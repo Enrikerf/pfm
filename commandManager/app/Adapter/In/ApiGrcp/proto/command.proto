@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "./proto";
+
+
+message Command{
+  string id = 1;
+  string host = 2;
+  string port = 3;
+  string command = 4;
+  string type = 5;
+  string status = 6;
+}
+
+message CreateCommandRequest{
+  Command command = 1;
+}
+
+message CreateCommandResponse{
+  Command command = 1;
+}
+
+message ReadCommandRequest{
+  string command_id = 1;
+}
+
+message ReadCommandResponse{
+  Command command = 1;
+}
+
+message UpdateCommandRequest{
+  Command command = 1;
+}
+
+message UpdateCommandResponse{
+  Command command = 1;
+}
+
+message DeleteCommandRequest{
+  string command_id = 1;
+}
+
+message DeleteCommandResponse{
+  string command_id = 1;
+}
+
+message ListCommandRequest{
+}
+
+message ListCommandResponse{
+  Command command = 1;
+}
+
+service CommandService{
+  rpc CreateCommand (CreateCommandRequest) returns (CreateCommandResponse);
+  rpc ReadCommand(ReadCommandRequest) returns (ReadCommandResponse);
+  rpc UpdateCommand(UpdateCommandRequest) returns (UpdateCommandResponse);
+  rpc DeleteCommand(DeleteCommandRequest) returns (DeleteCommandResponse);
+  rpc ListCommand(ListCommandRequest) returns (stream ListCommandResponse);
+}
+
