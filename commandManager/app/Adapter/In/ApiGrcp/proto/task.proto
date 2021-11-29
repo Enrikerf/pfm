@@ -8,7 +8,7 @@ message Task{
   string id = 1;
   string host = 2;
   string port = 3;
-  string task = 4;
+  string command = 4;
   string type = 5;
   string status = 6;
 }
