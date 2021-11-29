@@ -2,29 +2,29 @@ package ApiGrcp
 
 import (
 	"context"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/proto"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
 )
 
-type Server struct {
-	proto.UnimplementedCommandServiceServer
+type TaskServer struct {
+	task.UnimplementedTaskServiceServer
 }
 
-func (server Server) CreateCommand(ctx context.Context, request *proto.CreateCommandRequest) (*proto.CreateCommandResponse, error) {
+func (server TaskServer) CreateTask(ctx context.Context, request *task.CreateTaskRequest) (*task.CreateTaskResponse, error) {
 	panic("implement me")
 }
 
-func (server Server) ReadCommand(ctx context.Context, request *proto.ReadCommandRequest) (*proto.ReadCommandResponse, error) {
+func (server TaskServer) ReadTask(ctx context.Context, request *task.ReadTaskRequest) (*task.ReadTaskResponse, error) {
 	panic("implement me")
 }
 
-func (server Server) UpdateCommand(ctx context.Context, request *proto.UpdateCommandRequest) (*proto.UpdateCommandResponse, error) {
+func (server TaskServer) UpdateTask(ctx context.Context, request *task.UpdateTaskRequest) (*task.UpdateTaskResponse, error) {
 	panic("implement me")
 }
 
-func (server Server) DeleteCommand(ctx context.Context, request *proto.DeleteCommandRequest) (*proto.DeleteCommandResponse, error) {
+func (server TaskServer) DeleteTask(ctx context.Context, request *task.DeleteTaskRequest) (*task.DeleteTaskResponse, error) {
 	panic("implement me")
 }
 
-func (server Server) ListCommand(request *proto.ListCommandRequest, server2 proto.CommandService_ListCommandServer) error {
+func (server TaskServer) ListTask(request *task.ListTaskRequest, server2 task.TaskService_ListTaskServer) error {
 	panic("implement me")
 }

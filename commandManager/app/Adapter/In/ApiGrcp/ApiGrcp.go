@@ -2,7 +2,7 @@ package ApiGrcp
 
 import (
 	"fmt"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/proto"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
@@ -21,16 +21,16 @@ func Serve() {
 	}
 	var serverOptions []grpc.ServerOption
 	grpcServer := grpc.NewServer(serverOptions...)
-	proto.RegisterCommandServiceServer(grpcServer, Server{})
+	task.RegisterTaskServiceServer(grpcServer, TaskServer{})
 
 	//reflection to expose the api doc and commands
 	reflection.Register(grpcServer)
-	if error := grpcServer.Serve(listener); error != nil {
-		log.Fatalf("fatal")
-	}
+	//if error := grpcServer.Serve(listener); error != nil {
+	//	log.Fatalf("fatal")
+	//}
 
 	go func() {
-		fmt.Println("Starting Server...")
+		fmt.Println("Starting TaskServer...")
 		if err := grpcServer.Serve(listener); err != nil {
 			log.Fatalf("fatal")
 		}
