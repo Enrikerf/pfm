@@ -1,10 +1,28 @@
 package CreateTask
 
-import "testing"
+import (
+	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
-func TestCreate(t *testing.T)  {
-	got :=1
-	if got != 1 {
-		t.Errorf("Abs(-1) = %d; want 1", got)
+type MockTaskOutPort struct {
+}
+
+func (mock MockTaskOutPort)Save(task TaskDomain.Task) (TaskDomain.Task,error)  {
+	return task,nil
+}
+func TestCreate(t *testing.T) {
+	service := Service{MockTaskOutPort{}}
+	command := Command{
+		Host:    "Host",
+		Port:    "Port",
+		Command: "Command",
+		Mode:    "Mode",
+		Status:  "Status",
 	}
+	newTask, err := service.Create(command)
+
+	assert.Nil(t, err, "shouldn't be error")
+	assert.Equalf(t, TaskDomain.Pending, newTask.Status, "should initialise pending")
 }
