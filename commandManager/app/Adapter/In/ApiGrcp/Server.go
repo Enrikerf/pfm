@@ -2,6 +2,7 @@ package ApiGrcp
 
 import (
 	"context"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/Controller"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
 )
 
@@ -10,7 +11,12 @@ type TaskServer struct {
 }
 
 func (server TaskServer) CreateTask(ctx context.Context, request *task.CreateTaskRequest) (*task.CreateTaskResponse, error) {
-	panic("implement me")
+	controller := Controller.TaskController{}
+	postTask, err := controller.PostTask(request.GetTask())
+	if err != nil {
+		return nil, err
+	}
+	return &task.CreateTaskResponse{Task: postTask}, nil
 }
 
 func (server TaskServer) ReadTask(ctx context.Context, request *task.ReadTaskRequest) (*task.ReadTaskResponse, error) {

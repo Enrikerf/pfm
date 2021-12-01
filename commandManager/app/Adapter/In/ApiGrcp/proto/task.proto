@@ -9,7 +9,7 @@ message Task{
   string host = 2;
   string port = 3;
   string command = 4;
-  string type = 5;
+  string mode = 5;
   string status = 6;
 }
 

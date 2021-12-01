@@ -1,19 +1,21 @@
 package CreateTask
 
 import (
+	"fmt"
 	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-type MockTaskOutPort struct {
+type MockTaskOutOkPort struct {
 }
 
-func (mock MockTaskOutPort)Save(task TaskDomain.Task) (TaskDomain.Task,error)  {
-	return task,nil
+func (mock MockTaskOutOkPort) Save(task TaskDomain.Task) (TaskDomain.Task, error) {
+	return task, nil
 }
-func TestCreate(t *testing.T) {
-	service := Service{MockTaskOutPort{}}
+
+func TestCreateOk(t *testing.T) {
+	service := Service{MockTaskOutOkPort{}}
 	command := Command{
 		Host:    "Host",
 		Port:    "Port",
@@ -25,4 +27,24 @@ func TestCreate(t *testing.T) {
 
 	assert.Nil(t, err, "shouldn't be error")
 	assert.Equalf(t, TaskDomain.Pending, newTask.Status, "should initialise pending")
+}
+
+type MockTaskOutErrorPort struct {
+}
+
+func (mock MockTaskOutErrorPort) Save(task TaskDomain.Task) (TaskDomain.Task, error) {
+	return TaskDomain.Task{}, fmt.Errorf("error")
+}
+
+func TestCreateFail(t *testing.T) {
+	service := Service{MockTaskOutErrorPort{}}
+	command := Command{
+		Host:    "Host",
+		Port:    "Port",
+		Command: "Command",
+		Mode:    "Mode",
+		Status:  "Status",
+	}
+	_, err := service.Create(command)
+	assert.NotNil(t, err, "should be error")
 }

@@ -10,15 +10,26 @@ const (
 	Done
 )
 
+func (taskStatus TaskStatus) String() string {
+	switch taskStatus {
+	case Pending:
+		return "Pending"
+	case Running:
+		return "Running"
+	case Done:
+		return "Done"
+	}
+	return "unknown"
+}
 
-func (taskStatus TaskStatus) getStatus(status string) (TaskStatus,error) {
+func (taskStatus TaskStatus) getStatus(status string) (TaskStatus, error) {
 	switch status {
 	case "Pending":
-		return Pending,nil
+		return Pending, nil
 	case "Running":
-		return Running,nil
+		return Running, nil
 	case "Done":
-		return Done,nil
+		return Done, nil
 	}
-	return -1,fmt.Errorf("undefined")
+	return -1, fmt.Errorf("undefined")
 }
