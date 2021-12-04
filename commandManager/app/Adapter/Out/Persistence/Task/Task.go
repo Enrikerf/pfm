@@ -9,7 +9,8 @@ import (
 
 type Task struct {
 	ID uuid.UUID `gorm:"primary_key; unique; 
-                      type:uuid; column:id"`
+                      type:uuid; column:id; 
+                      default:uuid_generate_v4()"`
 	Host      string    `gorm:"size:255;not null;unique" json:"host"`
 	Port      string    `gorm:"size:255;not null;unique" json:"port"`
 	Command   string    `gorm:"size:255;not null;unique" json:"command"`
@@ -21,7 +22,7 @@ type Task struct {
 
 func FromDomain(task TaskDomain.Task) Task {
 	taskPersistence := Task{}
-	taskPersistence.ID = task.Id.String()
+	taskPersistence.ID = task.Id
 	taskPersistence.Host = task.Host
 	taskPersistence.Port = task.Port
 	taskPersistence.Command = task.Command
