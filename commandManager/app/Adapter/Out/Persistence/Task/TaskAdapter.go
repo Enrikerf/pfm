@@ -9,8 +9,8 @@ type Adapter struct {
 	Orm *gorm.DB
 }
 
-func (adapter Adapter) Save(taskDomain TaskDomain.Task) error {
-	var taskMysql = FromDomain(taskDomain)
+func (adapter Adapter) Save(task TaskDomain.Task) error {
+	var taskMysql = FromDomain(task)
 	err := taskMysql.SaveUser(adapter.Orm)
 	if err != nil {
 		return err

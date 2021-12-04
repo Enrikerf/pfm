@@ -1,6 +1,7 @@
 package Controller
 
 import (
+	"context"
 	"fmt"
 	taskProto "github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
@@ -8,9 +9,11 @@ import (
 
 type TaskController struct {
 	SaveTaskUseCase CreateTask.UseCase
+	taskProto.UnimplementedTaskServiceServer
 }
 
-func (taskController TaskController) PostTask(protoTask *taskProto.Task) (*taskProto.Task, error) {
+func (controller TaskController) CreateTask(ctx context.Context, request *taskProto.CreateTaskRequest) (*taskProto.CreateTaskResponse, error) {
+	protoTask := request.GetTask()
 	var command CreateTask.Command
 	command.Host = protoTask.Host
 	command.Port = protoTask.Port
@@ -18,10 +21,26 @@ func (taskController TaskController) PostTask(protoTask *taskProto.Task) (*taskP
 	command.Mode = protoTask.Mode
 	command.Status = protoTask.Status
 
-	task, err := taskController.SaveTaskUseCase.Save(command)
+	task, err := controller.SaveTaskUseCase.Create(command)
 	if err != nil {
-		return protoTask, fmt.Errorf("error")
+		return nil, fmt.Errorf("error")
 	}
 	protoTask.Id = task.Id.String()
-	return protoTask, nil
+	return &taskProto.CreateTaskResponse{Task: protoTask}, nil
+}
+
+func (controller TaskController) ReadTask(ctx context.Context, request *taskProto.ReadTaskRequest) (*taskProto.ReadTaskResponse, error) {
+	panic("implement me")
+}
+
+func (controller TaskController) UpdateTask(ctx context.Context, request *taskProto.UpdateTaskRequest) (*taskProto.UpdateTaskResponse, error) {
+	panic("implement me")
+}
+
+func (controller TaskController) DeleteTask(ctx context.Context, request *taskProto.DeleteTaskRequest) (*taskProto.DeleteTaskResponse, error) {
+	panic("implement me")
+}
+
+func (controller TaskController) ListTask(request *taskProto.ListTaskRequest, server2 taskProto.TaskService_ListTaskServer) error {
+	panic("implement me")
 }
