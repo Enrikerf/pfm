@@ -10,13 +10,13 @@ import (
 	"os"
 )
 
-type GinServer struct {
+type App struct {
 	ApiGrpc ApiGrcp.ApiGrpc
 }
 
-func (server *GinServer) Run() {
+func (server *App) Run() {
 
-	LoadDotEnv()
+	loadDotEnv()
 	server.ApiGrpc = ApiGrcp.ApiGrpc{}
 	server.ApiGrpc.Initialize(
 		loadDb(),
@@ -26,7 +26,7 @@ func (server *GinServer) Run() {
 	server.ApiGrpc.Run()
 }
 
-func LoadDotEnv() {
+func loadDotEnv() {
 	var err = godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error getting env, not comming through %v", err)

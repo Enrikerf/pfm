@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	var app = Config.GinServer{}
+	var app = Config.App{}
 	app.Run()
 }
