@@ -10,8 +10,11 @@ type Service struct {
 }
 
 func (service Service) Create(command Command) (TaskDomain.Task, error) {
-	var task, _ = TaskDomain.NewTask(command.Host, command.Port, command.Command, command.Mode)
-	err := service.SavePort.Save(task)
+	var task, err = TaskDomain.NewTask(command.Host, command.Port, command.Command, command.Mode)
+	if err != nil {
+		return TaskDomain.Task{}, err
+	}
+	err = service.SavePort.Save(task)
 	if err != nil {
 		return TaskDomain.Task{}, err
 	}

@@ -6,10 +6,8 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
-	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
 	"net"
@@ -17,73 +15,68 @@ import (
 	"os/signal"
 )
 
-func Serve() {
+type ApiGrpc struct {
+	DB         *gorm.DB
+	ServerHost string
+	ServerPort string
+	GrpcServer *grpc.Server
+	Listener   net.Listener
+}
 
-	var err = godotenv.Load()
-
-	if err != nil {
-		log.Fatalf("Error getting env, not comming through %v", err)
-	} else {
-		fmt.Println("We are getting the env values")
-	}
-
-	dbServerHost := os.Getenv("SERVER_HOST")
-	dbServerPort := os.Getenv("SERVER_PORT")
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbPort := os.Getenv("DB_PORT")
-	dbHost := os.Getenv("DB_HOST")
-	dbName := os.Getenv("DB_NAME")
-	dbUrl := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", dbUser, dbPassword, dbHost, dbPort, dbName)
-	db, err := gorm.Open(mysql.New(mysql.Config{
-		DSN:                       dbUrl, // data source name
-		DefaultStringSize:         256,   // default size for string fields
-		DisableDatetimePrecision:  true,  // disable datetime precision, which not supported before MySQL 5.6
-		DontSupportRenameIndex:    true,  // drop & create when rename index, rename index not supported before MySQL 5.7, MariaDB
-		DontSupportRenameColumn:   true,  // `change` when rename column, rename column not supported before MySQL 8, MariaDB
-		SkipInitializeWithVersion: false, // auto configure based on currently MySQL version
-	}), &gorm.Config{})
-	if err != nil {
-		fmt.Println(err.Error())
-		panic("failed to connect database")
-	}
-
-	var taskAdapter = Task.Adapter{Orm: db}
-	var taskService = CreateTask.Service{SavePort: taskAdapter}
-	var taskController = Controller.TaskController{SaveTaskUseCase: taskService}
+func (api *ApiGrpc) Initialize(db *gorm.DB, host string, port string) {
 	fmt.Println("Starting Command Manager...")
-	log.SetFlags(log.LstdFlags | log.Lshortfile) // TODO: parametrise with .env prod/debug :if we crash the go code, we ge the file name and line number
+	api.DB = db
+	api.ServerHost = host
+	api.ServerPort = port
+	api.loadServer()
+	api.configControllers()
+	api.loadListener()
+}
 
-	listener, err := net.Listen("tcp", dbServerHost+dbServerPort)
-	if err != nil {
-		log.Fatalf("failed to listen at: " + dbServerHost + dbServerPort)
+func (api *ApiGrpc) Run() {
+	if os.Getenv("APP_DEBUG") == "true" {
+		reflection.Register(api.GrpcServer)
 	}
-	var serverOptions []grpc.ServerOption
-	grpcServer := grpc.NewServer(serverOptions...)
-	task.RegisterTaskServiceServer(grpcServer, taskController)
-
-	//reflection to expose the api doc and commands
-	reflection.Register(grpcServer)
-	//if error := grpcServer.Serve(listener); error != nil {
-	//	log.Fatalf("fatal")
-	//}
-
 	go func() {
-		fmt.Println("Starting TaskController...")
-		if err := grpcServer.Serve(listener); err != nil {
+		fmt.Println("Starting at: " + api.ServerHost + api.ServerPort)
+		if err := api.GrpcServer.Serve(api.Listener); err != nil {
 			log.Fatalf("fatal")
 		}
 	}()
-
 	// Wait for control C to exit
 	channel := make(chan os.Signal, 1)
 	signal.Notify(channel, os.Interrupt)
-
 	// Bock until a signal is received
 	<-channel
 	fmt.Println("Stopping the server")
-	grpcServer.Stop()
-	fmt.Println("closing the listener")
-	listener.Close()
+	api.GrpcServer.Stop()
+	fmt.Println("closing the Listener")
+	err := api.Listener.Close()
+	if err != nil {
+		return
+	}
 	fmt.Println("End of program")
+}
+
+func (api *ApiGrpc) configControllers() {
+	var taskAdapter = Task.Adapter{Orm: api.DB}
+	var taskService = CreateTask.Service{SavePort: taskAdapter}
+	var taskController = Controller.TaskController{SaveTaskUseCase: taskService}
+	task.RegisterTaskServiceServer(api.GrpcServer, taskController)
+}
+
+func (api *ApiGrpc) loadServer() {
+	var serverOptions []grpc.ServerOption
+	api.GrpcServer = grpc.NewServer(serverOptions...)
+	if os.Getenv("APP_DEBUG") == "true" {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+	}
+}
+
+func (api *ApiGrpc) loadListener() {
+	listener, err := net.Listen("tcp", api.ServerHost+api.ServerPort)
+	if err != nil {
+		log.Fatalf("failed to listen at: " + api.ServerHost + api.ServerPort)
+	}
+	api.Listener = listener
 }

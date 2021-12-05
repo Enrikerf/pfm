@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package result;
+option go_package = "./result";
+
+
+message EditableResultParams{
+  string task_id = 2;
+  string result = 3;
+}
+
+message Result{
+  string id = 1;
+  string task_id = 2;
+  string content = 3;
+}
+
+message CreateResultRequest{
+  EditableResultParams task = 1;
+}
+
+message CreateResultResponse{
+  Result task = 1;
+}
+
+message ReadResultRequest{
+  string task_id = 1;
+}
+
+message ReadResultResponse{
+  Result task = 1;
+}
+
+message UpdateResultRequest{
+  EditableResultParams task = 1;
+}
+
+message UpdateResultResponse{
+  Result task = 1;
+}
+
+message DeleteResultRequest{
+  string task_id = 1;
+}
+
+message DeleteResultResponse{
+  string task_id = 1;
+}
+
+message ListResultRequest{
+}
+
+message ListResultResponse{
+  Result task = 1;
+}
+
+service ResultService{
+  rpc CreateResult (CreateResultRequest) returns (CreateResultResponse);
+  rpc ReadResult(ReadResultRequest) returns (ReadResultResponse);
+  rpc UpdateResult(UpdateResultRequest) returns (UpdateResultResponse);
+  rpc DeleteResult(DeleteResultRequest) returns (DeleteResultResponse);
+  rpc ListResult(ListResultRequest) returns (stream ListResultResponse);
+}
+

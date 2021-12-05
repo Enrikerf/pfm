@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp"
+	"github.com/Enrikerf/pfm/commandManager/app/Config"
 )
 
 func main() {
-	ApiGrcp.Serve()
+	var app = Config.GinServer{}
+	app.Run()
 }

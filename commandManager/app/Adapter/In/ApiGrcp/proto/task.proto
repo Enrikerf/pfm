@@ -4,6 +4,13 @@ package task;
 option go_package = "./task";
 
 
+message EditableTaskParams{
+  string host = 2;
+  string port = 3;
+  string command = 4;
+  string mode = 5;
+}
+
 message Task{
   string id = 1;
   string host = 2;
@@ -14,7 +21,7 @@ message Task{
 }
 
 message CreateTaskRequest{
-  Task task = 1;
+  EditableTaskParams task = 1;
 }
 
 message CreateTaskResponse{
@@ -30,7 +37,7 @@ message ReadTaskResponse{
 }
 
 message UpdateTaskRequest{
-  Task task = 1;
+  EditableTaskParams task = 1;
 }
 
 message UpdateTaskResponse{

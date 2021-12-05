@@ -19,14 +19,20 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 	command.Port = protoTask.Port
 	command.Command = protoTask.Command
 	command.Mode = protoTask.Mode
-	command.Status = protoTask.Status
 
 	task, err := controller.SaveTaskUseCase.Create(command)
 	if err != nil {
 		return nil, fmt.Errorf("error")
 	}
-	protoTask.Id = task.Id.String()
-	return &taskProto.CreateTaskResponse{Task: protoTask}, nil
+	newTask := taskProto.Task{
+		Id:     task.Id.String(),
+		Host:    task.Host,
+		Port:    task.Port,
+		Command: task.Command,
+		Mode:    task.Mode.String(),
+		Status:  task.Status.String(),
+	}
+	return &taskProto.CreateTaskResponse{Task: &newTask}, nil
 }
 
 func (controller TaskController) ReadTask(ctx context.Context, request *taskProto.ReadTaskRequest) (*taskProto.ReadTaskResponse, error) {
