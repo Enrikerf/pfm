@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package task;
+option go_package = "./task";
+
+
+message EditableTaskParams{
+  string host = 2;
+  string port = 3;
+  string command = 4;
+  string mode = 5;
+}
+
+message Task{
+  string id = 1;
+  string host = 2;
+  string port = 3;
+  string command = 4;
+  string mode = 5;
+  string status = 6;
+}
+
+message CreateTaskRequest{
+  EditableTaskParams task = 1;
+}
+
+message CreateTaskResponse{
+  Task task = 1;
+}
+
+message ReadTaskRequest{
+  string task_id = 1;
+}
+
+message ReadTaskResponse{
+  Task task = 1;
+}
+
+message UpdateTaskRequest{
+  EditableTaskParams task = 1;
+}
+
+message UpdateTaskResponse{
+  Task task = 1;
+}
+
+message DeleteTaskRequest{
+  string task_id = 1;
+}
+
+message DeleteTaskResponse{
+  string task_id = 1;
+}
+
+message ListTaskRequest{
+}
+
+message ListTaskResponse{
+  Task task = 1;
+}
+
+service TaskService{
+  rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse);
+  rpc ReadTask(ReadTaskRequest) returns (ReadTaskResponse);
+  rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
+  rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse);
+  rpc ListTask(ListTaskRequest) returns (stream ListTaskResponse);
+}
+
