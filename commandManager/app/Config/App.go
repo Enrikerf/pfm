@@ -3,13 +3,12 @@ package Config
 import (
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/LoopManager"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
 	"os"
-	"time"
 )
 
 type App struct {
@@ -19,26 +18,16 @@ type App struct {
 func (server *App) Run() {
 
 	loadDotEnv()
-	server.ApiGrpc = ApiGrcp.ApiGrpc{}
 	db := loadDb()
+	loop := LoopManager.LoopManager{DB: db}
+	go loop.Run()
+	server.ApiGrpc = ApiGrcp.ApiGrpc{}
 	server.ApiGrpc.Initialize(
 		db,
 		os.Getenv("SERVER_HOST"),
 		os.Getenv("SERVER_PORT"),
 	)
-	go commandManagerLoop(db)
 	server.ApiGrpc.Run()
-}
-
-func commandManagerLoop(db *gorm.DB) {
-	for true {
-		// TODO: wrap in layers and develop logic
-		fmt.Println("exec")
-		var tasks []Task.Task
-		result:=db.Find(&tasks)
-		fmt.Printf("tasks %v",result.RowsAffected)
-		time.Sleep(10* time.Second)
-	}
 }
 
 func loadDotEnv() {

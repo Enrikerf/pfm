@@ -16,42 +16,42 @@ message Result{
 }
 
 message CreateResultRequest{
-  EditableResultParams task = 1;
+  EditableResultParams result = 1;
 }
 
 message CreateResultResponse{
-  Result task = 1;
+  Result result = 1;
 }
 
 message ReadResultRequest{
-  string task_id = 1;
+  string result_id = 1;
 }
 
 message ReadResultResponse{
-  Result task = 1;
+  Result result = 1;
 }
 
 message UpdateResultRequest{
-  EditableResultParams task = 1;
+  EditableResultParams result = 1;
 }
 
 message UpdateResultResponse{
-  Result task = 1;
+  Result result = 1;
 }
 
 message DeleteResultRequest{
-  string task_id = 1;
+  string result_id = 1;
 }
 
 message DeleteResultResponse{
-  string task_id = 1;
+  string result_id = 1;
 }
 
 message ListResultRequest{
 }
 
 message ListResultResponse{
-  Result task = 1;
+  Result result = 1;
 }
 
 service ResultService{
