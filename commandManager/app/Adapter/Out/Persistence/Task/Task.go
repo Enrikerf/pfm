@@ -31,10 +31,28 @@ func FromDomain(task TaskDomain.Task) Task {
 	return taskPersistence
 }
 
-func (task *Task) SaveUser(db *gorm.DB) error {
+func ToDomain(task Task) TaskDomain.Task {
+	taskDomain := TaskDomain.Task{}
+	taskDomain.Id = task.ID
+	taskDomain.Host = task.Host
+	taskDomain.Port = task.Port
+	taskDomain.Command = task.Command
+	taskDomain.Mode,_ = TaskDomain.GetTaskMode(task.Mode)
+	taskDomain.Status,_ = TaskDomain.GetStatus(task.Status)
+	return taskDomain
+}
 
+func (task *Task) SaveUser(db *gorm.DB) error {
 	var err error
 	err = db.Create(&task).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (task *Task) FindAll(db *gorm.DB) error {
+	var err error
+	err = db.Find(&task).Error
 	if err != nil {
 		return err
 	}

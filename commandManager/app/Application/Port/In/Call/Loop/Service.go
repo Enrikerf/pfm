@@ -1,103 +1,62 @@
 package Loop
 
 import (
-	"context"
 	"fmt"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/call"
 	ResultOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Result"
 	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
+	CallOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Grcp/Call"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
-	"github.com/google/uuid"
-	"google.golang.org/grpc"
-	"log"
 	"os"
 	"text/tabwriter"
 	"time"
 )
 
 type Manager struct {
+	CallRequestPort CallOutPort.RequestPort
 	FindAllTaskPort TaskOutPort.FindAllPort
-	SaveTaskPort   TaskOutPort.SavePort
-	SaveResultPort ResultOutPort.SavePort
+	SaveTaskPort    TaskOutPort.SavePort
+	SaveResultPort  ResultOutPort.SavePort
 }
 
 func (manager Manager) Loop() {
 
 	//for true {
-	fmt.Println("exec")
-	tasks,err := manager.FindAllTaskPort.FindAll()
-	fmt.Printf("tasks %v. \n", len(tasks))
+	fmt.Println("--- loop ----")
+	//TODO: paginate?
+	tasks, err := manager.FindAllTaskPort.FindAll()
 	if err != nil {
-		fmt.Printf("tasks %v. \n", err)
+		fmt.Printf("error fetching task: %v. \n", err)
 	}
+	fmt.Printf("tasks %v. \n", len(tasks))
 	for index, task := range tasks {
 		printTask(index, task)
-		response := manager.callToClient(task)
-		manager.saveResult(response)
-		manager.updateTaskSTatus(task)
+		result := manager.callToClient(task)
+		manager.saveResult(result)
+		manager.updateTaskStatus(task)
 	}
 	time.Sleep(10 * time.Second)
 	//}
 }
 
-func (manager Manager) updateTaskSTatus(task TaskDomain.Task) {
+func (manager Manager) updateTaskStatus(task TaskDomain.Task) {
 	task.Status = TaskDomain.Done
-	manager.SaveTaskPort.Save(task)
-}
-
-func (manager Manager) saveResult(result string) {
-	println("saving result in db: " + result)
-	_ = manager.SaveResultPort.Save(Result.Result{
-		Id:      uuid.UUID{},
-		TaskId:  uuid.UUID{},
-		Content: "fake content",
-	})
-}
-
-func (manager Manager) callToClient(task TaskDomain.Task) string {
-	options := grpc.WithInsecure()
-	connection, err := grpc.Dial(task.Host+":"+task.Port, options)
+	err := manager.SaveTaskPort.Save(task)
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		fmt.Printf("error updating task %v. \n", err)
 	}
-	defer connection.Close()
-	client := call.NewCallServiceClient(connection)
-	callRequest := call.CallRequest{
-		Command: task.Command,
-	}
-	var callResponse2 string
-	switch task.Mode {
-	case TaskDomain.Unary:
-		callResponse, err := client.CallUnary(context.Background(), &callRequest)
-		if err != nil {
-			fmt.Printf("%v) task:  \n", err)
-		}
-		callResponse2 = callResponse.GetResult()
-	case TaskDomain.ServerStream:
-		callResponse, err := client.CallUnary(context.Background(), &callRequest)
-		if err != nil {
-			fmt.Printf("%v) task:  \n", err)
-		}
-		callResponse2 = callResponse.GetResult()
-	case TaskDomain.ClientStream:
-		callResponse, err := client.CallUnary(context.Background(), &callRequest)
-		if err != nil {
-			fmt.Printf("%v) task:  \n", err)
-		}
-		callResponse2 = callResponse.GetResult()
-	case TaskDomain.Bidirectional:
-		callResponse, err := client.CallUnary(context.Background(), &callRequest)
-		if err != nil {
-			fmt.Printf("%v) task:  \n", err)
-		}
-		callResponse2 = callResponse.GetResult()
-	default:
-		callResponse2 = "not implemented task mode"
-		fmt.Printf("%v) task:  \n", err)
-	}
+}
 
-	return callResponse2
+func (manager Manager) saveResult(result Result.Result) {
+	println("saving result in db: " + result.Content)
+	err := manager.SaveResultPort.Save(result)
+	if err != nil {
+		fmt.Printf("error saving result %v. \n", err)
+	}
+}
+
+func (manager Manager) callToClient(task TaskDomain.Task) Result.Result {
+	return  manager.CallRequestPort.Request(task)
 }
 
 func printTask(index int, task TaskDomain.Task) {

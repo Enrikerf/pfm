@@ -1,7 +1,10 @@
 package Call
 
-import "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+import (
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+)
 
 type RequestPort interface {
-	Request(result Result.Result) error
+	Request(task Task.Task) Result.Result
 }
