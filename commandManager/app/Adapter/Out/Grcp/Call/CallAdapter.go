@@ -7,7 +7,6 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 	"google.golang.org/grpc"
-	"log"
 )
 
 type Adapter struct {
@@ -17,7 +16,7 @@ func (adapter Adapter) Request(task Task.Task) Result.Result {
 	options := grpc.WithInsecure()
 	connection, err := grpc.Dial(task.Host+":"+task.Port, options)
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		fmt.Println("error: %v", err)
 	}
 	defer connection.Close()
 	client := call.NewCallServiceClient(connection)

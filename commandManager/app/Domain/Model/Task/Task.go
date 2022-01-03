@@ -17,7 +17,7 @@ func NewTask(host string, port string, command string, mode string) (Task, error
 	task.Host = host
 	task.Port = port
 	task.Command = command
-	taskMode, err := getTaskMode(mode)
+	taskMode, err := GetTaskMode(mode)
 	if err != nil {
 		return Task{}, err
 	}

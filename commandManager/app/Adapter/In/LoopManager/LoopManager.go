@@ -1,23 +1,21 @@
 package LoopManager
 
 import (
-	"context"
 	"fmt"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/call"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
-	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
-	"google.golang.org/grpc"
-	"gorm.io/gorm"
-	"log"
-	"os"
-	"text/tabwriter"
-	"time"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Loop"
 )
 
 type LoopManager struct {
-	DB *gorm.DB
+	Loop Loop.UseCase
 }
 
+func (loopManager LoopManager) Execute() {
+	err := loopManager.Loop.Loop()
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+/*
 func (loopManager LoopManager) Run() {
 
 	//for true {
@@ -99,3 +97,4 @@ func printTask(index int, task Task.Task) {
 	fmt.Fprintf(w, "%v \t %v \t %v \t %v \t %v \t %v\n", task.ID, task.Host, task.Port, task.Command, task.Mode, task.Status)
 	w.Flush()
 }
+*/

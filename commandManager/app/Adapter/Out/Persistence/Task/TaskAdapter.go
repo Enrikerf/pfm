@@ -12,7 +12,7 @@ type Adapter struct {
 
 func (adapter Adapter) Save(task TaskDomain.Task) error {
 	var taskMysql = FromDomain(task)
-	err := taskMysql.SaveUser(adapter.Orm)
+	err := taskMysql.Save(adapter.Orm)
 	if err != nil {
 		return err
 	}

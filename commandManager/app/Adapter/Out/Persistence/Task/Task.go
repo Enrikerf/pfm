@@ -42,14 +42,15 @@ func ToDomain(task Task) TaskDomain.Task {
 	return taskDomain
 }
 
-func (task *Task) SaveUser(db *gorm.DB) error {
+func (task *Task) Save(db *gorm.DB) error {
 	var err error
-	err = db.Create(&task).Error
+	err = db.Save(&task).Error
 	if err != nil {
 		return err
 	}
 	return nil
 }
+
 func (task *Task) FindAll(db *gorm.DB) error {
 	var err error
 	err = db.Find(&task).Error

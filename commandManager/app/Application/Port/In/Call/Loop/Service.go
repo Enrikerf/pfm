@@ -19,24 +19,25 @@ type Manager struct {
 	SaveResultPort  ResultOutPort.SavePort
 }
 
-func (manager Manager) Loop() {
+func (manager Manager) Loop() error {
 
-	//for true {
-	fmt.Println("--- loop ----")
-	//TODO: paginate?
-	tasks, err := manager.FindAllTaskPort.FindAll()
-	if err != nil {
-		fmt.Printf("error fetching task: %v. \n", err)
+	for true {
+		fmt.Println("--- loop ----")
+		//TODO: paginate?
+		tasks, err := manager.FindAllTaskPort.FindAll()
+		if err != nil {
+			fmt.Printf("error fetching task: %v. \n", err)
+		}
+		fmt.Printf("tasks %v. \n", len(tasks))
+		for index, task := range tasks {
+			printTask(index, task)
+			result := manager.callToClient(task)
+			manager.saveResult(result)
+			manager.updateTaskStatus(task)
+		}
+		time.Sleep(10 * time.Second)
 	}
-	fmt.Printf("tasks %v. \n", len(tasks))
-	for index, task := range tasks {
-		printTask(index, task)
-		result := manager.callToClient(task)
-		manager.saveResult(result)
-		manager.updateTaskStatus(task)
-	}
-	time.Sleep(10 * time.Second)
-	//}
+	return nil
 }
 
 func (manager Manager) updateTaskStatus(task TaskDomain.Task) {
@@ -56,7 +57,7 @@ func (manager Manager) saveResult(result Result.Result) {
 }
 
 func (manager Manager) callToClient(task TaskDomain.Task) Result.Result {
-	return  manager.CallRequestPort.Request(task)
+	return manager.CallRequestPort.Request(task)
 }
 
 func printTask(index int, task TaskDomain.Task) {
