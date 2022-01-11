@@ -3,6 +3,11 @@ package Config
 import (
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/LoopManager"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Grcp/Call"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Loop"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -17,9 +22,13 @@ type App struct {
 func (server *App) Run() {
 
 	loadDotEnv()
+	db := loadDb()
+	//loop := LoopManager.LoopManager{DB: db}
+	//go loop.Run()
+	loadLoop(db)
 	server.ApiGrpc = ApiGrcp.ApiGrpc{}
 	server.ApiGrpc.Initialize(
-		loadDb(),
+		db,
 		os.Getenv("SERVER_HOST"),
 		os.Getenv("SERVER_PORT"),
 	)
@@ -54,4 +63,20 @@ func loadDb() *gorm.DB {
 		log.Fatalf("failed to connect database %v", err)
 	}
 	return db
+}
+
+func loadLoop(db *gorm.DB) {
+	taskAdapter := Task.Adapter{Orm: db}
+	resultAdapter := Result.Adapter{Orm: db}
+	callAdapter := Call.Adapter{}
+	loopService := Loop.Manager{
+		CallRequestPort: callAdapter,
+		FindByPort:      taskAdapter,
+		UpdatePort:      taskAdapter,
+		SaveResultPort:  resultAdapter,
+	}
+	loopManager := LoopManager.LoopManager{
+		Loop: loopService,
+	}
+	go loopManager.Execute()
 }

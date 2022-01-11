@@ -22,7 +22,7 @@ func (taskStatus TaskStatus) String() string {
 	return "unknown"
 }
 
-func (taskStatus TaskStatus) getStatus(status string) (TaskStatus, error) {
+func GetStatus(status string) (TaskStatus, error) {
 	switch status {
 	case "Pending":
 		return Pending, nil

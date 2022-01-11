@@ -25,7 +25,7 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 		return nil, fmt.Errorf("error")
 	}
 	newTask := taskProto.Task{
-		Id:     task.Id.String(),
+		Uuid:    task.Uuid.String(),
 		Host:    task.Host,
 		Port:    task.Port,
 		Command: task.Command,

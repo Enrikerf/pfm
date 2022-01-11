@@ -25,7 +25,7 @@ func (taskModes TaskModes) String() string {
 	return "unknown"
 }
 
-func getTaskMode(mode string) (TaskModes, error) {
+func GetTaskMode(mode string) (TaskModes, error) {
 	switch mode {
 	case "Unary":
 		return Unary, nil
