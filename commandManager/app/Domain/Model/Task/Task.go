@@ -3,7 +3,7 @@ package Task
 import "github.com/google/uuid"
 
 type Task struct {
-	Id      uuid.UUID
+	Uuid    uuid.UUID
 	Host    string
 	Port    string
 	Command string
@@ -13,7 +13,7 @@ type Task struct {
 
 func NewTask(host string, port string, command string, mode string) (Task, error) {
 	task := Task{}
-	task.Id = uuid.New()
+	task.Uuid = uuid.New()
 	task.Host = host
 	task.Port = port
 	task.Command = command

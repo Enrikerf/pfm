@@ -5,13 +5,13 @@ option go_package = "./result";
 
 
 message EditableResultParams{
-  string task_id = 2;
-  string result = 3;
+  string task_uuid = 1;
+  string result = 2;
 }
 
 message Result{
   string id = 1;
-  string task_id = 2;
+  string task_uuid = 2;
   string content = 3;
 }
 
@@ -24,7 +24,7 @@ message CreateResultResponse{
 }
 
 message ReadResultRequest{
-  string result_id = 1;
+  string result_uuid = 1;
 }
 
 message ReadResultResponse{
@@ -40,11 +40,11 @@ message UpdateResultResponse{
 }
 
 message DeleteResultRequest{
-  string result_id = 1;
+  string result_uuid = 1;
 }
 
 message DeleteResultResponse{
-  string result_id = 1;
+  string result_uuid = 1;
 }
 
 message ListResultRequest{

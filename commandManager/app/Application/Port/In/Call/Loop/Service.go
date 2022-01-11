@@ -14,8 +14,8 @@ import (
 
 type Manager struct {
 	CallRequestPort CallOutPort.RequestPort
-	FindAllTaskPort TaskOutPort.FindAllPort
-	SaveTaskPort    TaskOutPort.SavePort
+	FindByPort      TaskOutPort.FindByPort
+	UpdatePort      TaskOutPort.UpdatePort
 	SaveResultPort  ResultOutPort.SavePort
 }
 
@@ -23,8 +23,7 @@ func (manager Manager) Loop() error {
 
 	for true {
 		fmt.Println("--- loop ----")
-		//TODO: paginate?
-		tasks, err := manager.FindAllTaskPort.FindAll()
+		tasks, err := manager.FindByPort.FindBy(map[string]interface{}{"Status": TaskDomain.Pending.String()})
 		if err != nil {
 			fmt.Printf("error fetching task: %v. \n", err)
 		}
@@ -42,7 +41,7 @@ func (manager Manager) Loop() error {
 
 func (manager Manager) updateTaskStatus(task TaskDomain.Task) {
 	task.Status = TaskDomain.Done
-	err := manager.SaveTaskPort.Save(task)
+	err := manager.UpdatePort.Update(task)
 	if err != nil {
 		fmt.Printf("error updating task %v. \n", err)
 	}
@@ -64,6 +63,6 @@ func printTask(index int, task TaskDomain.Task) {
 	fmt.Printf("%v) task:  \n", index)
 	w := tabwriter.NewWriter(os.Stdout, 1, 1, 1, '-', 0)
 	fmt.Fprintln(w, "uuid \t host \t port \t command \t mode \t status")
-	fmt.Fprintf(w, "%v \t %v \t %v \t %v \t %v \t %v\n", task.Id, task.Host, task.Port, task.Command, task.Mode, task.Status)
+	fmt.Fprintf(w, "%v \t %v \t %v \t %v \t %v \t %v\n", task.Uuid, task.Host, task.Port, task.Command, task.Mode, task.Status)
 	w.Flush()
 }

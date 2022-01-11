@@ -23,15 +23,16 @@ func (adapter Adapter) Request(task Task.Task) Result.Result {
 	callRequest := call.CallRequest{
 		Command: task.Command,
 	}
-	result, _ := Result.NewResult(task.Id,"")
+	result, _ := Result.NewResult(task.Uuid, "")
 	switch task.Mode {
 	case Task.Unary:
 		callResponse, err := client.CallUnary(context.Background(), &callRequest)
 		if err != nil {
 			fmt.Printf("%v) task:  \n", err)
 			result.Content = err.Error()
+		} else {
+			result.Content = callResponse.GetResult()
 		}
-		result.Content = callResponse.GetResult()
 	case Task.ServerStream:
 		callResponse, err := client.CallUnary(context.Background(), &callRequest)
 		if err != nil {

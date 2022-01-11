@@ -2,6 +2,7 @@ package Result
 
 import (
 	"fmt"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
 	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 	"gorm.io/gorm"
 )
@@ -11,8 +12,16 @@ type Adapter struct {
 }
 
 func (adapter Adapter) Save(result ResultDomain.Result) error {
-	var taskMysql = FromDomain(result)
-	err := taskMysql.SaveResult(adapter.Orm)
+	var taskMysql Task.Task
+	response := adapter.Orm.First(&taskMysql, "uuid = ?", result.TaskUuid)
+	if response.Error != nil {
+		fmt.Printf("tasks %v. \n", response.Error)
+		return response.Error
+	}
+	var resultMysql = FromDomain(result)
+	resultMysql.TaskID = taskMysql.ID
+
+	err := adapter.Orm.Create(&resultMysql).Error
 	if err != nil {
 		return err
 	}

@@ -71,8 +71,8 @@ func loadLoop(db *gorm.DB) {
 	callAdapter := Call.Adapter{}
 	loopService := Loop.Manager{
 		CallRequestPort: callAdapter,
-		FindAllTaskPort: taskAdapter,
-		SaveTaskPort:    taskAdapter,
+		FindByPort:      taskAdapter,
+		UpdatePort:      taskAdapter,
 		SaveResultPort:  resultAdapter,
 	}
 	loopManager := LoopManager.LoopManager{

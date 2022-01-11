@@ -12,7 +12,7 @@ message EditableTaskParams{
 }
 
 message Task{
-  string id = 1;
+  string uuid = 1;
   string host = 2;
   string port = 3;
   string command = 4;
@@ -29,7 +29,7 @@ message CreateTaskResponse{
 }
 
 message ReadTaskRequest{
-  string task_id = 1;
+  string task_uuid = 1;
 }
 
 message ReadTaskResponse{
@@ -45,11 +45,11 @@ message UpdateTaskResponse{
 }
 
 message DeleteTaskRequest{
-  string task_id = 1;
+  string task_uuid = 1;
 }
 
 message DeleteTaskResponse{
-  string task_id = 1;
+  string task_uuid = 1;
 }
 
 message ListTaskRequest{
