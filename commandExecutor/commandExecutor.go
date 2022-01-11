@@ -44,7 +44,6 @@ var (
 )
 
 func main() {
-
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	fmt.Println("Hello world")
 
