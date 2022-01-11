@@ -3,7 +3,6 @@ package Result
 import (
 	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -31,13 +30,4 @@ func ToDomain(result Result) ResultDomain.Result {
 	resultDomain.TaskUuid = result.TaskUuid
 	resultDomain.Content = result.Content
 	return resultDomain
-}
-
-func (result *Result) FindAll(db *gorm.DB) error {
-	var err error
-	err = db.Find(&result).Error
-	if err != nil {
-		return err
-	}
-	return nil
 }
