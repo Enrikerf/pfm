@@ -4,11 +4,9 @@ import (
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/Controller"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"gorm.io/gorm"
 	"log"
 	"net"
 	"os"
@@ -16,18 +14,18 @@ import (
 )
 
 type ApiGrpc struct {
-	DB         *gorm.DB
-	ServerHost string
-	ServerPort string
-	GrpcServer *grpc.Server
-	Listener   net.Listener
+	createTask CreateTask.UseCase
+	serverHost string
+	serverPort string
+	grpcServer *grpc.Server
+	listener   net.Listener
 }
 
-func (api *ApiGrpc) Initialize(db *gorm.DB, host string, port string) {
+func (api *ApiGrpc) Initialize(createTask CreateTask.UseCase, host string, port string) {
 	fmt.Println("Starting Command Manager...")
-	api.DB = db
-	api.ServerHost = host
-	api.ServerPort = port
+	api.createTask = createTask
+	api.serverHost = host
+	api.serverPort = port
 	api.loadServer()
 	api.configControllers()
 	api.loadListener()
@@ -35,11 +33,11 @@ func (api *ApiGrpc) Initialize(db *gorm.DB, host string, port string) {
 
 func (api *ApiGrpc) Run() {
 	if os.Getenv("APP_DEBUG") == "true" {
-		reflection.Register(api.GrpcServer)
+		reflection.Register(api.grpcServer)
 	}
 	go func() {
-		fmt.Println("Starting at: " + api.ServerHost + api.ServerPort)
-		if err := api.GrpcServer.Serve(api.Listener); err != nil {
+		fmt.Println("Starting at: " + api.serverHost + api.serverPort)
+		if err := api.grpcServer.Serve(api.listener); err != nil {
 			log.Fatalf("fatal")
 		}
 	}()
@@ -49,9 +47,9 @@ func (api *ApiGrpc) Run() {
 	// Bock until a signal is received
 	<-channel
 	fmt.Println("Stopping the server")
-	api.GrpcServer.Stop()
+	api.grpcServer.Stop()
 	fmt.Println("closing the Listener")
-	err := api.Listener.Close()
+	err := api.listener.Close()
 	if err != nil {
 		return
 	}
@@ -59,24 +57,22 @@ func (api *ApiGrpc) Run() {
 }
 
 func (api *ApiGrpc) configControllers() {
-	var taskAdapter = Task.Adapter{Orm: api.DB}
-	var taskService = CreateTask.Service{SavePort: taskAdapter}
-	var taskController = Controller.TaskController{SaveTaskUseCase: taskService}
-	task.RegisterTaskServiceServer(api.GrpcServer, taskController)
+	var taskController = Controller.TaskController{SaveTaskUseCase: api.createTask}
+	task.RegisterTaskServiceServer(api.grpcServer, taskController)
 }
 
 func (api *ApiGrpc) loadServer() {
 	var serverOptions []grpc.ServerOption
-	api.GrpcServer = grpc.NewServer(serverOptions...)
+	api.grpcServer = grpc.NewServer(serverOptions...)
 	if os.Getenv("APP_DEBUG") == "true" {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 	}
 }
 
 func (api *ApiGrpc) loadListener() {
-	listener, err := net.Listen("tcp", api.ServerHost+api.ServerPort)
+	listener, err := net.Listen("tcp", api.serverHost+api.serverPort)
 	if err != nil {
-		log.Fatalf("failed to listen at: " + api.ServerHost + api.ServerPort)
+		log.Fatalf("failed to listen at: " + api.serverHost + api.serverPort)
 	}
-	api.Listener = listener
+	api.listener = listener
 }
