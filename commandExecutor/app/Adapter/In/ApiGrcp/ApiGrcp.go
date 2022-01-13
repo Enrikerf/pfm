@@ -2,9 +2,8 @@ package ApiGrcp
 
 import (
 	"fmt"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/Controller"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
+	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp/Controller"
+	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp/gen/call"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
@@ -14,16 +13,14 @@ import (
 )
 
 type ApiGrpc struct {
-	createTask CreateTask.UseCase
 	serverHost string
 	serverPort string
 	grpcServer *grpc.Server
 	listener   net.Listener
 }
 
-func (api *ApiGrpc) Initialize(createTask CreateTask.UseCase, host string, port string) {
-	fmt.Println("Starting Command Manager...")
-	api.createTask = createTask
+func (api *ApiGrpc) Initialize(host string, port string) {
+	fmt.Println("Starting Command Executor...")
 	api.serverHost = host
 	api.serverPort = port
 	api.loadServer()
@@ -57,8 +54,8 @@ func (api *ApiGrpc) Run() {
 }
 
 func (api *ApiGrpc) configControllers() {
-	var taskController = Controller.TaskController{SaveTaskUseCase: api.createTask}
-	task.RegisterTaskServiceServer(api.grpcServer, taskController)
+	var callController = Controller.CallController{}
+	call.RegisterCallServiceServer(api.grpcServer, callController)
 }
 
 func (api *ApiGrpc) loadServer() {

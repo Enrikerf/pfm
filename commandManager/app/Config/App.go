@@ -8,6 +8,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Result"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Loop"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -20,22 +21,13 @@ type App struct {
 }
 
 func (server *App) Run() {
-
-	loadDotEnv()
-	db := loadDb()
-	//loop := LoopManager.LoopManager{DB: db}
-	//go loop.Run()
-	loadLoop(db)
-	server.ApiGrpc = ApiGrcp.ApiGrpc{}
-	server.ApiGrpc.Initialize(
-		db,
-		os.Getenv("SERVER_HOST"),
-		os.Getenv("SERVER_PORT"),
-	)
-	server.ApiGrpc.Run()
+	server.loadDotEnv()
+	db := server.loadDb()
+	server.loadLoop(db)
+	server.loadApiGrpc(db)
 }
 
-func loadDotEnv() {
+func (server *App) loadDotEnv() {
 	var err = godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error getting env, not comming through %v", err)
@@ -44,7 +36,7 @@ func loadDotEnv() {
 	}
 }
 
-func loadDb() *gorm.DB {
+func (server *App) loadDb() *gorm.DB {
 	dbUser := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbPort := os.Getenv("DB_PORT")
@@ -65,7 +57,7 @@ func loadDb() *gorm.DB {
 	return db
 }
 
-func loadLoop(db *gorm.DB) {
+func (server *App) loadLoop(db *gorm.DB) {
 	taskAdapter := Task.Adapter{Orm: db}
 	resultAdapter := Result.Adapter{Orm: db}
 	callAdapter := Call.Adapter{}
@@ -79,4 +71,17 @@ func loadLoop(db *gorm.DB) {
 		Loop: loopService,
 	}
 	go loopManager.Execute()
+}
+
+func (server *App) loadApiGrpc(db *gorm.DB) {
+	var taskAdapter = Task.Adapter{Orm: db}
+	var taskService = CreateTask.Service{SavePort: taskAdapter}
+	server.ApiGrpc = ApiGrcp.ApiGrpc{}
+	server.ApiGrpc.Initialize(
+		taskService,
+		os.Getenv("SERVER_HOST"),
+		os.Getenv("SERVER_PORT"),
+	)
+	server.ApiGrpc.Run()
+
 }
