@@ -10,8 +10,8 @@ import (
 type MockTaskOutOkPort struct {
 }
 
-func (mock MockTaskOutOkPort) Save(task TaskDomain.Task) (TaskDomain.Task, error) {
-	return task, nil
+func (mock MockTaskOutOkPort) Save(task TaskDomain.Task) error {
+	return nil
 }
 
 func TestCreateOk(t *testing.T) {
@@ -32,8 +32,8 @@ func TestCreateOk(t *testing.T) {
 type MockTaskOutErrorPort struct {
 }
 
-func (mock MockTaskOutErrorPort) Save(task TaskDomain.Task) (TaskDomain.Task, error) {
-	return TaskDomain.Task{}, fmt.Errorf("error")
+func (mock MockTaskOutErrorPort) Save(task TaskDomain.Task) error {
+	return fmt.Errorf("error")
 }
 
 func TestCreateFail(t *testing.T) {
