@@ -36,5 +36,5 @@ func GetTaskMode(mode string) (TaskModes, error) {
 	case "Bidirectional":
 		return Bidirectional, nil
 	}
-	return  -1 , fmt.Errorf("undefined")
+	return -1, fmt.Errorf("taskMode undefined")
 }

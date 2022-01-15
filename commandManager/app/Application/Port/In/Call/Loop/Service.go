@@ -5,7 +5,7 @@ import (
 	ResultOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Result"
 	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
 	CallOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Grcp/Call"
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 	"os"
 	"sync"
@@ -13,83 +13,98 @@ import (
 	"time"
 )
 
-// Manager TODO: rename Service
-//TODO: construct throw new to make variables unexported
-type Manager struct {
-	CallRequestPort CallOutPort.RequestPort
-	FindTasksByPort TaskOutPort.FindByPort
-	UpdateTaskPort  TaskOutPort.UpdatePort
-	SaveResultPort  ResultOutPort.SavePort
+type Service struct {
+	callRequestPort CallOutPort.RequestPort
+	findTasksByPort TaskOutPort.FindByPort
+	updateTaskPort  TaskOutPort.UpdatePort
+	saveResultPort  ResultOutPort.SavePort
+	exit            bool
 }
 
-func (manager Manager) Loop() error {
+func New(
+	callRequestPort CallOutPort.RequestPort,
+	findTasksByPort TaskOutPort.FindByPort,
+	updateTaskPort TaskOutPort.UpdatePort,
+	saveResultPort ResultOutPort.SavePort) *Service {
+	return &Service{
+		callRequestPort: callRequestPort,
+		findTasksByPort: findTasksByPort,
+		updateTaskPort:  updateTaskPort,
+		saveResultPort:  saveResultPort,
+		exit:            false,
+	}
+}
 
-	for true {
-		manager.Iteration()
+func (service *Service) GetExit() bool {
+	return service.exit
+
+}
+func (service *Service) Loop() error {
+
+	for !service.exit {
+		service.Iteration()
 		time.Sleep(10 * time.Second)
 	}
 	return nil
 }
 
-func (manager Manager) Iteration() {
-	fmt.Println("--- loop ----")
-	tasks, err := manager.FindTasksByPort.FindBy(map[string]interface{}{"Status": TaskDomain.Pending.String()})
-	if err != nil {
-		fmt.Printf("error fetching task: %v. \n", err)
+func (service *Service) Iteration() {
+	fmt.Println("------------ LOOP -------------")
+	tasks := service.findTasksByPort.FindBy(map[string]interface{}{"Status": TaskDomain.Pending.String()})
+	if tasks == nil {
+		fmt.Printf("error fetching task from db. \n")
+		service.exit = true
+	} else {
+		fmt.Printf("tasks %v. \n", len(tasks))
+		var wg sync.WaitGroup
+		for index := range tasks {
+			service.printTask(index, tasks[index])
+			wg.Add(1)
+			go service.slot(&wg, index, &tasks[index])
+		}
+		wg.Wait()
 	}
-	fmt.Printf("tasks %v. \n", len(tasks))
-	var wg sync.WaitGroup
-	for index := range tasks {
-		wg.Add(1)
-		go manager.slot(&wg, index, &tasks[index])
-	}
-	wg.Wait()
+
 }
 
-func (manager Manager) slot(wg *sync.WaitGroup, index int, tasks *TaskDomain.Task) {
+func (service *Service) slot(wg *sync.WaitGroup, index int, tasks *TaskDomain.Task) {
 	defer wg.Done()
-	printTask(index, *tasks)
-	manager.updateTaskStatus(tasks, TaskDomain.Running)
-	result := manager.callToClient(tasks)
-	manager.saveResult(result)
-	manager.updateTaskStatus(tasks, TaskDomain.Done)
-	println(tasks.Status.String())
+	service.updateTaskStatus(index, tasks, TaskDomain.Running)
+	result := service.callRequestPort.Request(*tasks)
+	service.saveResult(index, result)
+	service.updateTaskStatus(index, tasks, TaskDomain.Done)
 }
 
-func (manager Manager) updateTaskStatus(task *TaskDomain.Task, status TaskDomain.TaskStatus) {
+func (service *Service) updateTaskStatus(index int, task *TaskDomain.Task, status TaskDomain.TaskStatus) {
 	task.Status = status
-	err := manager.UpdateTaskPort.Update(*task)
+	err := service.updateTaskPort.Update(*task)
 	if err != nil {
-		fmt.Printf("error updating task %v. \n", err)
+		fmt.Printf("\t%v-error updating task %v. \n", index, err)
+		service.exit = true
 	}
 }
 
-func (manager Manager) saveResult(result Result.Result) {
-	println("saving result in db: " + result.Content)
-	err := manager.SaveResultPort.Save(result)
+func (service *Service) saveResult(index int, result ResultDomain.Result) {
+	fmt.Printf("\t%v-saving result in db: %v\n", index, result.Content)
+	err := service.saveResultPort.Save(result)
 	if err != nil {
-		fmt.Printf("error saving result %v. \n", err)
+		fmt.Printf("\t%v-error saving result %v. \n", index, err)
+		service.exit = true
 	}
 }
 
-func (manager Manager) callToClient(task *TaskDomain.Task) Result.Result {
-	return manager.CallRequestPort.Request(*task)
-}
-
-//func (manager Manager) callToClient(task TaskDomain.Task) Result.Result {
-//	resultChannel := make(chan Result.Result)
-//	go func(task TaskDomain.Task) {
-//		defer close(resultChannel)
-//		resultChannel <- manager.CallRequestPort.Request(task)
-//	}(task)
-//	result := <-resultChannel
-//	return result
-//}
-
-func printTask(index int, task TaskDomain.Task) {
-	fmt.Printf("%v) task:  \n", index)
+func (service *Service) printTask(index int, task TaskDomain.Task) {
 	w := tabwriter.NewWriter(os.Stdout, 1, 1, 1, '-', 0)
-	fmt.Fprintln(w, "uuid \t host \t port \t command \t mode \t status")
-	fmt.Fprintf(w, "%v \t %v \t %v \t %v \t %v \t %v\n", task.Uuid, task.Host, task.Port, task.Command, task.Mode, task.Status)
-	w.Flush()
+	_, err := fmt.Fprintf(w, "%v) task:  \n"+
+		"\t uuid \t host \t port \t command \t mode \t status\n"+
+		"\t %v \t %v \t %v \t %v \t %v \t %v\n",
+		index, task.Uuid, task.Host, task.Port, task.Command, task.Mode, task.Status)
+	if err != nil {
+		return
+	}
+	err = w.Flush()
+	if err != nil {
+		return
+	}
+	fmt.Println("----")
 }
