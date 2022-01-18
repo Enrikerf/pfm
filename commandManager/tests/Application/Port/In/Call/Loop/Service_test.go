@@ -145,6 +145,14 @@ func TestManager_Loop(t *testing.T) {
 				assert.Equal(t, TaskDomain.Done, domainTasks[index].Status)
 			}
 		}
+		resetTasks()
 	}
 
+}
+
+func resetTasks() {
+	//TODO: view problem with array of array references
+	for index := range domainTasks {
+		domainTasks[index].Status = TaskDomain.Pending
+	}
 }
