@@ -7,15 +7,16 @@ import (
 )
 
 type Task struct {
-	ID        uint      `gorm:"primaryKey"`
-	Uuid      uuid.UUID `gorm:"size:255;not null;unique" json:"uuid"`
-	Host      string    `gorm:"size:255;not null;unique" json:"host"`
-	Port      string    `gorm:"size:255;not null;unique" json:"port"`
-	Command   string    `gorm:"size:255;not null;unique" json:"command"`
-	Mode      string    `gorm:"size:255;not null;unique" json:"mode"`
-	Status    string    `gorm:"size:255;not null;unique" json:"status"`
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	ID            uint      `gorm:"primaryKey"`
+	Uuid          uuid.UUID `gorm:"size:255;not null;unique" json:"uuid"`
+	Host          string    `gorm:"size:255;not null;unique" json:"host"`
+	Port          string    `gorm:"size:255;not null;unique" json:"port"`
+	Command       string    `gorm:"size:255;not null;unique" json:"command"`
+	Mode          string    `gorm:"size:255;not null;unique" json:"mode"`
+	Status        string    `gorm:"size:255;not null;unique" json:"status"`
+	ExecutionMode string    `gorm:"column:execution_mode;size:255;not null;unique" json:"execution_mode"`
+	CreatedAt     time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt     time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
 func FromDomain(task TaskDomain.Task) Task {
@@ -26,6 +27,7 @@ func FromDomain(task TaskDomain.Task) Task {
 	taskPersistence.Command = task.Command
 	taskPersistence.Mode = task.Mode.String()
 	taskPersistence.Status = task.Status.String()
+	taskPersistence.ExecutionMode = task.ExecutionMode.String()
 	return taskPersistence
 }
 
@@ -37,5 +39,6 @@ func ToDomain(task Task) TaskDomain.Task {
 	taskDomain.Command = task.Command
 	taskDomain.Mode, _ = TaskDomain.GetTaskMode(task.Mode)
 	taskDomain.Status, _ = TaskDomain.GetStatus(task.Status)
+	taskDomain.ExecutionMode, _ = TaskDomain.GetExecutionMode(task.ExecutionMode)
 	return taskDomain
 }

@@ -2,16 +2,16 @@ package Task
 
 import "fmt"
 
-type TaskModes int
+type Modes int
 
 const (
-	Unary TaskModes = iota
+	Unary Modes = iota
 	ServerStream
 	ClientStream
 	Bidirectional
 )
 
-func (taskModes TaskModes) String() string {
+func (taskModes Modes) String() string {
 	switch taskModes {
 	case Unary:
 		return "Unary"
@@ -25,7 +25,7 @@ func (taskModes TaskModes) String() string {
 	return "unknown"
 }
 
-func GetTaskMode(mode string) (TaskModes, error) {
+func GetTaskMode(mode string) (Modes, error) {
 	switch mode {
 	case "Unary":
 		return Unary, nil

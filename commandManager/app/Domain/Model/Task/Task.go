@@ -3,15 +3,16 @@ package Task
 import "github.com/google/uuid"
 
 type Task struct {
-	Uuid    uuid.UUID
-	Host    string
-	Port    string
-	Command string
-	Mode    TaskModes
-	Status  TaskStatus
+	Uuid          uuid.UUID
+	Host          string
+	Port          string
+	Command       string
+	Mode          Modes
+	Status        TaskStatus
+	ExecutionMode ExecutionMode
 }
 
-func NewTask(host string, port string, command string, mode string) (Task, error) {
+func NewTask(host string, port string, command string, mode string, executionMode string) (Task, error) {
 	task := Task{}
 	task.Uuid = uuid.New()
 	task.Host = host
@@ -21,6 +22,11 @@ func NewTask(host string, port string, command string, mode string) (Task, error
 	if err != nil {
 		return Task{}, err
 	}
+	taskExecutionMode, err := GetExecutionMode(executionMode)
+	if err != nil {
+		return Task{}, err
+	}
+	task.ExecutionMode = taskExecutionMode
 	task.Mode = taskMode
 	task.Status = Pending
 	return task, nil

@@ -9,6 +9,7 @@ message EditableTaskParams{
   string port = 3;
   string command = 4;
   string mode = 5;
+  string executionMode = 6;
 }
 
 message Task{
@@ -18,6 +19,7 @@ message Task{
   string command = 4;
   string mode = 5;
   string status = 6;
+  string executionMode = 7;
 }
 
 message CreateTaskRequest{

@@ -49,7 +49,7 @@ func (adapter Adapter) FindAll() ([]TaskDomain.Task, error) {
 func (adapter Adapter) FindBy(conditions interface{}) []TaskDomain.Task {
 
 	var tasks []Task
-	var domainTasks []TaskDomain.Task
+	domainTasks := []TaskDomain.Task{}
 	err := adapter.Orm.Where(conditions).Find(&tasks).Error
 	if err != nil {
 		fmt.Printf("tasks %v. \n", err)

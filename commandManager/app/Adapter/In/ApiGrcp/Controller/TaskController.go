@@ -19,18 +19,20 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 	command.Port = protoTask.Port
 	command.Command = protoTask.Command
 	command.Mode = protoTask.Mode
+	command.ExecutionMode = protoTask.ExecutionMode
 
 	task, err := controller.SaveTaskUseCase.Create(command)
 	if err != nil {
 		return nil, fmt.Errorf("error")
 	}
 	newTask := taskProto.Task{
-		Uuid:    task.Uuid.String(),
-		Host:    task.Host,
-		Port:    task.Port,
-		Command: task.Command,
-		Mode:    task.Mode.String(),
-		Status:  task.Status.String(),
+		Uuid:          task.Uuid.String(),
+		Host:          task.Host,
+		Port:          task.Port,
+		Command:       task.Command,
+		Mode:          task.Mode.String(),
+		Status:        task.Status.String(),
+		ExecutionMode: task.ExecutionMode.String(),
 	}
 	return &taskProto.CreateTaskResponse{Task: &newTask}, nil
 }
