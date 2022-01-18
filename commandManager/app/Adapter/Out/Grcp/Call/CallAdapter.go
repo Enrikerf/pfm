@@ -28,7 +28,6 @@ func (adapter Adapter) Request(task Task.Task) Result.Result {
 	case Task.Unary:
 		callResponse, err := client.CallUnary(context.Background(), &callRequest)
 		if err != nil {
-			fmt.Printf("%v) task:  \n", err)
 			result.Content = err.Error()
 		} else {
 			result.Content = callResponse.GetResult()
@@ -36,21 +35,19 @@ func (adapter Adapter) Request(task Task.Task) Result.Result {
 	case Task.ServerStream:
 		callResponse, err := client.CallUnary(context.Background(), &callRequest)
 		if err != nil {
-			fmt.Printf("%v) task:  \n", err)
 			result.Content = err.Error()
 		}
 		result.Content = callResponse.GetResult()
 	case Task.ClientStream:
 		callResponse, err := client.CallUnary(context.Background(), &callRequest)
 		if err != nil {
-			fmt.Printf("%v) task:  \n", err)
 			result.Content = err.Error()
 		}
 		result.Content = callResponse.GetResult()
 	case Task.Bidirectional:
 		callResponse, err := client.CallUnary(context.Background(), &callRequest)
 		if err != nil {
-			fmt.Printf("%v) task:  \n", err)
+			//fmt.Printf("%v) task:  \n", err)
 			result.Content = err.Error()
 		}
 		result.Content = callResponse.GetResult()
