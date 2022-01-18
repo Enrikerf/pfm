@@ -33,11 +33,17 @@ func (adapter Adapter) Request(task Task.Task) Result.Result {
 			result.Content = callResponse.GetResult()
 		}
 	case Task.ServerStream:
-		callResponse, err := client.CallUnary(context.Background(), &callRequest)
+		_, err := client.CallClientStream(context.Background())
 		if err != nil {
 			result.Content = err.Error()
 		}
-		result.Content = callResponse.GetResult()
+		/*
+			TODO:
+			for _, request := range requests {
+				fmt.Printf("sending: %v\n", request)
+				stream.Send(request)
+			}*/
+		result.Content = ""
 	case Task.ClientStream:
 		callResponse, err := client.CallUnary(context.Background(), &callRequest)
 		if err != nil {
