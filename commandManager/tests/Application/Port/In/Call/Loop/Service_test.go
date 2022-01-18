@@ -63,7 +63,7 @@ equivalence classes
 tests
 	case	resultSavePortResult	taskUpdatePortResult	taskFindByResult	result
 	----------------------------------------------------------------------------------
-	1		nil						nil						nil					    error
+	1		nil						nil						nil						error
 	2		nil						nil						tasks					done
 	3		nil						error					nil						error
 	4		nil						error					tasks					error
