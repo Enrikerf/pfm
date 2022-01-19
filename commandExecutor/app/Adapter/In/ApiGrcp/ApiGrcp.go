@@ -20,7 +20,7 @@ type ApiGrpc struct {
 }
 
 func (api *ApiGrpc) Initialize(host string, port string) {
-	fmt.Println("Starting Command Executor...")
+	fmt.Println("Starting Name Executor...")
 	api.serverHost = host
 	api.serverPort = port
 	api.loadServer()

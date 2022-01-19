@@ -10,7 +10,15 @@ type Service struct {
 }
 
 func (service Service) Create(command Command) (TaskDomain.Task, error) {
-	var task, err = TaskDomain.NewTask(command.Host, command.Port, command.Command, command.Mode, command.ExecutionMode)
+	var commands []TaskDomain.Command
+	var task, err = TaskDomain.NewTask(command.Host, command.Port, commands, command.Mode, command.ExecutionMode)
+	for _, commandString := range command.Commands {
+		newCommand, err := TaskDomain.NewCommand(task.Uuid, commandString)
+		if err != nil {
+			return TaskDomain.Task{}, err
+		}
+		task.Commands = append(task.Commands, newCommand)
+	}
 	if err != nil {
 		return TaskDomain.Task{}, err
 	}

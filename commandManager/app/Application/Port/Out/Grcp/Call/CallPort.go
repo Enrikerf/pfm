@@ -6,5 +6,5 @@ import (
 )
 
 type RequestPort interface {
-	Request(task Task.Task) Result.Result
+	Request(task Task.Task) []Result.Result
 }

@@ -11,17 +11,20 @@ type Adapter struct {
 }
 
 func (adapter Adapter) Save(task TaskDomain.Task) error {
-	var taskMysql = FromDomain(task)
+	var taskMysql = Task{}
+	taskMysql.FromDomain(task)
 	err := adapter.Orm.Create(&taskMysql).Error
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
 func (adapter Adapter) Update(task TaskDomain.Task) error {
 	var taskUpdatedMysql Task
-	var taskValuesToUpdate = FromDomain(task)
+	var taskValuesToUpdate = Task{}
+	taskValuesToUpdate.FromDomain(task)
 	err := adapter.Orm.First(&taskUpdatedMysql, "uuid = ?", taskValuesToUpdate.Uuid).Error
 	if err != nil {
 		return err
@@ -41,7 +44,7 @@ func (adapter Adapter) FindAll() ([]TaskDomain.Task, error) {
 		return domainTasks, err
 	}
 	for _, task := range tasks {
-		domainTasks = append(domainTasks, ToDomain(task))
+		domainTasks = append(domainTasks, task.ToDomain(task))
 	}
 	return domainTasks, nil
 }
@@ -56,7 +59,7 @@ func (adapter Adapter) FindBy(conditions interface{}) []TaskDomain.Task {
 		return nil
 	}
 	for _, task := range tasks {
-		domainTasks = append(domainTasks, ToDomain(task))
+		domainTasks = append(domainTasks, task.ToDomain(task))
 	}
 	return domainTasks
 }
