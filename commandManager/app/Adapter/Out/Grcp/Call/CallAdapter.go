@@ -50,7 +50,6 @@ func (adapter Adapter) Request(task DomainTask.Task) []DomainResult.Result {
 			}
 			result, _ := DomainResult.NewResult(task.Uuid, response.GetResult())
 			results = append(results, result)
-
 		}
 	case DomainTask.Bidirectional:
 		results = adapter.notImplementedMethod(task, results)
