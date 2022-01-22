@@ -70,8 +70,8 @@ func (service *Service) Iteration() {
 func (service *Service) slot(wg *sync.WaitGroup, index int, tasks *TaskDomain.Task) {
 	defer wg.Done()
 	service.updateTaskStatus(index, tasks, TaskDomain.Running)
-	result := service.callRequestPort.Request(*tasks)
-	service.saveResult(index, result)
+	results := service.callRequestPort.Request(*tasks)
+	service.saveResults(index, results)
 	service.updateTaskStatus(index, tasks, TaskDomain.Done)
 }
 
@@ -84,13 +84,16 @@ func (service *Service) updateTaskStatus(index int, task *TaskDomain.Task, statu
 	}
 }
 
-func (service *Service) saveResult(index int, result ResultDomain.Result) {
-	fmt.Printf("\t%v-saving result in db: %v\n", index, result.Content)
-	err := service.saveResultPort.Save(result)
-	if err != nil {
-		fmt.Printf("\t%v-error saving result %v. \n", index, err)
-		service.exit = true
+func (service *Service) saveResults(index int, results []ResultDomain.Result) {
+	for index := range results {
+		fmt.Printf("\t%v-saving result in db: %v\n", index, results[index].Content)
+		err := service.saveResultPort.Save(results[index])
+		if err != nil {
+			fmt.Printf("\t%v-error saving result %v. \n", index, err)
+			service.exit = true
+		}
 	}
+
 }
 
 func (service *Service) printTask(index int, task TaskDomain.Task) {
@@ -98,7 +101,7 @@ func (service *Service) printTask(index int, task TaskDomain.Task) {
 	_, err := fmt.Fprintf(w, "%v) task:  \n"+
 		"\t uuid \t host \t port \t command \t mode \t status\n"+
 		"\t %v \t %v \t %v \t %v \t %v \t %v\n",
-		index, task.Uuid, task.Host, task.Port, task.Command, task.Mode, task.Status)
+		index, task.Uuid, task.Host, task.Port, task.Commands, task.Mode, task.Status)
 	if err != nil {
 		return
 	}

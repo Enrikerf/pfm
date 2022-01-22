@@ -17,7 +17,7 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 	var command CreateTask.Command
 	command.Host = protoTask.Host
 	command.Port = protoTask.Port
-	command.Command = protoTask.Command
+	command.Commands = protoTask.GetCommands()
 	command.Mode = protoTask.Mode
 	command.ExecutionMode = protoTask.ExecutionMode
 
@@ -25,11 +25,15 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 	if err != nil {
 		return nil, fmt.Errorf("error")
 	}
+	var commandNames []string
+	for _, command := range task.Commands {
+		commandNames = append(commandNames, command.Name)
+	}
 	newTask := taskProto.Task{
 		Uuid:          task.Uuid.String(),
 		Host:          task.Host,
 		Port:          task.Port,
-		Command:       task.Command,
+		Commands:      commandNames,
 		Mode:          task.Mode.String(),
 		Status:        task.Status.String(),
 		ExecutionMode: task.ExecutionMode.String(),

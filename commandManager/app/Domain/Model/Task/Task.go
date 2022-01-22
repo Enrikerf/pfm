@@ -6,18 +6,18 @@ type Task struct {
 	Uuid          uuid.UUID
 	Host          string
 	Port          string
-	Command       string
+	Commands      []Command
 	Mode          Modes
 	Status        TaskStatus
 	ExecutionMode ExecutionMode
 }
 
-func NewTask(host string, port string, command string, mode string, executionMode string) (Task, error) {
+func NewTask(host string, port string, commands []Command, mode string, executionMode string) (Task, error) {
 	task := Task{}
 	task.Uuid = uuid.New()
 	task.Host = host
 	task.Port = port
-	task.Command = command
+	task.Commands = commands
 	taskMode, err := GetTaskMode(mode)
 	if err != nil {
 		return Task{}, err

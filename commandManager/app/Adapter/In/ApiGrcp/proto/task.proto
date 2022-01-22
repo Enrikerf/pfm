@@ -7,7 +7,7 @@ option go_package = "./task";
 message EditableTaskParams{
   string host = 2;
   string port = 3;
-  string command = 4;
+  repeated string commands = 4;
   string mode = 5;
   string executionMode = 6;
 }
@@ -16,7 +16,7 @@ message Task{
   string uuid = 1;
   string host = 2;
   string port = 3;
-  string command = 4;
+  repeated string commands = 4;
   string mode = 5;
   string status = 6;
   string executionMode = 7;

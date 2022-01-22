@@ -3,58 +3,80 @@ package Call
 import (
 	"context"
 	"fmt"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/call"
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	ProtoCall "github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/call"
+	DomainResult "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+	DomainTask "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 	"google.golang.org/grpc"
 )
 
 type Adapter struct {
 }
 
-func (adapter Adapter) Request(task Task.Task) Result.Result {
+func (adapter Adapter) Request(task DomainTask.Task) []DomainResult.Result {
 	options := grpc.WithInsecure()
 	connection, err := grpc.Dial(task.Host+":"+task.Port, options)
 	if err != nil {
 		fmt.Println("error: %v", err)
 	}
 	defer connection.Close()
-	client := call.NewCallServiceClient(connection)
-	callRequest := call.CallRequest{
-		Command: task.Command,
-	}
-	result, _ := Result.NewResult(task.Uuid, "")
+	client := ProtoCall.NewCallServiceClient(connection)
+	results := []DomainResult.Result{}
 	switch task.Mode {
-	case Task.Unary:
-		callResponse, err := client.CallUnary(context.Background(), &callRequest)
+	case DomainTask.Unary:
+		results = adapter.doUnaryCall(task, client, results)
+	case DomainTask.ServerStream:
+		results = adapter.notImplementedMethod(task, results)
+	case DomainTask.ClientStream:
+		result, _ := DomainResult.NewResult(task.Uuid, "not implemented")
+		stream, err := client.CallClientStream(context.Background())
 		if err != nil {
 			result.Content = err.Error()
 		} else {
-			result.Content = callResponse.GetResult()
+			for _, command := range task.Commands {
+				fmt.Printf("sending: %v\n", command.Name)
+				callRequest := ProtoCall.CallRequest{
+					Command: command.Name,
+				}
+				err := stream.Send(&callRequest)
+				if err != nil {
+					result.Content = err.Error()
+					results = append(results, result)
+				}
+			}
+			response, err := stream.CloseAndRecv()
+			if err != nil {
+				result.Content = err.Error()
+				results = append(results, result)
+			}
+			result, _ := DomainResult.NewResult(task.Uuid, response.GetResult())
+			results = append(results, result)
 		}
-	case Task.ServerStream:
-		callResponse, err := client.CallUnary(context.Background(), &callRequest)
-		if err != nil {
-			result.Content = err.Error()
-		}
-		result.Content = callResponse.GetResult()
-	case Task.ClientStream:
-		callResponse, err := client.CallUnary(context.Background(), &callRequest)
-		if err != nil {
-			result.Content = err.Error()
-		}
-		result.Content = callResponse.GetResult()
-	case Task.Bidirectional:
-		callResponse, err := client.CallUnary(context.Background(), &callRequest)
-		if err != nil {
-			//fmt.Printf("%v) task:  \n", err)
-			result.Content = err.Error()
-		}
-		result.Content = callResponse.GetResult()
+	case DomainTask.Bidirectional:
+		results = adapter.notImplementedMethod(task, results)
 	default:
-		result.Content = "not implemented task mode"
-		fmt.Printf("%v) task:  \n", err)
+		results = adapter.notImplementedMethod(task, results)
 	}
 
-	return result
+	return results
+}
+
+func (adapter Adapter) doUnaryCall(task DomainTask.Task, client ProtoCall.CallServiceClient, results []DomainResult.Result) []DomainResult.Result {
+	callRequest := ProtoCall.CallRequest{
+		Command: task.Commands[0].Name,
+	}
+	callResponse, err := client.CallUnary(context.Background(), &callRequest)
+	result, _ := DomainResult.NewResult(task.Uuid, "")
+	if err != nil {
+		result.Content = err.Error()
+	} else {
+		result.Content = callResponse.GetResult()
+	}
+	results = append(results, result)
+	return results
+}
+
+func (adapter Adapter) notImplementedMethod(task DomainTask.Task, results []DomainResult.Result) []DomainResult.Result {
+	result, _ := DomainResult.NewResult(task.Uuid, "not implemented")
+	results = append(results, result)
+	return results
 }

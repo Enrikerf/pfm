@@ -19,7 +19,7 @@ func TestCreateOk(t *testing.T) {
 	command := Command{
 		Host:    "Host",
 		Port:    "Port",
-		Command: "Command",
+		Command: "Name",
 		Mode:    "Unary",
 	}
 	newTask, err := service.Create(command)
@@ -40,7 +40,7 @@ func TestCreateFail(t *testing.T) {
 	command := Command{
 		Host:    "Host",
 		Port:    "Port",
-		Command: "Command",
+		Command: "Name",
 		Mode:    "Mode",
 		Status:  "Status",
 	}

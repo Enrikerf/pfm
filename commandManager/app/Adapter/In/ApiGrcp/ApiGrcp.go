@@ -22,7 +22,7 @@ type ApiGrpc struct {
 }
 
 func (api *ApiGrpc) Initialize(createTask CreateTask.UseCase, host string, port string) {
-	fmt.Println("Starting Command Manager...")
+	fmt.Println("Starting Name Manager...")
 	api.createTask = createTask
 	api.serverHost = host
 	api.serverPort = port
