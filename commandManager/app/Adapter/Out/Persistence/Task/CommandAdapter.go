@@ -38,7 +38,7 @@ func (adapter CommandAdapter) FindAll() ([]TaskDomain.Command, error) {
 		return domainResults, response.Error
 	}
 	for _, commandMysql := range commands {
-		domainResults = append(domainResults, commandMysql.ToDomain(commandMysql))
+		domainResults = append(domainResults, commandMysql.ToDomain())
 	}
 	return domainResults, nil
 }

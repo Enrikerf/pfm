@@ -16,16 +16,16 @@ type command struct {
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
-func (command command) FromDomain(commandDomain TaskDomain.Command) {
+func (command *command) FromDomain(commandDomain TaskDomain.Command) {
 	command.Uuid = commandDomain.Uuid
 	command.TaskUuid = commandDomain.TaskUuid
 	command.Name = commandDomain.Name
 }
 
-func (command command) ToDomain(commandPersistence command) TaskDomain.Command {
+func (command *command) ToDomain() TaskDomain.Command {
 	resultDomain := TaskDomain.Command{}
-	resultDomain.Uuid = commandPersistence.Uuid
-	resultDomain.TaskUuid = commandPersistence.TaskUuid
-	resultDomain.Name = commandPersistence.Name
+	resultDomain.Uuid = command.Uuid
+	resultDomain.TaskUuid = command.TaskUuid
+	resultDomain.Name = command.Name
 	return resultDomain
 }

@@ -39,12 +39,14 @@ func (adapter Adapter) Request(task DomainTask.Task) []DomainResult.Result {
 				}
 				err := stream.Send(&callRequest)
 				if err != nil {
-					return nil
+					result.Content = err.Error()
+					results = append(results, result)
 				}
 			}
-			response, error := stream.CloseAndRecv()
-			if error != nil {
-				return nil
+			response, err := stream.CloseAndRecv()
+			if err != nil {
+				result.Content = err.Error()
+				results = append(results, result)
 			}
 			result, _ := DomainResult.NewResult(task.Uuid, response.GetResult())
 			results = append(results, result)

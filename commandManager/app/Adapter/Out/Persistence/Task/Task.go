@@ -19,7 +19,7 @@ type Task struct {
 	UpdatedAt     time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
-func (taskPersistence Task) FromDomain(task TaskDomain.Task) {
+func (taskPersistence *Task) FromDomain(task TaskDomain.Task) {
 	taskPersistence.Uuid = task.Uuid
 	taskPersistence.Host = task.Host
 	taskPersistence.Port = task.Port
@@ -33,16 +33,16 @@ func (taskPersistence Task) FromDomain(task TaskDomain.Task) {
 	taskPersistence.ExecutionMode = task.ExecutionMode.String()
 }
 
-func (taskPersistence Task) ToDomain(task Task) TaskDomain.Task {
+func (taskPersistence *Task) ToDomain() TaskDomain.Task {
 	taskDomain := TaskDomain.Task{}
-	taskDomain.Uuid = task.Uuid
-	taskDomain.Host = task.Host
-	taskDomain.Port = task.Port
-	for _, commandMysql := range task.Commands {
-		taskDomain.Commands = append(taskDomain.Commands, command{}.ToDomain(commandMysql))
+	taskDomain.Uuid = taskPersistence.Uuid
+	taskDomain.Host = taskPersistence.Host
+	taskDomain.Port = taskPersistence.Port
+	for _, commandMysql := range taskPersistence.Commands {
+		taskDomain.Commands = append(taskDomain.Commands, commandMysql.ToDomain())
 	}
-	taskDomain.Mode, _ = TaskDomain.GetTaskMode(task.Mode)
-	taskDomain.Status, _ = TaskDomain.GetStatus(task.Status)
-	taskDomain.ExecutionMode, _ = TaskDomain.GetExecutionMode(task.ExecutionMode)
+	taskDomain.Mode, _ = TaskDomain.GetTaskMode(taskPersistence.Mode)
+	taskDomain.Status, _ = TaskDomain.GetStatus(taskPersistence.Status)
+	taskDomain.ExecutionMode, _ = TaskDomain.GetExecutionMode(taskPersistence.ExecutionMode)
 	return taskDomain
 }
