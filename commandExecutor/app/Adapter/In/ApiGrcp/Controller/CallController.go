@@ -15,6 +15,7 @@ type CallController struct {
 	call.UnimplementedCallServiceServer
 }
 
+// CallUnary TODO: don't break on error never. return responses to allows keep going the system
 func (s CallController) CallUnary(ctx context.Context, request *call.CallRequest) (*call.CallResponse, error) {
 	fmt.Println("executing command: " + request.Command)
 	resultContent := execCommand(request.GetCommand())
@@ -44,8 +45,27 @@ func (s CallController) CallClientStream(server call.CallService_CallClientStrea
 }
 
 func (s CallController) CallBidirectional(server call.CallService_CallBidirectionalServer) error {
-	//TODO implement me
-	panic("implement me")
+	fmt.Println("Bidirectional")
+	for {
+		request, err := server.Recv()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			log.Fatalf("error")
+			return err
+		}
+		//TODO: do it with async accept new commands but execute it in sync way waiting until the previous end
+		result := execCommand(request.GetCommand())
+		sendError := server.Send(&call.CallResponse{
+			Result: result,
+		})
+		if sendError != nil {
+			log.Fatalf("error")
+			return sendError
+		}
+
+	}
 }
 
 func execCommand(command string) string {
