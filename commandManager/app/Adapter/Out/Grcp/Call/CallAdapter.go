@@ -62,6 +62,7 @@ func (adapter Adapter) doServerStream(task DomainTask.Task, client ProtoCall.Cal
 			if err != nil {
 				result, _ := DomainResult.NewResult(task.Uuid, err.Error())
 				results = append(results, result)
+				break
 			}
 			result, _ := DomainResult.NewResult(task.Uuid, msg.GetResult())
 			results = append(results, result)
