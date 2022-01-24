@@ -23,8 +23,17 @@ func (s CallController) CallUnary(ctx context.Context, request *call.CallRequest
 }
 
 func (s CallController) CallServerStream(request *call.CallRequest, server call.CallService_CallServerStreamServer) error {
-	//TODO implement me
-	panic("implement me")
+	fmt.Printf("Server stream %v\n", request)
+	//TODO: sense?
+	for i := 0; i < 3; i++ {
+		resultContent := execCommand(request.GetCommand())
+		err := server.Send(&call.CallResponse{Result: resultContent})
+		if err != nil {
+			log.Fatalf("error")
+			return nil
+		}
+	}
+	return nil
 }
 
 func (s CallController) CallClientStream(server call.CallService_CallClientStreamServer) error {
