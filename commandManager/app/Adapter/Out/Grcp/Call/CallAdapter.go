@@ -16,25 +16,58 @@ type Adapter struct {
 func (adapter Adapter) Request(task DomainTask.Task) []DomainResult.Result {
 	options := grpc.WithInsecure()
 	connection, err := grpc.Dial(task.Host+":"+task.Port, options)
+	results := []DomainResult.Result{}
 	if err != nil {
 		fmt.Println("error: %v", err)
-	}
-	defer connection.Close()
-	client := ProtoCall.NewCallServiceClient(connection)
-	results := []DomainResult.Result{}
-	switch task.Mode {
-	case DomainTask.Unary:
-		results = adapter.doUnaryCall(task, client)
-	case DomainTask.ServerStream:
-		results = adapter.notImplementedMethod(task)
-	case DomainTask.ClientStream:
-		results = adapter.doClientStream(task, client)
-	case DomainTask.Bidirectional:
-		results = adapter.doBidirectional(task, client)
-	default:
-		results = adapter.notImplementedMethod(task)
+		result, _ := DomainResult.NewResult(task.Uuid, err.Error())
+		results = append(results, result)
+	}else{
+		defer connection.Close()
+		client := ProtoCall.NewCallServiceClient(connection)
+		switch task.Mode {
+		case DomainTask.Unary:
+			results = adapter.doUnaryCall(task, client)
+		case DomainTask.ServerStream:
+			results = adapter.doServerStream(task, client)
+		case DomainTask.ClientStream:
+			results = adapter.doClientStream(task, client)
+		case DomainTask.Bidirectional:
+			results = adapter.doBidirectional(task, client)
+		default:
+			results = adapter.notImplementedMethod(task)
+		}
 	}
 
+	return results
+}
+
+func (adapter Adapter) doServerStream(task DomainTask.Task, client ProtoCall.CallServiceClient) []DomainResult.Result {
+	results := []DomainResult.Result{}
+	request := &ProtoCall.CallRequest{
+		Command: task.Commands[0].Name,
+	}
+	responseStream, err := client.CallServerStream(context.Background(), request)
+
+	if err != nil {
+		result, _ := DomainResult.NewResult(task.Uuid, err.Error())
+		results = append(results, result)
+	}else{
+		for {
+			msg, err := responseStream.Recv()
+			if err == io.EOF {
+				result, _ := DomainResult.NewResult(task.Uuid, err.Error())
+				results = append(results, result)
+				break
+			}
+			if err != nil {
+				result, _ := DomainResult.NewResult(task.Uuid, err.Error())
+				results = append(results, result)
+				break
+			}
+			result, _ := DomainResult.NewResult(task.Uuid, msg.GetResult())
+			results = append(results, result)
+		}
+	}
 	return results
 }
 
