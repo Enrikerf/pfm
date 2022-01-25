@@ -9,10 +9,12 @@ import (
 type MockCallRequestPort struct {
 }
 
-func (mock MockCallRequestPort) Request(task TaskDomain.Task) ResultDomain.Result {
-	return ResultDomain.Result{
-		Uuid:     uuid.UUID{},
-		TaskUuid: uuid.UUID{},
-		Content:  task.Command,
+func (mock MockCallRequestPort) Request(task TaskDomain.Task) []ResultDomain.Result {
+	return []ResultDomain.Result{
+		{
+			Uuid:     uuid.UUID{},
+			TaskUuid: uuid.UUID{},
+			Content:  "",
+		},
 	}
 }

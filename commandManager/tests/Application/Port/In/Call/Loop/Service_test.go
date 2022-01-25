@@ -7,7 +7,7 @@ import (
 	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 	mockResultPort "github.com/Enrikerf/pfm/commandManager/tests/Application/Port/Out/Database/Result"
 	mockTask "github.com/Enrikerf/pfm/commandManager/tests/Application/Port/Out/Database/Task"
-	"github.com/Enrikerf/pfm/commandManager/tests/Application/Port/Out/Grcp/Call"
+	mockCall "github.com/Enrikerf/pfm/commandManager/tests/Application/Port/Out/Grcp/Call"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -15,36 +15,52 @@ import (
 
 var domainTasks = []TaskDomain.Task{
 	{
-		Uuid:    uuid.UUID{},
-		Host:    "",
-		Port:    "",
-		Command: "1000",
-		Mode:    0,
-		Status:  TaskDomain.Pending,
+		Uuid: uuid.UUID{},
+		Host: "",
+		Port: "",
+		Commands: []TaskDomain.Command{{
+			Uuid:     uuid.UUID{},
+			TaskUuid: uuid.UUID{},
+			Name:     "ls",
+		}},
+		Mode:   TaskDomain.Unary,
+		Status: TaskDomain.Pending,
 	},
 	{
-		Uuid:    uuid.UUID{},
-		Host:    "",
-		Port:    "",
-		Command: "100",
-		Mode:    0,
-		Status:  TaskDomain.Pending,
+		Uuid: uuid.UUID{},
+		Host: "",
+		Port: "",
+		Commands: []TaskDomain.Command{{
+			Uuid:     uuid.UUID{},
+			TaskUuid: uuid.UUID{},
+			Name:     "ls",
+		}},
+		Mode:   TaskDomain.Unary,
+		Status: TaskDomain.Pending,
 	},
 	{
-		Uuid:    uuid.UUID{},
-		Host:    "",
-		Port:    "",
-		Command: "10",
-		Mode:    0,
-		Status:  TaskDomain.Pending,
+		Uuid: uuid.UUID{},
+		Host: "",
+		Port: "",
+		Commands: []TaskDomain.Command{{
+			Uuid:     uuid.UUID{},
+			TaskUuid: uuid.UUID{},
+			Name:     "ls",
+		}},
+		Mode:   TaskDomain.Unary,
+		Status: TaskDomain.Pending,
 	},
 	{
-		Uuid:    uuid.UUID{},
-		Host:    "",
-		Port:    "",
-		Command: "1",
-		Mode:    0,
-		Status:  TaskDomain.Pending,
+		Uuid: uuid.UUID{},
+		Host: "",
+		Port: "",
+		Commands: []TaskDomain.Command{{
+			Uuid:     uuid.UUID{},
+			TaskUuid: uuid.UUID{},
+			Name:     "ls",
+		}},
+		Mode:   0,
+		Status: TaskDomain.Pending,
 	},
 }
 
@@ -131,7 +147,7 @@ var tests = []struct {
 func TestManager_Loop(t *testing.T) {
 	for index, test := range tests {
 		service := Loop.New(
-			Call.MockCallRequestPort{},
+			mockCall.MockCallRequestPort{},
 			mockTask.MockFindByPort{Result: test.taskFindByResult},
 			mockTask.MockUpdatePort{Return: test.taskUpdatePortResult},
 			mockResultPort.MockSavePort{Result: test.resultSavePortResult},

@@ -50,7 +50,8 @@ func (service *Service) Loop() error {
 
 func (service *Service) Iteration() {
 	fmt.Println("------------ LOOP -------------")
-	tasks := service.findTasksByPort.FindBy(map[string]interface{}{"Status": TaskDomain.Pending.String(), "execution_mode": TaskDomain.Automatic})
+	tasks := service.findTasksByPort.
+		FindBy(map[string]interface{}{"Status": TaskDomain.Pending.String(), "execution_mode": TaskDomain.Automatic})
 	if tasks == nil {
 		fmt.Printf("error fetching task from db. \n")
 		service.exit = true
