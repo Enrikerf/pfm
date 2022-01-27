@@ -7,27 +7,25 @@ import (
 )
 
 type Result struct {
-	ID        uint      `gorm:"primaryKey"`
-	Uuid      uuid.UUID `gorm:"size:255;not null;unique" json:"uuid"`
-	TaskID    uint      `gorm:"size:255;not null;unique" json:"task_id"`
-	TaskUuid  uuid.UUID `gorm:"size:255;not null;unique" json:"task_uuid"`
-	Content   string    `json:"content"`
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	ID        uint
+	Uuid      uuid.UUID
+	BatchID   uint
+	BatchUuid uuid.UUID
+	Content   string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
-func FromDomain(result ResultDomain.Result) Result {
-	resultPersistence := Result{}
-	resultPersistence.Uuid = result.Uuid
-	resultPersistence.TaskUuid = result.TaskUuid
-	resultPersistence.Content = result.Content
-	return resultPersistence
+func (result *Result) FromDomain(resultDomain ResultDomain.Result) {
+	result.Uuid = resultDomain.Uuid
+	result.BatchUuid = resultDomain.BatchUuid
+	result.Content = resultDomain.Content
 }
 
-func ToDomain(result Result) ResultDomain.Result {
+func (result *Result) ToDomain() ResultDomain.Result {
 	resultDomain := ResultDomain.Result{}
 	resultDomain.Uuid = result.Uuid
-	resultDomain.TaskUuid = result.TaskUuid
+	resultDomain.BatchUuid = result.BatchUuid
 	resultDomain.Content = result.Content
 	return resultDomain
 }

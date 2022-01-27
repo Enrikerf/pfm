@@ -12,7 +12,7 @@ type CommandAdapter struct {
 
 func (adapter CommandAdapter) Save(commandDomain TaskDomain.Command) error {
 	var taskMysql Task
-	var commandMysql command
+	var commandMysql Command
 	response := adapter.Orm.First(&taskMysql, "uuid = ?", commandDomain.TaskUuid)
 	if response.Error != nil {
 		fmt.Printf("tasks %v.\n", response.Error)
@@ -30,7 +30,7 @@ func (adapter CommandAdapter) Save(commandDomain TaskDomain.Command) error {
 
 func (adapter CommandAdapter) FindAll() ([]TaskDomain.Command, error) {
 
-	var commands []command
+	var commands []Command
 	var domainResults []TaskDomain.Command
 	response := adapter.Orm.Find(&commands)
 	if response.Error != nil {

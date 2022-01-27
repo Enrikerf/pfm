@@ -17,7 +17,8 @@ type Service struct {
 	callRequestPort CallOutPort.RequestPort
 	findTasksByPort TaskOutPort.FindByPort
 	updateTaskPort  TaskOutPort.UpdatePort
-	saveResultPort  ResultOutPort.SavePort
+	saveBatchPort   ResultOutPort.SaveBatchPort
+	saveResultPort  ResultOutPort.SaveResultPort
 	exit            bool
 }
 
@@ -25,7 +26,7 @@ func New(
 	callRequestPort CallOutPort.RequestPort,
 	findTasksByPort TaskOutPort.FindByPort,
 	updateTaskPort TaskOutPort.UpdatePort,
-	saveResultPort ResultOutPort.SavePort) *Service {
+	saveResultPort ResultOutPort.SaveResultPort) *Service {
 	return &Service{
 		callRequestPort: callRequestPort,
 		findTasksByPort: findTasksByPort,
@@ -68,12 +69,12 @@ func (service *Service) Iteration() {
 
 }
 
-func (service *Service) slot(wg *sync.WaitGroup, index int, tasks *TaskDomain.Task) {
+func (service *Service) slot(wg *sync.WaitGroup, index int, task *TaskDomain.Task) {
 	defer wg.Done()
-	service.updateTaskStatus(index, tasks, TaskDomain.Running)
-	results := service.callRequestPort.Request(*tasks)
-	service.saveResults(index, results)
-	service.updateTaskStatus(index, tasks, TaskDomain.Done)
+	service.updateTaskStatus(index, task, TaskDomain.Running)
+	results := service.callRequestPort.Request(*task)
+	service.saveResults(index, task, results)
+	service.updateTaskStatus(index, task, TaskDomain.Done)
 }
 
 func (service *Service) updateTaskStatus(index int, task *TaskDomain.Task, status TaskDomain.TaskStatus) {
@@ -85,15 +86,26 @@ func (service *Service) updateTaskStatus(index int, task *TaskDomain.Task, statu
 	}
 }
 
-func (service *Service) saveResults(index int, results []ResultDomain.Result) {
-	for index := range results {
-		fmt.Printf("\t%v-saving result in db: %v\n", index, results[index].Content)
-		err := service.saveResultPort.Save(results[index])
-		if err != nil {
-			fmt.Printf("\t%v-error saving result %v. \n", index, err)
-			service.exit = true
-		}
+func (service *Service) saveResults(index int, task *TaskDomain.Task, results []ResultDomain.Result) {
+	batch, err := ResultDomain.NewBatch(task.Uuid, results)
+	if err != nil {
+		fmt.Printf("\t%v-error saving result %v. \n", index, err)
+		service.exit = true
 	}
+	fmt.Printf("\t%v-saving result in db: %v\n", index, batch)
+	err = service.saveBatchPort.Save(batch)
+	if err != nil {
+		fmt.Printf("\t%v-error saving result %v. \n", index, err)
+		service.exit = true
+	}
+	//for index := range results {
+	//	fmt.Printf("\t%v-saving result in db: %v\n", index, results[index].Content)
+	//	err := service.saveResultPort.Save(results[index])
+	//	if err != nil {
+	//		fmt.Printf("\t%v-error saving result %v. \n", index, err)
+	//		service.exit = true
+	//	}
+	//}
 
 }
 
