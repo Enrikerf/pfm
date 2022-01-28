@@ -2,7 +2,6 @@ package Result
 
 import (
 	"fmt"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
 	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 	"gorm.io/gorm"
 )
@@ -12,14 +11,15 @@ type Adapter struct {
 }
 
 func (adapter Adapter) Save(result ResultDomain.Result) error {
-	var taskMysql Task.Task
-	response := adapter.Orm.First(&taskMysql, "uuid = ?", result.TaskUuid)
+	var batchMysql Batch
+	var resultMysql Result
+	response := adapter.Orm.First(&batchMysql, "uuid = ?", result.BatchUuid)
 	if response.Error != nil {
 		fmt.Printf("tasks %v. \n", response.Error)
 		return response.Error
 	}
-	var resultMysql = FromDomain(result)
-	resultMysql.TaskID = taskMysql.ID
+	resultMysql.FromDomain(result)
+	resultMysql.BatchID = batchMysql.ID
 
 	err := adapter.Orm.Create(&resultMysql).Error
 	if err != nil {
@@ -38,7 +38,7 @@ func (adapter Adapter) FindAll() ([]ResultDomain.Result, error) {
 		return domainResults, response.Error
 	}
 	for _, task := range results {
-		domainResults = append(domainResults, ToDomain(task))
+		domainResults = append(domainResults, task.ToDomain())
 	}
 	return domainResults, nil
 }

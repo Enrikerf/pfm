@@ -19,10 +19,10 @@ type Batch struct {
 func (batch *Batch) FromDomain(batchDomain ResultDomain.Batch) {
 	batch.Uuid = batchDomain.Uuid
 	batch.TaskUuid = batchDomain.TaskUuid
-	for _, commandDomain := range batchDomain.Results {
-		command := Result{}
-		command.FromDomain(commandDomain)
-		batch.Results = append(batch.Results, command)
+	for _, resultDomain := range batchDomain.Results {
+		result := Result{}
+		result.FromDomain(resultDomain)
+		batch.Results = append(batch.Results, result)
 	}
 }
 
