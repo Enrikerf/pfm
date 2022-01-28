@@ -13,7 +13,7 @@ import (
 type Adapter struct {
 }
 
-func (adapter Adapter) Request(task DomainTask.Task) []DomainResult.Result {
+func (adapter Adapter) Request(task DomainTask.Task) DomainResult.Batch {
 	options := grpc.WithInsecure()
 	connection, err := grpc.Dial(task.Host+":"+task.Port, options)
 	results := []DomainResult.Result{}
@@ -21,7 +21,7 @@ func (adapter Adapter) Request(task DomainTask.Task) []DomainResult.Result {
 		fmt.Println("error: %v", err)
 		result, _ := DomainResult.NewResult(task.Uuid, err.Error())
 		results = append(results, result)
-	}else{
+	} else {
 		defer connection.Close()
 		client := ProtoCall.NewCallServiceClient(connection)
 		switch task.Mode {
@@ -38,7 +38,7 @@ func (adapter Adapter) Request(task DomainTask.Task) []DomainResult.Result {
 		}
 	}
 
-	return results
+	return DomainResult.NewBatch(task.Uuid, results)
 }
 
 func (adapter Adapter) doServerStream(task DomainTask.Task, client ProtoCall.CallServiceClient) []DomainResult.Result {
@@ -51,7 +51,7 @@ func (adapter Adapter) doServerStream(task DomainTask.Task, client ProtoCall.Cal
 	if err != nil {
 		result, _ := DomainResult.NewResult(task.Uuid, err.Error())
 		results = append(results, result)
-	}else{
+	} else {
 		for {
 			msg, err := responseStream.Recv()
 			if err == io.EOF {
@@ -79,23 +79,25 @@ func (adapter Adapter) doBidirectional(task DomainTask.Task, client ProtoCall.Ca
 		result, _ := DomainResult.NewResult(task.Uuid, "")
 		result.Content = err.Error()
 		results = append(results, result)
+	} else {
+		// we send a bunch of messages to de client go routine
+		resultsChannel1 := make(chan string)
+		go sendInStream(task, stream, resultsChannel1)
+		// we receive a bunch of messages form the client go routine
+		resultsChannel2 := make(chan string)
+		go receiveServerStream(stream, resultsChannel2)
+		for i := range resultsChannel1 {
+			result, _ := DomainResult.NewResult(task.Uuid, "")
+			result.Content = i
+			results = append(results, result)
+		}
+		for i := range resultsChannel2 {
+			result, _ := DomainResult.NewResult(task.Uuid, "")
+			result.Content = i
+			results = append(results, result)
+		}
 	}
-	// we send a bunch of messages to de client go routine
-	resultsChannel1 := make(chan string)
-	go sendInStream(task, stream, resultsChannel1)
-	// we receive a bunch of messages form the client go routine
-	resultsChannel2 := make(chan string)
-	go receiveServerStream(stream, resultsChannel2)
-	for i := range resultsChannel1 {
-		result, _ := DomainResult.NewResult(task.Uuid, "")
-		result.Content = i
-		results = append(results, result)
-	}
-	for i := range resultsChannel2 {
-		result, _ := DomainResult.NewResult(task.Uuid, "")
-		result.Content = i
-		results = append(results, result)
-	}
+
 	return results
 }
 

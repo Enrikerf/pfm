@@ -60,12 +60,14 @@ func (server *App) loadDb() *gorm.DB {
 func (server *App) loadLoop(db *gorm.DB) {
 	taskAdapter := Task.Adapter{Orm: db}
 	resultAdapter := Result.Adapter{Orm: db}
+	batchAdapter := Result.BatchAdapter{Orm: db}
 	//TODO: inject grcp and proto? to test this adapter later
 	callAdapter := Call.Adapter{}
 	loopService := Loop.New(
 		callAdapter,
 		taskAdapter,
 		taskAdapter,
+		batchAdapter,
 		resultAdapter,
 	)
 	loopManager := LoopManager.LoopManager{

@@ -6,23 +6,23 @@ import (
 	"time"
 )
 
-type command struct {
-	ID        uint      `gorm:"primaryKey"`
-	Uuid      uuid.UUID `gorm:"size:255;not null;unique" json:"uuid"`
-	TaskID    uint      `gorm:"size:255;not null;unique" json:"task_id"`
-	TaskUuid  uuid.UUID `gorm:"size:255;not null;unique" json:"task_uuid"`
-	Name      string    `json:"content"`
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+type Command struct {
+	ID        uint
+	Uuid      uuid.UUID
+	TaskID    uint
+	TaskUuid  uuid.UUID
+	Name      string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
-func (command *command) FromDomain(commandDomain TaskDomain.Command) {
+func (command *Command) FromDomain(commandDomain TaskDomain.Command) {
 	command.Uuid = commandDomain.Uuid
 	command.TaskUuid = commandDomain.TaskUuid
 	command.Name = commandDomain.Name
 }
 
-func (command *command) ToDomain() TaskDomain.Command {
+func (command *Command) ToDomain() TaskDomain.Command {
 	resultDomain := TaskDomain.Command{}
 	resultDomain.Uuid = command.Uuid
 	resultDomain.TaskUuid = command.TaskUuid
