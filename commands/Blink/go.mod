@@ -29,6 +29,7 @@ require (
 	github.com/sigurn/crc8 v0.0.0-20220107193325-2243fe600f9f // indirect
 	github.com/sigurn/utils v0.0.0-20190728110027-e1fefb11a144 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
+	github.com/stianeikeland/go-rpio/v4 v4.6.0 // indirect
 	github.com/urfave/cli v1.22.5 // indirect
 	github.com/veandco/go-sdl2 v0.4.12 // indirect
 	go.bug.st/serial v1.3.4 // indirect

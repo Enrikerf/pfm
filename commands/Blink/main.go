@@ -1,33 +1,51 @@
 package main
 
 import (
-	"gobot.io/x/gobot"
-	"gobot.io/x/gobot/drivers/gpio"
-	"gobot.io/x/gobot/platforms/raspi"
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/stianeikeland/go-rpio/v4"
 )
 
 func main() {
-	r := raspi.NewAdaptor()
-	ledPwm := gpio.NewLedDriver(r, "12")
-	ledEncoderA := gpio.NewLedDriver(r, "22")
-	ledEncoderB := gpio.NewLedDriver(r, "24")
-	ledDir := gpio.NewLedDriver(r, "26")
-	ledBrake := gpio.NewLedDriver(r, "28")
+	// level := byte(1)
+	// r := raspi.NewAdaptor()
+	// ledPwm := gpio.NewDirectPinDriver(r, "12")
+	// ledEncoderA := gpio.NewDirectPinDriver(r, "22")
+	// ledEncoderB := gpio.NewDirectPinDriver(r, "24")
+	// ledDir := gpio.NewDirectPinDriver(r, "26")
+	// ledBrake := gpio.NewDirectPinDriver(r, "32")
 
-	work := func() {
-		ledPwm.Toggle()
-		ledEncoderA.Toggle()
-		ledEncoderB.Toggle()
-		ledDir.Toggle()
-		ledBrake.Toggle()
-
+	pinPwm := rpio.Pin(18)
+	pinEncoderA := rpio.Pin(25)
+	pinEncoderB := rpio.Pin(8)
+	pinDir := rpio.Pin(7)
+	pinBrake := rpio.Pin(12)
+	// Open and map memory to access gpio, check for errors
+	if err := rpio.Open(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
-	robot := gobot.NewRobot("blinkBot",
-		[]gobot.Connection{r},
-		[]gobot.Device{ledPwm, ledEncoderA, ledEncoderB, ledDir, ledBrake},
-		work,
-	)
+	// Unmap gpio memory when done
+	defer rpio.Close()
 
-	robot.Start()
+	// Set pin to output mode
+	pinPwm.Output()
+	pinEncoderA.Output()
+	pinEncoderB.Output()
+	pinDir.Output()
+	pinBrake.Output()
+
+	// Toggle pin 20 times
+	for x := 0; x < 20; x++ {
+		pinPwm.Toggle()
+		pinEncoderA.Toggle()
+		pinEncoderB.Toggle()
+		pinDir.Toggle()
+		pinBrake.Toggle()
+		time.Sleep(time.Second)
+	}
+
 }
