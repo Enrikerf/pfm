@@ -19,6 +19,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hybridgroup/go-ardrone v0.0.0-20140402002621-b9750d8d7b78 // indirect
 	github.com/hybridgroup/mjpeg v0.0.0-20140228234708-4680f319790e // indirect
+	github.com/jonboulle/clockwork v0.2.2 // indirect
 	github.com/muka/go-bluetooth v0.0.0-20211227073548-985739196620 // indirect
 	github.com/nats-io/nats.go v1.13.0 // indirect
 	github.com/nats-io/nkeys v0.3.0 // indirect
@@ -38,6 +39,11 @@ require (
 	golang.org/x/crypto v0.0.0-20220128200615-198e4374d7ed // indirect
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
 	golang.org/x/sys v0.0.0-20220128215802-99c3d69c2c27 // indirect
+	periph.io/x/cmd v0.0.0-20211213172547-12a801ec554f // indirect
+	periph.io/x/conn/v3 v3.6.10 // indirect
+	periph.io/x/d2xx v0.0.4 // indirect
+	periph.io/x/devices/v3 v3.6.13 // indirect
+	periph.io/x/host/v3 v3.7.2 // indirect
 	periph.io/x/periph v3.6.8+incompatible // indirect
 	tinygo.org/x/bluetooth v0.4.0 // indirect
 )
