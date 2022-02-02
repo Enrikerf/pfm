@@ -150,6 +150,7 @@ func TestManager_Loop(t *testing.T) {
 			mockCall.MockCallRequestPort{},
 			mockTask.MockFindByPort{Result: test.taskFindByResult},
 			mockTask.MockUpdatePort{Return: test.taskUpdatePortResult},
+			mockResultPort.MockSaveBatchPort{Result: nil},
 			mockResultPort.MockSavePort{Result: test.resultSavePortResult},
 		)
 		fmt.Println(index)

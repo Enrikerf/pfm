@@ -14,16 +14,23 @@ import (
 )
 
 type ApiGrpc struct {
-	createTask CreateTask.UseCase
-	serverHost string
-	serverPort string
-	grpcServer *grpc.Server
-	listener   net.Listener
+	createTaskUseCase CreateTask.UseCase
+	listTasksUseCase  ListTasks.UseCase
+	serverHost        string
+	serverPort        string
+	grpcServer        *grpc.Server
+	listener          net.Listener
 }
 
-func (api *ApiGrpc) Initialize(createTask CreateTask.UseCase, host string, port string) {
+func (api *ApiGrpc) Initialize(
+	createTaskUseCase CreateTask.UseCase,
+	listTasksUseCase ListTasks.UseCase,
+	host string,
+	port string,
+) {
 	fmt.Println("Starting Name Manager...")
-	api.createTask = createTask
+	api.createTaskUseCase = createTaskUseCase
+	api.listTasksUseCase = listTasksUseCase
 	api.serverHost = host
 	api.serverPort = port
 	api.loadServer()
@@ -57,7 +64,10 @@ func (api *ApiGrpc) Run() {
 }
 
 func (api *ApiGrpc) configControllers() {
-	var taskController = Controller.TaskController{SaveTaskUseCase: api.createTask}
+	var taskController = Controller.TaskController{
+		SaveTaskUseCase:  api.createTaskUseCase,
+		ListTasksUseCase: api.listTasksUseCase,
+	}
 	task.RegisterTaskServiceServer(api.grpcServer, taskController)
 }
 

@@ -5,10 +5,14 @@ import (
 	"fmt"
 	taskProto "github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type TaskController struct {
-	SaveTaskUseCase CreateTask.UseCase
+	SaveTaskUseCase  CreateTask.UseCase
+	ListTasksUseCase ListTasks.UseCase
 	taskProto.UnimplementedTaskServiceServer
 }
 
@@ -53,6 +57,25 @@ func (controller TaskController) DeleteTask(ctx context.Context, request *taskPr
 	panic("implement me")
 }
 
-func (controller TaskController) ListTask(request *taskProto.ListTaskRequest, server2 taskProto.TaskService_ListTaskServer) error {
-	panic("implement me")
+func (controller TaskController) ListTasks(ctx context.Context, in *taskProto.ListTasksRequest) (*taskProto.ListTasksResponse, error) {
+	tasks := controller.ListTasksUseCase.List(ListTasks.Query{})
+	if tasks == nil {
+		return &taskProto.ListTasksResponse{}, status.Errorf(
+			codes.Internal,
+			fmt.Sprintf("error"),
+		)
+	}
+	tasksProtoArray := []*taskProto.Task{}
+	for _, task := range tasks {
+		tasksProtoArray = append(tasksProtoArray, &taskProto.Task{
+			Uuid:          task.Uuid.String(),
+			Host:          task.Host,
+			Port:          task.Port,
+			Commands:      nil,
+			Mode:          task.Mode.String(),
+			Status:        task.Status.String(),
+			ExecutionMode: task.ExecutionMode.String(),
+		})
+	}
+	return &taskProto.ListTasksResponse{Tasks: tasksProtoArray}, nil
 }

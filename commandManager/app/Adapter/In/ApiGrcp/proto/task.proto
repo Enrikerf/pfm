@@ -54,11 +54,11 @@ message DeleteTaskResponse{
   string task_uuid = 1;
 }
 
-message ListTaskRequest{
+message ListTasksRequest{
 }
 
-message ListTaskResponse{
-  Task task = 1;
+message ListTasksResponse{
+  repeated Task tasks = 1;
 }
 
 service TaskService{
@@ -66,6 +66,6 @@ service TaskService{
   rpc ReadTask(ReadTaskRequest) returns (ReadTaskResponse);
   rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
   rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse);
-  rpc ListTask(ListTaskRequest) returns (stream ListTaskResponse);
+  rpc ListTasks(ListTasksRequest) returns (ListTasksResponse);
 }
 

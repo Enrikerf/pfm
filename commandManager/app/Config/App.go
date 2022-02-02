@@ -78,10 +78,12 @@ func (server *App) loadLoop(db *gorm.DB) {
 
 func (server *App) loadApiGrpc(db *gorm.DB) {
 	var taskAdapter = Task.Adapter{Orm: db}
-	var taskService = CreateTask.Service{SavePort: taskAdapter}
+	var createTaskService = CreateTask.Service{SavePort: taskAdapter}
+	var listTasksService = ListTasks.Service{FindByPort: taskAdapter}
 	server.ApiGrpc = ApiGrcp.ApiGrpc{}
 	server.ApiGrpc.Initialize(
-		taskService,
+		createTaskService,
+		listTasksService,
 		os.Getenv("SERVER_HOST"),
 		os.Getenv("SERVER_PORT"),
 	)
