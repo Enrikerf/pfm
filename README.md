@@ -11,3 +11,4 @@ go get -t github.com/google/gops/
 
 * install [doctrine migrate cli](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate)
 * usage [doctrine migrate](https://github.com/golang-migrate/migrate)
+
