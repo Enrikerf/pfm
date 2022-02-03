@@ -10,6 +10,16 @@ type Adapter struct {
 	Orm *gorm.DB
 }
 
+func (adapter Adapter) Find(uuid string) (TaskDomain.Task, error) {
+	var taskMysql = Task{}
+	err := adapter.Orm.First(&taskMysql, "uuid = ?", uuid).Error
+	if err != nil {
+		return TaskDomain.Task{}, err
+	}
+
+	return taskMysql.ToDomain(), nil
+}
+
 func (adapter Adapter) Save(task TaskDomain.Task) error {
 	var taskMysql = Task{}
 	taskMysql.FromDomain(task)

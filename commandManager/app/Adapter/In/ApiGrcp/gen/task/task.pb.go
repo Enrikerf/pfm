@@ -288,7 +288,7 @@ func (x *CreateTaskResponse) GetTask() *Task {
 	return nil
 }
 
-type ReadTaskRequest struct {
+type ShowTaskRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -296,8 +296,8 @@ type ReadTaskRequest struct {
 	TaskUuid string `protobuf:"bytes,1,opt,name=task_uuid,json=taskUuid,proto3" json:"task_uuid,omitempty"`
 }
 
-func (x *ReadTaskRequest) Reset() {
-	*x = ReadTaskRequest{}
+func (x *ShowTaskRequest) Reset() {
+	*x = ShowTaskRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_app_Adapter_In_ApiGrcp_proto_task_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -305,13 +305,13 @@ func (x *ReadTaskRequest) Reset() {
 	}
 }
 
-func (x *ReadTaskRequest) String() string {
+func (x *ShowTaskRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReadTaskRequest) ProtoMessage() {}
+func (*ShowTaskRequest) ProtoMessage() {}
 
-func (x *ReadTaskRequest) ProtoReflect() protoreflect.Message {
+func (x *ShowTaskRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_app_Adapter_In_ApiGrcp_proto_task_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -323,19 +323,19 @@ func (x *ReadTaskRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReadTaskRequest.ProtoReflect.Descriptor instead.
-func (*ReadTaskRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ShowTaskRequest.ProtoReflect.Descriptor instead.
+func (*ShowTaskRequest) Descriptor() ([]byte, []int) {
 	return file_app_Adapter_In_ApiGrcp_proto_task_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *ReadTaskRequest) GetTaskUuid() string {
+func (x *ShowTaskRequest) GetTaskUuid() string {
 	if x != nil {
 		return x.TaskUuid
 	}
 	return ""
 }
 
-type ReadTaskResponse struct {
+type ShowTaskResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -343,8 +343,8 @@ type ReadTaskResponse struct {
 	Task *Task `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
 }
 
-func (x *ReadTaskResponse) Reset() {
-	*x = ReadTaskResponse{}
+func (x *ShowTaskResponse) Reset() {
+	*x = ShowTaskResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_app_Adapter_In_ApiGrcp_proto_task_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -352,13 +352,13 @@ func (x *ReadTaskResponse) Reset() {
 	}
 }
 
-func (x *ReadTaskResponse) String() string {
+func (x *ShowTaskResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReadTaskResponse) ProtoMessage() {}
+func (*ShowTaskResponse) ProtoMessage() {}
 
-func (x *ReadTaskResponse) ProtoReflect() protoreflect.Message {
+func (x *ShowTaskResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_app_Adapter_In_ApiGrcp_proto_task_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -370,12 +370,12 @@ func (x *ReadTaskResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReadTaskResponse.ProtoReflect.Descriptor instead.
-func (*ReadTaskResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use ShowTaskResponse.ProtoReflect.Descriptor instead.
+func (*ShowTaskResponse) Descriptor() ([]byte, []int) {
 	return file_app_Adapter_In_ApiGrcp_proto_task_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *ReadTaskResponse) GetTask() *Task {
+func (x *ShowTaskResponse) GetTask() *Task {
 	if x != nil {
 		return x.Task
 	}
@@ -689,10 +689,10 @@ var file_app_Adapter_In_ApiGrcp_proto_task_proto_rawDesc = []byte{
 	0x65, 0x61, 0x74, 0x65, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
 	0x12, 0x1e, 0x0a, 0x04, 0x74, 0x61, 0x73, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0a,
 	0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x04, 0x74, 0x61, 0x73, 0x6b,
-	0x22, 0x2e, 0x0a, 0x0f, 0x52, 0x65, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75,
+	0x22, 0x2e, 0x0a, 0x0f, 0x53, 0x68, 0x6f, 0x77, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x75, 0x75, 0x69, 0x64,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x74, 0x61, 0x73, 0x6b, 0x55, 0x75, 0x69, 0x64,
-	0x22, 0x32, 0x0a, 0x10, 0x52, 0x65, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x70,
+	0x22, 0x32, 0x0a, 0x10, 0x53, 0x68, 0x6f, 0x77, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x70,
 	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1e, 0x0a, 0x04, 0x74, 0x61, 0x73, 0x6b, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x0b, 0x32, 0x0a, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x04,
 	0x74, 0x61, 0x73, 0x6b, 0x22, 0x41, 0x0a, 0x11, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x61,
@@ -719,9 +719,9 @@ var file_app_Adapter_In_ApiGrcp_proto_task_proto_rawDesc = []byte{
 	0x73, 0x6b, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71,
 	0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x43, 0x72, 0x65, 0x61,
 	0x74, 0x65, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x39,
-	0x0a, 0x08, 0x52, 0x65, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x15, 0x2e, 0x74, 0x61, 0x73,
-	0x6b, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x1a, 0x16, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x54, 0x61, 0x73,
+	0x0a, 0x08, 0x53, 0x68, 0x6f, 0x77, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x15, 0x2e, 0x74, 0x61, 0x73,
+	0x6b, 0x2e, 0x53, 0x68, 0x6f, 0x77, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x16, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x53, 0x68, 0x6f, 0x77, 0x54, 0x61, 0x73,
 	0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3f, 0x0a, 0x0a, 0x55, 0x70, 0x64,
 	0x61, 0x74, 0x65, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x17, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x55,
 	0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
@@ -756,8 +756,8 @@ var file_app_Adapter_In_ApiGrcp_proto_task_proto_goTypes = []interface{}{
 	(*Task)(nil),               // 1: task.Task
 	(*CreateTaskRequest)(nil),  // 2: task.CreateTaskRequest
 	(*CreateTaskResponse)(nil), // 3: task.CreateTaskResponse
-	(*ReadTaskRequest)(nil),    // 4: task.ReadTaskRequest
-	(*ReadTaskResponse)(nil),   // 5: task.ReadTaskResponse
+	(*ShowTaskRequest)(nil),    // 4: task.ShowTaskRequest
+	(*ShowTaskResponse)(nil),   // 5: task.ShowTaskResponse
 	(*UpdateTaskRequest)(nil),  // 6: task.UpdateTaskRequest
 	(*UpdateTaskResponse)(nil), // 7: task.UpdateTaskResponse
 	(*DeleteTaskRequest)(nil),  // 8: task.DeleteTaskRequest
@@ -768,17 +768,17 @@ var file_app_Adapter_In_ApiGrcp_proto_task_proto_goTypes = []interface{}{
 var file_app_Adapter_In_ApiGrcp_proto_task_proto_depIdxs = []int32{
 	0,  // 0: task.CreateTaskRequest.task:type_name -> task.EditableTaskParams
 	1,  // 1: task.CreateTaskResponse.task:type_name -> task.Task
-	1,  // 2: task.ReadTaskResponse.task:type_name -> task.Task
+	1,  // 2: task.ShowTaskResponse.task:type_name -> task.Task
 	0,  // 3: task.UpdateTaskRequest.task:type_name -> task.EditableTaskParams
 	1,  // 4: task.UpdateTaskResponse.task:type_name -> task.Task
 	1,  // 5: task.ListTasksResponse.tasks:type_name -> task.Task
 	2,  // 6: task.TaskService.CreateTask:input_type -> task.CreateTaskRequest
-	4,  // 7: task.TaskService.ReadTask:input_type -> task.ReadTaskRequest
+	4,  // 7: task.TaskService.ShowTask:input_type -> task.ShowTaskRequest
 	6,  // 8: task.TaskService.UpdateTask:input_type -> task.UpdateTaskRequest
 	8,  // 9: task.TaskService.DeleteTask:input_type -> task.DeleteTaskRequest
 	10, // 10: task.TaskService.ListTasks:input_type -> task.ListTasksRequest
 	3,  // 11: task.TaskService.CreateTask:output_type -> task.CreateTaskResponse
-	5,  // 12: task.TaskService.ReadTask:output_type -> task.ReadTaskResponse
+	5,  // 12: task.TaskService.ShowTask:output_type -> task.ShowTaskResponse
 	7,  // 13: task.TaskService.UpdateTask:output_type -> task.UpdateTaskResponse
 	9,  // 14: task.TaskService.DeleteTask:output_type -> task.DeleteTaskResponse
 	11, // 15: task.TaskService.ListTasks:output_type -> task.ListTasksResponse
@@ -844,7 +844,7 @@ func file_app_Adapter_In_ApiGrcp_proto_task_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_task_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReadTaskRequest); i {
+			switch v := v.(*ShowTaskRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -856,7 +856,7 @@ func file_app_Adapter_In_ApiGrcp_proto_task_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_task_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReadTaskResponse); i {
+			switch v := v.(*ShowTaskResponse); i {
 			case 0:
 				return &v.state
 			case 1:

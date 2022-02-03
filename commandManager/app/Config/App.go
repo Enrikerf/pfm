@@ -9,6 +9,8 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Loop"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -80,10 +82,12 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 	var taskAdapter = Task.Adapter{Orm: db}
 	var createTaskService = CreateTask.Service{SavePort: taskAdapter}
 	var listTasksService = ListTasks.Service{FindByPort: taskAdapter}
+	var showTaskService = ShowTask.Service{FindByPort: taskAdapter}
 	server.ApiGrpc = ApiGrcp.ApiGrpc{}
 	server.ApiGrpc.Initialize(
 		createTaskService,
 		listTasksService,
+		showTaskService,
 		os.Getenv("SERVER_HOST"),
 		os.Getenv("SERVER_PORT"),
 	)

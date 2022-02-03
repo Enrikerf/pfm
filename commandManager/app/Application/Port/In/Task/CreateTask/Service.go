@@ -11,7 +11,15 @@ type Service struct {
 
 func (service Service) Create(command Command) (TaskDomain.Task, error) {
 	var commands []TaskDomain.Command
-	var task, err = TaskDomain.NewTask(command.Host, command.Port, commands, command.Mode, command.ExecutionMode)
+	var task, err = TaskDomain.NewTask(
+		command.Host,
+		command.Port,
+		commands,
+		command.Mode,
+		command.ExecutionMode,
+	)
+	//TODO: this is responsibility of adapterIn not application
+	//TODO: Vo needed because the dependency command-taskUuid taskVo has commandsVo without uuids
 	for _, commandString := range command.Commands {
 		newCommand, err := TaskDomain.NewCommand(task.Uuid, commandString)
 		if err != nil {

@@ -30,11 +30,11 @@ message CreateTaskResponse{
   Task task = 1;
 }
 
-message ReadTaskRequest{
+message ShowTaskRequest{
   string task_uuid = 1;
 }
 
-message ReadTaskResponse{
+message ShowTaskResponse{
   Task task = 1;
 }
 
@@ -63,7 +63,7 @@ message ListTasksResponse{
 
 service TaskService{
   rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse);
-  rpc ReadTask(ReadTaskRequest) returns (ReadTaskResponse);
+  rpc ShowTask(ShowTaskRequest) returns (ShowTaskResponse);
   rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
   rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse);
   rpc ListTasks(ListTasksRequest) returns (ListTasksResponse);

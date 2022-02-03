@@ -5,6 +5,8 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/Controller"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
@@ -16,6 +18,7 @@ import (
 type ApiGrpc struct {
 	createTaskUseCase CreateTask.UseCase
 	listTasksUseCase  ListTasks.UseCase
+	showTaskUseCase   ShowTask.UseCase
 	serverHost        string
 	serverPort        string
 	grpcServer        *grpc.Server
@@ -25,12 +28,14 @@ type ApiGrpc struct {
 func (api *ApiGrpc) Initialize(
 	createTaskUseCase CreateTask.UseCase,
 	listTasksUseCase ListTasks.UseCase,
+	showTaskUseCase ShowTask.UseCase,
 	host string,
 	port string,
 ) {
 	fmt.Println("Starting Name Manager...")
 	api.createTaskUseCase = createTaskUseCase
 	api.listTasksUseCase = listTasksUseCase
+	api.showTaskUseCase = showTaskUseCase
 	api.serverHost = host
 	api.serverPort = port
 	api.loadServer()
@@ -67,6 +72,7 @@ func (api *ApiGrpc) configControllers() {
 	var taskController = Controller.TaskController{
 		SaveTaskUseCase:  api.createTaskUseCase,
 		ListTasksUseCase: api.listTasksUseCase,
+		ShowTaskUseCase:  api.showTaskUseCase,
 	}
 	task.RegisterTaskServiceServer(api.grpcServer, taskController)
 }
