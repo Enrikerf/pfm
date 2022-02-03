@@ -15,6 +15,7 @@ require (
 )
 
 require (
+	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/davecgh/go-spew v1.1.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect

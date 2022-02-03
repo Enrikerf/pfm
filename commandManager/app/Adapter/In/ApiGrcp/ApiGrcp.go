@@ -5,6 +5,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/Controller"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
 	"google.golang.org/grpc"
@@ -19,6 +20,7 @@ type ApiGrpc struct {
 	createTaskUseCase CreateTask.UseCase
 	listTasksUseCase  ListTasks.UseCase
 	showTaskUseCase   ShowTask.UseCase
+	deleteTaskUseCase DeleteTask.UseCase
 	serverHost        string
 	serverPort        string
 	grpcServer        *grpc.Server
@@ -29,6 +31,7 @@ func (api *ApiGrpc) Initialize(
 	createTaskUseCase CreateTask.UseCase,
 	listTasksUseCase ListTasks.UseCase,
 	showTaskUseCase ShowTask.UseCase,
+	deleteTaskUseCase DeleteTask.UseCase,
 	host string,
 	port string,
 ) {
@@ -36,6 +39,7 @@ func (api *ApiGrpc) Initialize(
 	api.createTaskUseCase = createTaskUseCase
 	api.listTasksUseCase = listTasksUseCase
 	api.showTaskUseCase = showTaskUseCase
+	api.deleteTaskUseCase = deleteTaskUseCase
 	api.serverHost = host
 	api.serverPort = port
 	api.loadServer()
@@ -70,9 +74,10 @@ func (api *ApiGrpc) Run() {
 
 func (api *ApiGrpc) configControllers() {
 	var taskController = Controller.TaskController{
-		SaveTaskUseCase:  api.createTaskUseCase,
-		ListTasksUseCase: api.listTasksUseCase,
-		ShowTaskUseCase:  api.showTaskUseCase,
+		SaveTaskUseCase:   api.createTaskUseCase,
+		ListTasksUseCase:  api.listTasksUseCase,
+		ShowTaskUseCase:   api.showTaskUseCase,
+		DeleteTaskUseCase: api.deleteTaskUseCase,
 	}
 	task.RegisterTaskServiceServer(api.grpcServer, taskController)
 }

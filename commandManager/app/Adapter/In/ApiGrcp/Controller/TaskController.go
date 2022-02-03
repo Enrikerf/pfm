@@ -5,6 +5,7 @@ import (
 	"fmt"
 	taskProto "github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
 	"google.golang.org/grpc/codes"
@@ -12,9 +13,10 @@ import (
 )
 
 type TaskController struct {
-	SaveTaskUseCase  CreateTask.UseCase
-	ListTasksUseCase ListTasks.UseCase
-	ShowTaskUseCase  ShowTask.UseCase
+	SaveTaskUseCase   CreateTask.UseCase
+	ListTasksUseCase  ListTasks.UseCase
+	ShowTaskUseCase   ShowTask.UseCase
+	DeleteTaskUseCase DeleteTask.UseCase
 	taskProto.UnimplementedTaskServiceServer
 }
 
@@ -74,7 +76,16 @@ func (controller TaskController) UpdateTask(ctx context.Context, request *taskPr
 }
 
 func (controller TaskController) DeleteTask(ctx context.Context, request *taskProto.DeleteTaskRequest) (*taskProto.DeleteTaskResponse, error) {
-	panic("implement me")
+	var command = DeleteTask.Command{Uuid: request.GetTaskUuid()}
+	err := controller.DeleteTaskUseCase.Delete(command)
+	if err != nil {
+		return &taskProto.DeleteTaskResponse{}, status.Errorf(
+			codes.NotFound,
+			fmt.Sprintf("error"),
+		)
+	}
+
+	return &taskProto.DeleteTaskResponse{}, nil
 }
 
 func (controller TaskController) ListTasks(ctx context.Context, in *taskProto.ListTasksRequest) (*taskProto.ListTasksResponse, error) {

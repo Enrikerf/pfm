@@ -43,7 +43,6 @@ message UpdateTaskRequest{
 }
 
 message UpdateTaskResponse{
-  Task task = 1;
 }
 
 message DeleteTaskRequest{
@@ -51,7 +50,6 @@ message DeleteTaskRequest{
 }
 
 message DeleteTaskResponse{
-  string task_uuid = 1;
 }
 
 message ListTasksRequest{

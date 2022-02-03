@@ -9,6 +9,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Loop"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
 	"github.com/joho/godotenv"
@@ -83,11 +84,13 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 	var createTaskService = CreateTask.Service{SavePort: taskAdapter}
 	var listTasksService = ListTasks.Service{FindByPort: taskAdapter}
 	var showTaskService = ShowTask.Service{FindByPort: taskAdapter}
+	var deleteTaskService = DeleteTask.Service{DeleteTaskPort: taskAdapter}
 	server.ApiGrpc = ApiGrcp.ApiGrpc{}
 	server.ApiGrpc.Initialize(
 		createTaskService,
 		listTasksService,
 		showTaskService,
+		deleteTaskService,
 		os.Getenv("SERVER_HOST"),
 		os.Getenv("SERVER_PORT"),
 	)
