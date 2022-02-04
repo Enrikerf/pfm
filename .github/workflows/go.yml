@@ -1,0 +1,40 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+        
+    - name: Go Formatter
+      # You may pin to the exact commit or the version.
+      # uses: sladyn98/auto-go-format@6557e892479fd174506c48cb34017c51399d492b
+      uses: sladyn98/auto-go-format@v0.0.1
+    - name: Golang go.sum
+      # You may pin to the exact commit or the version.
+      # uses: paulvollmer/action-golang-gosum@fec93d20b3e20c8bbc39d5b23576316ce53586d5
+      uses: paulvollmer/action-golang-gosum@v1.0.0
+    - name: Go-Linty
+      # You may pin to the exact commit or the version.
+      # uses: ArangoGutierrez/GoLinty-Action@3f9802b64a9abdae2a98e6541ccd4d3271ef44d7
+      uses: ArangoGutierrez/GoLinty-Action@go-1.13rc1-alpine
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
+      
+    
