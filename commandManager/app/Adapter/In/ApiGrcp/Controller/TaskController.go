@@ -8,6 +8,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/UpdateTask"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -17,17 +18,18 @@ type TaskController struct {
 	ListTasksUseCase  ListTasks.UseCase
 	ShowTaskUseCase   ShowTask.UseCase
 	DeleteTaskUseCase DeleteTask.UseCase
+	UpdateTaskUseCase UpdateTask.UseCase
 	taskProto.UnimplementedTaskServiceServer
 }
 
 func (controller TaskController) CreateTask(ctx context.Context, request *taskProto.CreateTaskRequest) (*taskProto.CreateTaskResponse, error) {
 	protoTask := request.GetTask()
 	var command CreateTask.Command
-	command.Host = protoTask.Host
-	command.Port = protoTask.Port
+	command.Host = protoTask.GetHost()
+	command.Port = protoTask.GetPort()
 	command.Commands = protoTask.GetCommands()
-	command.Mode = protoTask.Mode
-	command.ExecutionMode = protoTask.ExecutionMode
+	command.Mode = protoTask.GetMode().String()
+	command.ExecutionMode = protoTask.GetExecutionMode().String()
 
 	task, err := controller.SaveTaskUseCase.Create(command)
 	if err != nil {
@@ -72,7 +74,31 @@ func (controller TaskController) ShowTask(ctx context.Context, request *taskProt
 }
 
 func (controller TaskController) UpdateTask(ctx context.Context, request *taskProto.UpdateTaskRequest) (*taskProto.UpdateTaskResponse, error) {
-	panic("implement me")
+	cmd := UpdateTask.Command{}
+	params := request.GetParams()
+	cmd.Uuid = request.GetTaskUuid()
+	if params.GetHost() != nil {
+		cmd.Host.Change = true
+	}
+	if params.GetPort() != nil {
+		cmd.Port.Change = true
+	}
+	if params.GetMode() != 0 {
+		cmd.Mode.Change = true
+	}
+	if params.GetStatus() != 0 {
+		cmd.Status.Change = true
+	}
+	if params.GetExecutionMode() != 0 {
+		cmd.ExecutionMode.Change = true
+	}
+	cmd.Host.Value = params.GetHost().GetValue()
+	cmd.Port.Value = params.GetPort().GetValue()
+	cmd.Mode.Value = params.GetMode().String()
+	cmd.Status.Value = params.GetStatus().String()
+	cmd.ExecutionMode.Value = params.GetExecutionMode().String()
+	err := controller.UpdateTaskUseCase.Update(cmd)
+	return &taskProto.UpdateTaskResponse{}, err
 }
 
 func (controller TaskController) DeleteTask(ctx context.Context, request *taskProto.DeleteTaskRequest) (*taskProto.DeleteTaskResponse, error) {

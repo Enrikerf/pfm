@@ -12,12 +12,22 @@ type Task struct {
 	ExecutionMode ExecutionMode
 }
 
+func (task *Task) UpdateFromVo(taskVo TaskVo) {
+	task.Host = taskVo.Host
+	task.Port = taskVo.Port
+	task.Commands = taskVo.Commands
+	task.Mode = taskVo.Mode
+	task.Status = taskVo.Status
+	task.ExecutionMode = taskVo.ExecutionMode
+}
+
 func NewTask(host string, port string, commands []Command, mode string, executionMode string) (Task, error) {
 	task := Task{}
 	task.Uuid = uuid.New()
 	task.Host = host
 	task.Port = port
 	task.Commands = commands
+	//TODO: taskMode, ExecutionMode are Vos but how to handle errors? make strings not iota?
 	taskMode, err := GetTaskMode(mode)
 	if err != nil {
 		return Task{}, err

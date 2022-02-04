@@ -8,6 +8,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/UpdateTask"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"log"
@@ -21,6 +22,7 @@ type ApiGrpc struct {
 	listTasksUseCase  ListTasks.UseCase
 	showTaskUseCase   ShowTask.UseCase
 	deleteTaskUseCase DeleteTask.UseCase
+	updateTaskUseCase UpdateTask.UseCase
 	serverHost        string
 	serverPort        string
 	grpcServer        *grpc.Server
@@ -32,6 +34,7 @@ func (api *ApiGrpc) Initialize(
 	listTasksUseCase ListTasks.UseCase,
 	showTaskUseCase ShowTask.UseCase,
 	deleteTaskUseCase DeleteTask.UseCase,
+	updateTaskUseCase UpdateTask.UseCase,
 	host string,
 	port string,
 ) {
@@ -40,6 +43,7 @@ func (api *ApiGrpc) Initialize(
 	api.listTasksUseCase = listTasksUseCase
 	api.showTaskUseCase = showTaskUseCase
 	api.deleteTaskUseCase = deleteTaskUseCase
+	api.updateTaskUseCase = updateTaskUseCase
 	api.serverHost = host
 	api.serverPort = port
 	api.loadServer()
@@ -78,6 +82,7 @@ func (api *ApiGrpc) configControllers() {
 		ListTasksUseCase:  api.listTasksUseCase,
 		ShowTaskUseCase:   api.showTaskUseCase,
 		DeleteTaskUseCase: api.deleteTaskUseCase,
+		UpdateTaskUseCase: api.updateTaskUseCase,
 	}
 	task.RegisterTaskServiceServer(api.grpcServer, taskController)
 }
