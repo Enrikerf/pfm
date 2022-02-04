@@ -10,6 +10,25 @@ type Adapter struct {
 	Orm *gorm.DB
 }
 
+func (adapter Adapter) Find(uuid string) (TaskDomain.Task, error) {
+	var taskMysql = Task{}
+	err := adapter.Orm.First(&taskMysql, "uuid = ?", uuid).Error
+	if err != nil {
+		return TaskDomain.Task{}, err
+	}
+
+	return taskMysql.ToDomain(), nil
+}
+
+func (adapter Adapter) Delete(uuid string) error {
+	var taskMysql = Task{}
+	err := adapter.Orm.Delete(&taskMysql, "uuid = ?", uuid).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (adapter Adapter) Save(task TaskDomain.Task) error {
 	var taskMysql = Task{}
 	taskMysql.FromDomain(task)
@@ -33,20 +52,20 @@ func (adapter Adapter) Update(task TaskDomain.Task) error {
 	return nil
 }
 
-func (adapter Adapter) FindAll() ([]TaskDomain.Task, error) {
+func (adapter Adapter) FindAll() []TaskDomain.Task {
 
 	var tasks []Task
-	var domainTasks []TaskDomain.Task
+	domainTasks := []TaskDomain.Task{}
 	var err error
 	err = adapter.Orm.Find(&tasks).Error
 	if err != nil {
 		fmt.Printf("tasks %v. \n", err)
-		return domainTasks, err
+		return nil
 	}
 	for _, task := range tasks {
 		domainTasks = append(domainTasks, task.ToDomain())
 	}
-	return domainTasks, nil
+	return domainTasks
 }
 
 func (adapter Adapter) FindBy(conditions interface{}) []TaskDomain.Task {

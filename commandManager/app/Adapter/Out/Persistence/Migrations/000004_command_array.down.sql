@@ -1,2 +1,0 @@
-DROP TABLE commands;
-ALTER TABLE tasks ADD COLUMN command VARCHAR(30) NOT NULL;

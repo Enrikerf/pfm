@@ -5,21 +5,31 @@ import (
 	"fmt"
 	taskProto "github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/UpdateTask"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type TaskController struct {
-	SaveTaskUseCase CreateTask.UseCase
+	SaveTaskUseCase   CreateTask.UseCase
+	ListTasksUseCase  ListTasks.UseCase
+	ShowTaskUseCase   ShowTask.UseCase
+	DeleteTaskUseCase DeleteTask.UseCase
+	UpdateTaskUseCase UpdateTask.UseCase
 	taskProto.UnimplementedTaskServiceServer
 }
 
 func (controller TaskController) CreateTask(ctx context.Context, request *taskProto.CreateTaskRequest) (*taskProto.CreateTaskResponse, error) {
 	protoTask := request.GetTask()
 	var command CreateTask.Command
-	command.Host = protoTask.Host
-	command.Port = protoTask.Port
+	command.Host = protoTask.GetHost()
+	command.Port = protoTask.GetPort()
 	command.Commands = protoTask.GetCommands()
-	command.Mode = protoTask.Mode
-	command.ExecutionMode = protoTask.ExecutionMode
+	command.Mode = protoTask.GetMode().String()
+	command.ExecutionMode = protoTask.GetExecutionMode().String()
 
 	task, err := controller.SaveTaskUseCase.Create(command)
 	if err != nil {
@@ -41,18 +51,88 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 	return &taskProto.CreateTaskResponse{Task: &newTask}, nil
 }
 
-func (controller TaskController) ReadTask(ctx context.Context, request *taskProto.ReadTaskRequest) (*taskProto.ReadTaskResponse, error) {
-	panic("implement me")
+func (controller TaskController) ShowTask(ctx context.Context, request *taskProto.ShowTaskRequest) (*taskProto.ShowTaskResponse, error) {
+
+	var query = ShowTask.Query{Uuid: request.GetTaskUuid()}
+	task, err := controller.ShowTaskUseCase.Show(query)
+	if err != nil {
+		return &taskProto.ShowTaskResponse{}, status.Errorf(
+			codes.NotFound,
+			fmt.Sprintf("error"),
+		)
+	}
+
+	return &taskProto.ShowTaskResponse{Task: &taskProto.Task{
+		Uuid:          task.Uuid.String(),
+		Host:          task.Host,
+		Port:          task.Port,
+		Commands:      nil,
+		Mode:          task.Mode.String(),
+		Status:        task.Status.String(),
+		ExecutionMode: task.ExecutionMode.String(),
+	}}, nil
 }
 
 func (controller TaskController) UpdateTask(ctx context.Context, request *taskProto.UpdateTaskRequest) (*taskProto.UpdateTaskResponse, error) {
-	panic("implement me")
+	cmd := UpdateTask.Command{}
+	params := request.GetParams()
+	cmd.Uuid = request.GetTaskUuid()
+	if params.GetHost() != nil {
+		cmd.Host.Change = true
+	}
+	if params.GetPort() != nil {
+		cmd.Port.Change = true
+	}
+	if params.GetMode() != 0 {
+		cmd.Mode.Change = true
+	}
+	if params.GetStatus() != 0 {
+		cmd.Status.Change = true
+	}
+	if params.GetExecutionMode() != 0 {
+		cmd.ExecutionMode.Change = true
+	}
+	cmd.Host.Value = params.GetHost().GetValue()
+	cmd.Port.Value = params.GetPort().GetValue()
+	cmd.Mode.Value = params.GetMode().String()
+	cmd.Status.Value = params.GetStatus().String()
+	cmd.ExecutionMode.Value = params.GetExecutionMode().String()
+	err := controller.UpdateTaskUseCase.Update(cmd)
+	return &taskProto.UpdateTaskResponse{}, err
 }
 
 func (controller TaskController) DeleteTask(ctx context.Context, request *taskProto.DeleteTaskRequest) (*taskProto.DeleteTaskResponse, error) {
-	panic("implement me")
+	var command = DeleteTask.Command{Uuid: request.GetTaskUuid()}
+	err := controller.DeleteTaskUseCase.Delete(command)
+	if err != nil {
+		return &taskProto.DeleteTaskResponse{}, status.Errorf(
+			codes.NotFound,
+			fmt.Sprintf("error"),
+		)
+	}
+
+	return &taskProto.DeleteTaskResponse{}, nil
 }
 
-func (controller TaskController) ListTask(request *taskProto.ListTaskRequest, server2 taskProto.TaskService_ListTaskServer) error {
-	panic("implement me")
+func (controller TaskController) ListTasks(ctx context.Context, in *taskProto.ListTasksRequest) (*taskProto.ListTasksResponse, error) {
+	tasks := controller.ListTasksUseCase.List(ListTasks.Query{})
+	if tasks == nil {
+		return &taskProto.ListTasksResponse{}, status.Errorf(
+			codes.Internal,
+			fmt.Sprintf("error"),
+		)
+	}
+	tasksProtoArray := []*taskProto.Task{}
+	for _, task := range tasks {
+		tasksProtoArray = append(tasksProtoArray, &taskProto.Task{
+			Uuid:          task.Uuid.String(),
+			Host:          task.Host,
+			Port:          task.Port,
+			Commands:      nil,
+			Mode:          task.Mode.String(),
+			Status:        task.Status.String(),
+			ExecutionMode: task.ExecutionMode.String(),
+		})
+	}
+	return &taskProto.ListTasksResponse{Tasks: tasksProtoArray}, nil
 }

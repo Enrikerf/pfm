@@ -3,13 +3,14 @@ syntax = "proto3";
 package task;
 option go_package = "./task";
 
+import "google/protobuf/wrappers.proto";
 
-message EditableTaskParams{
-  string host = 2;
-  string port = 3;
-  repeated string commands = 4;
-  string mode = 5;
-  string executionMode = 6;
+service TaskService{
+  rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse);
+  rpc ShowTask(ShowTaskRequest) returns (ShowTaskResponse);
+  rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
+  rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse);
+  rpc ListTasks(ListTasksRequest) returns (ListTasksResponse);
 }
 
 message Task{
@@ -21,51 +22,73 @@ message Task{
   string status = 6;
   string executionMode = 7;
 }
+message EditableTaskParams{
+  google.protobuf.StringValue host = 1;
+  google.protobuf.StringValue port = 2;
+  Mode mode = 4;
+  Status status = 5;
+  ExecutionMode executionMode = 6;
+}
+message CreateTaskParams{
+  string host = 1;
+  string port = 2;
+  repeated string commands = 3;
+  Mode mode = 4;
+  Status status = 5;
+  ExecutionMode executionMode = 6;
+}
+enum Status {
+  StatusNotChange = 0;
+  Pending = 1;
+  Running = 2;
+  Done = 3;
+}
+enum Mode {
+  ModeNotChange = 0;
+  Unary = 1;
+  ClientStream = 2;
+  ServerStream = 3;
+  Bidirectional = 4;
+}
+enum ExecutionMode {
+  ExecutionModeMotChange = 0;
+  Automatic = 1;
+  Manual = 2;
+}
 
 message CreateTaskRequest{
-  EditableTaskParams task = 1;
+  CreateTaskParams task = 1;
 }
 
 message CreateTaskResponse{
   Task task = 1;
 }
 
-message ReadTaskRequest{
+message ShowTaskRequest{
   string task_uuid = 1;
 }
 
-message ReadTaskResponse{
+message ShowTaskResponse{
   Task task = 1;
 }
 
 message UpdateTaskRequest{
-  EditableTaskParams task = 1;
+  string task_uuid = 1;
+  EditableTaskParams params = 2;
 }
 
-message UpdateTaskResponse{
-  Task task = 1;
-}
+message UpdateTaskResponse{}
 
 message DeleteTaskRequest{
   string task_uuid = 1;
 }
 
-message DeleteTaskResponse{
-  string task_uuid = 1;
+message DeleteTaskResponse{}
+
+message ListTasksRequest{}
+
+message ListTasksResponse{
+  repeated Task tasks = 1;
 }
 
-message ListTaskRequest{
-}
-
-message ListTaskResponse{
-  Task task = 1;
-}
-
-service TaskService{
-  rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse);
-  rpc ReadTask(ReadTaskRequest) returns (ReadTaskResponse);
-  rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
-  rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse);
-  rpc ListTask(ListTaskRequest) returns (stream ListTaskResponse);
-}
 
