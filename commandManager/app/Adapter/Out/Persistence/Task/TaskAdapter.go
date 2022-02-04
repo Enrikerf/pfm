@@ -22,18 +22,6 @@ func (adapter Adapter) Find(uuid string) (TaskDomain.Task, error) {
 
 func (adapter Adapter) Delete(uuid string) error {
 	var taskMysql = Task{}
-	//var commandsMysql = []Command{}
-	//var batchMysql = []Result.Batch{}
-	//var resultsMysql = []Result.Result{}
-	//err := adapter.Orm.
-	//	Table("results").
-	//	Preload("Batches").
-	//	//Where(map[string]interface{}{"BatchUuid": uuid}).
-	//	Joins("inner join batches on batches.task_uuid = " + uuid).
-	//	Group("results.bach_id").
-	//	Delete(&resultsMysql).
-	//	Error
-	//err := adapter.Orm.Delete(&commandsMysql, "task_uuid = ?", uuid).Error
 	err := adapter.Orm.Delete(&taskMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return err
