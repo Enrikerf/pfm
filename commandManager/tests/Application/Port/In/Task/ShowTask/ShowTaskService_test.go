@@ -2,7 +2,7 @@ package ShowTask
 
 import (
 	"errors"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ReadTask"
 	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 	"github.com/Enrikerf/pfm/commandManager/tests/Application/Port/Out/Database/Task"
 	"github.com/google/uuid"
@@ -32,12 +32,12 @@ var tests = []struct {
 
 func TestListTaskService(t *testing.T) {
 	for _, test := range tests {
-		service := ShowTask.Service{FindByPort: Task.MockFindPort{
+		service := ReadTask.Service{FindByPort: Task.MockFindPort{
 			Result: test.taskFindResponse,
 			Error:  test.taskFindError,
 		}}
-		query := ShowTask.Query{Uuid: "11a24a01-700d-4f55-8afe-a6ce3c461ead"}
-		tasks, err := service.Show(query)
+		query := ReadTask.Query{Uuid: "11a24a01-700d-4f55-8afe-a6ce3c461ead"}
+		tasks, err := service.Read(query)
 		if test.taskFindError != nil {
 			assert.Error(t, err)
 		} else {

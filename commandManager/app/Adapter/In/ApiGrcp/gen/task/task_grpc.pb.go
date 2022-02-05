@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TaskServiceClient interface {
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
-	ShowTask(ctx context.Context, in *ShowTaskRequest, opts ...grpc.CallOption) (*ShowTaskResponse, error)
+	ReadTask(ctx context.Context, in *ReadTaskRequest, opts ...grpc.CallOption) (*ReadTaskResponse, error)
 	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*UpdateTaskResponse, error)
 	DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*DeleteTaskResponse, error)
 	ListTasks(ctx context.Context, in *ListTasksRequest, opts ...grpc.CallOption) (*ListTasksResponse, error)
@@ -46,9 +46,9 @@ func (c *taskServiceClient) CreateTask(ctx context.Context, in *CreateTaskReques
 	return out, nil
 }
 
-func (c *taskServiceClient) ShowTask(ctx context.Context, in *ShowTaskRequest, opts ...grpc.CallOption) (*ShowTaskResponse, error) {
-	out := new(ShowTaskResponse)
-	err := c.cc.Invoke(ctx, "/task.TaskService/ShowTask", in, out, opts...)
+func (c *taskServiceClient) ReadTask(ctx context.Context, in *ReadTaskRequest, opts ...grpc.CallOption) (*ReadTaskResponse, error) {
+	out := new(ReadTaskResponse)
+	err := c.cc.Invoke(ctx, "/task.TaskService/ReadTask", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func (c *taskServiceClient) ListTasks(ctx context.Context, in *ListTasksRequest,
 // for forward compatibility
 type TaskServiceServer interface {
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
-	ShowTask(context.Context, *ShowTaskRequest) (*ShowTaskResponse, error)
+	ReadTask(context.Context, *ReadTaskRequest) (*ReadTaskResponse, error)
 	UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error)
 	DeleteTask(context.Context, *DeleteTaskRequest) (*DeleteTaskResponse, error)
 	ListTasks(context.Context, *ListTasksRequest) (*ListTasksResponse, error)
@@ -101,8 +101,8 @@ type UnimplementedTaskServiceServer struct {
 func (UnimplementedTaskServiceServer) CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTask not implemented")
 }
-func (UnimplementedTaskServiceServer) ShowTask(context.Context, *ShowTaskRequest) (*ShowTaskResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ShowTask not implemented")
+func (UnimplementedTaskServiceServer) ReadTask(context.Context, *ReadTaskRequest) (*ReadTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReadTask not implemented")
 }
 func (UnimplementedTaskServiceServer) UpdateTask(context.Context, *UpdateTaskRequest) (*UpdateTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
@@ -144,20 +144,20 @@ func _TaskService_CreateTask_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TaskService_ShowTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ShowTaskRequest)
+func _TaskService_ReadTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReadTaskRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TaskServiceServer).ShowTask(ctx, in)
+		return srv.(TaskServiceServer).ReadTask(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/task.TaskService/ShowTask",
+		FullMethod: "/task.TaskService/ReadTask",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskServiceServer).ShowTask(ctx, req.(*ShowTaskRequest))
+		return srv.(TaskServiceServer).ReadTask(ctx, req.(*ReadTaskRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -228,8 +228,8 @@ var TaskService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TaskService_CreateTask_Handler,
 		},
 		{
-			MethodName: "ShowTask",
-			Handler:    _TaskService_ShowTask_Handler,
+			MethodName: "ReadTask",
+			Handler:    _TaskService_ReadTask_Handler,
 		},
 		{
 			MethodName: "UpdateTask",

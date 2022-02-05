@@ -7,16 +7,21 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Grcp/Call"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Result"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/CreateBatch"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/DeleteBatch"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ListBatches"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ReadBatch"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/UpdateBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Loop"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ShowResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ReadResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ReadTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/UpdateTask"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -86,24 +91,37 @@ func (server *App) loadLoop(db *gorm.DB) {
 }
 
 func (server *App) loadApiGrpc(db *gorm.DB) {
-	//TaskController
 	var taskAdapter = Task.Adapter{Orm: db}
+	var batchAdapter = Result.BatchAdapter{Orm: db}
+	var resultAdapter = Result.Adapter{Orm: db}
+
+	//TaskController
 	var createTaskService = CreateTask.Service{SavePort: taskAdapter}
-	var listTasksService = ListTasks.Service{FindByPort: taskAdapter}
-	var showTaskService = ShowTask.Service{FindByPort: taskAdapter}
-	var deleteTaskService = DeleteTask.Service{DeleteTaskPort: taskAdapter}
+	var readTaskService = ReadTask.Service{FindByPort: taskAdapter}
 	var updateTaskService = UpdateTask.Service{
 		FindPort:   taskAdapter,
 		UpdatePort: taskAdapter,
 	}
+	var deleteTaskService = DeleteTask.Service{DeleteTaskPort: taskAdapter}
+	var listTasksService = ListTasks.Service{FindByPort: taskAdapter}
+
+	// BatchController
+	var createBatchService = CreateBatch.Service{SavePort: batchAdapter}
+	var readBatchService = ReadBatch.Service{FindByPort: batchAdapter}
+	var updateBatchService = UpdateBatch.Service{
+		FindBatchPort:   batchAdapter,
+		FindTaskPort:    taskAdapter,
+		UpdateBatchPort: batchAdapter,
+	}
+	var deleteBatchService = DeleteBatch.Service{DeleteBatchPort: batchAdapter}
+	var listBatchesService = ListBatches.Service{FindByPort: batchAdapter}
+
 	//ResultController
-	var resultAdapter = Result.Adapter{Orm: db}
-	var batchAdapter = Result.BatchAdapter{Orm: db}
 	var createResultService = CreateResult.Service{
 		FindBatchPort: batchAdapter,
 		SavePort:      resultAdapter,
 	}
-	var showResultService = ShowResult.Service{FindByPort: resultAdapter}
+	var readResultService = ReadResult.Service{FindByPort: resultAdapter}
 	var updateResultService = UpdateResult.Service{
 		FindPort:      resultAdapter,
 		FindBatchPort: batchAdapter,
@@ -111,18 +129,24 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 	}
 	var deleteResultService = DeleteResult.Service{DeleteTaskPort: resultAdapter}
 	var listResultsService = ListResults.Service{FindByPort: resultAdapter}
+
 	server.ApiGrpc = ApiGrcp.ApiGrpc{}
 	server.ApiGrpc.Initialize(
 		createTaskService,
-		listTasksService,
-		showTaskService,
-		deleteTaskService,
+		readTaskService,
 		updateTaskService,
+		deleteTaskService,
+		listTasksService,
 		createResultService,
-		showResultService,
+		readResultService,
 		updateResultService,
 		deleteResultService,
 		listResultsService,
+		createBatchService,
+		readBatchService,
+		updateBatchService,
+		deleteBatchService,
+		listBatchesService,
 		os.Getenv("SERVER_HOST"),
 		os.Getenv("SERVER_PORT"),
 	)

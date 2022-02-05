@@ -1,0 +1,56 @@
+syntax = "proto3";
+package batch;
+option go_package = "./batch";
+
+service BatchService{
+  rpc CreateBatch (CreateBatchRequest) returns (CreateBatchResponse);
+  rpc ReadBatch(ReadBatchRequest) returns (ReadBatchResponse);
+  rpc UpdateBatch(UpdateBatchRequest) returns (UpdateBatchResponse);
+  rpc DeleteBatch(DeleteBatchRequest) returns (DeleteBatchResponse);
+  rpc ListBatches(ListBatchesRequest) returns (ListBatchesResponse);
+}
+
+message Batch{
+  string uuid = 1;
+  string task_uuid = 2;
+  string created_at = 3;
+  string updated_at = 4;
+}
+message CreateBatchParams{
+  string task_uuid = 1;
+}
+message EditableBatchParams{
+  string task_uuid = 1;
+}
+
+message CreateBatchRequest{
+  CreateBatchParams batchParams = 1;
+}
+message CreateBatchResponse{
+  Batch batch = 1;
+}
+
+message ReadBatchRequest{
+  string batch_uuid = 1;
+}
+message ReadBatchResponse{
+  Batch batch = 1;
+}
+
+message UpdateBatchRequest{
+  string batch_uuid = 1;
+  EditableBatchParams params = 2;
+}
+message UpdateBatchResponse{}
+
+message DeleteBatchRequest{
+  string batch_uuid = 1;
+}
+message DeleteBatchResponse{}
+
+message ListBatchesRequest{}
+message ListBatchesResponse{
+  repeated Batch batches = 1;
+}
+
+

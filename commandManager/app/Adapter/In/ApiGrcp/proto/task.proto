@@ -5,12 +5,11 @@ import "google/protobuf/wrappers.proto";
 
 service TaskService{
   rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse);
-  rpc ShowTask(ShowTaskRequest) returns (ShowTaskResponse);
+  rpc ReadTask(ReadTaskRequest) returns (ReadTaskResponse);
   rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
   rpc DeleteTask(DeleteTaskRequest) returns (DeleteTaskResponse);
   rpc ListTasks(ListTasksRequest) returns (ListTasksResponse);
 }
-
 message Task{
   string uuid = 1;
   string host = 2;
@@ -55,16 +54,16 @@ enum ExecutionMode {
 }
 
 message CreateTaskRequest{
-  CreateTaskParams task = 1;
+  CreateTaskParams taskParams = 1;
 }
 message CreateTaskResponse{
   Task task = 1;
 }
 
-message ShowTaskRequest{
+message ReadTaskRequest{
   string task_uuid = 1;
 }
-message ShowTaskResponse{
+message ReadTaskResponse{
   Task task = 1;
 }
 

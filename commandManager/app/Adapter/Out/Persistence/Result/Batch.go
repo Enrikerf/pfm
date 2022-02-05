@@ -19,6 +19,8 @@ type Batch struct {
 func (batch *Batch) FromDomain(batchDomain ResultDomain.Batch) {
 	batch.Uuid = batchDomain.Uuid
 	batch.TaskUuid = batchDomain.TaskUuid
+	batch.CreatedAt = batchDomain.CreatedAt
+	batch.UpdatedAt = batchDomain.UpdatedAt
 	for _, resultDomain := range batchDomain.Results {
 		result := Result{}
 		result.FromDomain(resultDomain)
@@ -30,6 +32,8 @@ func (batch *Batch) ToDomain() ResultDomain.Batch {
 	batchDomain := ResultDomain.Batch{}
 	batchDomain.Uuid = batch.Uuid
 	batchDomain.TaskUuid = batch.TaskUuid
+	batchDomain.CreatedAt = batch.CreatedAt
+	batchDomain.UpdatedAt = batch.UpdatedAt
 	for _, result := range batch.Results {
 		batchDomain.AddResult(result.ToDomain())
 	}

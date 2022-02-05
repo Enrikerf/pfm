@@ -1,4 +1,4 @@
-package ShowTask
+package ReadTask
 
 type Query struct {
 	Uuid string

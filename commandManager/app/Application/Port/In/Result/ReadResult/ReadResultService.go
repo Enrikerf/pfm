@@ -1,4 +1,4 @@
-package ShowResult
+package ReadResult
 
 import (
 	"errors"
@@ -10,7 +10,7 @@ type Service struct {
 	FindByPort ResultFindPort.Find
 }
 
-func (service Service) Show(query Query) (Result.Result, error) {
+func (service Service) Read(query Query) (Result.Result, error) {
 	task, err := service.FindByPort.Find(query.Uuid)
 	if err != nil {
 		return Result.Result{}, errors.New("not found")

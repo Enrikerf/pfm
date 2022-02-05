@@ -7,7 +7,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ReadTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/UpdateTask"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -16,14 +16,14 @@ import (
 type TaskController struct {
 	SaveTaskUseCase   CreateTask.UseCase
 	ListTasksUseCase  ListTasks.UseCase
-	ShowTaskUseCase   ShowTask.UseCase
+	ReadTaskUseCase   ReadTask.UseCase
 	DeleteTaskUseCase DeleteTask.UseCase
 	UpdateTaskUseCase UpdateTask.UseCase
 	taskProto.UnimplementedTaskServiceServer
 }
 
 func (controller TaskController) CreateTask(ctx context.Context, request *taskProto.CreateTaskRequest) (*taskProto.CreateTaskResponse, error) {
-	protoTask := request.GetTask()
+	protoTask := request.GetTaskParams()
 	var command CreateTask.Command
 	command.Host = protoTask.GetHost()
 	command.Port = protoTask.GetPort()
@@ -51,17 +51,17 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 	return &taskProto.CreateTaskResponse{Task: &newTask}, nil
 }
 
-func (controller TaskController) ShowTask(ctx context.Context, request *taskProto.ShowTaskRequest) (*taskProto.ShowTaskResponse, error) {
-	var query = ShowTask.Query{Uuid: request.GetTaskUuid()}
-	task, err := controller.ShowTaskUseCase.Show(query)
+func (controller TaskController) ReadTask(ctx context.Context, request *taskProto.ReadTaskRequest) (*taskProto.ReadTaskResponse, error) {
+	var query = ReadTask.Query{Uuid: request.GetTaskUuid()}
+	task, err := controller.ReadTaskUseCase.Read(query)
 	if err != nil {
-		return &taskProto.ShowTaskResponse{}, status.Errorf(
+		return &taskProto.ReadTaskResponse{}, status.Errorf(
 			codes.NotFound,
 			fmt.Sprintf("error"),
 		)
 	}
 
-	return &taskProto.ShowTaskResponse{Task: &taskProto.Task{
+	return &taskProto.ReadTaskResponse{Task: &taskProto.Task{
 		Uuid:          task.Uuid.String(),
 		Host:          task.Host,
 		Port:          task.Port,
