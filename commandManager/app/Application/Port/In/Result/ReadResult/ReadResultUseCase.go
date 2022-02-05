@@ -1,9 +1,9 @@
-package ShowResult
+package ReadResult
 
 import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 )
 
 type UseCase interface {
-	Show(query Query) (Result.Result, error)
+	Read(query Query) (Result.Result, error)
 }

@@ -11,12 +11,12 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ShowResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ReadResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ReadTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/UpdateTask"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -90,7 +90,7 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 	var taskAdapter = Task.Adapter{Orm: db}
 	var createTaskService = CreateTask.Service{SavePort: taskAdapter}
 	var listTasksService = ListTasks.Service{FindByPort: taskAdapter}
-	var showTaskService = ShowTask.Service{FindByPort: taskAdapter}
+	var showTaskService = ReadTask.Service{FindByPort: taskAdapter}
 	var deleteTaskService = DeleteTask.Service{DeleteTaskPort: taskAdapter}
 	var updateTaskService = UpdateTask.Service{
 		FindPort:   taskAdapter,
@@ -103,7 +103,7 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 		FindBatchPort: batchAdapter,
 		SavePort:      resultAdapter,
 	}
-	var showResultService = ShowResult.Service{FindByPort: resultAdapter}
+	var showResultService = ReadResult.Service{FindByPort: resultAdapter}
 	var updateResultService = UpdateResult.Service{
 		FindPort:      resultAdapter,
 		FindBatchPort: batchAdapter,

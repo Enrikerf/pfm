@@ -5,12 +5,11 @@ import "google/protobuf/wrappers.proto";
 
 service ResultService{
   rpc CreateResult (CreateResultRequest) returns (CreateResultResponse);
-  rpc ShowResult(ShowResultRequest) returns (ShowResultResponse);
+  rpc ReadResult(ReadResultRequest) returns (ReadResultResponse);
   rpc UpdateResult(UpdateResultRequest) returns (UpdateResultResponse);
   rpc DeleteResult(DeleteResultRequest) returns (DeleteResultResponse);
   rpc ListResult(ListResultRequest) returns (ListResultResponse);
 }
-
 message Result{
   string uuid = 1;
   string batch_uuid = 2;
@@ -24,6 +23,7 @@ message EditableResultParams{
   google.protobuf.StringValue batch_uuid = 1;
   google.protobuf.StringValue content = 2;
 }
+
 message CreateResultRequest{
   CreateResultParams resultParams = 1;
 }
@@ -31,10 +31,10 @@ message CreateResultResponse{
   Result result = 1;
 }
 
-message ShowResultRequest{
+message ReadResultRequest{
   string result_uuid = 1;
 }
-message ShowResultResponse{
+message ReadResultResponse{
   Result result = 1;
 }
 
@@ -42,9 +42,7 @@ message UpdateResultRequest{
   string resultUuid = 1;
   EditableResultParams resultParams = 2;
 }
-message UpdateResultResponse{
-  EditableResultParams result = 1;
-}
+message UpdateResultResponse{}
 
 message DeleteResultRequest{
   string result_uuid = 1;

@@ -7,7 +7,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ShowResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ReadResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -15,7 +15,7 @@ import (
 
 type ResultController struct {
 	CreateResultUseCase CreateResult.UseCase
-	ShowResultUseCase   ShowResult.UseCase
+	ReadResultUseCase   ReadResult.UseCase
 	UpdateResultUseCase UpdateResult.UseCase
 	DeleteResultUseCase DeleteResult.UseCase
 	ListUseCase         ListResults.UseCase
@@ -39,16 +39,16 @@ func (controller ResultController) CreateResult(ctx context.Context, request *re
 	return &resultProto.CreateResultResponse{Result: &newResult}, nil
 }
 
-func (controller ResultController) ShowResult(ctx context.Context, request *resultProto.ShowResultRequest) (*resultProto.ShowResultResponse, error) {
-	var query = ShowResult.Query{Uuid: request.GetResultUuid()}
-	result, err := controller.ShowResultUseCase.Show(query)
+func (controller ResultController) ReadResult(ctx context.Context, request *resultProto.ReadResultRequest) (*resultProto.ReadResultResponse, error) {
+	var query = ReadResult.Query{Uuid: request.GetResultUuid()}
+	result, err := controller.ReadResultUseCase.Read(query)
 	if err != nil {
-		return &resultProto.ShowResultResponse{}, status.Errorf(
+		return &resultProto.ReadResultResponse{}, status.Errorf(
 			codes.NotFound,
 			fmt.Sprintf("error"),
 		)
 	}
-	return &resultProto.ShowResultResponse{Result: &resultProto.Result{
+	return &resultProto.ReadResultResponse{Result: &resultProto.Result{
 		Uuid:      result.Uuid.String(),
 		Content:   result.Content,
 		BatchUuid: result.BatchUuid.String(),

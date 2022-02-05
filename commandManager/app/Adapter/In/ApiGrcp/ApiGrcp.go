@@ -8,12 +8,12 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ShowResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ReadResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ShowTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ReadTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/UpdateTask"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -26,12 +26,12 @@ import (
 type ApiGrpc struct {
 	createTaskUseCase CreateTask.UseCase
 	listTasksUseCase  ListTasks.UseCase
-	showTaskUseCase   ShowTask.UseCase
+	showTaskUseCase   ReadTask.UseCase
 	deleteTaskUseCase DeleteTask.UseCase
 	updateTaskUseCase UpdateTask.UseCase
 
 	createResultUseCase CreateResult.UseCase
-	showResultUseCase   ShowResult.UseCase
+	showResultUseCase   ReadResult.UseCase
 	updateResultUseCase UpdateResult.UseCase
 	deleteResultUseCase DeleteResult.UseCase
 	listResultsUseCase  ListResults.UseCase
@@ -44,12 +44,12 @@ type ApiGrpc struct {
 func (api *ApiGrpc) Initialize(
 	createTaskUseCase CreateTask.UseCase,
 	listTasksUseCase ListTasks.UseCase,
-	showTaskUseCase ShowTask.UseCase,
+	showTaskUseCase ReadTask.UseCase,
 	deleteTaskUseCase DeleteTask.UseCase,
 	updateTaskUseCase UpdateTask.UseCase,
 
 	createResultUseCase CreateResult.UseCase,
-	showResultUseCase ShowResult.UseCase,
+	showResultUseCase ReadResult.UseCase,
 	updateResultUseCase UpdateResult.UseCase,
 	deleteResultUseCase DeleteResult.UseCase,
 	listResultsUseCase ListResults.UseCase,
@@ -104,7 +104,7 @@ func (api *ApiGrpc) configControllers() {
 	var taskController = Controller.TaskController{
 		SaveTaskUseCase:   api.createTaskUseCase,
 		ListTasksUseCase:  api.listTasksUseCase,
-		ShowTaskUseCase:   api.showTaskUseCase,
+		ReadTaskUseCase:   api.showTaskUseCase,
 		DeleteTaskUseCase: api.deleteTaskUseCase,
 		UpdateTaskUseCase: api.updateTaskUseCase,
 	}
@@ -112,7 +112,7 @@ func (api *ApiGrpc) configControllers() {
 
 	var resultController = Controller.ResultController{
 		CreateResultUseCase: api.createResultUseCase,
-		ShowResultUseCase:   api.showResultUseCase,
+		ReadResultUseCase:   api.showResultUseCase,
 		UpdateResultUseCase: api.updateResultUseCase,
 		DeleteResultUseCase: api.deleteResultUseCase,
 		ListUseCase:         api.listResultsUseCase,

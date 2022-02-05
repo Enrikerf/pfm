@@ -3,57 +3,6 @@ syntax = "proto3";
 package command;
 option go_package = "./command";
 
-
-message EditableCommandParams{
-  string command_uuid = 1;
-  string result = 2;
-}
-
-message Command{
-  string id = 1;
-  string command_uuid = 2;
-  string name = 3;
-}
-
-message CreateCommandRequest{
-  EditableCommandParams command = 1;
-}
-
-message CreateCommandResponse{
-  Command command = 1;
-}
-
-message ReadCommandRequest{
-  string command_uuid = 1;
-}
-
-message ReadCommandResponse{
-  Command command = 1;
-}
-
-message UpdateCommandRequest{
-  EditableCommandParams command = 1;
-}
-
-message UpdateCommandResponse{
-  Command command = 1;
-}
-
-message DeleteCommandRequest{
-  string command_uuid = 1;
-}
-
-message DeleteCommandResponse{
-  string command_uuid = 1;
-}
-
-message ListCommandRequest{
-}
-
-message ListCommandResponse{
-  Command command = 1;
-}
-
 service CommandService{
   rpc CreateCommand (CreateCommandRequest) returns (CreateCommandResponse);
   rpc ReadCommand(ReadCommandRequest) returns (ReadCommandResponse);
@@ -61,4 +10,44 @@ service CommandService{
   rpc DeleteCommand(DeleteCommandRequest) returns (DeleteCommandResponse);
   rpc ListCommand(ListCommandRequest) returns (stream ListCommandResponse);
 }
+message Command{
+  string id = 1;
+  string command_uuid = 2;
+  string name = 3;
+}
+message EditableCommandParams{
+  string command_uuid = 1;
+  string result = 2;
+}
+
+message CreateCommandRequest{
+  EditableCommandParams commandParams = 1;
+}
+message CreateCommandResponse{
+  Command command = 1;
+}
+
+message ReadCommandRequest{
+  string command_uuid = 1;
+}
+message ReadCommandResponse{
+  Command command = 1;
+}
+
+message UpdateCommandRequest{
+  EditableCommandParams commandParams = 1;
+}
+message UpdateCommandResponse{}
+
+message DeleteCommandRequest{
+  string command_uuid = 1;
+}
+message DeleteCommandResponse{}
+
+message ListCommandRequest{}
+message ListCommandResponse{
+  Command command = 1;
+}
+
+
 
