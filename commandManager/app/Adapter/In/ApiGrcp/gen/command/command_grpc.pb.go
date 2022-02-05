@@ -26,7 +26,7 @@ type CommandServiceClient interface {
 	ReadCommand(ctx context.Context, in *ReadCommandRequest, opts ...grpc.CallOption) (*ReadCommandResponse, error)
 	UpdateCommand(ctx context.Context, in *UpdateCommandRequest, opts ...grpc.CallOption) (*UpdateCommandResponse, error)
 	DeleteCommand(ctx context.Context, in *DeleteCommandRequest, opts ...grpc.CallOption) (*DeleteCommandResponse, error)
-	ListCommand(ctx context.Context, in *ListCommandRequest, opts ...grpc.CallOption) (CommandService_ListCommandClient, error)
+	ListCommands(ctx context.Context, in *ListCommandsRequest, opts ...grpc.CallOption) (*ListCommandsResponse, error)
 }
 
 type commandServiceClient struct {
@@ -73,36 +73,13 @@ func (c *commandServiceClient) DeleteCommand(ctx context.Context, in *DeleteComm
 	return out, nil
 }
 
-func (c *commandServiceClient) ListCommand(ctx context.Context, in *ListCommandRequest, opts ...grpc.CallOption) (CommandService_ListCommandClient, error) {
-	stream, err := c.cc.NewStream(ctx, &CommandService_ServiceDesc.Streams[0], "/command.CommandService/ListCommand", opts...)
+func (c *commandServiceClient) ListCommands(ctx context.Context, in *ListCommandsRequest, opts ...grpc.CallOption) (*ListCommandsResponse, error) {
+	out := new(ListCommandsResponse)
+	err := c.cc.Invoke(ctx, "/command.CommandService/ListCommands", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &commandServiceListCommandClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type CommandService_ListCommandClient interface {
-	Recv() (*ListCommandResponse, error)
-	grpc.ClientStream
-}
-
-type commandServiceListCommandClient struct {
-	grpc.ClientStream
-}
-
-func (x *commandServiceListCommandClient) Recv() (*ListCommandResponse, error) {
-	m := new(ListCommandResponse)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
+	return out, nil
 }
 
 // CommandServiceServer is the server API for CommandService service.
@@ -113,7 +90,7 @@ type CommandServiceServer interface {
 	ReadCommand(context.Context, *ReadCommandRequest) (*ReadCommandResponse, error)
 	UpdateCommand(context.Context, *UpdateCommandRequest) (*UpdateCommandResponse, error)
 	DeleteCommand(context.Context, *DeleteCommandRequest) (*DeleteCommandResponse, error)
-	ListCommand(*ListCommandRequest, CommandService_ListCommandServer) error
+	ListCommands(context.Context, *ListCommandsRequest) (*ListCommandsResponse, error)
 	mustEmbedUnimplementedCommandServiceServer()
 }
 
@@ -133,8 +110,8 @@ func (UnimplementedCommandServiceServer) UpdateCommand(context.Context, *UpdateC
 func (UnimplementedCommandServiceServer) DeleteCommand(context.Context, *DeleteCommandRequest) (*DeleteCommandResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCommand not implemented")
 }
-func (UnimplementedCommandServiceServer) ListCommand(*ListCommandRequest, CommandService_ListCommandServer) error {
-	return status.Errorf(codes.Unimplemented, "method ListCommand not implemented")
+func (UnimplementedCommandServiceServer) ListCommands(context.Context, *ListCommandsRequest) (*ListCommandsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCommands not implemented")
 }
 func (UnimplementedCommandServiceServer) mustEmbedUnimplementedCommandServiceServer() {}
 
@@ -221,25 +198,22 @@ func _CommandService_DeleteCommand_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CommandService_ListCommand_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(ListCommandRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+func _CommandService_ListCommands_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCommandsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
 	}
-	return srv.(CommandServiceServer).ListCommand(m, &commandServiceListCommandServer{stream})
-}
-
-type CommandService_ListCommandServer interface {
-	Send(*ListCommandResponse) error
-	grpc.ServerStream
-}
-
-type commandServiceListCommandServer struct {
-	grpc.ServerStream
-}
-
-func (x *commandServiceListCommandServer) Send(m *ListCommandResponse) error {
-	return x.ServerStream.SendMsg(m)
+	if interceptor == nil {
+		return srv.(CommandServiceServer).ListCommands(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/command.CommandService/ListCommands",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommandServiceServer).ListCommands(ctx, req.(*ListCommandsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 // CommandService_ServiceDesc is the grpc.ServiceDesc for CommandService service.
@@ -265,13 +239,11 @@ var CommandService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "DeleteCommand",
 			Handler:    _CommandService_DeleteCommand_Handler,
 		},
-	},
-	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "ListCommand",
-			Handler:       _CommandService_ListCommand_Handler,
-			ServerStreams: true,
+			MethodName: "ListCommands",
+			Handler:    _CommandService_ListCommands_Handler,
 		},
 	},
+	Streams:  []grpc.StreamDesc{},
 	Metadata: "app/Adapter/In/ApiGrcp/proto/command.proto",
 }

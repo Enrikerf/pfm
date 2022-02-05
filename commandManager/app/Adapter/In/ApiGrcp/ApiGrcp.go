@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/Controller"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/batch"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/command"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/result"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/CreateBatch"
@@ -11,6 +12,11 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ListBatches"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ReadBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/UpdateBatch"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/CreateCommand"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/DeleteCommand"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/ListCommands"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/ReadCommand"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/UpdateCommand"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
@@ -48,6 +54,12 @@ type ApiGrpc struct {
 	deleteBatchUseCase DeleteBatch.UseCase
 	listBatchesUseCase ListBatches.UseCase
 
+	createCommandUseCase CreateCommand.UseCase
+	readCommandUseCase   ReadCommand.UseCase
+	updateCommandUseCase UpdateCommand.UseCase
+	deleteCommandUseCase DeleteCommand.UseCase
+	listCommandsUseCase  ListCommands.UseCase
+
 	serverHost string
 	serverPort string
 	grpcServer *grpc.Server
@@ -73,6 +85,12 @@ func (api *ApiGrpc) Initialize(
 	deleteBatchUseCase DeleteBatch.UseCase,
 	listBatchesUseCase ListBatches.UseCase,
 
+	createCommandUseCase CreateCommand.UseCase,
+	readCommandUseCase ReadCommand.UseCase,
+	updateCommandUseCase UpdateCommand.UseCase,
+	deleteCommandUseCase DeleteCommand.UseCase,
+	listCommandsUseCase ListCommands.UseCase,
+
 	host string,
 	port string,
 ) {
@@ -96,6 +114,12 @@ func (api *ApiGrpc) Initialize(
 	api.updateBatchUseCase = updateBatchUseCase
 	api.deleteBatchUseCase = deleteBatchUseCase
 	api.listBatchesUseCase = listBatchesUseCase
+
+	api.createCommandUseCase = createCommandUseCase
+	api.readCommandUseCase = readCommandUseCase
+	api.updateCommandUseCase = updateCommandUseCase
+	api.deleteCommandUseCase = deleteCommandUseCase
+	api.listCommandsUseCase = listCommandsUseCase
 
 	api.serverHost = host
 	api.serverPort = port
@@ -156,6 +180,15 @@ func (api *ApiGrpc) configControllers() {
 		ListBatchesUseCase: api.listBatchesUseCase,
 	}
 	batch.RegisterBatchServiceServer(api.grpcServer, batchController)
+
+	var commandController = Controller.CommandController{
+		CreateCommandUseCase: api.createCommandUseCase,
+		ReadCommandUseCase:   api.readCommandUseCase,
+		UpdateCommandUseCase: api.updateCommandUseCase,
+		DeleteCommandUseCase: api.deleteCommandUseCase,
+		ListCommandsUseCase:  api.listCommandsUseCase,
+	}
+	command.RegisterCommandServiceServer(api.grpcServer, commandController)
 }
 
 func (api *ApiGrpc) loadServer() {

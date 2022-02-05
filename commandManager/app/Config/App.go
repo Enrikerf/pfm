@@ -13,6 +13,11 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ReadBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/UpdateBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Loop"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/CreateCommand"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/DeleteCommand"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/ListCommands"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/ReadCommand"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/UpdateCommand"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
@@ -92,6 +97,7 @@ func (server *App) loadLoop(db *gorm.DB) {
 
 func (server *App) loadApiGrpc(db *gorm.DB) {
 	var taskAdapter = Task.Adapter{Orm: db}
+	var commandAdapter = Task.CommandAdapter{Orm: db}
 	var batchAdapter = Result.BatchAdapter{Orm: db}
 	var resultAdapter = Result.Adapter{Orm: db}
 
@@ -104,6 +110,20 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 	}
 	var deleteTaskService = DeleteTask.Service{DeleteTaskPort: taskAdapter}
 	var listTasksService = ListTasks.Service{FindByPort: taskAdapter}
+
+	// CommandController
+	var createCommandService = CreateCommand.Service{
+		FindTaskPort:    taskAdapter,
+		SaveCommandPort: commandAdapter,
+	}
+	var readCommandService = ReadCommand.Service{FindCommandPort: commandAdapter}
+	var updateCommandService = UpdateCommand.Service{
+		FindCommandPort:   commandAdapter,
+		FindTaskPort:      taskAdapter,
+		UpdateCommandPort: commandAdapter,
+	}
+	var deleteCommandService = DeleteCommand.Service{DeleteCommandPort: commandAdapter}
+	var listCommandsService = ListCommands.Service{FindCommandByPort: commandAdapter}
 
 	// BatchController
 	var createBatchService = CreateBatch.Service{SavePort: batchAdapter}
@@ -147,6 +167,11 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 		updateBatchService,
 		deleteBatchService,
 		listBatchesService,
+		createCommandService,
+		readCommandService,
+		updateCommandService,
+		deleteCommandService,
+		listCommandsService,
 		os.Getenv("SERVER_HOST"),
 		os.Getenv("SERVER_PORT"),
 	)

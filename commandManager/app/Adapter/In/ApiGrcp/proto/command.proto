@@ -2,26 +2,31 @@ syntax = "proto3";
 
 package command;
 option go_package = "./command";
+import "google/protobuf/wrappers.proto";
 
 service CommandService{
   rpc CreateCommand (CreateCommandRequest) returns (CreateCommandResponse);
   rpc ReadCommand(ReadCommandRequest) returns (ReadCommandResponse);
   rpc UpdateCommand(UpdateCommandRequest) returns (UpdateCommandResponse);
   rpc DeleteCommand(DeleteCommandRequest) returns (DeleteCommandResponse);
-  rpc ListCommand(ListCommandRequest) returns (stream ListCommandResponse);
+  rpc ListCommands(ListCommandsRequest) returns (ListCommandsResponse);
 }
 message Command{
-  string id = 1;
-  string command_uuid = 2;
+  string uuid = 1;
+  string task_uuid = 2;
   string name = 3;
 }
+message CreateCommandParams{
+  string task_uuid = 1;
+  string name = 2;
+}
 message EditableCommandParams{
-  string command_uuid = 1;
-  string result = 2;
+  google.protobuf.StringValue task_uuid = 1;
+  google.protobuf.StringValue name = 2;
 }
 
 message CreateCommandRequest{
-  EditableCommandParams commandParams = 1;
+  CreateCommandParams commandParams = 1;
 }
 message CreateCommandResponse{
   Command command = 1;
@@ -35,7 +40,8 @@ message ReadCommandResponse{
 }
 
 message UpdateCommandRequest{
-  EditableCommandParams commandParams = 1;
+  string command_uuid = 1;
+  EditableCommandParams commandParams = 2;
 }
 message UpdateCommandResponse{}
 
@@ -44,9 +50,9 @@ message DeleteCommandRequest{
 }
 message DeleteCommandResponse{}
 
-message ListCommandRequest{}
-message ListCommandResponse{
-  Command command = 1;
+message ListCommandsRequest{}
+message ListCommandsResponse{
+  repeated Command commands = 1;
 }
 
 
