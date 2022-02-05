@@ -52,3 +52,50 @@ func (adapter BatchAdapter) FindAll() ([]ResultDomain.Batch, error) {
 	}
 	return domainBatch, nil
 }
+
+func (adapter BatchAdapter) Update(batch ResultDomain.Batch) error {
+	var taskMysql Task.Task
+	var currentBatchMysql Batch
+	var batchValuesToUpdate = Batch{}
+	err := adapter.Orm.First(&taskMysql, "uuid = ?", batch.TaskUuid).Error
+	if err != nil {
+		return err
+	}
+	err = adapter.Orm.First(&currentBatchMysql, "uuid = ?", batch.Uuid.String()).Error
+	if err != nil {
+		return err
+	}
+	batchValuesToUpdate.FromDomain(batch)
+	batchValuesToUpdate.TaskID = taskMysql.ID
+	adapter.Orm.Model(&currentBatchMysql).Updates(batchValuesToUpdate)
+	return nil
+}
+
+func (adapter BatchAdapter) FindBy(conditions interface{}) []ResultDomain.Batch {
+
+	var batches []Batch
+	domainBatches := []ResultDomain.Batch{}
+	err := adapter.Orm.
+		Table("batches").
+		Where(conditions).
+		Find(&batches).
+		Error
+	if err != nil {
+		fmt.Printf("batches %v. \n", err)
+		return nil
+	}
+
+	for _, batch := range batches {
+		domainBatches = append(domainBatches, batch.ToDomain())
+	}
+	return domainBatches
+}
+
+func (adapter BatchAdapter) Delete(uuid string) error {
+	var batchMysql = Result{}
+	err := adapter.Orm.Delete(&batchMysql, "uuid = ?", uuid).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}

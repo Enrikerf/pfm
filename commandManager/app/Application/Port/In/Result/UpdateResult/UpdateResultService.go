@@ -3,7 +3,6 @@ package UpdateResult
 import (
 	"errors"
 	ResultOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Result"
-	"github.com/google/uuid"
 )
 
 type Service struct {
@@ -18,15 +17,15 @@ func (service Service) Update(command Command) error {
 	if err != nil {
 		return errors.New("not found")
 	}
-	batch, err := service.FindBatchPort.Find(command.BatchUuid.Value)
-	if err != nil {
-		return errors.New("not found")
-	}
 	if command.Content.Change {
 		result.Content = command.Content.Value
 	}
 	if command.BatchUuid.Change {
-		result.BatchUuid, err = uuid.Parse(batch.Uuid.String())
+		batch, err := service.FindBatchPort.Find(command.BatchUuid.Value)
+		if err != nil {
+			return errors.New("not found")
+		}
+		result.BatchUuid = batch.Uuid
 		if err != nil {
 			return errors.New("internal")
 		}

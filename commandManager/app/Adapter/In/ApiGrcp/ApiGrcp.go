@@ -3,8 +3,14 @@ package ApiGrcp
 import (
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/Controller"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/batch"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/result"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/CreateBatch"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/DeleteBatch"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ListBatches"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ReadBatch"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/UpdateBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
@@ -26,48 +32,71 @@ import (
 type ApiGrpc struct {
 	createTaskUseCase CreateTask.UseCase
 	listTasksUseCase  ListTasks.UseCase
-	showTaskUseCase   ReadTask.UseCase
+	readTaskUseCase   ReadTask.UseCase
 	deleteTaskUseCase DeleteTask.UseCase
 	updateTaskUseCase UpdateTask.UseCase
 
 	createResultUseCase CreateResult.UseCase
-	showResultUseCase   ReadResult.UseCase
+	readResultUseCase   ReadResult.UseCase
 	updateResultUseCase UpdateResult.UseCase
 	deleteResultUseCase DeleteResult.UseCase
 	listResultsUseCase  ListResults.UseCase
-	serverHost          string
-	serverPort          string
-	grpcServer          *grpc.Server
-	listener            net.Listener
+
+	createBatchUseCase CreateBatch.UseCase
+	readBatchUseCase   ReadBatch.UseCase
+	updateBatchUseCase UpdateBatch.UseCase
+	deleteBatchUseCase DeleteBatch.UseCase
+	listBatchesUseCase ListBatches.UseCase
+
+	serverHost string
+	serverPort string
+	grpcServer *grpc.Server
+	listener   net.Listener
 }
 
 func (api *ApiGrpc) Initialize(
 	createTaskUseCase CreateTask.UseCase,
-	listTasksUseCase ListTasks.UseCase,
-	showTaskUseCase ReadTask.UseCase,
-	deleteTaskUseCase DeleteTask.UseCase,
+	readTaskUseCase ReadTask.UseCase,
 	updateTaskUseCase UpdateTask.UseCase,
+	deleteTaskUseCase DeleteTask.UseCase,
+	listTasksUseCase ListTasks.UseCase,
 
 	createResultUseCase CreateResult.UseCase,
-	showResultUseCase ReadResult.UseCase,
+	readResultUseCase ReadResult.UseCase,
 	updateResultUseCase UpdateResult.UseCase,
 	deleteResultUseCase DeleteResult.UseCase,
 	listResultsUseCase ListResults.UseCase,
+
+	createBatchUseCase CreateBatch.UseCase,
+	readBatchUseCase ReadBatch.UseCase,
+	updateBatchUseCase UpdateBatch.UseCase,
+	deleteBatchUseCase DeleteBatch.UseCase,
+	listBatchesUseCase ListBatches.UseCase,
+
 	host string,
 	port string,
 ) {
 	fmt.Println("Starting Name Manager...")
+
 	api.createTaskUseCase = createTaskUseCase
 	api.listTasksUseCase = listTasksUseCase
-	api.showTaskUseCase = showTaskUseCase
+	api.readTaskUseCase = readTaskUseCase
 	api.deleteTaskUseCase = deleteTaskUseCase
 	api.updateTaskUseCase = updateTaskUseCase
+
 	api.listResultsUseCase = listResultsUseCase
 	api.createResultUseCase = createResultUseCase
-	api.showResultUseCase = showResultUseCase
+	api.readResultUseCase = readResultUseCase
 	api.updateResultUseCase = updateResultUseCase
 	api.deleteResultUseCase = deleteResultUseCase
 	api.listResultsUseCase = listResultsUseCase
+
+	api.createBatchUseCase = createBatchUseCase
+	api.readBatchUseCase = readBatchUseCase
+	api.updateBatchUseCase = updateBatchUseCase
+	api.deleteBatchUseCase = deleteBatchUseCase
+	api.listBatchesUseCase = listBatchesUseCase
+
 	api.serverHost = host
 	api.serverPort = port
 	api.loadServer()
@@ -104,7 +133,7 @@ func (api *ApiGrpc) configControllers() {
 	var taskController = Controller.TaskController{
 		SaveTaskUseCase:   api.createTaskUseCase,
 		ListTasksUseCase:  api.listTasksUseCase,
-		ReadTaskUseCase:   api.showTaskUseCase,
+		ReadTaskUseCase:   api.readTaskUseCase,
 		DeleteTaskUseCase: api.deleteTaskUseCase,
 		UpdateTaskUseCase: api.updateTaskUseCase,
 	}
@@ -112,12 +141,21 @@ func (api *ApiGrpc) configControllers() {
 
 	var resultController = Controller.ResultController{
 		CreateResultUseCase: api.createResultUseCase,
-		ReadResultUseCase:   api.showResultUseCase,
+		ReadResultUseCase:   api.readResultUseCase,
 		UpdateResultUseCase: api.updateResultUseCase,
 		DeleteResultUseCase: api.deleteResultUseCase,
 		ListUseCase:         api.listResultsUseCase,
 	}
 	result.RegisterResultServiceServer(api.grpcServer, resultController)
+
+	var batchController = Controller.BatchController{
+		CreateBatchUseCase: api.createBatchUseCase,
+		ReadBatchUseCase:   api.readBatchUseCase,
+		UpdateBatchUseCase: api.updateBatchUseCase,
+		DeleteBatchUseCase: api.deleteBatchUseCase,
+		ListBatchesUseCase: api.listBatchesUseCase,
+	}
+	batch.RegisterBatchServiceServer(api.grpcServer, batchController)
 }
 
 func (api *ApiGrpc) loadServer() {

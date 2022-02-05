@@ -1,7 +1,6 @@
 syntax = "proto3";
 package batch;
 option go_package = "./batch";
-import "google/protobuf/timestamp.proto";
 
 service BatchService{
   rpc CreateBatch (CreateBatchRequest) returns (CreateBatchResponse);
@@ -14,8 +13,8 @@ service BatchService{
 message Batch{
   string uuid = 1;
   string task_uuid = 2;
-  google.protobuf.Timestamp created_at = 3;
-  google.protobuf.Timestamp updated_at = 4;
+  string created_at = 3;
+  string updated_at = 4;
 }
 message CreateBatchParams{
   string task_uuid = 1;
