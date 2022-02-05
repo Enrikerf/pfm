@@ -11,6 +11,16 @@ type BatchAdapter struct {
 	Orm *gorm.DB
 }
 
+func (adapter BatchAdapter) Find(uuid string) (ResultDomain.Batch, error) {
+	var batchMysql = Batch{}
+	err := adapter.Orm.First(&batchMysql, "uuid = ?", uuid).Error
+	if err != nil {
+		return ResultDomain.Batch{}, err
+	}
+
+	return batchMysql.ToDomain(), nil
+}
+
 func (adapter BatchAdapter) Save(batch ResultDomain.Batch) error {
 	var taskMysql Task.Task
 	var batchMysql Batch

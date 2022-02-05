@@ -23,10 +23,10 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ResultServiceClient interface {
 	CreateResult(ctx context.Context, in *CreateResultRequest, opts ...grpc.CallOption) (*CreateResultResponse, error)
-	ReadResult(ctx context.Context, in *ReadResultRequest, opts ...grpc.CallOption) (*ReadResultResponse, error)
+	ShowResult(ctx context.Context, in *ShowResultRequest, opts ...grpc.CallOption) (*ShowResultResponse, error)
 	UpdateResult(ctx context.Context, in *UpdateResultRequest, opts ...grpc.CallOption) (*UpdateResultResponse, error)
 	DeleteResult(ctx context.Context, in *DeleteResultRequest, opts ...grpc.CallOption) (*DeleteResultResponse, error)
-	ListResult(ctx context.Context, in *ListResultRequest, opts ...grpc.CallOption) (ResultService_ListResultClient, error)
+	ListResult(ctx context.Context, in *ListResultRequest, opts ...grpc.CallOption) (*ListResultResponse, error)
 }
 
 type resultServiceClient struct {
@@ -46,9 +46,9 @@ func (c *resultServiceClient) CreateResult(ctx context.Context, in *CreateResult
 	return out, nil
 }
 
-func (c *resultServiceClient) ReadResult(ctx context.Context, in *ReadResultRequest, opts ...grpc.CallOption) (*ReadResultResponse, error) {
-	out := new(ReadResultResponse)
-	err := c.cc.Invoke(ctx, "/result.ResultService/ReadResult", in, out, opts...)
+func (c *resultServiceClient) ShowResult(ctx context.Context, in *ShowResultRequest, opts ...grpc.CallOption) (*ShowResultResponse, error) {
+	out := new(ShowResultResponse)
+	err := c.cc.Invoke(ctx, "/result.ResultService/ShowResult", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -73,36 +73,13 @@ func (c *resultServiceClient) DeleteResult(ctx context.Context, in *DeleteResult
 	return out, nil
 }
 
-func (c *resultServiceClient) ListResult(ctx context.Context, in *ListResultRequest, opts ...grpc.CallOption) (ResultService_ListResultClient, error) {
-	stream, err := c.cc.NewStream(ctx, &ResultService_ServiceDesc.Streams[0], "/result.ResultService/ListResult", opts...)
+func (c *resultServiceClient) ListResult(ctx context.Context, in *ListResultRequest, opts ...grpc.CallOption) (*ListResultResponse, error) {
+	out := new(ListResultResponse)
+	err := c.cc.Invoke(ctx, "/result.ResultService/ListResult", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &resultServiceListResultClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type ResultService_ListResultClient interface {
-	Recv() (*ListResultResponse, error)
-	grpc.ClientStream
-}
-
-type resultServiceListResultClient struct {
-	grpc.ClientStream
-}
-
-func (x *resultServiceListResultClient) Recv() (*ListResultResponse, error) {
-	m := new(ListResultResponse)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
+	return out, nil
 }
 
 // ResultServiceServer is the server API for ResultService service.
@@ -110,10 +87,10 @@ func (x *resultServiceListResultClient) Recv() (*ListResultResponse, error) {
 // for forward compatibility
 type ResultServiceServer interface {
 	CreateResult(context.Context, *CreateResultRequest) (*CreateResultResponse, error)
-	ReadResult(context.Context, *ReadResultRequest) (*ReadResultResponse, error)
+	ShowResult(context.Context, *ShowResultRequest) (*ShowResultResponse, error)
 	UpdateResult(context.Context, *UpdateResultRequest) (*UpdateResultResponse, error)
 	DeleteResult(context.Context, *DeleteResultRequest) (*DeleteResultResponse, error)
-	ListResult(*ListResultRequest, ResultService_ListResultServer) error
+	ListResult(context.Context, *ListResultRequest) (*ListResultResponse, error)
 	mustEmbedUnimplementedResultServiceServer()
 }
 
@@ -124,8 +101,8 @@ type UnimplementedResultServiceServer struct {
 func (UnimplementedResultServiceServer) CreateResult(context.Context, *CreateResultRequest) (*CreateResultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateResult not implemented")
 }
-func (UnimplementedResultServiceServer) ReadResult(context.Context, *ReadResultRequest) (*ReadResultResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReadResult not implemented")
+func (UnimplementedResultServiceServer) ShowResult(context.Context, *ShowResultRequest) (*ShowResultResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowResult not implemented")
 }
 func (UnimplementedResultServiceServer) UpdateResult(context.Context, *UpdateResultRequest) (*UpdateResultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateResult not implemented")
@@ -133,8 +110,8 @@ func (UnimplementedResultServiceServer) UpdateResult(context.Context, *UpdateRes
 func (UnimplementedResultServiceServer) DeleteResult(context.Context, *DeleteResultRequest) (*DeleteResultResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteResult not implemented")
 }
-func (UnimplementedResultServiceServer) ListResult(*ListResultRequest, ResultService_ListResultServer) error {
-	return status.Errorf(codes.Unimplemented, "method ListResult not implemented")
+func (UnimplementedResultServiceServer) ListResult(context.Context, *ListResultRequest) (*ListResultResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListResult not implemented")
 }
 func (UnimplementedResultServiceServer) mustEmbedUnimplementedResultServiceServer() {}
 
@@ -167,20 +144,20 @@ func _ResultService_CreateResult_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ResultService_ReadResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ReadResultRequest)
+func _ResultService_ShowResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShowResultRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ResultServiceServer).ReadResult(ctx, in)
+		return srv.(ResultServiceServer).ShowResult(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/result.ResultService/ReadResult",
+		FullMethod: "/result.ResultService/ShowResult",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResultServiceServer).ReadResult(ctx, req.(*ReadResultRequest))
+		return srv.(ResultServiceServer).ShowResult(ctx, req.(*ShowResultRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -221,25 +198,22 @@ func _ResultService_DeleteResult_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ResultService_ListResult_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(ListResultRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+func _ResultService_ListResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListResultRequest)
+	if err := dec(in); err != nil {
+		return nil, err
 	}
-	return srv.(ResultServiceServer).ListResult(m, &resultServiceListResultServer{stream})
-}
-
-type ResultService_ListResultServer interface {
-	Send(*ListResultResponse) error
-	grpc.ServerStream
-}
-
-type resultServiceListResultServer struct {
-	grpc.ServerStream
-}
-
-func (x *resultServiceListResultServer) Send(m *ListResultResponse) error {
-	return x.ServerStream.SendMsg(m)
+	if interceptor == nil {
+		return srv.(ResultServiceServer).ListResult(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/result.ResultService/ListResult",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResultServiceServer).ListResult(ctx, req.(*ListResultRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 // ResultService_ServiceDesc is the grpc.ServiceDesc for ResultService service.
@@ -254,8 +228,8 @@ var ResultService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ResultService_CreateResult_Handler,
 		},
 		{
-			MethodName: "ReadResult",
-			Handler:    _ResultService_ReadResult_Handler,
+			MethodName: "ShowResult",
+			Handler:    _ResultService_ShowResult_Handler,
 		},
 		{
 			MethodName: "UpdateResult",
@@ -265,13 +239,11 @@ var ResultService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "DeleteResult",
 			Handler:    _ResultService_DeleteResult_Handler,
 		},
-	},
-	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "ListResult",
-			Handler:       _ResultService_ListResult_Handler,
-			ServerStreams: true,
+			MethodName: "ListResult",
+			Handler:    _ResultService_ListResult_Handler,
 		},
 	},
+	Streams:  []grpc.StreamDesc{},
 	Metadata: "app/Adapter/In/ApiGrcp/proto/result.proto",
 }

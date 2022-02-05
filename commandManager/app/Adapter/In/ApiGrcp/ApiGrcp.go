@@ -3,7 +3,13 @@ package ApiGrcp
 import (
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/Controller"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/result"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ShowResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
@@ -23,10 +29,16 @@ type ApiGrpc struct {
 	showTaskUseCase   ShowTask.UseCase
 	deleteTaskUseCase DeleteTask.UseCase
 	updateTaskUseCase UpdateTask.UseCase
-	serverHost        string
-	serverPort        string
-	grpcServer        *grpc.Server
-	listener          net.Listener
+
+	createResultUseCase CreateResult.UseCase
+	showResultUseCase   ShowResult.UseCase
+	updateResultUseCase UpdateResult.UseCase
+	deleteResultUseCase DeleteResult.UseCase
+	listResultsUseCase  ListResults.UseCase
+	serverHost          string
+	serverPort          string
+	grpcServer          *grpc.Server
+	listener            net.Listener
 }
 
 func (api *ApiGrpc) Initialize(
@@ -35,6 +47,12 @@ func (api *ApiGrpc) Initialize(
 	showTaskUseCase ShowTask.UseCase,
 	deleteTaskUseCase DeleteTask.UseCase,
 	updateTaskUseCase UpdateTask.UseCase,
+
+	createResultUseCase CreateResult.UseCase,
+	showResultUseCase ShowResult.UseCase,
+	updateResultUseCase UpdateResult.UseCase,
+	deleteResultUseCase DeleteResult.UseCase,
+	listResultsUseCase ListResults.UseCase,
 	host string,
 	port string,
 ) {
@@ -44,6 +62,12 @@ func (api *ApiGrpc) Initialize(
 	api.showTaskUseCase = showTaskUseCase
 	api.deleteTaskUseCase = deleteTaskUseCase
 	api.updateTaskUseCase = updateTaskUseCase
+	api.listResultsUseCase = listResultsUseCase
+	api.createResultUseCase = createResultUseCase
+	api.showResultUseCase = showResultUseCase
+	api.updateResultUseCase = updateResultUseCase
+	api.deleteResultUseCase = deleteResultUseCase
+	api.listResultsUseCase = listResultsUseCase
 	api.serverHost = host
 	api.serverPort = port
 	api.loadServer()
@@ -85,6 +109,15 @@ func (api *ApiGrpc) configControllers() {
 		UpdateTaskUseCase: api.updateTaskUseCase,
 	}
 	task.RegisterTaskServiceServer(api.grpcServer, taskController)
+
+	var resultController = Controller.ResultController{
+		CreateResultUseCase: api.createResultUseCase,
+		ShowResultUseCase:   api.showResultUseCase,
+		UpdateResultUseCase: api.updateResultUseCase,
+		DeleteResultUseCase: api.deleteResultUseCase,
+		ListUseCase:         api.listResultsUseCase,
+	}
+	result.RegisterResultServiceServer(api.grpcServer, resultController)
 }
 
 func (api *ApiGrpc) loadServer() {

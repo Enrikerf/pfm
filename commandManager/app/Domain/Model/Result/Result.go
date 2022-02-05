@@ -8,10 +8,10 @@ type Result struct {
 	Content   string
 }
 
-func NewResult(TaskUuid uuid.UUID, content string) (Result, error) {
+func NewResult(BatchUuid uuid.UUID, content string) (Result, error) {
 	result := Result{}
 	result.Uuid = uuid.New()
-	result.BatchUuid = TaskUuid
+	result.BatchUuid = BatchUuid
 	result.Content = content
 	return result, nil
 }
