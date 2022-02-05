@@ -8,6 +8,11 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Result"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Loop"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ShowResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
@@ -81,6 +86,7 @@ func (server *App) loadLoop(db *gorm.DB) {
 }
 
 func (server *App) loadApiGrpc(db *gorm.DB) {
+	//TaskController
 	var taskAdapter = Task.Adapter{Orm: db}
 	var createTaskService = CreateTask.Service{SavePort: taskAdapter}
 	var listTasksService = ListTasks.Service{FindByPort: taskAdapter}
@@ -90,6 +96,21 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 		FindPort:   taskAdapter,
 		UpdatePort: taskAdapter,
 	}
+	//ResultController
+	var resultAdapter = Result.Adapter{Orm: db}
+	var batchAdapter = Result.BatchAdapter{Orm: db}
+	var createResultService = CreateResult.Service{
+		FindBatchPort: batchAdapter,
+		SavePort:      resultAdapter,
+	}
+	var showResultService = ShowResult.Service{FindByPort: resultAdapter}
+	var updateResultService = UpdateResult.Service{
+		FindPort:      resultAdapter,
+		FindBatchPort: batchAdapter,
+		UpdatePort:    resultAdapter,
+	}
+	var deleteResultService = DeleteResult.Service{DeleteTaskPort: resultAdapter}
+	var listResultsService = ListResults.Service{FindByPort: resultAdapter}
 	server.ApiGrpc = ApiGrcp.ApiGrpc{}
 	server.ApiGrpc.Initialize(
 		createTaskService,
@@ -97,6 +118,11 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 		showTaskService,
 		deleteTaskService,
 		updateTaskService,
+		createResultService,
+		showResultService,
+		updateResultService,
+		deleteResultService,
+		listResultsService,
 		os.Getenv("SERVER_HOST"),
 		os.Getenv("SERVER_PORT"),
 	)

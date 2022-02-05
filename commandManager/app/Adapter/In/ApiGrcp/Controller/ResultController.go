@@ -2,29 +2,103 @@ package Controller
 
 import (
 	"context"
+	"fmt"
 	resultProto "github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/result"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ShowResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type ResultController struct {
+	CreateResultUseCase CreateResult.UseCase
+	ShowResultUseCase   ShowResult.UseCase
+	UpdateResultUseCase UpdateResult.UseCase
+	DeleteResultUseCase DeleteResult.UseCase
+	ListUseCase         ListResults.UseCase
 	resultProto.UnimplementedResultServiceServer
 }
 
-func (controller TaskController) CreateResult(ctx context.Context, request *resultProto.CreateResultRequest) (*resultProto.CreateResultResponse, error) {
-	panic("implement me")
+func (controller ResultController) CreateResult(ctx context.Context, request *resultProto.CreateResultRequest) (*resultProto.CreateResultResponse, error) {
+	protoResult := request.GetResultParams()
+	var command CreateResult.Command
+	command.Content = protoResult.GetContent()
+	command.BatchUuid = protoResult.GetBatchUuid()
+	result, err := controller.CreateResultUseCase.Create(command)
+	if err != nil {
+		return nil, fmt.Errorf("error")
+	}
+	newResult := resultProto.Result{
+		Uuid:      result.Uuid.String(),
+		Content:   result.Content,
+		BatchUuid: result.BatchUuid.String(),
+	}
+	return &resultProto.CreateResultResponse{Result: &newResult}, nil
 }
 
-func (controller TaskController) ReadResult(ctx context.Context, request *resultProto.ReadResultRequest) (*resultProto.ReadResultResponse, error) {
-	panic("implement me")
+func (controller ResultController) ShowResult(ctx context.Context, request *resultProto.ShowResultRequest) (*resultProto.ShowResultResponse, error) {
+	var query = ShowResult.Query{Uuid: request.GetResultUuid()}
+	result, err := controller.ShowResultUseCase.Show(query)
+	if err != nil {
+		return &resultProto.ShowResultResponse{}, status.Errorf(
+			codes.NotFound,
+			fmt.Sprintf("error"),
+		)
+	}
+	return &resultProto.ShowResultResponse{Result: &resultProto.Result{
+		Uuid:      result.Uuid.String(),
+		Content:   result.Content,
+		BatchUuid: result.BatchUuid.String(),
+	}}, nil
 }
 
 func (controller ResultController) UpdateResult(ctx context.Context, request *resultProto.UpdateResultRequest) (*resultProto.UpdateResultResponse, error) {
-	panic("implement me")
+	cmd := UpdateResult.Command{}
+	params := request.GetResultParams()
+	cmd.Uuid = request.GetResultUuid()
+	if params.GetContent() != nil {
+		cmd.Content.Change = true
+	}
+	if params.GetBatchUuid() != nil {
+		cmd.BatchUuid.Change = true
+	}
+	cmd.Content.Value = params.GetContent().GetValue()
+	cmd.BatchUuid.Value = params.GetBatchUuid().GetValue()
+	err := controller.UpdateResultUseCase.Update(cmd)
+	return &resultProto.UpdateResultResponse{}, err
 }
 
 func (controller ResultController) DeleteResult(ctx context.Context, request *resultProto.DeleteResultRequest) (*resultProto.DeleteResultResponse, error) {
-	panic("implement me")
+	var command = DeleteResult.Command{Uuid: request.GetResultUuid()}
+	err := controller.DeleteResultUseCase.Delete(command)
+	if err != nil {
+		return &resultProto.DeleteResultResponse{}, status.Errorf(
+			codes.NotFound,
+			fmt.Sprintf("error"),
+		)
+	}
+
+	return &resultProto.DeleteResultResponse{}, nil
 }
 
-func (controller ResultController) ListResult(request *resultProto.ListResultRequest, server2 resultProto.ResultService_ListResultServer) error {
-	panic("implement me")
+func (controller ResultController) ListResult(ctx context.Context, request *resultProto.ListResultRequest) (*resultProto.ListResultResponse, error) {
+	results := controller.ListUseCase.List(ListResults.Query{})
+	if results == nil {
+		return &resultProto.ListResultResponse{}, status.Errorf(
+			codes.Internal,
+			fmt.Sprintf("error"),
+		)
+	}
+	resultProtoArray := []*resultProto.Result{}
+	for _, result := range results {
+		resultProtoArray = append(resultProtoArray, &resultProto.Result{
+			Uuid:      result.Uuid.String(),
+			BatchUuid: result.BatchUuid.String(),
+			Content:   result.Content,
+		})
+	}
+	return &resultProto.ListResultResponse{Results: resultProtoArray}, nil
 }

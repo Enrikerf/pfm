@@ -7,6 +7,7 @@
 package result
 
 import (
+	wrappers "github.com/golang/protobuf/ptypes/wrappers"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -20,75 +21,20 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type EditableResultParams struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	TaskUuid string `protobuf:"bytes,1,opt,name=task_uuid,json=taskUuid,proto3" json:"task_uuid,omitempty"`
-	Result   string `protobuf:"bytes,2,opt,name=result,proto3" json:"result,omitempty"`
-}
-
-func (x *EditableResultParams) Reset() {
-	*x = EditableResultParams{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[0]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *EditableResultParams) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EditableResultParams) ProtoMessage() {}
-
-func (x *EditableResultParams) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[0]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EditableResultParams.ProtoReflect.Descriptor instead.
-func (*EditableResultParams) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *EditableResultParams) GetTaskUuid() string {
-	if x != nil {
-		return x.TaskUuid
-	}
-	return ""
-}
-
-func (x *EditableResultParams) GetResult() string {
-	if x != nil {
-		return x.Result
-	}
-	return ""
-}
-
 type Result struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id       string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	TaskUuid string `protobuf:"bytes,2,opt,name=task_uuid,json=taskUuid,proto3" json:"task_uuid,omitempty"`
-	Content  string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	Uuid      string `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	BatchUuid string `protobuf:"bytes,2,opt,name=batch_uuid,json=batchUuid,proto3" json:"batch_uuid,omitempty"`
+	Content   string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
 }
 
 func (x *Result) Reset() {
 	*x = Result{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[1]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -101,7 +47,7 @@ func (x *Result) String() string {
 func (*Result) ProtoMessage() {}
 
 func (x *Result) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[1]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -114,19 +60,19 @@ func (x *Result) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Result.ProtoReflect.Descriptor instead.
 func (*Result) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{1}
+	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Result) GetId() string {
+func (x *Result) GetUuid() string {
 	if x != nil {
-		return x.Id
+		return x.Uuid
 	}
 	return ""
 }
 
-func (x *Result) GetTaskUuid() string {
+func (x *Result) GetBatchUuid() string {
 	if x != nil {
-		return x.TaskUuid
+		return x.BatchUuid
 	}
 	return ""
 }
@@ -138,18 +84,128 @@ func (x *Result) GetContent() string {
 	return ""
 }
 
+type CreateResultParams struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	BatchUuid string `protobuf:"bytes,1,opt,name=batch_uuid,json=batchUuid,proto3" json:"batch_uuid,omitempty"`
+	Content   string `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
+}
+
+func (x *CreateResultParams) Reset() {
+	*x = CreateResultParams{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateResultParams) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateResultParams) ProtoMessage() {}
+
+func (x *CreateResultParams) ProtoReflect() protoreflect.Message {
+	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateResultParams.ProtoReflect.Descriptor instead.
+func (*CreateResultParams) Descriptor() ([]byte, []int) {
+	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *CreateResultParams) GetBatchUuid() string {
+	if x != nil {
+		return x.BatchUuid
+	}
+	return ""
+}
+
+func (x *CreateResultParams) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+type EditableResultParams struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	BatchUuid *wrappers.StringValue `protobuf:"bytes,1,opt,name=batch_uuid,json=batchUuid,proto3" json:"batch_uuid,omitempty"`
+	Content   *wrappers.StringValue `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
+}
+
+func (x *EditableResultParams) Reset() {
+	*x = EditableResultParams{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EditableResultParams) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EditableResultParams) ProtoMessage() {}
+
+func (x *EditableResultParams) ProtoReflect() protoreflect.Message {
+	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EditableResultParams.ProtoReflect.Descriptor instead.
+func (*EditableResultParams) Descriptor() ([]byte, []int) {
+	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *EditableResultParams) GetBatchUuid() *wrappers.StringValue {
+	if x != nil {
+		return x.BatchUuid
+	}
+	return nil
+}
+
+func (x *EditableResultParams) GetContent() *wrappers.StringValue {
+	if x != nil {
+		return x.Content
+	}
+	return nil
+}
+
 type CreateResultRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Result *EditableResultParams `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	ResultParams *CreateResultParams `protobuf:"bytes,1,opt,name=resultParams,proto3" json:"resultParams,omitempty"`
 }
 
 func (x *CreateResultRequest) Reset() {
 	*x = CreateResultRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[2]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -162,7 +218,7 @@ func (x *CreateResultRequest) String() string {
 func (*CreateResultRequest) ProtoMessage() {}
 
 func (x *CreateResultRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[2]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -175,12 +231,12 @@ func (x *CreateResultRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateResultRequest.ProtoReflect.Descriptor instead.
 func (*CreateResultRequest) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{2}
+	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *CreateResultRequest) GetResult() *EditableResultParams {
+func (x *CreateResultRequest) GetResultParams() *CreateResultParams {
 	if x != nil {
-		return x.Result
+		return x.ResultParams
 	}
 	return nil
 }
@@ -196,7 +252,7 @@ type CreateResultResponse struct {
 func (x *CreateResultResponse) Reset() {
 	*x = CreateResultResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[3]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -209,7 +265,7 @@ func (x *CreateResultResponse) String() string {
 func (*CreateResultResponse) ProtoMessage() {}
 
 func (x *CreateResultResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[3]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -222,7 +278,7 @@ func (x *CreateResultResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateResultResponse.ProtoReflect.Descriptor instead.
 func (*CreateResultResponse) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{3}
+	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateResultResponse) GetResult() *Result {
@@ -232,7 +288,7 @@ func (x *CreateResultResponse) GetResult() *Result {
 	return nil
 }
 
-type ReadResultRequest struct {
+type ShowResultRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -240,55 +296,8 @@ type ReadResultRequest struct {
 	ResultUuid string `protobuf:"bytes,1,opt,name=result_uuid,json=resultUuid,proto3" json:"result_uuid,omitempty"`
 }
 
-func (x *ReadResultRequest) Reset() {
-	*x = ReadResultRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[4]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ReadResultRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ReadResultRequest) ProtoMessage() {}
-
-func (x *ReadResultRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[4]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ReadResultRequest.ProtoReflect.Descriptor instead.
-func (*ReadResultRequest) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *ReadResultRequest) GetResultUuid() string {
-	if x != nil {
-		return x.ResultUuid
-	}
-	return ""
-}
-
-type ReadResultResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Result *Result `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
-}
-
-func (x *ReadResultResponse) Reset() {
-	*x = ReadResultResponse{}
+func (x *ShowResultRequest) Reset() {
+	*x = ShowResultRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -296,13 +305,13 @@ func (x *ReadResultResponse) Reset() {
 	}
 }
 
-func (x *ReadResultResponse) String() string {
+func (x *ShowResultRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReadResultResponse) ProtoMessage() {}
+func (*ShowResultRequest) ProtoMessage() {}
 
-func (x *ReadResultResponse) ProtoReflect() protoreflect.Message {
+func (x *ShowResultRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -314,12 +323,59 @@ func (x *ReadResultResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReadResultResponse.ProtoReflect.Descriptor instead.
-func (*ReadResultResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use ShowResultRequest.ProtoReflect.Descriptor instead.
+func (*ShowResultRequest) Descriptor() ([]byte, []int) {
 	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *ReadResultResponse) GetResult() *Result {
+func (x *ShowResultRequest) GetResultUuid() string {
+	if x != nil {
+		return x.ResultUuid
+	}
+	return ""
+}
+
+type ShowResultResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Result *Result `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+}
+
+func (x *ShowResultResponse) Reset() {
+	*x = ShowResultResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ShowResultResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ShowResultResponse) ProtoMessage() {}
+
+func (x *ShowResultResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ShowResultResponse.ProtoReflect.Descriptor instead.
+func (*ShowResultResponse) Descriptor() ([]byte, []int) {
+	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ShowResultResponse) GetResult() *Result {
 	if x != nil {
 		return x.Result
 	}
@@ -331,13 +387,14 @@ type UpdateResultRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Result *EditableResultParams `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	ResultUuid   string                `protobuf:"bytes,1,opt,name=resultUuid,proto3" json:"resultUuid,omitempty"`
+	ResultParams *EditableResultParams `protobuf:"bytes,2,opt,name=resultParams,proto3" json:"resultParams,omitempty"`
 }
 
 func (x *UpdateResultRequest) Reset() {
 	*x = UpdateResultRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[6]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -350,7 +407,7 @@ func (x *UpdateResultRequest) String() string {
 func (*UpdateResultRequest) ProtoMessage() {}
 
 func (x *UpdateResultRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[6]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -363,12 +420,19 @@ func (x *UpdateResultRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateResultRequest.ProtoReflect.Descriptor instead.
 func (*UpdateResultRequest) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{6}
+	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *UpdateResultRequest) GetResult() *EditableResultParams {
+func (x *UpdateResultRequest) GetResultUuid() string {
 	if x != nil {
-		return x.Result
+		return x.ResultUuid
+	}
+	return ""
+}
+
+func (x *UpdateResultRequest) GetResultParams() *EditableResultParams {
+	if x != nil {
+		return x.ResultParams
 	}
 	return nil
 }
@@ -378,13 +442,13 @@ type UpdateResultResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Result *Result `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Result *EditableResultParams `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
 }
 
 func (x *UpdateResultResponse) Reset() {
 	*x = UpdateResultResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[7]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -397,7 +461,7 @@ func (x *UpdateResultResponse) String() string {
 func (*UpdateResultResponse) ProtoMessage() {}
 
 func (x *UpdateResultResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[7]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -410,10 +474,10 @@ func (x *UpdateResultResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateResultResponse.ProtoReflect.Descriptor instead.
 func (*UpdateResultResponse) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{7}
+	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *UpdateResultResponse) GetResult() *Result {
+func (x *UpdateResultResponse) GetResult() *EditableResultParams {
 	if x != nil {
 		return x.Result
 	}
@@ -431,7 +495,7 @@ type DeleteResultRequest struct {
 func (x *DeleteResultRequest) Reset() {
 	*x = DeleteResultRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[8]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -444,7 +508,7 @@ func (x *DeleteResultRequest) String() string {
 func (*DeleteResultRequest) ProtoMessage() {}
 
 func (x *DeleteResultRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[8]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -457,7 +521,7 @@ func (x *DeleteResultRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteResultRequest.ProtoReflect.Descriptor instead.
 func (*DeleteResultRequest) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{8}
+	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *DeleteResultRequest) GetResultUuid() string {
@@ -471,14 +535,12 @@ type DeleteResultResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
-
-	ResultUuid string `protobuf:"bytes,1,opt,name=result_uuid,json=resultUuid,proto3" json:"result_uuid,omitempty"`
 }
 
 func (x *DeleteResultResponse) Reset() {
 	*x = DeleteResultResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[9]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -491,7 +553,7 @@ func (x *DeleteResultResponse) String() string {
 func (*DeleteResultResponse) ProtoMessage() {}
 
 func (x *DeleteResultResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[9]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -504,14 +566,7 @@ func (x *DeleteResultResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteResultResponse.ProtoReflect.Descriptor instead.
 func (*DeleteResultResponse) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *DeleteResultResponse) GetResultUuid() string {
-	if x != nil {
-		return x.ResultUuid
-	}
-	return ""
+	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{10}
 }
 
 type ListResultRequest struct {
@@ -523,7 +578,7 @@ type ListResultRequest struct {
 func (x *ListResultRequest) Reset() {
 	*x = ListResultRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[10]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -536,7 +591,7 @@ func (x *ListResultRequest) String() string {
 func (*ListResultRequest) ProtoMessage() {}
 
 func (x *ListResultRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[10]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -549,7 +604,7 @@ func (x *ListResultRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListResultRequest.ProtoReflect.Descriptor instead.
 func (*ListResultRequest) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{10}
+	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{11}
 }
 
 type ListResultResponse struct {
@@ -557,13 +612,13 @@ type ListResultResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Result *Result `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Results []*Result `protobuf:"bytes,1,rep,name=results,proto3" json:"results,omitempty"`
 }
 
 func (x *ListResultResponse) Reset() {
 	*x = ListResultResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[11]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -576,7 +631,7 @@ func (x *ListResultResponse) String() string {
 func (*ListResultResponse) ProtoMessage() {}
 
 func (x *ListResultResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[11]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -589,12 +644,12 @@ func (x *ListResultResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListResultResponse.ProtoReflect.Descriptor instead.
 func (*ListResultResponse) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{11}
+	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *ListResultResponse) GetResult() *Result {
+func (x *ListResultResponse) GetResults() []*Result {
 	if x != nil {
-		return x.Result
+		return x.Results
 	}
 	return nil
 }
@@ -605,79 +660,92 @@ var file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDesc = []byte{
 	0x0a, 0x29, 0x61, 0x70, 0x70, 0x2f, 0x41, 0x64, 0x61, 0x70, 0x74, 0x65, 0x72, 0x2f, 0x49, 0x6e,
 	0x2f, 0x41, 0x70, 0x69, 0x47, 0x72, 0x63, 0x70, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x72,
 	0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x06, 0x72, 0x65, 0x73,
-	0x75, 0x6c, 0x74, 0x22, 0x4b, 0x0a, 0x14, 0x45, 0x64, 0x69, 0x74, 0x61, 0x62, 0x6c, 0x65, 0x52,
-	0x65, 0x73, 0x75, 0x6c, 0x74, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x1b, 0x0a, 0x09, 0x74,
-	0x61, 0x73, 0x6b, 0x5f, 0x75, 0x75, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
-	0x74, 0x61, 0x73, 0x6b, 0x55, 0x75, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x22, 0x4f, 0x0a, 0x06, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x1b, 0x0a, 0x09, 0x74, 0x61,
-	0x73, 0x6b, 0x5f, 0x75, 0x75, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x74,
-	0x61, 0x73, 0x6b, 0x55, 0x75, 0x69, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65,
-	0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e,
-	0x74, 0x22, 0x4b, 0x0a, 0x13, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c,
-	0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x34, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c,
-	0x74, 0x2e, 0x45, 0x64, 0x69, 0x74, 0x61, 0x62, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x3e,
+	0x75, 0x6c, 0x74, 0x1a, 0x1e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x62, 0x75, 0x66, 0x2f, 0x77, 0x72, 0x61, 0x70, 0x70, 0x65, 0x72, 0x73, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x22, 0x55, 0x0a, 0x06, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x12, 0x0a,
+	0x04, 0x75, 0x75, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x75, 0x75, 0x69,
+	0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x61, 0x74, 0x63, 0x68, 0x5f, 0x75, 0x75, 0x69, 0x64, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x61, 0x74, 0x63, 0x68, 0x55, 0x75, 0x69, 0x64,
+	0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x22, 0x4d, 0x0a, 0x12, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x61, 0x74, 0x63, 0x68, 0x5f, 0x75, 0x75, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x61, 0x74, 0x63, 0x68, 0x55, 0x75, 0x69, 0x64, 0x12,
+	0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x22, 0x8b, 0x01, 0x0a, 0x14, 0x45, 0x64,
+	0x69, 0x74, 0x61, 0x62, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x50, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x12, 0x3b, 0x0a, 0x0a, 0x62, 0x61, 0x74, 0x63, 0x68, 0x5f, 0x75, 0x75, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x56,
+	0x61, 0x6c, 0x75, 0x65, 0x52, 0x09, 0x62, 0x61, 0x74, 0x63, 0x68, 0x55, 0x75, 0x69, 0x64, 0x12,
+	0x36, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x1c, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
+	0x75, 0x66, 0x2e, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x07,
+	0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x22, 0x55, 0x0a, 0x13, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x3e,
+	0x0a, 0x0c, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x52, 0x0c, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x3e,
 	0x0a, 0x14, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65,
 	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x26, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e,
 	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x34,
-	0x0a, 0x11, 0x52, 0x65, 0x61, 0x64, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71, 0x75,
+	0x0a, 0x11, 0x53, 0x68, 0x6f, 0x77, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x5f, 0x75, 0x75,
 	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x55, 0x75, 0x69, 0x64, 0x22, 0x3c, 0x0a, 0x12, 0x52, 0x65, 0x61, 0x64, 0x52, 0x65, 0x73, 0x75,
+	0x55, 0x75, 0x69, 0x64, 0x22, 0x3c, 0x0a, 0x12, 0x53, 0x68, 0x6f, 0x77, 0x52, 0x65, 0x73, 0x75,
 	0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x26, 0x0a, 0x06, 0x72, 0x65,
 	0x73, 0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x72, 0x65, 0x73,
 	0x75, 0x6c, 0x74, 0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x22, 0x4b, 0x0a, 0x13, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x34, 0x0a, 0x06, 0x72, 0x65, 0x73,
-	0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x72, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x2e, 0x45, 0x64, 0x69, 0x74, 0x61, 0x62, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c,
-	0x74, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22,
-	0x3e, 0x0a, 0x14, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x26, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c,
-	0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22,
-	0x36, 0x0a, 0x13, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x5f, 0x75, 0x75, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x72, 0x65, 0x73,
-	0x75, 0x6c, 0x74, 0x55, 0x75, 0x69, 0x64, 0x22, 0x37, 0x0a, 0x14, 0x44, 0x65, 0x6c, 0x65, 0x74,
-	0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
-	0x1f, 0x0a, 0x0b, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x5f, 0x75, 0x75, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x55, 0x75, 0x69, 0x64,
-	0x22, 0x13, 0x0a, 0x11, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x3c, 0x0a, 0x12, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73,
-	0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x26, 0x0a, 0x06, 0x72,
-	0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x72, 0x65,
-	0x73, 0x75, 0x6c, 0x74, 0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x06, 0x72, 0x65, 0x73,
-	0x75, 0x6c, 0x74, 0x32, 0xfc, 0x02, 0x0a, 0x0d, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x53, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x49, 0x0a, 0x0c, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52,
-	0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x1b, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x43, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x43, 0x0a, 0x0a, 0x52, 0x65, 0x61, 0x64, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x19,
-	0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x52, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x72, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x2e, 0x52, 0x65, 0x61, 0x64, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x49, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52,
-	0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x1b, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x55,
-	0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x55, 0x70, 0x64, 0x61,
-	0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x49, 0x0a, 0x0c, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x12, 0x1b, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65,
+	0x6c, 0x74, 0x22, 0x77, 0x0a, 0x13, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75,
+	0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1e, 0x0a, 0x0a, 0x72, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x55, 0x75, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x72,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x55, 0x75, 0x69, 0x64, 0x12, 0x40, 0x0a, 0x0c, 0x72, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x1c, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x45, 0x64, 0x69, 0x74, 0x61, 0x62, 0x6c,
+	0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x0c, 0x72,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x4c, 0x0a, 0x14, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x34, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x45, 0x64, 0x69,
+	0x74, 0x61, 0x62, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x50, 0x61, 0x72, 0x61, 0x6d,
+	0x73, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x36, 0x0a, 0x13, 0x44, 0x65, 0x6c,
+	0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x1f, 0x0a, 0x0b, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x5f, 0x75, 0x75, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x55, 0x75, 0x69,
+	0x64, 0x22, 0x16, 0x0a, 0x14, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c,
+	0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x13, 0x0a, 0x11, 0x4c, 0x69, 0x73,
+	0x74, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x3e,
+	0x0a, 0x12, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x28, 0x0a, 0x07, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x73, 0x18,
+	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x52,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x07, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x73, 0x32, 0xfa,
+	0x02, 0x0a, 0x0d, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x12, 0x49, 0x0a, 0x0c, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74,
+	0x12, 0x1b, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
 	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e,
-	0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73,
-	0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x45, 0x0a, 0x0a, 0x4c,
-	0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x19, 0x2e, 0x72, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x4c, 0x69,
-	0x73, 0x74, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x30, 0x01, 0x42, 0x0a, 0x5a, 0x08, 0x2e, 0x2f, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x43, 0x0a, 0x0a, 0x53,
+	0x68, 0x6f, 0x77, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x19, 0x2e, 0x72, 0x65, 0x73, 0x75,
+	0x6c, 0x74, 0x2e, 0x53, 0x68, 0x6f, 0x77, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x53, 0x68,
+	0x6f, 0x77, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x49, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74,
+	0x12, 0x1b, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e,
+	0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x49, 0x0a, 0x0c, 0x44,
+	0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x1b, 0x2e, 0x72, 0x65,
+	0x73, 0x75, 0x6c, 0x74, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c,
+	0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c,
+	0x74, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x43, 0x0a, 0x0a, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65,
+	0x73, 0x75, 0x6c, 0x74, 0x12, 0x19, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x4c, 0x69,
+	0x73, 0x74, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x1a, 0x2e, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2e, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73,
+	0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x0a, 0x5a, 0x08, 0x2e,
+	0x2f, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -692,43 +760,47 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescGZIP() []byte {
 	return file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDescData
 }
 
-var file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_app_Adapter_In_ApiGrcp_proto_result_proto_goTypes = []interface{}{
-	(*EditableResultParams)(nil), // 0: result.EditableResultParams
-	(*Result)(nil),               // 1: result.Result
-	(*CreateResultRequest)(nil),  // 2: result.CreateResultRequest
-	(*CreateResultResponse)(nil), // 3: result.CreateResultResponse
-	(*ReadResultRequest)(nil),    // 4: result.ReadResultRequest
-	(*ReadResultResponse)(nil),   // 5: result.ReadResultResponse
-	(*UpdateResultRequest)(nil),  // 6: result.UpdateResultRequest
-	(*UpdateResultResponse)(nil), // 7: result.UpdateResultResponse
-	(*DeleteResultRequest)(nil),  // 8: result.DeleteResultRequest
-	(*DeleteResultResponse)(nil), // 9: result.DeleteResultResponse
-	(*ListResultRequest)(nil),    // 10: result.ListResultRequest
-	(*ListResultResponse)(nil),   // 11: result.ListResultResponse
+	(*Result)(nil),               // 0: result.Result
+	(*CreateResultParams)(nil),   // 1: result.CreateResultParams
+	(*EditableResultParams)(nil), // 2: result.EditableResultParams
+	(*CreateResultRequest)(nil),  // 3: result.CreateResultRequest
+	(*CreateResultResponse)(nil), // 4: result.CreateResultResponse
+	(*ShowResultRequest)(nil),    // 5: result.ShowResultRequest
+	(*ShowResultResponse)(nil),   // 6: result.ShowResultResponse
+	(*UpdateResultRequest)(nil),  // 7: result.UpdateResultRequest
+	(*UpdateResultResponse)(nil), // 8: result.UpdateResultResponse
+	(*DeleteResultRequest)(nil),  // 9: result.DeleteResultRequest
+	(*DeleteResultResponse)(nil), // 10: result.DeleteResultResponse
+	(*ListResultRequest)(nil),    // 11: result.ListResultRequest
+	(*ListResultResponse)(nil),   // 12: result.ListResultResponse
+	(*wrappers.StringValue)(nil), // 13: google.protobuf.StringValue
 }
 var file_app_Adapter_In_ApiGrcp_proto_result_proto_depIdxs = []int32{
-	0,  // 0: result.CreateResultRequest.result:type_name -> result.EditableResultParams
-	1,  // 1: result.CreateResultResponse.result:type_name -> result.Result
-	1,  // 2: result.ReadResultResponse.result:type_name -> result.Result
-	0,  // 3: result.UpdateResultRequest.result:type_name -> result.EditableResultParams
-	1,  // 4: result.UpdateResultResponse.result:type_name -> result.Result
-	1,  // 5: result.ListResultResponse.result:type_name -> result.Result
-	2,  // 6: result.ResultService.CreateResult:input_type -> result.CreateResultRequest
-	4,  // 7: result.ResultService.ReadResult:input_type -> result.ReadResultRequest
-	6,  // 8: result.ResultService.UpdateResult:input_type -> result.UpdateResultRequest
-	8,  // 9: result.ResultService.DeleteResult:input_type -> result.DeleteResultRequest
-	10, // 10: result.ResultService.ListResult:input_type -> result.ListResultRequest
-	3,  // 11: result.ResultService.CreateResult:output_type -> result.CreateResultResponse
-	5,  // 12: result.ResultService.ReadResult:output_type -> result.ReadResultResponse
-	7,  // 13: result.ResultService.UpdateResult:output_type -> result.UpdateResultResponse
-	9,  // 14: result.ResultService.DeleteResult:output_type -> result.DeleteResultResponse
-	11, // 15: result.ResultService.ListResult:output_type -> result.ListResultResponse
-	11, // [11:16] is the sub-list for method output_type
-	6,  // [6:11] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	13, // 0: result.EditableResultParams.batch_uuid:type_name -> google.protobuf.StringValue
+	13, // 1: result.EditableResultParams.content:type_name -> google.protobuf.StringValue
+	1,  // 2: result.CreateResultRequest.resultParams:type_name -> result.CreateResultParams
+	0,  // 3: result.CreateResultResponse.result:type_name -> result.Result
+	0,  // 4: result.ShowResultResponse.result:type_name -> result.Result
+	2,  // 5: result.UpdateResultRequest.resultParams:type_name -> result.EditableResultParams
+	2,  // 6: result.UpdateResultResponse.result:type_name -> result.EditableResultParams
+	0,  // 7: result.ListResultResponse.results:type_name -> result.Result
+	3,  // 8: result.ResultService.CreateResult:input_type -> result.CreateResultRequest
+	5,  // 9: result.ResultService.ShowResult:input_type -> result.ShowResultRequest
+	7,  // 10: result.ResultService.UpdateResult:input_type -> result.UpdateResultRequest
+	9,  // 11: result.ResultService.DeleteResult:input_type -> result.DeleteResultRequest
+	11, // 12: result.ResultService.ListResult:input_type -> result.ListResultRequest
+	4,  // 13: result.ResultService.CreateResult:output_type -> result.CreateResultResponse
+	6,  // 14: result.ResultService.ShowResult:output_type -> result.ShowResultResponse
+	8,  // 15: result.ResultService.UpdateResult:output_type -> result.UpdateResultResponse
+	10, // 16: result.ResultService.DeleteResult:output_type -> result.DeleteResultResponse
+	12, // 17: result.ResultService.ListResult:output_type -> result.ListResultResponse
+	13, // [13:18] is the sub-list for method output_type
+	8,  // [8:13] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_app_Adapter_In_ApiGrcp_proto_result_proto_init() }
@@ -738,18 +810,6 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*EditableResultParams); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Result); i {
 			case 0:
 				return &v.state
@@ -761,8 +821,20 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_init() {
 				return nil
 			}
 		}
+		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateResultParams); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateResultRequest); i {
+			switch v := v.(*EditableResultParams); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -774,7 +846,7 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateResultResponse); i {
+			switch v := v.(*CreateResultRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -786,7 +858,7 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReadResultRequest); i {
+			switch v := v.(*CreateResultResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -798,7 +870,7 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReadResultResponse); i {
+			switch v := v.(*ShowResultRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -810,7 +882,7 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateResultRequest); i {
+			switch v := v.(*ShowResultResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -822,7 +894,7 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateResultResponse); i {
+			switch v := v.(*UpdateResultRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -834,7 +906,7 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteResultRequest); i {
+			switch v := v.(*UpdateResultResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -846,7 +918,7 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteResultResponse); i {
+			switch v := v.(*DeleteResultRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -858,7 +930,7 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListResultRequest); i {
+			switch v := v.(*DeleteResultResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -870,6 +942,18 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListResultRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_app_Adapter_In_ApiGrcp_proto_result_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListResultResponse); i {
 			case 0:
 				return &v.state
@@ -888,7 +972,7 @@ func file_app_Adapter_In_ApiGrcp_proto_result_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_app_Adapter_In_ApiGrcp_proto_result_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

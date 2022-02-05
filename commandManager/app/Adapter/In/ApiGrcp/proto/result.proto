@@ -1,64 +1,61 @@
 syntax = "proto3";
-
 package result;
 option go_package = "./result";
+import "google/protobuf/wrappers.proto";
 
-
-message EditableResultParams{
-  string task_uuid = 1;
-  string result = 2;
+service ResultService{
+  rpc CreateResult (CreateResultRequest) returns (CreateResultResponse);
+  rpc ShowResult(ShowResultRequest) returns (ShowResultResponse);
+  rpc UpdateResult(UpdateResultRequest) returns (UpdateResultResponse);
+  rpc DeleteResult(DeleteResultRequest) returns (DeleteResultResponse);
+  rpc ListResult(ListResultRequest) returns (ListResultResponse);
 }
 
 message Result{
-  string id = 1;
-  string task_uuid = 2;
+  string uuid = 1;
+  string batch_uuid = 2;
   string content = 3;
 }
-
-message CreateResultRequest{
-  EditableResultParams result = 1;
+message CreateResultParams{
+  string batch_uuid = 1;
+  string content = 2;
 }
-
+message EditableResultParams{
+  google.protobuf.StringValue batch_uuid = 1;
+  google.protobuf.StringValue content = 2;
+}
+message CreateResultRequest{
+  CreateResultParams resultParams = 1;
+}
 message CreateResultResponse{
   Result result = 1;
 }
 
-message ReadResultRequest{
+message ShowResultRequest{
   string result_uuid = 1;
 }
-
-message ReadResultResponse{
+message ShowResultResponse{
   Result result = 1;
 }
 
 message UpdateResultRequest{
-  EditableResultParams result = 1;
+  string resultUuid = 1;
+  EditableResultParams resultParams = 2;
 }
-
 message UpdateResultResponse{
-  Result result = 1;
+  EditableResultParams result = 1;
 }
 
 message DeleteResultRequest{
   string result_uuid = 1;
 }
-
 message DeleteResultResponse{
-  string result_uuid = 1;
 }
 
 message ListResultRequest{
 }
-
 message ListResultResponse{
-  Result result = 1;
+  repeated Result results = 1;
 }
 
-service ResultService{
-  rpc CreateResult (CreateResultRequest) returns (CreateResultResponse);
-  rpc ReadResult(ReadResultRequest) returns (ReadResultResponse);
-  rpc UpdateResult(UpdateResultRequest) returns (UpdateResultResponse);
-  rpc DeleteResult(DeleteResultRequest) returns (DeleteResultResponse);
-  rpc ListResult(ListResultRequest) returns (stream ListResultResponse);
-}
 

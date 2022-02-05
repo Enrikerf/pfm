@@ -1,8 +1,6 @@
 syntax = "proto3";
-
 package task;
 option go_package = "./task";
-
 import "google/protobuf/wrappers.proto";
 
 service TaskService{
@@ -22,17 +20,17 @@ message Task{
   string status = 6;
   string executionMode = 7;
 }
-message EditableTaskParams{
-  google.protobuf.StringValue host = 1;
-  google.protobuf.StringValue port = 2;
-  Mode mode = 4;
-  Status status = 5;
-  ExecutionMode executionMode = 6;
-}
 message CreateTaskParams{
   string host = 1;
   string port = 2;
   repeated string commands = 3;
+  Mode mode = 4;
+  Status status = 5;
+  ExecutionMode executionMode = 6;
+}
+message EditableTaskParams{
+  google.protobuf.StringValue host = 1;
+  google.protobuf.StringValue port = 2;
   Mode mode = 4;
   Status status = 5;
   ExecutionMode executionMode = 6;
@@ -59,7 +57,6 @@ enum ExecutionMode {
 message CreateTaskRequest{
   CreateTaskParams task = 1;
 }
-
 message CreateTaskResponse{
   Task task = 1;
 }
@@ -67,7 +64,6 @@ message CreateTaskResponse{
 message ShowTaskRequest{
   string task_uuid = 1;
 }
-
 message ShowTaskResponse{
   Task task = 1;
 }
@@ -76,17 +72,14 @@ message UpdateTaskRequest{
   string task_uuid = 1;
   EditableTaskParams params = 2;
 }
-
 message UpdateTaskResponse{}
 
 message DeleteTaskRequest{
   string task_uuid = 1;
 }
-
 message DeleteTaskResponse{}
 
 message ListTasksRequest{}
-
 message ListTasksResponse{
   repeated Task tasks = 1;
 }

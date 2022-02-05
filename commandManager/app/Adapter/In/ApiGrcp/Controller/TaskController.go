@@ -52,7 +52,6 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 }
 
 func (controller TaskController) ShowTask(ctx context.Context, request *taskProto.ShowTaskRequest) (*taskProto.ShowTaskResponse, error) {
-
 	var query = ShowTask.Query{Uuid: request.GetTaskUuid()}
 	task, err := controller.ShowTaskUseCase.Show(query)
 	if err != nil {

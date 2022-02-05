@@ -41,14 +41,14 @@ func (adapter Adapter) Save(task TaskDomain.Task) error {
 }
 
 func (adapter Adapter) Update(task TaskDomain.Task) error {
-	var taskUpdatedMysql Task
+	var currentTaskMysql Task
 	var taskValuesToUpdate = Task{}
 	taskValuesToUpdate.FromDomain(task)
-	err := adapter.Orm.First(&taskUpdatedMysql, "uuid = ?", taskValuesToUpdate.Uuid).Error
+	err := adapter.Orm.First(&currentTaskMysql, "uuid = ?", taskValuesToUpdate.Uuid).Error
 	if err != nil {
 		return err
 	}
-	adapter.Orm.Model(&taskUpdatedMysql).Updates(taskValuesToUpdate)
+	adapter.Orm.Model(&currentTaskMysql).Updates(taskValuesToUpdate)
 	return nil
 }
 
