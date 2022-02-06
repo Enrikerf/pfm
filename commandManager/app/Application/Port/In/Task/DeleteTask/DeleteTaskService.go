@@ -2,11 +2,11 @@ package DeleteTask
 
 import (
 	"errors"
-	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
 )
 
 type Service struct {
-	DeleteTaskPort TaskOutPort.DeleteTask
+	DeleteTaskPort TaskPort.Delete
 }
 
 func (service Service) Delete(command Command) error {

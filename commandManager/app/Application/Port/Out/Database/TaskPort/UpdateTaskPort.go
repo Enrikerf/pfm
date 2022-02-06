@@ -1,9 +1,9 @@
-package Task
+package TaskPort
 
 import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 )
 
-type SaveTaskPort interface {
-	Save(task Task.Task) error
+type Update interface {
+	Update(task Task.Task) error
 }

@@ -1,7 +1,7 @@
-package Result
+package ResultPort
 
 import "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 
-type SaveResultPort interface {
+type Save interface {
 	Save(result Result.Result) error
 }

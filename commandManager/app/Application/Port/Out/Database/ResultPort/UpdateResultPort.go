@@ -1,9 +1,9 @@
-package Result
+package ResultPort
 
 import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 )
 
-type UpdateResultPort interface {
+type Update interface {
 	Update(result Result.Result) error
 }

@@ -1,12 +1,12 @@
 package CreateTask
 
 import (
-	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
 	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 )
 
 type Service struct {
-	SaveTaskPort TaskOutPort.SaveTaskPort
+	SaveTaskPort TaskPort.Save
 }
 
 func (service Service) Create(command Command) (TaskDomain.Task, error) {

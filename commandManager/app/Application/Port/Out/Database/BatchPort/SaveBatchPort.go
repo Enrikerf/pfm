@@ -1,7 +1,7 @@
-package Result
+package BatchPort
 
 import "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 
-type SaveBatchPort interface {
+type Save interface {
 	Save(batch Result.Batch) error
 }

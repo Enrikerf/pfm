@@ -2,12 +2,12 @@ package ReadBatch
 
 import (
 	"errors"
-	ResultFindPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/BatchPort"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 )
 
 type Service struct {
-	FindBatchPort ResultFindPort.FindBatch
+	FindBatchPort BatchPort.Find
 }
 
 func (service Service) Read(query Query) (Result.Batch, error) {

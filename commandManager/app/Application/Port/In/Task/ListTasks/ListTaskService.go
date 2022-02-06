@@ -1,12 +1,12 @@
 package ListTasks
 
 import (
-	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 )
 
 type Service struct {
-	FindTasksByPort TaskOutPort.FindTasksByPort
+	FindTasksByPort TaskPort.FindBy
 }
 
 func (service Service) List(query Query) []Task.Task {

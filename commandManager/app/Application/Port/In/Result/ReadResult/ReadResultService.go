@@ -2,12 +2,12 @@ package ReadResult
 
 import (
 	"errors"
-	ResultFindPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/ResultPort"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 )
 
 type Service struct {
-	FindResultPort ResultFindPort.FindResult
+	FindResultPort ResultPort.Find
 }
 
 func (service Service) Read(query Query) (Result.Result, error) {

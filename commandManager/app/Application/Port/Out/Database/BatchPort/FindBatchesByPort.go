@@ -1,7 +1,7 @@
-package Result
+package BatchPort
 
 import "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 
-type FindBatchesByPort interface {
+type FindBy interface {
 	FindBy(conditions interface{}) []Result.Batch
 }

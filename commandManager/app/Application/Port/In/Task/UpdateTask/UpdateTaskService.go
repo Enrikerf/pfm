@@ -2,13 +2,13 @@ package UpdateTask
 
 import (
 	"errors"
-	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 )
 
 type Service struct {
-	FindTaskPort   TaskOutPort.FindTask
-	UpdateTaskPort TaskOutPort.UpdateTaskPort
+	FindTaskPort   TaskPort.Find
+	UpdateTaskPort TaskPort.Update
 }
 
 func (service Service) Update(command Command) error {

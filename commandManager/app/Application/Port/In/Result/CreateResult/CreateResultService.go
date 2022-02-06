@@ -1,13 +1,14 @@
 package CreateResult
 
 import (
-	ResultOutPorts "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/BatchPort"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/ResultPort"
 	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 )
 
 type Service struct {
-	FindBatchPort  ResultOutPorts.FindBatch
-	SaveResultPort ResultOutPorts.SaveResultPort
+	FindBatchPort  BatchPort.Find
+	SaveResultPort ResultPort.Save
 }
 
 func (service Service) Create(command Command) (ResultDomain.Result, error) {

@@ -2,14 +2,14 @@ package UpdateBatch
 
 import (
 	"errors"
-	ResultOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Result"
-	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/BatchPort"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
 )
 
 type Service struct {
-	FindBatchPort   ResultOutPort.FindBatch
-	FindTaskPort    TaskOutPort.FindTask
-	UpdateBatchPort ResultOutPort.UpdateBatchPort
+	FindBatchPort   BatchPort.Find
+	FindTaskPort    TaskPort.Find
+	UpdateBatchPort BatchPort.Update
 }
 
 func (service Service) Update(command Command) error {

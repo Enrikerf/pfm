@@ -1,12 +1,12 @@
 package ListSteps
 
 import (
-	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/StepPort"
 	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 )
 
 type Service struct {
-	FindStepByPort TaskOutPort.FindStepByPort
+	FindStepByPort StepPort.FindBy
 }
 
 func (service Service) List(query Query) []TaskDomain.Step {

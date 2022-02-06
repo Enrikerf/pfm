@@ -2,9 +2,10 @@ package Loop
 
 import (
 	"fmt"
-	ResultOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Result"
-	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
-	CallOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Grcp/Call"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/BatchPort"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/ResultPort"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Grcp/CallPort"
 	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 	"os"
@@ -14,20 +15,20 @@ import (
 )
 
 type Service struct {
-	callRequestPort CallOutPort.RequestPort
-	findTasksByPort TaskOutPort.FindTasksByPort
-	updateTaskPort  TaskOutPort.UpdateTaskPort
-	saveBatchPort   ResultOutPort.SaveBatchPort
-	saveResultPort  ResultOutPort.SaveResultPort
+	callRequestPort CallPort.Request
+	findTasksByPort TaskPort.FindBy
+	updateTaskPort  TaskPort.Update
+	saveBatchPort   BatchPort.Save
+	saveResultPort  ResultPort.Save
 	exit            bool
 }
 
 func New(
-	callRequestPort CallOutPort.RequestPort,
-	findTasksByPort TaskOutPort.FindTasksByPort,
-	updateTaskPort TaskOutPort.UpdateTaskPort,
-	saveBatchPort ResultOutPort.SaveBatchPort,
-	saveResultPort ResultOutPort.SaveResultPort) *Service {
+	callRequestPort CallPort.Request,
+	findTasksByPort TaskPort.FindBy,
+	updateTaskPort TaskPort.Update,
+	saveBatchPort BatchPort.Save,
+	saveResultPort ResultPort.Save) *Service {
 	return &Service{
 		callRequestPort: callRequestPort,
 		findTasksByPort: findTasksByPort,
@@ -95,15 +96,6 @@ func (service *Service) saveResults(index int, resultBatch ResultDomain.Batch) {
 		fmt.Printf("\t%v-error saving result %v. \n", index, err)
 		service.exit = true
 	}
-	//for index := range resultBatch {
-	//	fmt.Printf("\t%v-saving result in db: %v\n", index, resultBatch[index].Content)
-	//	err := service.saveResultPort.Save(resultBatch[index])
-	//	if err != nil {
-	//		fmt.Printf("\t%v-error saving result %v. \n", index, err)
-	//		service.exit = true
-	//	}
-	//}
-
 }
 
 func (service *Service) printTask(index int, task TaskDomain.Task) {

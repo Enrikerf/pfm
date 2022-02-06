@@ -1,13 +1,14 @@
 package CreateStep
 
 import (
-	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/StepPort"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
 	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 )
 
 type Service struct {
-	FindTaskPort TaskOutPort.FindTask
-	SaveStepPort TaskOutPort.SaveStepPort
+	FindTaskPort TaskPort.Find
+	SaveStepPort StepPort.Save
 }
 
 func (service Service) Create(command Command) (TaskDomain.Step, error) {

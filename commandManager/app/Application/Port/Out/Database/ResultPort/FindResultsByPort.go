@@ -1,7 +1,7 @@
-package Result
+package ResultPort
 
 import "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
 
-type FindResultsByPort interface {
+type FindBy interface {
 	FindBy(conditions interface{}) []Result.Result
 }

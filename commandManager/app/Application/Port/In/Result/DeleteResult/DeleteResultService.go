@@ -2,11 +2,11 @@ package DeleteResult
 
 import (
 	"errors"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/ResultPort"
 )
 
 type Service struct {
-	DeleteTaskPort Result.DeleteResult
+	DeleteTaskPort ResultPort.Delete
 }
 
 func (service Service) Delete(command Command) error {

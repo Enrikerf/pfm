@@ -2,12 +2,12 @@ package ReadStep
 
 import (
 	"errors"
-	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/StepPort"
 	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 )
 
 type Service struct {
-	FindStepPort TaskOutPort.FindStep
+	FindStepPort StepPort.Find
 }
 
 func (service Service) Read(query Query) (TaskDomain.Step, error) {

@@ -2,13 +2,14 @@ package UpdateStep
 
 import (
 	"errors"
-	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/StepPort"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
 )
 
 type Service struct {
-	FindStepPort   TaskOutPort.FindStep
-	FindTaskPort   TaskOutPort.FindTask
-	UpdateStepPort TaskOutPort.UpdateStepPort
+	FindStepPort   StepPort.Find
+	FindTaskPort   TaskPort.Find
+	UpdateStepPort StepPort.UpdateStepPort
 }
 
 func (service Service) Update(command Command) error {

@@ -2,13 +2,14 @@ package UpdateResult
 
 import (
 	"errors"
-	ResultOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/BatchPort"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/ResultPort"
 )
 
 type Service struct {
-	FindResultPort   ResultOutPort.FindResult
-	FindBatchPort    ResultOutPort.FindBatch
-	UpdateResultPort ResultOutPort.UpdateResultPort
+	FindResultPort   ResultPort.Find
+	FindBatchPort    BatchPort.Find
+	UpdateResultPort ResultPort.Update
 }
 
 func (service Service) Update(command Command) error {

@@ -2,12 +2,12 @@ package ReadTask
 
 import (
 	"errors"
-	TaskOutPort "github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
 )
 
 type Service struct {
-	FindTaskPort TaskOutPort.FindTask
+	FindTaskPort TaskPort.Find
 }
 
 func (service Service) Read(query Query) (Task.Task, error) {
