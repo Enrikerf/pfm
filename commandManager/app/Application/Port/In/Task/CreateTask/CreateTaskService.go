@@ -26,9 +26,6 @@ func (service Service) Create(command Command) (Entity.Task, error) {
 		command.Mode,
 		command.ExecutionMode,
 	)
-	//TODO: this is responsibility of adapterIn not application
-	//TODO: Vo needed because the dependency command-taskUuid taskVo has commandsVo without uuids
-
 	if err != nil {
 		return Entity.Task{}, err
 	}

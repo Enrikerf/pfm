@@ -14,8 +14,8 @@ protoGen: ##@proto Start all or <container_name> containers in foreground
 	protoc 	app/Adapter/In/ApiGrcp/proto/*.proto --go_out=app/Adapter/In/ApiGrcp/gen --go-grpc_out=app/Adapter/In/ApiGrcp/gen
 clearGit: ##@git Start all or <container_name> containers in foreground
 	git branch --merged | egrep -v "(^\*|master|main|dev)" | xargs git branch -d
-tests: ##@tests Start all or <container_name> containers in foreground
-	go test ./...
+runTests: ##@tests Start all or <container_name> containers in foreground
+	cd tests; go test ./... -v; cd -
 migrate: ##@migrate Start all or <container_name> containers in foreground
 	cd app/Adapter/Out/Persistence/Migrations/ ; migrate create -ext sql -dir . -seq $(call args)
 

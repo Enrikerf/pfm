@@ -11,6 +11,13 @@ const (
 	Bidirectional
 )
 
+type MyModes struct {
+}
+
+func (m MyModes) UNARY() string {
+	return "UNARY"
+}
+
 func (taskModes Modes) String() string {
 	switch taskModes {
 	case Unary:
