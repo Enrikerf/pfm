@@ -1,4 +1,4 @@
-package DeleteTask
+package DeleteTaskTest
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-var tests = []struct{ taskFindError error }{
+var tests = []struct{ deleteTaskPortResponse error }{
 	{errors.New("internal")},
 	{nil},
 }
@@ -16,11 +16,11 @@ var tests = []struct{ taskFindError error }{
 func TestListTaskService(t *testing.T) {
 	for _, test := range tests {
 		service := DeleteTask.Service{DeleteTaskPort: MockTaskPort.MockDeletePort{
-			Error: test.taskFindError,
+			Error: test.deleteTaskPortResponse,
 		}}
 		command := DeleteTask.Command{Uuid: "11a24a01-700d-4f55-8afe-a6ce3c461ead"}
 		err := service.Delete(command)
-		if test.taskFindError != nil {
+		if test.deleteTaskPortResponse != nil {
 			assert.Error(t, err)
 		} else {
 			assert.Nil(t, err)
