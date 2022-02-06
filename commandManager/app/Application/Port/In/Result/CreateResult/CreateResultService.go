@@ -6,8 +6,8 @@ import (
 )
 
 type Service struct {
-	FindBatchPort ResultOutPorts.FindBatch
-	SavePort      ResultOutPorts.SaveResultPort
+	FindBatchPort  ResultOutPorts.FindBatch
+	SaveResultPort ResultOutPorts.SaveResultPort
 }
 
 func (service Service) Create(command Command) (ResultDomain.Result, error) {
@@ -19,7 +19,7 @@ func (service Service) Create(command Command) (ResultDomain.Result, error) {
 	if err != nil {
 		return ResultDomain.Result{}, err
 	}
-	err = service.SavePort.Save(result)
+	err = service.SaveResultPort.Save(result)
 	if err != nil {
 		return ResultDomain.Result{}, err
 	}

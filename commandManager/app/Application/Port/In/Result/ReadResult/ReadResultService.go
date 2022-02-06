@@ -7,11 +7,11 @@ import (
 )
 
 type Service struct {
-	FindByPort ResultFindPort.Find
+	FindResultPort ResultFindPort.FindResult
 }
 
 func (service Service) Read(query Query) (Result.Result, error) {
-	task, err := service.FindByPort.Find(query.Uuid)
+	task, err := service.FindResultPort.Find(query.Uuid)
 	if err != nil {
 		return Result.Result{}, errors.New("not found")
 	}

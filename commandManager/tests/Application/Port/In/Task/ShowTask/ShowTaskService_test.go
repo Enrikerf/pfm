@@ -19,10 +19,10 @@ var tests = []struct {
 		Uuid: uuid.UUID{},
 		Host: "host",
 		Port: "port",
-		Commands: []TaskDomain.Command{{
+		Steps: []TaskDomain.Step{{
 			Uuid:     uuid.UUID{},
 			TaskUuid: uuid.UUID{},
-			Name:     "name",
+			Sentence: "name",
 		}},
 		Mode:          0,
 		Status:        0,
@@ -32,7 +32,7 @@ var tests = []struct {
 
 func TestListTaskService(t *testing.T) {
 	for _, test := range tests {
-		service := ReadTask.Service{FindByPort: Task.MockFindPort{
+		service := ReadTask.Service{FindTaskPort: Task.MockFindPort{
 			Result: test.taskFindResponse,
 			Error:  test.taskFindError,
 		}}

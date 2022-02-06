@@ -3,13 +3,13 @@ package Task
 type TaskVo struct {
 	Host          string
 	Port          string
-	Commands      []Command
+	Commands      []Step
 	Mode          Modes
 	Status        TaskStatus
 	ExecutionMode ExecutionMode
 }
 
-func NewTaskVo(host string, port string, commands []Command, mode string, executionMode string) (TaskVo, error) {
+func NewTaskVo(host string, port string, commands []Step, mode string, executionMode string) (TaskVo, error) {
 	taskVo := TaskVo{}
 	taskVo.Host = host
 	taskVo.Port = port

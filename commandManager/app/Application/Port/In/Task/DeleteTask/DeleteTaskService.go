@@ -6,7 +6,7 @@ import (
 )
 
 type Service struct {
-	DeleteTaskPort TaskOutPort.Delete
+	DeleteTaskPort TaskOutPort.DeleteTask
 }
 
 func (service Service) Delete(command Command) error {

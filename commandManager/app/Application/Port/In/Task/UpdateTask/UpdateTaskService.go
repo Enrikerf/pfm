@@ -7,13 +7,13 @@ import (
 )
 
 type Service struct {
-	FindPort   TaskOutPort.Find
-	UpdatePort TaskOutPort.UpdatePort
+	FindTaskPort   TaskOutPort.FindTask
+	UpdateTaskPort TaskOutPort.UpdateTaskPort
 }
 
 func (service Service) Update(command Command) error {
 	//TODO: error types from ports and error types to return from domain
-	task, err := service.FindPort.Find(command.Uuid)
+	task, err := service.FindTaskPort.Find(command.Uuid)
 	if err != nil {
 		return errors.New("not found")
 	}
@@ -33,7 +33,7 @@ func (service Service) Update(command Command) error {
 		task.ExecutionMode, err = Task.GetExecutionMode(command.ExecutionMode.Value)
 	}
 
-	err = service.UpdatePort.Update(task)
+	err = service.UpdateTaskPort.Update(task)
 	if err != nil {
 		return errors.New("INTERNAL")
 	}

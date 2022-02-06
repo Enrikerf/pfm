@@ -52,31 +52,15 @@ func (adapter Adapter) Update(task TaskDomain.Task) error {
 	return nil
 }
 
-func (adapter Adapter) FindAll() []TaskDomain.Task {
-
-	var tasks []Task
-	domainTasks := []TaskDomain.Task{}
-	var err error
-	err = adapter.Orm.Find(&tasks).Error
-	if err != nil {
-		fmt.Printf("tasks %v. \n", err)
-		return nil
-	}
-	for _, task := range tasks {
-		domainTasks = append(domainTasks, task.ToDomain())
-	}
-	return domainTasks
-}
-
 func (adapter Adapter) FindBy(conditions interface{}) []TaskDomain.Task {
 
 	var tasks []Task
 	domainTasks := []TaskDomain.Task{}
 	err := adapter.Orm.
 		Table("tasks").
-		Preload("Commands").
+		Preload("Steps").
 		Where(conditions).
-		Joins("inner join commands on commands.task_id = tasks.id").
+		Joins("inner join steps on steps.task_id = tasks.id").
 		Group("tasks.id").
 		Find(&tasks).
 		Error

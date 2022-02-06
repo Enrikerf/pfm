@@ -18,10 +18,10 @@ var tests = []struct {
 		Uuid: uuid.UUID{},
 		Host: "host",
 		Port: "port",
-		Commands: []TaskDomain.Command{{
+		Steps: []TaskDomain.Step{{
 			Uuid:     uuid.UUID{},
 			TaskUuid: uuid.UUID{},
-			Name:     "name",
+			Sentence: "name",
 		}},
 		Mode:          0,
 		Status:        0,
@@ -31,7 +31,7 @@ var tests = []struct {
 
 func TestListTaskService(t *testing.T) {
 	for _, test := range tests {
-		service := ListTasks.Service{FindByPort: Task.MockFindByPort{Result: test.taskFindByResult}}
+		service := ListTasks.Service{FindTasksByPort: Task.MockFindByPort{Result: test.taskFindByResult}}
 		query := ListTasks.Query{}
 		tasks := service.List(query)
 		assert.Equal(t, test.taskFindByResult, tasks, "error retrieving tasks")

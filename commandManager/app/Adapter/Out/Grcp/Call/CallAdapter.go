@@ -44,7 +44,7 @@ func (adapter Adapter) Request(task DomainTask.Task) DomainResult.Batch {
 func (adapter Adapter) doServerStream(task DomainTask.Task, client ProtoCall.CallServiceClient) []DomainResult.Result {
 	results := []DomainResult.Result{}
 	request := &ProtoCall.CallRequest{
-		Command: task.Commands[0].Name,
+		Step: task.Steps[0].Sentence,
 	}
 	responseStream, err := client.CallServerStream(context.Background(), request)
 
@@ -119,10 +119,10 @@ func receiveServerStream(stream ProtoCall.CallService_CallBidirectionalClient, r
 }
 
 func sendInStream(task DomainTask.Task, stream ProtoCall.CallService_CallBidirectionalClient, resultsChannel chan string) {
-	for _, command := range task.Commands {
-		fmt.Println("sending message %v", command)
+	for _, step := range task.Steps {
+		fmt.Println("sending message %v", step)
 		callRequest := ProtoCall.CallRequest{
-			Command: command.Name,
+			Step: step.Sentence,
 		}
 		err := stream.Send(&callRequest)
 		if err != nil {
@@ -143,10 +143,10 @@ func (adapter Adapter) doClientStream(task DomainTask.Task, client ProtoCall.Cal
 	if err != nil {
 		result.Content = err.Error()
 	} else {
-		for _, command := range task.Commands {
-			fmt.Printf("sending: %v\n", command.Name)
+		for _, step := range task.Steps {
+			fmt.Printf("sending: %v\n", step.Sentence)
 			callRequest := ProtoCall.CallRequest{
-				Command: command.Name,
+				Step: step.Sentence,
 			}
 			err := stream.Send(&callRequest)
 			if err != nil {
@@ -168,7 +168,7 @@ func (adapter Adapter) doClientStream(task DomainTask.Task, client ProtoCall.Cal
 func (adapter Adapter) doUnaryCall(task DomainTask.Task, client ProtoCall.CallServiceClient) []DomainResult.Result {
 	results := []DomainResult.Result{}
 	callRequest := ProtoCall.CallRequest{
-		Command: task.Commands[0].Name,
+		Step: task.Steps[0].Sentence,
 	}
 	callResponse, err := client.CallUnary(context.Background(), &callRequest)
 	result, _ := DomainResult.NewResult(task.Uuid, "")

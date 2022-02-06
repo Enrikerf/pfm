@@ -8,7 +8,7 @@ import (
 
 type Service struct {
 	FindBatchPort   ResultOutPort.FindBatch
-	FindTaskPort    TaskOutPort.Find
+	FindTaskPort    TaskOutPort.FindTask
 	UpdateBatchPort ResultOutPort.UpdateBatchPort
 }
 

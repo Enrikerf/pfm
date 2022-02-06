@@ -6,9 +6,9 @@ import (
 )
 
 type Service struct {
-	FindByPort ResultOutPort.FindByPort
+	FindResultsByPort ResultOutPort.FindResultsByPort
 }
 
 func (service Service) List(query Query) []Result.Result {
-	return service.FindByPort.FindBy(query)
+	return service.FindResultsByPort.FindBy(query)
 }

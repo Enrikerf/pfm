@@ -36,8 +36,8 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 		return nil, fmt.Errorf("error")
 	}
 	var commandNames []string
-	for _, command := range task.Commands {
-		commandNames = append(commandNames, command.Name)
+	for _, command := range task.Steps {
+		commandNames = append(commandNames, command.Sentence)
 	}
 	newTask := taskProto.Task{
 		Uuid:          task.Uuid.String(),

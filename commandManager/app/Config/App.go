@@ -13,16 +13,16 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ReadBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/UpdateBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Loop"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/CreateCommand"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/DeleteCommand"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/ListCommands"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/ReadCommand"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Command/UpdateCommand"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ReadResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/CreateStep"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/DeleteStep"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/ListSteps"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/ReadStep"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/UpdateStep"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
@@ -97,58 +97,58 @@ func (server *App) loadLoop(db *gorm.DB) {
 
 func (server *App) loadApiGrpc(db *gorm.DB) {
 	var taskAdapter = Task.Adapter{Orm: db}
-	var commandAdapter = Task.CommandAdapter{Orm: db}
+	var commandAdapter = Task.StepAdapter{Orm: db}
 	var batchAdapter = Result.BatchAdapter{Orm: db}
 	var resultAdapter = Result.Adapter{Orm: db}
 
 	//TaskController
-	var createTaskService = CreateTask.Service{SavePort: taskAdapter}
-	var readTaskService = ReadTask.Service{FindByPort: taskAdapter}
+	var createTaskService = CreateTask.Service{SaveTaskPort: taskAdapter}
+	var readTaskService = ReadTask.Service{FindTaskPort: taskAdapter}
 	var updateTaskService = UpdateTask.Service{
-		FindPort:   taskAdapter,
-		UpdatePort: taskAdapter,
+		FindTaskPort:   taskAdapter,
+		UpdateTaskPort: taskAdapter,
 	}
 	var deleteTaskService = DeleteTask.Service{DeleteTaskPort: taskAdapter}
-	var listTasksService = ListTasks.Service{FindByPort: taskAdapter}
+	var listTasksService = ListTasks.Service{FindTasksByPort: taskAdapter}
 
 	// CommandController
-	var createCommandService = CreateCommand.Service{
-		FindTaskPort:    taskAdapter,
-		SaveCommandPort: commandAdapter,
+	var createStepService = CreateStep.Service{
+		FindTaskPort: taskAdapter,
+		SaveStepPort: commandAdapter,
 	}
-	var readCommandService = ReadCommand.Service{FindCommandPort: commandAdapter}
-	var updateCommandService = UpdateCommand.Service{
-		FindCommandPort:   commandAdapter,
-		FindTaskPort:      taskAdapter,
-		UpdateCommandPort: commandAdapter,
+	var readStepService = ReadStep.Service{FindStepPort: commandAdapter}
+	var updateStepService = UpdateStep.Service{
+		FindStepPort:   commandAdapter,
+		FindTaskPort:   taskAdapter,
+		UpdateStepPort: commandAdapter,
 	}
-	var deleteCommandService = DeleteCommand.Service{DeleteCommandPort: commandAdapter}
-	var listCommandsService = ListCommands.Service{FindCommandByPort: commandAdapter}
+	var deleteStepService = DeleteStep.Service{DeleteStepPort: commandAdapter}
+	var listStepsService = ListSteps.Service{FindStepByPort: commandAdapter}
 
 	// BatchController
-	var createBatchService = CreateBatch.Service{SavePort: batchAdapter}
-	var readBatchService = ReadBatch.Service{FindByPort: batchAdapter}
+	var createBatchService = CreateBatch.Service{SaveBatchPort: batchAdapter}
+	var readBatchService = ReadBatch.Service{FindBatchPort: batchAdapter}
 	var updateBatchService = UpdateBatch.Service{
 		FindBatchPort:   batchAdapter,
 		FindTaskPort:    taskAdapter,
 		UpdateBatchPort: batchAdapter,
 	}
 	var deleteBatchService = DeleteBatch.Service{DeleteBatchPort: batchAdapter}
-	var listBatchesService = ListBatches.Service{FindByPort: batchAdapter}
+	var listBatchesService = ListBatches.Service{FindBatchesByPort: batchAdapter}
 
 	//ResultController
 	var createResultService = CreateResult.Service{
-		FindBatchPort: batchAdapter,
-		SavePort:      resultAdapter,
+		FindBatchPort:  batchAdapter,
+		SaveResultPort: resultAdapter,
 	}
-	var readResultService = ReadResult.Service{FindByPort: resultAdapter}
+	var readResultService = ReadResult.Service{FindResultPort: resultAdapter}
 	var updateResultService = UpdateResult.Service{
-		FindPort:      resultAdapter,
-		FindBatchPort: batchAdapter,
-		UpdatePort:    resultAdapter,
+		FindResultPort:   resultAdapter,
+		FindBatchPort:    batchAdapter,
+		UpdateResultPort: resultAdapter,
 	}
 	var deleteResultService = DeleteResult.Service{DeleteTaskPort: resultAdapter}
-	var listResultsService = ListResults.Service{FindByPort: resultAdapter}
+	var listResultsService = ListResults.Service{FindResultsByPort: resultAdapter}
 
 	server.ApiGrpc = ApiGrcp.ApiGrpc{}
 	server.ApiGrpc.Initialize(
@@ -167,11 +167,11 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 		updateBatchService,
 		deleteBatchService,
 		listBatchesService,
-		createCommandService,
-		readCommandService,
-		updateCommandService,
-		deleteCommandService,
-		listCommandsService,
+		createStepService,
+		readStepService,
+		updateStepService,
+		deleteStepService,
+		listStepsService,
 		os.Getenv("SERVER_HOST"),
 		os.Getenv("SERVER_PORT"),
 	)

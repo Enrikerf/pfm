@@ -28,21 +28,6 @@ func (adapter Adapter) Save(result ResultDomain.Result) error {
 	return nil
 }
 
-func (adapter Adapter) FindAll() ([]ResultDomain.Result, error) {
-
-	var results []Result
-	var domainResults []ResultDomain.Result
-	response := adapter.Orm.Find(&results)
-	if response.Error != nil {
-		fmt.Printf("tasks %v. \n", response.Error)
-		return domainResults, response.Error
-	}
-	for _, task := range results {
-		domainResults = append(domainResults, task.ToDomain())
-	}
-	return domainResults, nil
-}
-
 func (adapter Adapter) FindBy(conditions interface{}) []ResultDomain.Result {
 
 	var results []Result

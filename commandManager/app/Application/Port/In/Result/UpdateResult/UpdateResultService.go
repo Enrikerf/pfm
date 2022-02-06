@@ -6,14 +6,14 @@ import (
 )
 
 type Service struct {
-	FindPort      ResultOutPort.Find
-	FindBatchPort ResultOutPort.FindBatch
-	UpdatePort    ResultOutPort.UpdatePort
+	FindResultPort   ResultOutPort.FindResult
+	FindBatchPort    ResultOutPort.FindBatch
+	UpdateResultPort ResultOutPort.UpdateResultPort
 }
 
 func (service Service) Update(command Command) error {
 	//TODO: error types from ports and error types to return from domain
-	result, err := service.FindPort.Find(command.Uuid)
+	result, err := service.FindResultPort.Find(command.Uuid)
 	if err != nil {
 		return errors.New("not found")
 	}
@@ -30,7 +30,7 @@ func (service Service) Update(command Command) error {
 			return errors.New("internal")
 		}
 	}
-	err = service.UpdatePort.Update(result)
+	err = service.UpdateResultPort.Update(result)
 	if err != nil {
 		return errors.New("INTERNAL")
 	}

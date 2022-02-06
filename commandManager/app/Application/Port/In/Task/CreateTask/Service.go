@@ -6,11 +6,11 @@ import (
 )
 
 type Service struct {
-	SavePort TaskOutPort.SavePort
+	SaveTaskPort TaskOutPort.SaveTaskPort
 }
 
 func (service Service) Create(command Command) (TaskDomain.Task, error) {
-	var commands []TaskDomain.Command
+	var commands []TaskDomain.Step
 	var task, err = TaskDomain.NewTask(
 		command.Host,
 		command.Port,
@@ -25,12 +25,12 @@ func (service Service) Create(command Command) (TaskDomain.Task, error) {
 		if err != nil {
 			return TaskDomain.Task{}, err
 		}
-		task.Commands = append(task.Commands, newCommand)
+		task.Steps = append(task.Steps, newCommand)
 	}
 	if err != nil {
 		return TaskDomain.Task{}, err
 	}
-	err = service.SavePort.Save(task)
+	err = service.SaveTaskPort.Save(task)
 	if err != nil {
 		return TaskDomain.Task{}, err
 	}

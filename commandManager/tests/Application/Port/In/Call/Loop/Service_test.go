@@ -18,10 +18,10 @@ var domainTasks = []TaskDomain.Task{
 		Uuid: uuid.UUID{},
 		Host: "",
 		Port: "",
-		Commands: []TaskDomain.Command{{
+		Steps: []TaskDomain.Step{{
 			Uuid:     uuid.UUID{},
 			TaskUuid: uuid.UUID{},
-			Name:     "ls",
+			Sentence: "ls",
 		}},
 		Mode:   TaskDomain.Unary,
 		Status: TaskDomain.Pending,
@@ -30,10 +30,10 @@ var domainTasks = []TaskDomain.Task{
 		Uuid: uuid.UUID{},
 		Host: "",
 		Port: "",
-		Commands: []TaskDomain.Command{{
+		Steps: []TaskDomain.Step{{
 			Uuid:     uuid.UUID{},
 			TaskUuid: uuid.UUID{},
-			Name:     "ls",
+			Sentence: "ls",
 		}},
 		Mode:   TaskDomain.Unary,
 		Status: TaskDomain.Pending,
@@ -42,10 +42,10 @@ var domainTasks = []TaskDomain.Task{
 		Uuid: uuid.UUID{},
 		Host: "",
 		Port: "",
-		Commands: []TaskDomain.Command{{
+		Steps: []TaskDomain.Step{{
 			Uuid:     uuid.UUID{},
 			TaskUuid: uuid.UUID{},
-			Name:     "ls",
+			Sentence: "ls",
 		}},
 		Mode:   TaskDomain.Unary,
 		Status: TaskDomain.Pending,
@@ -54,10 +54,10 @@ var domainTasks = []TaskDomain.Task{
 		Uuid: uuid.UUID{},
 		Host: "",
 		Port: "",
-		Commands: []TaskDomain.Command{{
+		Steps: []TaskDomain.Step{{
 			Uuid:     uuid.UUID{},
 			TaskUuid: uuid.UUID{},
-			Name:     "ls",
+			Sentence: "ls",
 		}},
 		Mode:   0,
 		Status: TaskDomain.Pending,

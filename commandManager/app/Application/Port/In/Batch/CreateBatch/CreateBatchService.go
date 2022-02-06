@@ -7,7 +7,7 @@ import (
 
 type Service struct {
 	FindBatchPort ResultOutPorts.FindBatch
-	SavePort      ResultOutPorts.SaveBatchPort
+	SaveBatchPort ResultOutPorts.SaveBatchPort
 }
 
 func (service Service) Create(command Command) (ResultDomain.Batch, error) {
@@ -19,7 +19,7 @@ func (service Service) Create(command Command) (ResultDomain.Batch, error) {
 	if err != nil {
 		return ResultDomain.Batch{}, err
 	}
-	err = service.SavePort.Save(result)
+	err = service.SaveBatchPort.Save(result)
 	if err != nil {
 		return ResultDomain.Batch{}, err
 	}

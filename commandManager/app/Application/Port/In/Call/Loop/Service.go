@@ -15,8 +15,8 @@ import (
 
 type Service struct {
 	callRequestPort CallOutPort.RequestPort
-	findTasksByPort TaskOutPort.FindByPort
-	updateTaskPort  TaskOutPort.UpdatePort
+	findTasksByPort TaskOutPort.FindTasksByPort
+	updateTaskPort  TaskOutPort.UpdateTaskPort
 	saveBatchPort   ResultOutPort.SaveBatchPort
 	saveResultPort  ResultOutPort.SaveResultPort
 	exit            bool
@@ -24,8 +24,8 @@ type Service struct {
 
 func New(
 	callRequestPort CallOutPort.RequestPort,
-	findTasksByPort TaskOutPort.FindByPort,
-	updateTaskPort TaskOutPort.UpdatePort,
+	findTasksByPort TaskOutPort.FindTasksByPort,
+	updateTaskPort TaskOutPort.UpdateTaskPort,
 	saveBatchPort ResultOutPort.SaveBatchPort,
 	saveResultPort ResultOutPort.SaveResultPort) *Service {
 	return &Service{
@@ -111,7 +111,7 @@ func (service *Service) printTask(index int, task TaskDomain.Task) {
 	_, err := fmt.Fprintf(w, "%v) task:  \n"+
 		"\t uuid \t host \t port \t command \t mode \t status\n"+
 		"\t %v \t %v \t %v \t %v \t %v \t %v\n",
-		index, task.Uuid, task.Host, task.Port, task.Commands, task.Mode, task.Status)
+		index, task.Uuid, task.Host, task.Port, task.Steps, task.Mode, task.Status)
 	if err != nil {
 		return
 	}

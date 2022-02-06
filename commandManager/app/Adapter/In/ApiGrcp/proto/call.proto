@@ -5,7 +5,7 @@ option go_package = "./call";
 
 
 message CallRequest{
-  string command = 2;
+  string step = 2;
 }
 
 message CallResponse{
