@@ -8,6 +8,6 @@ type SaveMock struct {
 	Err error
 }
 
-func (mock SaveMock) Save(batch Entity.Task) error {
+func (mock SaveMock) Save(task Entity.Task) error {
 	return mock.Err
 }
