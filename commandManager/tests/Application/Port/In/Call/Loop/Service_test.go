@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Loop"
-	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model"
 	mockResultPort "github.com/Enrikerf/pfm/commandManager/tests/Application/Port/Out/Database/Result"
 	mockTask "github.com/Enrikerf/pfm/commandManager/tests/Application/Port/Out/Database/Task"
 	mockCall "github.com/Enrikerf/pfm/commandManager/tests/Application/Port/Out/Grcp/Call"
@@ -13,54 +13,54 @@ import (
 	"testing"
 )
 
-var domainTasks = []TaskDomain.Task{
+var domainTasks = []Entity.Task{
 	{
 		Uuid: uuid.UUID{},
 		Host: "",
 		Port: "",
-		Steps: []TaskDomain.Step{{
+		Steps: []Entity.Step{{
 			Uuid:     uuid.UUID{},
 			TaskUuid: uuid.UUID{},
 			Sentence: "ls",
 		}},
-		Mode:   TaskDomain.Unary,
-		Status: TaskDomain.Pending,
+		Mode:   Entity.Unary,
+		Status: Entity.Pending,
 	},
 	{
 		Uuid: uuid.UUID{},
 		Host: "",
 		Port: "",
-		Steps: []TaskDomain.Step{{
+		Steps: []Entity.Step{{
 			Uuid:     uuid.UUID{},
 			TaskUuid: uuid.UUID{},
 			Sentence: "ls",
 		}},
-		Mode:   TaskDomain.Unary,
-		Status: TaskDomain.Pending,
+		Mode:   Entity.Unary,
+		Status: Entity.Pending,
 	},
 	{
 		Uuid: uuid.UUID{},
 		Host: "",
 		Port: "",
-		Steps: []TaskDomain.Step{{
+		Steps: []Entity.Step{{
 			Uuid:     uuid.UUID{},
 			TaskUuid: uuid.UUID{},
 			Sentence: "ls",
 		}},
-		Mode:   TaskDomain.Unary,
-		Status: TaskDomain.Pending,
+		Mode:   Entity.Unary,
+		Status: Entity.Pending,
 	},
 	{
 		Uuid: uuid.UUID{},
 		Host: "",
 		Port: "",
-		Steps: []TaskDomain.Step{{
+		Steps: []Entity.Step{{
 			Uuid:     uuid.UUID{},
 			TaskUuid: uuid.UUID{},
 			Sentence: "ls",
 		}},
 		Mode:   0,
-		Status: TaskDomain.Pending,
+		Status: Entity.Pending,
 	},
 }
 
@@ -89,7 +89,7 @@ tests
 	8		error					error					tasks					error
 */
 var tests = []struct {
-	taskFindByResult     []TaskDomain.Task
+	taskFindByResult     []Entity.Task
 	taskUpdatePortResult error
 	resultSavePortResult error
 	finalResult          bool
@@ -159,7 +159,7 @@ func TestManager_Loop(t *testing.T) {
 			assert.True(t, service.GetExit())
 		} else {
 			for index := range domainTasks {
-				assert.Equal(t, TaskDomain.Done, domainTasks[index].Status)
+				assert.Equal(t, Entity.Done, domainTasks[index].Status)
 			}
 		}
 		resetTasks()
@@ -170,6 +170,6 @@ func TestManager_Loop(t *testing.T) {
 func resetTasks() {
 	//TODO: view problem with array of array references
 	for index := range domainTasks {
-		domainTasks[index].Status = TaskDomain.Pending
+		domainTasks[index].Status = Entity.Pending
 	}
 }

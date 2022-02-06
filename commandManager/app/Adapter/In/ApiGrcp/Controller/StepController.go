@@ -26,7 +26,7 @@ func (controller StepController) CreateStep(ctx context.Context, request *stepPr
 	protoStep := request.GetStepParams()
 	var cmd CreateStep.Command
 	cmd.TaskUuid = protoStep.GetTaskUuid()
-	cmd.Name = protoStep.GetName()
+	cmd.Sentence = protoStep.GetName()
 	stepDomain, err := controller.CreateStepUseCase.Create(cmd)
 	if err != nil {
 		return nil, fmt.Errorf("error")

@@ -1,9 +1,9 @@
 package ListSteps
 
 import (
-	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type UseCase interface {
-	List(query Query) []TaskDomain.Step
+	List(query Query) []Entity.Step
 }

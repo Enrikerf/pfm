@@ -6,8 +6,8 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/ResultPort"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Grcp/CallPort"
-	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
-	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/ValueObject"
 	"os"
 	"sync"
 	"text/tabwriter"
@@ -55,7 +55,7 @@ func (service *Service) Loop() error {
 func (service *Service) Iteration() {
 	fmt.Println("------------ LOOP -------------")
 	tasks := service.findTasksByPort.
-		FindBy(map[string]interface{}{"Status": TaskDomain.Pending.String(), "execution_mode": TaskDomain.Automatic})
+		FindBy(map[string]interface{}{"Status": ValueObject.Pending.String(), "execution_mode": ValueObject.Automatic.String()})
 	if tasks == nil {
 		fmt.Printf("error fetching task from db. \n")
 		service.exit = true
@@ -72,15 +72,15 @@ func (service *Service) Iteration() {
 
 }
 
-func (service *Service) slot(wg *sync.WaitGroup, index int, task *TaskDomain.Task) {
+func (service *Service) slot(wg *sync.WaitGroup, index int, task *Entity.Task) {
 	defer wg.Done()
-	service.updateTaskStatus(index, task, TaskDomain.Running)
+	service.updateTaskStatus(index, task, ValueObject.Running)
 	resultBatch := service.callRequestPort.Request(*task)
 	service.saveResults(index, resultBatch)
-	service.updateTaskStatus(index, task, TaskDomain.Done)
+	service.updateTaskStatus(index, task, ValueObject.Done)
 }
 
-func (service *Service) updateTaskStatus(index int, task *TaskDomain.Task, status TaskDomain.TaskStatus) {
+func (service *Service) updateTaskStatus(index int, task *Entity.Task, status ValueObject.TaskStatus) {
 	task.Status = status
 	err := service.updateTaskPort.Update(*task)
 	if err != nil {
@@ -89,7 +89,7 @@ func (service *Service) updateTaskStatus(index int, task *TaskDomain.Task, statu
 	}
 }
 
-func (service *Service) saveResults(index int, resultBatch ResultDomain.Batch) {
+func (service *Service) saveResults(index int, resultBatch Entity.Batch) {
 	fmt.Printf("\t%v-saving result in db: %v\n", index, resultBatch)
 	err := service.saveBatchPort.Save(resultBatch)
 	if err != nil {
@@ -98,7 +98,7 @@ func (service *Service) saveResults(index int, resultBatch ResultDomain.Batch) {
 	}
 }
 
-func (service *Service) printTask(index int, task TaskDomain.Task) {
+func (service *Service) printTask(index int, task Entity.Task) {
 	w := tabwriter.NewWriter(os.Stdout, 1, 1, 1, '-', 0)
 	_, err := fmt.Fprintf(w, "%v) task:  \n"+
 		"\t uuid \t host \t port \t command \t mode \t status\n"+

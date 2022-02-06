@@ -1,7 +1,9 @@
 package ResultPort
 
-import "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+import (
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
+)
 
 type Save interface {
-	Save(result Result.Result) error
+	Save(result Entity.Result) error
 }

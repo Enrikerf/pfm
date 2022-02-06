@@ -1,18 +1,19 @@
-package Result
+package Adapters
 
 import (
 	"fmt"
-	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Model"
+	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 	"gorm.io/gorm"
 )
 
-type Adapter struct {
+type ResultAdapter struct {
 	Orm *gorm.DB
 }
 
-func (adapter Adapter) Save(result ResultDomain.Result) error {
-	var batchMysql Batch
-	var resultMysql Result
+func (adapter ResultAdapter) Save(result ResultDomain.Result) error {
+	var batchMysql Model.Batch
+	var resultMysql Model.Result
 	response := adapter.Orm.First(&batchMysql, "uuid = ?", result.BatchUuid)
 	if response.Error != nil {
 		fmt.Printf("tasks %v. \n", response.Error)
@@ -28,9 +29,9 @@ func (adapter Adapter) Save(result ResultDomain.Result) error {
 	return nil
 }
 
-func (adapter Adapter) FindBy(conditions interface{}) []ResultDomain.Result {
+func (adapter ResultAdapter) FindBy(conditions interface{}) []ResultDomain.Result {
 
-	var results []Result
+	var results []Model.Result
 	domainResults := []ResultDomain.Result{}
 	err := adapter.Orm.
 		Table("results").
@@ -48,8 +49,8 @@ func (adapter Adapter) FindBy(conditions interface{}) []ResultDomain.Result {
 	return domainResults
 }
 
-func (adapter Adapter) Delete(uuid string) error {
-	var taskMysql = Result{}
+func (adapter ResultAdapter) Delete(uuid string) error {
+	var taskMysql = Model.Result{}
 	err := adapter.Orm.Delete(&taskMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return err
@@ -57,10 +58,10 @@ func (adapter Adapter) Delete(uuid string) error {
 	return nil
 }
 
-func (adapter Adapter) Update(result ResultDomain.Result) error {
-	var batchMysql Batch
-	var currentResultMysql Result
-	var resultValuesToUpdate = Result{}
+func (adapter ResultAdapter) Update(result ResultDomain.Result) error {
+	var batchMysql Model.Batch
+	var currentResultMysql Model.Result
+	var resultValuesToUpdate = Model.Result{}
 	err := adapter.Orm.First(&batchMysql, "uuid = ?", result.BatchUuid).Error
 	if err != nil {
 		return err
@@ -75,8 +76,8 @@ func (adapter Adapter) Update(result ResultDomain.Result) error {
 	return nil
 }
 
-func (adapter Adapter) Find(uuid string) (ResultDomain.Result, error) {
-	var resultMysql = Result{}
+func (adapter ResultAdapter) Find(uuid string) (ResultDomain.Result, error) {
+	var resultMysql = Model.Result{}
 	err := adapter.Orm.First(&resultMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return ResultDomain.Result{}, err

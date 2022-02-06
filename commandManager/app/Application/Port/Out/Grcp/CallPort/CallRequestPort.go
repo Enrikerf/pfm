@@ -1,10 +1,9 @@
 package CallPort
 
 import (
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type Request interface {
-	Request(task Task.Task) Result.Batch
+	Request(task Entity.Task) Entity.Batch
 }

@@ -1,9 +1,9 @@
-package Result
+package Adapters
 
 import (
 	"fmt"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
-	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Model"
+	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 	"gorm.io/gorm"
 )
 
@@ -12,7 +12,7 @@ type BatchAdapter struct {
 }
 
 func (adapter BatchAdapter) Find(uuid string) (ResultDomain.Batch, error) {
-	var batchMysql = Batch{}
+	var batchMysql = Model.Batch{}
 	err := adapter.Orm.First(&batchMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return ResultDomain.Batch{}, err
@@ -22,8 +22,8 @@ func (adapter BatchAdapter) Find(uuid string) (ResultDomain.Batch, error) {
 }
 
 func (adapter BatchAdapter) Save(batch ResultDomain.Batch) error {
-	var taskMysql Task.Task
-	var batchMysql Batch
+	var taskMysql Model.Task
+	var batchMysql Model.Batch
 	response := adapter.Orm.First(&taskMysql, "uuid = ?", batch.TaskUuid)
 	if response.Error != nil {
 		fmt.Printf("tasks %v.\n", response.Error)
@@ -40,7 +40,7 @@ func (adapter BatchAdapter) Save(batch ResultDomain.Batch) error {
 
 func (adapter BatchAdapter) FindAll() ([]ResultDomain.Batch, error) {
 
-	var results []Batch
+	var results []Model.Batch
 	var domainBatch []ResultDomain.Batch
 	response := adapter.Orm.Find(&results)
 	if response.Error != nil {
@@ -54,9 +54,9 @@ func (adapter BatchAdapter) FindAll() ([]ResultDomain.Batch, error) {
 }
 
 func (adapter BatchAdapter) Update(batch ResultDomain.Batch) error {
-	var taskMysql Task.Task
-	var currentBatchMysql Batch
-	var batchValuesToUpdate = Batch{}
+	var taskMysql Model.Task
+	var currentBatchMysql Model.Batch
+	var batchValuesToUpdate = Model.Batch{}
 	err := adapter.Orm.First(&taskMysql, "uuid = ?", batch.TaskUuid).Error
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func (adapter BatchAdapter) Update(batch ResultDomain.Batch) error {
 
 func (adapter BatchAdapter) FindBy(conditions interface{}) []ResultDomain.Batch {
 
-	var batches []Batch
+	var batches []Model.Batch
 	domainBatches := []ResultDomain.Batch{}
 	err := adapter.Orm.
 		Table("batches").
@@ -92,7 +92,7 @@ func (adapter BatchAdapter) FindBy(conditions interface{}) []ResultDomain.Batch 
 }
 
 func (adapter BatchAdapter) Delete(uuid string) error {
-	var batchMysql = Result{}
+	var batchMysql = Model.Result{}
 	err := adapter.Orm.Delete(&batchMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return err

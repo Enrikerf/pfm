@@ -1,9 +1,9 @@
 package StepPort
 
 import (
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type Save interface {
-	Save(step Task.Step) error
+	Save(step Entity.Step) error
 }

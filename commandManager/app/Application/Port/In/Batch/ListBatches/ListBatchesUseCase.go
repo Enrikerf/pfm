@@ -1,9 +1,9 @@
 package ListBatches
 
 import (
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type UseCase interface {
-	List(query Query) []Result.Batch
+	List(query Query) []Entity.Batch
 }

@@ -1,9 +1,9 @@
 package ResultPort
 
 import (
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type Find interface {
-	Find(uuid string) (Result.Result, error)
+	Find(uuid string) (Entity.Result, error)
 }

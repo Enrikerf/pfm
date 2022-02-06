@@ -1,9 +1,9 @@
 package StepPort
 
 import (
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type UpdateStepPort interface {
-	Update(step Task.Step) error
+	Update(step Entity.Step) error
 }

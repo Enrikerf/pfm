@@ -3,7 +3,7 @@ package ShowTask
 import (
 	"errors"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ReadTask"
-	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model"
 	"github.com/Enrikerf/pfm/commandManager/tests/Application/Port/Out/Database/Task"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -11,15 +11,15 @@ import (
 )
 
 var tests = []struct {
-	taskFindResponse TaskDomain.Task
+	taskFindResponse Entity.Task
 	taskFindError    error
 }{
-	{TaskDomain.Task{}, errors.New("not found")},
-	{TaskDomain.Task{
+	{Entity.Task{}, errors.New("not found")},
+	{Entity.Task{
 		Uuid: uuid.UUID{},
 		Host: "host",
 		Port: "port",
-		Steps: []TaskDomain.Step{{
+		Steps: []Entity.Step{{
 			Uuid:     uuid.UUID{},
 			TaskUuid: uuid.UUID{},
 			Sentence: "name",

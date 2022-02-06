@@ -1,7 +1,9 @@
 package ResultPort
 
-import "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+import (
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
+)
 
 type FindBy interface {
-	FindBy(conditions interface{}) []Result.Result
+	FindBy(conditions interface{}) []Entity.Result
 }

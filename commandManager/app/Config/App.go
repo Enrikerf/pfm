@@ -5,8 +5,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/LoopManager"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Grcp/Call"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Result"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Adapters"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/CreateBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/DeleteBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ListBatches"
@@ -77,9 +76,9 @@ func (server *App) loadDb() *gorm.DB {
 }
 
 func (server *App) loadLoop(db *gorm.DB) {
-	taskAdapter := Task.Adapter{Orm: db}
-	resultAdapter := Result.Adapter{Orm: db}
-	batchAdapter := Result.BatchAdapter{Orm: db}
+	taskAdapter := Adapters.TaskAdapter{Orm: db}
+	resultAdapter := Adapters.ResultAdapter{Orm: db}
+	batchAdapter := Adapters.BatchAdapter{Orm: db}
 	//TODO: inject grcp and proto? to test this adapter later
 	callAdapter := Call.Adapter{}
 	loopService := Loop.New(
@@ -96,10 +95,10 @@ func (server *App) loadLoop(db *gorm.DB) {
 }
 
 func (server *App) loadApiGrpc(db *gorm.DB) {
-	var taskAdapter = Task.Adapter{Orm: db}
-	var commandAdapter = Task.StepAdapter{Orm: db}
-	var batchAdapter = Result.BatchAdapter{Orm: db}
-	var resultAdapter = Result.Adapter{Orm: db}
+	var taskAdapter = Adapters.TaskAdapter{Orm: db}
+	var commandAdapter = Adapters.StepAdapter{Orm: db}
+	var batchAdapter = Adapters.BatchAdapter{Orm: db}
+	var resultAdapter = Adapters.ResultAdapter{Orm: db}
 
 	//TaskController
 	var createTaskService = CreateTask.Service{SaveTaskPort: taskAdapter}

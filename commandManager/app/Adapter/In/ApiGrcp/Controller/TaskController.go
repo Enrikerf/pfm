@@ -27,7 +27,7 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 	var command CreateTask.Command
 	command.Host = protoTask.GetHost()
 	command.Port = protoTask.GetPort()
-	command.Commands = protoTask.GetCommands()
+	command.CommandSentences = protoTask.GetCommands()
 	command.Mode = protoTask.GetMode().String()
 	command.ExecutionMode = protoTask.GetExecutionMode().String()
 

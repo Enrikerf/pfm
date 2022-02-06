@@ -1,17 +1,18 @@
-package Task
+package Adapters
 
 import (
 	"fmt"
-	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Model"
+	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 	"gorm.io/gorm"
 )
 
-type Adapter struct {
+type TaskAdapter struct {
 	Orm *gorm.DB
 }
 
-func (adapter Adapter) Find(uuid string) (TaskDomain.Task, error) {
-	var taskMysql = Task{}
+func (adapter TaskAdapter) Find(uuid string) (TaskDomain.Task, error) {
+	var taskMysql = Model.Task{}
 	err := adapter.Orm.First(&taskMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return TaskDomain.Task{}, err
@@ -20,8 +21,8 @@ func (adapter Adapter) Find(uuid string) (TaskDomain.Task, error) {
 	return taskMysql.ToDomain(), nil
 }
 
-func (adapter Adapter) Delete(uuid string) error {
-	var taskMysql = Task{}
+func (adapter TaskAdapter) Delete(uuid string) error {
+	var taskMysql = Model.Task{}
 	err := adapter.Orm.Delete(&taskMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return err
@@ -29,8 +30,8 @@ func (adapter Adapter) Delete(uuid string) error {
 	return nil
 }
 
-func (adapter Adapter) Save(task TaskDomain.Task) error {
-	var taskMysql = Task{}
+func (adapter TaskAdapter) Save(task TaskDomain.Task) error {
+	var taskMysql = Model.Task{}
 	taskMysql.FromDomain(task)
 	err := adapter.Orm.Create(&taskMysql).Error
 	if err != nil {
@@ -40,9 +41,9 @@ func (adapter Adapter) Save(task TaskDomain.Task) error {
 	return nil
 }
 
-func (adapter Adapter) Update(task TaskDomain.Task) error {
-	var currentTaskMysql Task
-	var taskValuesToUpdate = Task{}
+func (adapter TaskAdapter) Update(task TaskDomain.Task) error {
+	var currentTaskMysql Model.Task
+	var taskValuesToUpdate = Model.Task{}
 	taskValuesToUpdate.FromDomain(task)
 	err := adapter.Orm.First(&currentTaskMysql, "uuid = ?", taskValuesToUpdate.Uuid).Error
 	if err != nil {
@@ -52,9 +53,9 @@ func (adapter Adapter) Update(task TaskDomain.Task) error {
 	return nil
 }
 
-func (adapter Adapter) FindBy(conditions interface{}) []TaskDomain.Task {
+func (adapter TaskAdapter) FindBy(conditions interface{}) []TaskDomain.Task {
 
-	var tasks []Task
+	var tasks []Model.Task
 	domainTasks := []TaskDomain.Task{}
 	err := adapter.Orm.
 		Table("tasks").

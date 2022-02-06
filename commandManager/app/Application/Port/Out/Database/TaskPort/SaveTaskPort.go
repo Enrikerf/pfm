@@ -1,9 +1,9 @@
 package TaskPort
 
 import (
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type Save interface {
-	Save(task Task.Task) error
+	Save(task Entity.Task) error
 }

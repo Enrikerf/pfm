@@ -2,7 +2,7 @@ package CreateBatch
 
 import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/BatchPort"
-	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type Service struct {
@@ -10,18 +10,18 @@ type Service struct {
 	SaveBatchPort BatchPort.Save
 }
 
-func (service Service) Create(command Command) (ResultDomain.Batch, error) {
+func (service Service) Create(command Command) (Entity.Batch, error) {
 	task, err := service.FindBatchPort.Find(command.TaskUuid)
 	if err != nil {
-		return ResultDomain.Batch{}, err
+		return Entity.Batch{}, err
 	}
-	result := ResultDomain.NewBatch(task.Uuid, []ResultDomain.Result{})
+	result := Entity.NewBatch(task.Uuid, []Entity.Result{})
 	if err != nil {
-		return ResultDomain.Batch{}, err
+		return Entity.Batch{}, err
 	}
 	err = service.SaveBatchPort.Save(result)
 	if err != nil {
-		return ResultDomain.Batch{}, err
+		return Entity.Batch{}, err
 	}
 	return result, nil
 }

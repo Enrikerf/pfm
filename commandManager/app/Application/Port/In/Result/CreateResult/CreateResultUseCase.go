@@ -1,9 +1,9 @@
 package CreateResult
 
 import (
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type UseCase interface {
-	Create(command Command) (Result.Result, error)
+	Create(command Command) (Entity.Result, error)
 }

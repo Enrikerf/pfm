@@ -1,6 +1,8 @@
 package Task
 
-import TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+import (
+	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model"
+)
 
 type MockFindPort struct {
 	Result TaskDomain.Task

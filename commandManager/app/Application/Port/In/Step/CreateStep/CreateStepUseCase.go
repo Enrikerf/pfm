@@ -1,9 +1,9 @@
 package CreateStep
 
 import (
-	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type UseCase interface {
-	Create(command Command) (TaskDomain.Step, error)
+	Create(command Command) (Entity.Step, error)
 }

@@ -2,7 +2,7 @@ package ListTask
 
 import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
-	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model"
 	"github.com/Enrikerf/pfm/commandManager/tests/Application/Port/Out/Database/Task"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -10,15 +10,15 @@ import (
 )
 
 var tests = []struct {
-	taskFindByResult []TaskDomain.Task
+	taskFindByResult []Entity.Task
 }{
 	{nil},
-	{[]TaskDomain.Task{}},
-	{[]TaskDomain.Task{{
+	{[]Entity.Task{}},
+	{[]Entity.Task{{
 		Uuid: uuid.UUID{},
 		Host: "host",
 		Port: "port",
-		Steps: []TaskDomain.Step{{
+		Steps: []Entity.Step{{
 			Uuid:     uuid.UUID{},
 			TaskUuid: uuid.UUID{},
 			Sentence: "name",

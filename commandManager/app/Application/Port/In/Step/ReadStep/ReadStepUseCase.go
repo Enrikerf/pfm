@@ -1,9 +1,9 @@
 package ReadStep
 
 import (
-	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type UseCase interface {
-	Read(query Query) (TaskDomain.Step, error)
+	Read(query Query) (Entity.Step, error)
 }

@@ -1,9 +1,9 @@
 package ReadResult
 
 import (
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type UseCase interface {
-	Read(query Query) (Result.Result, error)
+	Read(query Query) (Entity.Result, error)
 }

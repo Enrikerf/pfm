@@ -1,7 +1,9 @@
 package BatchPort
 
-import "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+import (
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
+)
 
 type Save interface {
-	Save(batch Result.Batch) error
+	Save(batch Entity.Batch) error
 }

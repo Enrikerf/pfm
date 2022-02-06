@@ -3,7 +3,8 @@ package CreateStep
 import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/StepPort"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
-	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/ValueObject"
 )
 
 type Service struct {
@@ -11,18 +12,19 @@ type Service struct {
 	SaveStepPort StepPort.Save
 }
 
-func (service Service) Create(command Command) (TaskDomain.Step, error) {
+func (service Service) Create(command Command) (Entity.Step, error) {
 	task, err := service.FindTaskPort.Find(command.TaskUuid)
 	if err != nil {
-		return TaskDomain.Step{}, err
+		return Entity.Step{}, err
 	}
-	result, err := TaskDomain.NewCommand(task.Uuid, command.Name)
+	stepVo, err := ValueObject.NewStepVo(command.Sentence)
 	if err != nil {
-		return TaskDomain.Step{}, err
+		return Entity.Step{}, err
 	}
+	result := Entity.NewStep(task.Uuid, stepVo)
 	err = service.SaveStepPort.Save(result)
 	if err != nil {
-		return TaskDomain.Step{}, err
+		return Entity.Step{}, err
 	}
 	return result, nil
 }

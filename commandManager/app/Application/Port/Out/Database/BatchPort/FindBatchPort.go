@@ -1,9 +1,9 @@
 package BatchPort
 
 import (
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Model/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type Find interface {
-	Find(uuid string) (Result.Batch, error)
+	Find(uuid string) (Entity.Batch, error)
 }
