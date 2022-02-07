@@ -1,0 +1,131 @@
+@startuml
+legend
+<u><b>Legend</b></u>
+Render Aggregations: true
+Render Fields: true
+Render Methods: true
+Pritave Aggregations: true
+end legend
+namespace Adapters {
+    class BatchAdapter << (S,Aquamarine) >> {
+        + Orm *gorm.DB
+
+        + Find(uuid string) (Entity.Batch, error)
+        + Save(batch Entity.Batch) error
+        + FindAll() ([]Entity.Batch, error)
+        + Update(batch Entity.Batch) error
+        + FindBy(conditions <font color=blue>interface</font>{}) []Entity.Batch
+        + Delete(uuid string) error
+
+    }
+    class ResultAdapter << (S,Aquamarine) >> {
+        + Orm *gorm.DB
+
+        + Save(result Entity.Result) error
+        + FindBy(conditions <font color=blue>interface</font>{}) []Entity.Result
+        + Delete(uuid string) error
+        + Update(result Entity.Result) error
+        + Find(uuid string) (Entity.Result, error)
+
+    }
+    class StepAdapter << (S,Aquamarine) >> {
+        + Orm *gorm.DB
+
+        + Save(selfDomain Entity.Step) error
+        + Find(uuid string) (Entity.Step, error)
+        + Update(selfDomain Entity.Step) error
+        + Delete(uuid string) error
+        + FindBy(conditions <font color=blue>interface</font>{}) []Entity.Step
+
+    }
+    class TaskAdapter << (S,Aquamarine) >> {
+        + Orm *gorm.DB
+
+        + Find(uuid string) (Entity.Task, error)
+        + Delete(uuid string) error
+        + Save(task Entity.Task) error
+        + Update(task Entity.Task) error
+        + FindBy(conditions <font color=blue>interface</font>{}) []Entity.Task
+
+    }
+}
+
+
+"Adapters.BatchAdapter""uses" o-- "gorm.DB"
+"Adapters.ResultAdapter""uses" o-- "gorm.DB"
+"Adapters.StepAdapter""uses" o-- "gorm.DB"
+"Adapters.TaskAdapter""uses" o-- "gorm.DB"
+
+namespace Model {
+    class Batch << (S,Aquamarine) >> {
+        + ID uint
+        + Uuid uuid.UUID
+        + TaskID uint
+        + TaskUuid uuid.UUID
+        + Results []Result
+        + CreatedAt time.Time
+        + UpdatedAt time.Time
+
+        + FromDomain(selfEntity Entity.Batch) 
+        + ToDomain() Entity.Batch
+
+    }
+    class Result << (S,Aquamarine) >> {
+        + ID uint
+        + Uuid uuid.UUID
+        + BatchID uint
+        + BatchUuid uuid.UUID
+        + Content string
+        + CreatedAt time.Time
+        + UpdatedAt time.Time
+
+        + FromDomain(selfEntity Entity.Result) 
+        + ToDomain() Entity.Result
+
+    }
+    class Step << (S,Aquamarine) >> {
+        + ID uint
+        + Uuid uuid.UUID
+        + TaskID uint
+        + TaskUuid uuid.UUID
+        + Sentence string
+        + CreatedAt time.Time
+        + UpdatedAt time.Time
+
+        + TableName() string
+        + FromDomain(selfEntity Entity.Step) 
+        + ToDomain() Entity.Step
+
+    }
+    class Task << (S,Aquamarine) >> {
+        + ID uint
+        + Uuid uuid.UUID
+        + Host string
+        + Port string
+        + Steps []Step
+        + Mode string
+        + Status string
+        + ExecutionMode string
+        + CreatedAt time.Time
+        + UpdatedAt time.Time
+
+        + TableName() string
+        + FromDomain(selfEntity Entity.Task) 
+        + ToDomain() Entity.Task
+
+    }
+}
+
+
+"Model.Batch""uses" o-- "Model.Result"
+"Model.Batch""uses" o-- "time.Time"
+"Model.Batch""uses" o-- "uuid.UUID"
+"Model.Result""uses" o-- "time.Time"
+"Model.Result""uses" o-- "uuid.UUID"
+"Model.Step""uses" o-- "time.Time"
+"Model.Step""uses" o-- "uuid.UUID"
+"Model.Task""uses" o-- "Model.Step"
+"Model.Task""uses" o-- "time.Time"
+"Model.Task""uses" o-- "uuid.UUID"
+
+@enduml

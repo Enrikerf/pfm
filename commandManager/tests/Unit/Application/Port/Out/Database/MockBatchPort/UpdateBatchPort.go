@@ -5,9 +5,9 @@ import (
 )
 
 type UpdateMock struct {
-	Err error
+	Error error
 }
 
 func (mock UpdateMock) Update(result Entity.Batch) error {
-	return mock.Err
+	return mock.Error
 }

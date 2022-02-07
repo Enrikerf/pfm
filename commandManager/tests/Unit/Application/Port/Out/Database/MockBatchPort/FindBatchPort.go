@@ -6,9 +6,9 @@ import (
 
 type FindMock struct {
 	Result Entity.Batch
-	Err    error
+	Error  error
 }
 
 func (mock FindMock) Find(uuid string) (Entity.Batch, error) {
-	return mock.Result, mock.Err
+	return mock.Result, mock.Error
 }

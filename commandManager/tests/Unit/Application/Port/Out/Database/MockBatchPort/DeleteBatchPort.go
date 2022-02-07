@@ -1,9 +1,9 @@
 package MockBatchPort
 
 type DeleteMock struct {
-	Err error
+	Error error
 }
 
 func (mock DeleteMock) Delete(uuid string) error {
-	return mock.Err
+	return mock.Error
 }

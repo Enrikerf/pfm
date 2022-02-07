@@ -1,0 +1,1044 @@
+@startuml
+legend
+<u><b>Legend</b></u>
+Render Aggregations: true
+Render Fields: true
+Render Methods: true
+Pritave Aggregations: true
+end legend
+namespace Adapters {
+    class BatchAdapter << (S,Aquamarine) >> {
+        + Orm *gorm.DB
+
+        + Find(uuid string) (Entity.Batch, error)
+        + Save(batch Entity.Batch) error
+        + FindAll() ([]Entity.Batch, error)
+        + Update(batch Entity.Batch) error
+        + FindBy(conditions <font color=blue>interface</font>{}) []Entity.Batch
+        + Delete(uuid string) error
+
+    }
+    class ResultAdapter << (S,Aquamarine) >> {
+        + Orm *gorm.DB
+
+        + Save(result Entity.Result) error
+        + FindBy(conditions <font color=blue>interface</font>{}) []Entity.Result
+        + Delete(uuid string) error
+        + Update(result Entity.Result) error
+        + Find(uuid string) (Entity.Result, error)
+
+    }
+    class StepAdapter << (S,Aquamarine) >> {
+        + Orm *gorm.DB
+
+        + Save(selfDomain Entity.Step) error
+        + Find(uuid string) (Entity.Step, error)
+        + Update(selfDomain Entity.Step) error
+        + Delete(uuid string) error
+        + FindBy(conditions <font color=blue>interface</font>{}) []Entity.Step
+
+    }
+    class TaskAdapter << (S,Aquamarine) >> {
+        + Orm *gorm.DB
+
+        + Find(uuid string) (Entity.Task, error)
+        + Delete(uuid string) error
+        + Save(task Entity.Task) error
+        + Update(task Entity.Task) error
+        + FindBy(conditions <font color=blue>interface</font>{}) []Entity.Task
+
+    }
+}
+
+"BatchPort.Delete" <|-- "implements""Adapters.BatchAdapter"
+"BatchPort.Find" <|-- "implements""Adapters.BatchAdapter"
+"BatchPort.FindBy" <|-- "implements""Adapters.BatchAdapter"
+"BatchPort.Save" <|-- "implements""Adapters.BatchAdapter"
+"BatchPort.Update" <|-- "implements""Adapters.BatchAdapter"
+"ResultPort.Delete" <|-- "implements""Adapters.BatchAdapter"
+"StepPort.DeleteStep" <|-- "implements""Adapters.BatchAdapter"
+"TaskPort.Delete" <|-- "implements""Adapters.BatchAdapter"
+"BatchPort.Delete" <|-- "implements""Adapters.ResultAdapter"
+"ResultPort.Delete" <|-- "implements""Adapters.ResultAdapter"
+"ResultPort.Find" <|-- "implements""Adapters.ResultAdapter"
+"ResultPort.FindBy" <|-- "implements""Adapters.ResultAdapter"
+"ResultPort.Save" <|-- "implements""Adapters.ResultAdapter"
+"ResultPort.Update" <|-- "implements""Adapters.ResultAdapter"
+"StepPort.DeleteStep" <|-- "implements""Adapters.ResultAdapter"
+"TaskPort.Delete" <|-- "implements""Adapters.ResultAdapter"
+"BatchPort.Delete" <|-- "implements""Adapters.StepAdapter"
+"ResultPort.Delete" <|-- "implements""Adapters.StepAdapter"
+"StepPort.DeleteStep" <|-- "implements""Adapters.StepAdapter"
+"StepPort.Find" <|-- "implements""Adapters.StepAdapter"
+"StepPort.FindBy" <|-- "implements""Adapters.StepAdapter"
+"StepPort.Save" <|-- "implements""Adapters.StepAdapter"
+"StepPort.UpdateStepPort" <|-- "implements""Adapters.StepAdapter"
+"TaskPort.Delete" <|-- "implements""Adapters.StepAdapter"
+"BatchPort.Delete" <|-- "implements""Adapters.TaskAdapter"
+"ResultPort.Delete" <|-- "implements""Adapters.TaskAdapter"
+"StepPort.DeleteStep" <|-- "implements""Adapters.TaskAdapter"
+"TaskPort.Delete" <|-- "implements""Adapters.TaskAdapter"
+"TaskPort.Find" <|-- "implements""Adapters.TaskAdapter"
+"TaskPort.FindBy" <|-- "implements""Adapters.TaskAdapter"
+"TaskPort.Save" <|-- "implements""Adapters.TaskAdapter"
+"TaskPort.Update" <|-- "implements""Adapters.TaskAdapter"
+
+"Adapters.BatchAdapter""uses" o-- "gorm.DB"
+"Adapters.ResultAdapter""uses" o-- "gorm.DB"
+"Adapters.StepAdapter""uses" o-- "gorm.DB"
+"Adapters.TaskAdapter""uses" o-- "gorm.DB"
+
+namespace ApiGrcp {
+    class ApiGrpc << (S,Aquamarine) >> {
+        - createTaskUseCase CreateTask.UseCase
+        - listTasksUseCase ListTasks.UseCase
+        - readTaskUseCase ReadTask.UseCase
+        - deleteTaskUseCase DeleteTask.UseCase
+        - updateTaskUseCase UpdateTask.UseCase
+        - createResultUseCase CreateResult.UseCase
+        - readResultUseCase ReadResult.UseCase
+        - updateResultUseCase UpdateResult.UseCase
+        - deleteResultUseCase DeleteResult.UseCase
+        - listResultsUseCase ListResults.UseCase
+        - createBatchUseCase CreateBatch.UseCase
+        - readBatchUseCase ReadBatch.UseCase
+        - updateBatchUseCase UpdateBatch.UseCase
+        - deleteBatchUseCase DeleteBatch.UseCase
+        - listBatchesUseCase ListBatches.UseCase
+        - createStepUseCase CreateStep.UseCase
+        - readStepUseCase ReadStep.UseCase
+        - updateStepUseCase UpdateStep.UseCase
+        - deleteStepUseCase DeleteStep.UseCase
+        - listStepsUseCase ListSteps.UseCase
+        - serverHost string
+        - serverPort string
+        - grpcServer *grpc.Server
+        - listener net.Listener
+
+        - configControllers() 
+        - loadServer() 
+        - loadListener() 
+
+        + Initialize(createTaskUseCase CreateTask.UseCase, readTaskUseCase ReadTask.UseCase, updateTaskUseCase UpdateTask.UseCase, deleteTaskUseCase DeleteTask.UseCase, listTasksUseCase ListTasks.UseCase, createResultUseCase CreateResult.UseCase, readResultUseCase ReadResult.UseCase, updateResultUseCase UpdateResult.UseCase, deleteResultUseCase DeleteResult.UseCase, listResultsUseCase ListResults.UseCase, createBatchUseCase CreateBatch.UseCase, readBatchUseCase ReadBatch.UseCase, updateBatchUseCase UpdateBatch.UseCase, deleteBatchUseCase DeleteBatch.UseCase, listBatchesUseCase ListBatches.UseCase, createStepUseCase CreateStep.UseCase, readStepUseCase ReadStep.UseCase, updateStepUseCase UpdateStep.UseCase, deleteStepUseCase DeleteStep.UseCase, listStepsUseCase ListSteps.UseCase, host string, port string) 
+        + Run() 
+
+    }
+}
+
+
+"ApiGrcp.ApiGrpc""uses" o-- "CreateBatch.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "CreateResult.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "CreateStep.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "CreateTask.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "DeleteBatch.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "DeleteResult.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "DeleteStep.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "DeleteTask.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "ListBatches.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "ListResults.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "ListSteps.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "ListTasks.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "ReadBatch.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "ReadResult.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "ReadStep.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "ReadTask.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "UpdateBatch.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "UpdateResult.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "UpdateStep.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "UpdateTask.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "grpc.Server"
+"ApiGrcp.ApiGrpc""uses" o-- "net.Listener"
+
+namespace BatchPort {
+    interface Delete  {
+        + Delete(uuid string) error
+
+    }
+    interface Find  {
+        + Find(uuid string) (Entity.Batch, error)
+
+    }
+    interface FindBy  {
+        + FindBy(conditions <font color=blue>interface</font>{}) []Entity.Batch
+
+    }
+    interface Save  {
+        + Save(batch Entity.Batch) error
+
+    }
+    interface Update  {
+        + Update(result Entity.Batch) error
+
+    }
+}
+
+
+
+namespace Call {
+    class Adapter << (S,Aquamarine) >> {
+        - doServerStream(task Entity.Task, client call.CallServiceClient) []Entity.Result
+        - doBidirectional(task Entity.Task, client call.CallServiceClient) []Entity.Result
+        - doClientStream(task Entity.Task, client call.CallServiceClient) []Entity.Result
+        - doUnaryCall(task Entity.Task, client call.CallServiceClient) []Entity.Result
+        - notImplementedMethod(task Entity.Task) []Entity.Result
+
+        + Request(task Entity.Task) Entity.Batch
+
+    }
+}
+
+"CallPort.Request" <|-- "implements""Call.Adapter"
+
+
+namespace CallPort {
+    interface Request  {
+        + Request(task Entity.Task) Entity.Batch
+
+    }
+}
+
+
+
+namespace Config {
+    class App << (S,Aquamarine) >> {
+        + ApiGrpc ApiGrcp.ApiGrpc
+
+        - loadDotEnv() 
+        - loadDb() *gorm.DB
+        - loadLoop(db *gorm.DB) 
+        - loadApiGrpc(db *gorm.DB) 
+
+        + Run() 
+
+    }
+}
+
+
+"Config.App""uses" o-- "ApiGrcp.ApiGrpc"
+
+namespace Controller {
+    class BatchController << (S,Aquamarine) >> {
+        + CreateBatchUseCase CreateBatch.UseCase
+        + ReadBatchUseCase ReadBatch.UseCase
+        + UpdateBatchUseCase UpdateBatch.UseCase
+        + DeleteBatchUseCase DeleteBatch.UseCase
+        + ListBatchesUseCase ListBatches.UseCase
+
+        + CreateBatch(ctx context.Context, request *batch.CreateBatchRequest) (*batch.CreateBatchResponse, error)
+        + ReadBatch(ctx context.Context, request *batch.ReadBatchRequest) (*batch.ReadBatchResponse, error)
+        + UpdateBatch(ctx context.Context, request *batch.UpdateBatchRequest) (*batch.UpdateBatchResponse, error)
+        + DeleteBatch(ctx context.Context, request *batch.DeleteBatchRequest) (*batch.DeleteBatchResponse, error)
+        + ListBatches(ctx context.Context, request *batch.ListBatchesRequest) (*batch.ListBatchesResponse, error)
+
+    }
+    class ResultController << (S,Aquamarine) >> {
+        + CreateResultUseCase CreateResult.UseCase
+        + ReadResultUseCase ReadResult.UseCase
+        + UpdateResultUseCase UpdateResult.UseCase
+        + DeleteResultUseCase DeleteResult.UseCase
+        + ListResultsUseCase ListResults.UseCase
+
+        + CreateResult(ctx context.Context, request *result.CreateResultRequest) (*result.CreateResultResponse, error)
+        + ReadResult(ctx context.Context, request *result.ReadResultRequest) (*result.ReadResultResponse, error)
+        + UpdateResult(ctx context.Context, request *result.UpdateResultRequest) (*result.UpdateResultResponse, error)
+        + DeleteResult(ctx context.Context, request *result.DeleteResultRequest) (*result.DeleteResultResponse, error)
+        + ListResult(ctx context.Context, request *result.ListResultRequest) (*result.ListResultResponse, error)
+
+    }
+    class StepController << (S,Aquamarine) >> {
+        + CreateStepUseCase CreateStep.UseCase
+        + ReadStepUseCase ReadStep.UseCase
+        + UpdateStepUseCase UpdateStep.UseCase
+        + DeleteStepUseCase DeleteStep.UseCase
+        + ListStepsUseCase ListSteps.UseCase
+
+        + CreateStep(ctx context.Context, request *step.CreateStepRequest) (*step.CreateStepResponse, error)
+        + ReadStep(ctx context.Context, request *step.ReadStepRequest) (*step.ReadStepResponse, error)
+        + UpdateStep(ctx context.Context, request *step.UpdateStepRequest) (*step.UpdateStepResponse, error)
+        + DeleteStep(ctx context.Context, request *step.DeleteStepRequest) (*step.DeleteStepResponse, error)
+        + ListSteps(ctx context.Context, request *step.ListStepsRequest) (*step.ListStepsResponse, error)
+
+    }
+    class TaskController << (S,Aquamarine) >> {
+        + SaveTaskUseCase CreateTask.UseCase
+        + ListTasksUseCase ListTasks.UseCase
+        + ReadTaskUseCase ReadTask.UseCase
+        + DeleteTaskUseCase DeleteTask.UseCase
+        + UpdateTaskUseCase UpdateTask.UseCase
+
+        + CreateTask(ctx context.Context, request *task.CreateTaskRequest) (*task.CreateTaskResponse, error)
+        + ReadTask(ctx context.Context, request *task.ReadTaskRequest) (*task.ReadTaskResponse, error)
+        + UpdateTask(ctx context.Context, request *task.UpdateTaskRequest) (*task.UpdateTaskResponse, error)
+        + DeleteTask(ctx context.Context, request *task.DeleteTaskRequest) (*task.DeleteTaskResponse, error)
+        + ListTasks(ctx context.Context, in *task.ListTasksRequest) (*task.ListTasksResponse, error)
+
+    }
+}
+"batch.UnimplementedBatchServiceServer" *-- "extends""Controller.BatchController"
+"result.UnimplementedResultServiceServer" *-- "extends""Controller.ResultController"
+"step.UnimplementedStepServiceServer" *-- "extends""Controller.StepController"
+"task.UnimplementedTaskServiceServer" *-- "extends""Controller.TaskController"
+
+
+"Controller.BatchController""uses" o-- "CreateBatch.UseCase"
+"Controller.BatchController""uses" o-- "DeleteBatch.UseCase"
+"Controller.BatchController""uses" o-- "ListBatches.UseCase"
+"Controller.BatchController""uses" o-- "ReadBatch.UseCase"
+"Controller.BatchController""uses" o-- "UpdateBatch.UseCase"
+"Controller.ResultController""uses" o-- "CreateResult.UseCase"
+"Controller.ResultController""uses" o-- "DeleteResult.UseCase"
+"Controller.ResultController""uses" o-- "ListResults.UseCase"
+"Controller.ResultController""uses" o-- "ReadResult.UseCase"
+"Controller.ResultController""uses" o-- "UpdateResult.UseCase"
+"Controller.StepController""uses" o-- "CreateStep.UseCase"
+"Controller.StepController""uses" o-- "DeleteStep.UseCase"
+"Controller.StepController""uses" o-- "ListSteps.UseCase"
+"Controller.StepController""uses" o-- "ReadStep.UseCase"
+"Controller.StepController""uses" o-- "UpdateStep.UseCase"
+"Controller.TaskController""uses" o-- "CreateTask.UseCase"
+"Controller.TaskController""uses" o-- "DeleteTask.UseCase"
+"Controller.TaskController""uses" o-- "ListTasks.UseCase"
+"Controller.TaskController""uses" o-- "ReadTask.UseCase"
+"Controller.TaskController""uses" o-- "UpdateTask.UseCase"
+
+namespace CreateBatch {
+    class Command << (S,Aquamarine) >> {
+        + TaskUuid string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindBatchPort TaskPort.Find
+        + SaveBatchPort BatchPort.Save
+
+        + Create(command Command) (Entity.Batch, error)
+
+    }
+    interface UseCase  {
+        + Create(command Command) (Entity.Batch, error)
+
+    }
+}
+
+"CreateBatch.UseCase" <|-- "implements""CreateBatch.Service"
+
+"CreateBatch.Service""uses" o-- "BatchPort.Save"
+"CreateBatch.Service""uses" o-- "TaskPort.Find"
+
+namespace CreateResult {
+    class Command << (S,Aquamarine) >> {
+        + Content string
+        + BatchUuid string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindBatchPort BatchPort.Find
+        + SaveResultPort ResultPort.Save
+
+        + Create(command Command) (Entity.Result, error)
+
+    }
+    interface UseCase  {
+        + Create(command Command) (Entity.Result, error)
+
+    }
+}
+
+"CreateResult.UseCase" <|-- "implements""CreateResult.Service"
+
+"CreateResult.Service""uses" o-- "BatchPort.Find"
+"CreateResult.Service""uses" o-- "ResultPort.Save"
+
+namespace CreateStep {
+    class Command << (S,Aquamarine) >> {
+        + TaskUuid string
+        + Sentence string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindTaskPort TaskPort.Find
+        + SaveStepPort StepPort.Save
+
+        + Create(command Command) (Entity.Step, error)
+
+    }
+    interface UseCase  {
+        + Create(command Command) (Entity.Step, error)
+
+    }
+}
+
+"CreateStep.UseCase" <|-- "implements""CreateStep.Service"
+
+"CreateStep.Service""uses" o-- "StepPort.Save"
+"CreateStep.Service""uses" o-- "TaskPort.Find"
+
+namespace CreateTask {
+    class Command << (S,Aquamarine) >> {
+        + Host string
+        + Port string
+        + CommandSentences []string
+        + Mode string
+        + Status string
+        + ExecutionMode string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + SaveTaskPort TaskPort.Save
+
+        + Create(command Command) (Entity.Task, error)
+
+    }
+    interface UseCase  {
+        + Create(task Command) (Entity.Task, error)
+
+    }
+}
+
+"CreateTask.UseCase" <|-- "implements""CreateTask.Service"
+
+"CreateTask.Service""uses" o-- "TaskPort.Save"
+
+namespace DeleteBatch {
+    class Command << (S,Aquamarine) >> {
+        + Uuid string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + DeleteBatchPort BatchPort.Delete
+
+        + Delete(command Command) error
+
+    }
+    interface UseCase  {
+        + Delete(command Command) error
+
+    }
+}
+
+"DeleteBatch.UseCase" <|-- "implements""DeleteBatch.Service"
+
+"DeleteBatch.Service""uses" o-- "BatchPort.Delete"
+
+namespace DeleteResult {
+    class Command << (S,Aquamarine) >> {
+        + Uuid string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + DeleteTaskPort ResultPort.Delete
+
+        + Delete(command Command) error
+
+    }
+    interface UseCase  {
+        + Delete(command Command) error
+
+    }
+}
+
+"DeleteResult.UseCase" <|-- "implements""DeleteResult.Service"
+
+"DeleteResult.Service""uses" o-- "ResultPort.Delete"
+
+namespace DeleteStep {
+    class Command << (S,Aquamarine) >> {
+        + Uuid string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + DeleteStepPort TaskPort.Delete
+
+        + Delete(command Command) error
+
+    }
+    interface UseCase  {
+        + Delete(command Command) error
+
+    }
+}
+
+"DeleteStep.UseCase" <|-- "implements""DeleteStep.Service"
+
+"DeleteStep.Service""uses" o-- "TaskPort.Delete"
+
+namespace DeleteTask {
+    class Command << (S,Aquamarine) >> {
+        + Uuid string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + DeleteTaskPort TaskPort.Delete
+
+        + Delete(command Command) error
+
+    }
+    interface UseCase  {
+        + Delete(command Command) error
+
+    }
+}
+
+"DeleteTask.UseCase" <|-- "implements""DeleteTask.Service"
+
+"DeleteTask.Service""uses" o-- "TaskPort.Delete"
+
+namespace Entity {
+    class Batch << (S,Aquamarine) >> {
+        + Uuid uuid.UUID
+        + TaskUuid uuid.UUID
+        + Results []Result
+        + CreatedAt time.Time
+        + UpdatedAt time.Time
+
+        + AddResult(result Result) 
+
+    }
+    class Call << (S,Aquamarine) >> {
+        + Command string
+
+    }
+    class Result << (S,Aquamarine) >> {
+        + Uuid uuid.UUID
+        + BatchUuid uuid.UUID
+        + Content string
+
+    }
+    class Step << (S,Aquamarine) >> {
+        + Uuid uuid.UUID
+        + TaskUuid uuid.UUID
+        + Sentence string
+
+    }
+    class Task << (S,Aquamarine) >> {
+        + Uuid uuid.UUID
+        + Host string
+        + Port string
+        + Steps []Step
+        + Mode ValueObject.Modes
+        + Status ValueObject.TaskStatus
+        + ExecutionMode ValueObject.ExecutionMode
+
+    }
+}
+
+
+"Entity.Batch""uses" o-- "Entity.Result"
+"Entity.Batch""uses" o-- "time.Time"
+"Entity.Batch""uses" o-- "uuid.UUID"
+"Entity.Result""uses" o-- "uuid.UUID"
+"Entity.Step""uses" o-- "uuid.UUID"
+"Entity.Task""uses" o-- "Entity.Step"
+"Entity.Task""uses" o-- "ValueObject.ExecutionMode"
+"Entity.Task""uses" o-- "ValueObject.Modes"
+"Entity.Task""uses" o-- "ValueObject.TaskStatus"
+"Entity.Task""uses" o-- "uuid.UUID"
+
+namespace ListBatches {
+    class Query << (S,Aquamarine) >> {
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindBatchesByPort BatchPort.FindBy
+
+        + List(query Query) []Entity.Batch
+
+    }
+    interface UseCase  {
+        + List(query Query) []Entity.Batch
+
+    }
+}
+
+"ListBatches.UseCase" <|-- "implements""ListBatches.Service"
+
+"ListBatches.Service""uses" o-- "BatchPort.FindBy"
+
+namespace ListResults {
+    class Query << (S,Aquamarine) >> {
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindResultsByPort ResultPort.FindBy
+
+        + List(query Query) []Entity.Result
+
+    }
+    interface UseCase  {
+        + List(query Query) []Entity.Result
+
+    }
+}
+
+"ListResults.UseCase" <|-- "implements""ListResults.Service"
+
+"ListResults.Service""uses" o-- "ResultPort.FindBy"
+
+namespace ListSteps {
+    class Query << (S,Aquamarine) >> {
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindStepByPort StepPort.FindBy
+
+        + List(query Query) []Entity.Step
+
+    }
+    interface UseCase  {
+        + List(query Query) []Entity.Step
+
+    }
+}
+
+"ListSteps.UseCase" <|-- "implements""ListSteps.Service"
+
+"ListSteps.Service""uses" o-- "StepPort.FindBy"
+
+namespace ListTasks {
+    class Query << (S,Aquamarine) >> {
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindTasksByPort TaskPort.FindBy
+
+        + List(query Query) []Entity.Task
+
+    }
+    interface UseCase  {
+        + List(query Query) []Entity.Task
+
+    }
+}
+
+"ListTasks.UseCase" <|-- "implements""ListTasks.Service"
+
+"ListTasks.Service""uses" o-- "TaskPort.FindBy"
+
+namespace Loop {
+    class Service << (S,Aquamarine) >> {
+        - callRequestPort CallPort.Request
+        - findTasksByPort TaskPort.FindBy
+        - updateTaskPort TaskPort.Update
+        - saveBatchPort BatchPort.Save
+        - saveResultPort ResultPort.Save
+        - exit bool
+
+        - slot(wg *sync.WaitGroup, index int, task *Entity.Task) 
+        - updateTaskStatus(index int, task *Entity.Task, status ValueObject.TaskStatus) 
+        - saveResults(index int, resultBatch Entity.Batch) 
+        - printTask(index int, task Entity.Task) 
+
+        + GetExit() bool
+        + Loop() error
+        + Iteration() 
+
+    }
+    interface UseCase  {
+        + Loop() error
+
+    }
+}
+
+"Loop.UseCase" <|-- "implements""Loop.Service"
+
+"Loop.Service""uses" o-- "BatchPort.Save"
+"Loop.Service""uses" o-- "CallPort.Request"
+"Loop.Service""uses" o-- "ResultPort.Save"
+"Loop.Service""uses" o-- "TaskPort.FindBy"
+"Loop.Service""uses" o-- "TaskPort.Update"
+
+namespace LoopManager {
+    class LoopManager << (S,Aquamarine) >> {
+        + Loop Loop.UseCase
+
+        + Execute() 
+
+    }
+}
+
+
+"LoopManager.LoopManager""uses" o-- "Loop.UseCase"
+
+namespace Model {
+    class Batch << (S,Aquamarine) >> {
+        + ID uint
+        + Uuid uuid.UUID
+        + TaskID uint
+        + TaskUuid uuid.UUID
+        + Results []Result
+        + CreatedAt time.Time
+        + UpdatedAt time.Time
+
+        + FromDomain(selfEntity Entity.Batch) 
+        + ToDomain() Entity.Batch
+
+    }
+    class OptionalString << (S,Aquamarine) >> {
+        + Change bool
+        + Value string
+
+    }
+    class Result << (S,Aquamarine) >> {
+        + ID uint
+        + Uuid uuid.UUID
+        + BatchID uint
+        + BatchUuid uuid.UUID
+        + Content string
+        + CreatedAt time.Time
+        + UpdatedAt time.Time
+
+        + FromDomain(selfEntity Entity.Result) 
+        + ToDomain() Entity.Result
+
+    }
+    class Step << (S,Aquamarine) >> {
+        + ID uint
+        + Uuid uuid.UUID
+        + TaskID uint
+        + TaskUuid uuid.UUID
+        + Sentence string
+        + CreatedAt time.Time
+        + UpdatedAt time.Time
+
+        + TableName() string
+        + FromDomain(selfEntity Entity.Step) 
+        + ToDomain() Entity.Step
+
+    }
+    class Task << (S,Aquamarine) >> {
+        + ID uint
+        + Uuid uuid.UUID
+        + Host string
+        + Port string
+        + Steps []Step
+        + Mode string
+        + Status string
+        + ExecutionMode string
+        + CreatedAt time.Time
+        + UpdatedAt time.Time
+
+        + TableName() string
+        + FromDomain(selfEntity Entity.Task) 
+        + ToDomain() Entity.Task
+
+    }
+}
+
+
+"Model.Batch""uses" o-- "Model.Result"
+"Model.Batch""uses" o-- "time.Time"
+"Model.Batch""uses" o-- "uuid.UUID"
+"Model.Result""uses" o-- "time.Time"
+"Model.Result""uses" o-- "uuid.UUID"
+"Model.Step""uses" o-- "time.Time"
+"Model.Step""uses" o-- "uuid.UUID"
+"Model.Task""uses" o-- "Model.Step"
+"Model.Task""uses" o-- "time.Time"
+"Model.Task""uses" o-- "uuid.UUID"
+
+namespace ReadBatch {
+    class Query << (S,Aquamarine) >> {
+        + Uuid string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindBatchPort BatchPort.Find
+
+        + Read(query Query) (Entity.Batch, error)
+
+    }
+    interface UseCase  {
+        + Read(query Query) (Entity.Batch, error)
+
+    }
+}
+
+"ReadBatch.UseCase" <|-- "implements""ReadBatch.Service"
+
+"ReadBatch.Service""uses" o-- "BatchPort.Find"
+
+namespace ReadResult {
+    class Query << (S,Aquamarine) >> {
+        + Uuid string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindResultPort ResultPort.Find
+
+        + Read(query Query) (Entity.Result, error)
+
+    }
+    interface UseCase  {
+        + Read(query Query) (Entity.Result, error)
+
+    }
+}
+
+"ReadResult.UseCase" <|-- "implements""ReadResult.Service"
+
+"ReadResult.Service""uses" o-- "ResultPort.Find"
+
+namespace ReadStep {
+    class Query << (S,Aquamarine) >> {
+        + Uuid string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindStepPort StepPort.Find
+
+        + Read(query Query) (Entity.Step, error)
+
+    }
+    interface UseCase  {
+        + Read(query Query) (Entity.Step, error)
+
+    }
+}
+
+"ReadStep.UseCase" <|-- "implements""ReadStep.Service"
+
+"ReadStep.Service""uses" o-- "StepPort.Find"
+
+namespace ReadTask {
+    class Query << (S,Aquamarine) >> {
+        + Uuid string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindTaskPort TaskPort.Find
+
+        + Read(query Query) (Entity.Task, error)
+
+    }
+    interface UseCase  {
+        + Read(query Query) (Entity.Task, error)
+
+    }
+}
+
+"ReadTask.UseCase" <|-- "implements""ReadTask.Service"
+
+"ReadTask.Service""uses" o-- "TaskPort.Find"
+
+namespace ResultPort {
+    interface Delete  {
+        + Delete(uuid string) error
+
+    }
+    interface Find  {
+        + Find(uuid string) (Entity.Result, error)
+
+    }
+    interface FindBy  {
+        + FindBy(conditions <font color=blue>interface</font>{}) []Entity.Result
+
+    }
+    interface Save  {
+        + Save(result Entity.Result) error
+
+    }
+    interface Update  {
+        + Update(result Entity.Result) error
+
+    }
+}
+
+
+
+namespace StepPort {
+    interface DeleteStep  {
+        + Delete(uuid string) error
+
+    }
+    interface Find  {
+        + Find(uuid string) (Entity.Step, error)
+
+    }
+    interface FindBy  {
+        + FindBy(conditions <font color=blue>interface</font>{}) []Entity.Step
+
+    }
+    interface Save  {
+        + Save(step Entity.Step) error
+
+    }
+    interface UpdateStepPort  {
+        + Update(step Entity.Step) error
+
+    }
+}
+
+
+
+namespace TaskPort {
+    interface Delete  {
+        + Delete(uuid string) error
+
+    }
+    interface Find  {
+        + Find(uuid string) (Entity.Task, error)
+
+    }
+    interface FindBy  {
+        + FindBy(conditions <font color=blue>interface</font>{}) []Entity.Task
+
+    }
+    interface Save  {
+        + Save(task Entity.Task) error
+
+    }
+    interface Update  {
+        + Update(task Entity.Task) error
+
+    }
+}
+
+
+
+namespace UpdateBatch {
+    class Command << (S,Aquamarine) >> {
+        + Uuid string
+        + TaskUuid Model.OptionalString
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindBatchPort BatchPort.Find
+        + FindTaskPort TaskPort.Find
+        + UpdateBatchPort BatchPort.Update
+
+        + Update(command Command) error
+
+    }
+    interface UseCase  {
+        + Update(command Command) error
+
+    }
+}
+
+"UpdateBatch.UseCase" <|-- "implements""UpdateBatch.Service"
+
+"UpdateBatch.Command""uses" o-- "Model.OptionalString"
+"UpdateBatch.Service""uses" o-- "BatchPort.Find"
+"UpdateBatch.Service""uses" o-- "BatchPort.Update"
+"UpdateBatch.Service""uses" o-- "TaskPort.Find"
+
+namespace UpdateResult {
+    class Command << (S,Aquamarine) >> {
+        + Uuid string
+        + Content Model.OptionalString
+        + BatchUuid Model.OptionalString
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindResultPort ResultPort.Find
+        + FindBatchPort BatchPort.Find
+        + UpdateResultPort ResultPort.Update
+
+        + Update(command Command) error
+
+    }
+    interface UseCase  {
+        + Update(command Command) error
+
+    }
+}
+
+"UpdateResult.UseCase" <|-- "implements""UpdateResult.Service"
+
+"UpdateResult.Command""uses" o-- "Model.OptionalString"
+"UpdateResult.Service""uses" o-- "BatchPort.Find"
+"UpdateResult.Service""uses" o-- "ResultPort.Find"
+"UpdateResult.Service""uses" o-- "ResultPort.Update"
+
+namespace UpdateStep {
+    class Command << (S,Aquamarine) >> {
+        + Uuid string
+        + TaskUuid Model.OptionalString
+        + Sentence Model.OptionalString
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindStepPort StepPort.Find
+        + FindTaskPort TaskPort.Find
+        + UpdateStepPort StepPort.UpdateStepPort
+
+        + Update(command Command) error
+
+    }
+    interface UseCase  {
+        + Update(command Command) error
+
+    }
+}
+
+"UpdateStep.UseCase" <|-- "implements""UpdateStep.Service"
+
+"UpdateStep.Command""uses" o-- "Model.OptionalString"
+"UpdateStep.Service""uses" o-- "StepPort.Find"
+"UpdateStep.Service""uses" o-- "StepPort.UpdateStepPort"
+"UpdateStep.Service""uses" o-- "TaskPort.Find"
+
+namespace UpdateTask {
+    class Command << (S,Aquamarine) >> {
+        + Uuid string
+        + Host OptionalString
+        + Port OptionalString
+        + Mode OptionalString
+        + Status OptionalString
+        + ExecutionMode OptionalString
+
+    }
+    class OptionalString << (S,Aquamarine) >> {
+        + Change bool
+        + Value string
+
+    }
+    class Service << (S,Aquamarine) >> {
+        + FindTaskPort TaskPort.Find
+        + UpdateTaskPort TaskPort.Update
+
+        + Update(command Command) error
+
+    }
+    interface UseCase  {
+        + Update(command Command) error
+
+    }
+}
+
+"UpdateTask.UseCase" <|-- "implements""UpdateTask.Service"
+
+"UpdateTask.Command""uses" o-- "UpdateTask.OptionalString"
+"UpdateTask.Service""uses" o-- "TaskPort.Find"
+"UpdateTask.Service""uses" o-- "TaskPort.Update"
+
+namespace ValueObject {
+    class ExecutionMode << (S,Aquamarine) >> {
+        + String() string
+
+    }
+    class Modes << (S,Aquamarine) >> {
+        + String() string
+
+    }
+    class MyModes << (S,Aquamarine) >> {
+        + UNARY() string
+
+    }
+    class StepVo << (S,Aquamarine) >> {
+        + Sentence string
+
+    }
+    class TaskStatus << (S,Aquamarine) >> {
+        + String() string
+
+    }
+    class ValueObject.ExecutionMode << (T, #FF7700) >>  {
+    }
+    class ValueObject.Modes << (T, #FF7700) >>  {
+    }
+    class ValueObject.TaskStatus << (T, #FF7700) >>  {
+    }
+}
+
+
+
+"__builtin__.int" #.. "alias of""ValueObject.ExecutionMode"
+"__builtin__.int" #.. "alias of""ValueObject.Modes"
+"__builtin__.int" #.. "alias of""ValueObject.TaskStatus"
+@enduml
