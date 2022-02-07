@@ -146,7 +146,7 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 		FindBatchPort:    batchAdapter,
 		UpdateResultPort: resultAdapter,
 	}
-	var deleteResultService = DeleteResult.Service{DeleteTaskPort: resultAdapter}
+	var deleteResultService = DeleteResult.Service{DeleteResultPort: resultAdapter}
 	var listResultsService = ListResults.Service{FindResultsByPort: resultAdapter}
 
 	server.ApiGrpc = ApiGrcp.ApiGrpc{}

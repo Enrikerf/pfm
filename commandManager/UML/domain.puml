@@ -1,0 +1,94 @@
+@startuml
+legend
+<u><b>Legend</b></u>
+Render Aggregations: true
+Render Fields: true
+Render Methods: true
+Pritave Aggregations: true
+end legend
+namespace Entity {
+    class Batch << (S,Aquamarine) >> {
+        + Uuid uuid.UUID
+        + TaskUuid uuid.UUID
+        + Results []Result
+        + CreatedAt time.Time
+        + UpdatedAt time.Time
+
+        + AddResult(result Result) 
+
+    }
+    class Call << (S,Aquamarine) >> {
+        + Command string
+
+    }
+    class Result << (S,Aquamarine) >> {
+        + Uuid uuid.UUID
+        + BatchUuid uuid.UUID
+        + Content string
+
+    }
+    class Step << (S,Aquamarine) >> {
+        + Uuid uuid.UUID
+        + TaskUuid uuid.UUID
+        + Sentence string
+
+    }
+    class Task << (S,Aquamarine) >> {
+        + Uuid uuid.UUID
+        + Host string
+        + Port string
+        + Steps []Step
+        + Mode ValueObject.Modes
+        + Status ValueObject.TaskStatus
+        + ExecutionMode ValueObject.ExecutionMode
+
+    }
+}
+
+
+"Entity.Batch""uses" o-- "Entity.Result"
+"Entity.Batch""uses" o-- "time.Time"
+"Entity.Batch""uses" o-- "uuid.UUID"
+"Entity.Result""uses" o-- "uuid.UUID"
+"Entity.Step""uses" o-- "uuid.UUID"
+"Entity.Task""uses" o-- "Entity.Step"
+"Entity.Task""uses" o-- "ValueObject.ExecutionMode"
+"Entity.Task""uses" o-- "ValueObject.Modes"
+"Entity.Task""uses" o-- "ValueObject.TaskStatus"
+"Entity.Task""uses" o-- "uuid.UUID"
+
+namespace ValueObject {
+    class ExecutionMode << (S,Aquamarine) >> {
+        + String() string
+
+    }
+    class Modes << (S,Aquamarine) >> {
+        + String() string
+
+    }
+    class MyModes << (S,Aquamarine) >> {
+        + UNARY() string
+
+    }
+    class StepVo << (S,Aquamarine) >> {
+        + Sentence string
+
+    }
+    class TaskStatus << (S,Aquamarine) >> {
+        + String() string
+
+    }
+    class ValueObject.ExecutionMode << (T, #FF7700) >>  {
+    }
+    class ValueObject.Modes << (T, #FF7700) >>  {
+    }
+    class ValueObject.TaskStatus << (T, #FF7700) >>  {
+    }
+}
+
+
+
+"__builtin__.int" #.. "alias of""ValueObject.ExecutionMode"
+"__builtin__.int" #.. "alias of""ValueObject.Modes"
+"__builtin__.int" #.. "alias of""ValueObject.TaskStatus"
+@enduml

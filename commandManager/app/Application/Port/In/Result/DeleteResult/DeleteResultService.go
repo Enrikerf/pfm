@@ -6,11 +6,11 @@ import (
 )
 
 type Service struct {
-	DeleteTaskPort ResultPort.Delete
+	DeleteResultPort ResultPort.Delete
 }
 
 func (service Service) Delete(command Command) error {
-	err := service.DeleteTaskPort.Delete(command.Uuid)
+	err := service.DeleteResultPort.Delete(command.Uuid)
 	if err != nil {
 		return errors.New("INTERNAL")
 	}

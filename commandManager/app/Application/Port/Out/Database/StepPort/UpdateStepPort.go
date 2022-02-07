@@ -4,6 +4,6 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
-type UpdateStepPort interface {
+type Update interface {
 	Update(step Entity.Step) error
 }

@@ -2,11 +2,12 @@ package CreateBatch
 
 import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/BatchPort"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 )
 
 type Service struct {
-	FindBatchPort BatchPort.Find
+	FindBatchPort TaskPort.Find
 	SaveBatchPort BatchPort.Save
 }
 

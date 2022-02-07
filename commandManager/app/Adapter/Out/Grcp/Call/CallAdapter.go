@@ -18,7 +18,7 @@ func (adapter Adapter) Request(task Entity.Task) Entity.Batch {
 	connection, err := grpc.Dial(task.Host+":"+task.Port, options)
 	results := []Entity.Result{}
 	if err != nil {
-		fmt.Println("error: %v", err)
+		fmt.Printf("error: %v\n", err)
 		result, _ := Entity.NewResult(task.Uuid, err.Error())
 		results = append(results, result)
 	} else {
@@ -113,14 +113,14 @@ func receiveServerStream(stream call.CallService_CallBidirectionalClient, result
 			break
 		}
 		resultsChannel <- response.Result
-		fmt.Println("received: %v", response)
+		fmt.Printf("received: %v\n", response)
 	}
 	close(resultsChannel)
 }
 
 func sendInStream(task Entity.Task, stream call.CallService_CallBidirectionalClient, resultsChannel chan string) {
 	for _, step := range task.Steps {
-		fmt.Println("sending message %v", step)
+		fmt.Printf("sending message %v\n", step)
 		callRequest := call.CallRequest{
 			Step: step.Sentence,
 		}

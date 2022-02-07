@@ -9,7 +9,7 @@ import (
 type Service struct {
 	FindStepPort   StepPort.Find
 	FindTaskPort   TaskPort.Find
-	UpdateStepPort StepPort.UpdateStepPort
+	UpdateStepPort StepPort.Update
 }
 
 func (service Service) Update(command Command) error {
