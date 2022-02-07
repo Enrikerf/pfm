@@ -2,7 +2,7 @@
 
 
 
-## debuger
+## debugger
 
 go get -t github.com/google/gops/
 
