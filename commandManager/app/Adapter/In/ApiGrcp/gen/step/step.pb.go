@@ -58,7 +58,7 @@ func (x *Step) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Step.ProtoReflect.Descriptor instead.
+// Deprecated: Use Result.ProtoReflect.Descriptor instead.
 func (*Step) Descriptor() ([]byte, []int) {
 	return file_app_Adapter_In_ApiGrcp_proto_step_proto_rawDescGZIP(), []int{0}
 }
@@ -740,7 +740,7 @@ func file_app_Adapter_In_ApiGrcp_proto_step_proto_rawDescGZIP() []byte {
 
 var file_app_Adapter_In_ApiGrcp_proto_step_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_app_Adapter_In_ApiGrcp_proto_step_proto_goTypes = []interface{}{
-	(*Step)(nil),                 // 0: step.Step
+	(*Step)(nil),                 // 0: step.Result
 	(*CreateStepParams)(nil),     // 1: step.CreateStepParams
 	(*EditableStepParams)(nil),   // 2: step.EditableStepParams
 	(*CreateStepRequest)(nil),    // 3: step.CreateStepRequest
@@ -759,10 +759,10 @@ var file_app_Adapter_In_ApiGrcp_proto_step_proto_depIdxs = []int32{
 	13, // 0: step.EditableStepParams.task_uuid:type_name -> google.protobuf.StringValue
 	13, // 1: step.EditableStepParams.name:type_name -> google.protobuf.StringValue
 	1,  // 2: step.CreateStepRequest.stepParams:type_name -> step.CreateStepParams
-	0,  // 3: step.CreateStepResponse.step:type_name -> step.Step
-	0,  // 4: step.ReadStepResponse.step:type_name -> step.Step
+	0,  // 3: step.CreateStepResponse.step:type_name -> step.Result
+	0,  // 4: step.ReadStepResponse.step:type_name -> step.Result
 	2,  // 5: step.UpdateStepRequest.stepParams:type_name -> step.EditableStepParams
-	0,  // 6: step.ListStepsResponse.steps:type_name -> step.Step
+	0,  // 6: step.ListStepsResponse.steps:type_name -> step.Result
 	3,  // 7: step.StepService.CreateStep:input_type -> step.CreateStepRequest
 	5,  // 8: step.StepService.ReadStep:input_type -> step.ReadStepRequest
 	7,  // 9: step.StepService.UpdateStep:input_type -> step.UpdateStepRequest

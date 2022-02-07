@@ -1,4 +1,4 @@
-package ListResultTest
+package ListResultsTest
 
 import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
