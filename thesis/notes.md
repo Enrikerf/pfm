@@ -1,6 +1,6 @@
 ## Go installation
 
-### apt 
+### apt
 
     $ sudo apt install golang-go
 
@@ -24,13 +24,11 @@ you could download go from goland
 
 ![asedfasdf](golandSdk.png)
 
-
 And then edit gopath
 
     $ vim /.bashrc
 
     PATH="$PATH:/home/kerf/sdk/go1.17.6/bin"
-
 
 ### UML automatic generator
 
@@ -40,7 +38,6 @@ https://github.com/jfeliu007/goplantuml
     $ go install github.com/jfeliu007/goplantuml/cmd/goplantu@latest
     $ sudo apt install graphviz
 
-
 in goland
 
     goplantuml -aggregate-private-members -recursive -show-aggregations -show-aliases -show-compositions -show-connection-labels -show-implementations -show-options-as-note ./app/Adapter/Out/Persistence/ > ./UML/adapterPersistence.puml
@@ -49,6 +46,32 @@ the visor it's a pluging
 
 https://plugins.jetbrains.com/plugin/12496-go-linter
 
-goplantuml -aggregate-private-members -recursive -show-aggregations -show-aliases -show-compositions -show-connection-labels -show-implementations -show-options-as-note ./app/Adapter/Out/Persistence/ > ./UML/adapterPersistence.puml
+goplantuml -aggregate-private-members -recursive -show-aggregations -show-aliases -show-compositions
+-show-connection-labels -show-implementations -show-options-as-note ./app/Adapter/Out/Persistence/ >
+./UML/adapterPersistence.puml
 
+### Class equivalent in golang
 
+``` go
+    type OutPin interface {
+        Method()
+    }
+    
+    type outPin struct {
+        id     string
+        status bool
+    }
+    
+    func NewPin(id string) OutPin {
+        return &outPin{id: id, status: false}
+    }
+    
+    func FullDefinedPin(id string, status bool) *outPin {
+        return &outPin{id: id, status: status}
+    }
+    
+    func (outPin *outPin) Method(){
+        
+    }
+    
+```
