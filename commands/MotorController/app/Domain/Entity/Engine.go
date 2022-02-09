@@ -7,12 +7,13 @@ const (
 )
 
 type Engine interface {
-	Build()
 	Gas()
 	VelocityControl()
 	PositionControl()
 	Brake()
-	Dir()
+	UnBrake()
+	Forward()
+	Backward()
 	GetPosition()
 }
 type engine struct {
@@ -21,15 +22,23 @@ type engine struct {
 	pwmPin   Pin.PWMPin
 }
 
-func NewEngine() Engine {
-	e := engine{}
-	e.Build()
+func NewEngine(
+	brakePin Pin.OutPin,
+	dirPin Pin.OutPin,
+	pwmPin Pin.PWMPin,
+) Engine {
+	e := engine{
+		brakePin: brakePin,
+		dirPin:   dirPin,
+		pwmPin:   pwmPin,
+	}
+	e.setup()
 	return e
 }
 
-func (e engine) Build() {
-	e.dirPin.SetStatus()
-	e.brakePin.SetStatus()
+func (e engine) setup() {
+	e.dirPin.Up()
+	e.brakePin.Up()
 }
 
 func (e engine) Gas() {
@@ -47,16 +56,21 @@ func (e engine) PositionControl() {
 }
 
 func (e engine) Brake() {
-	//TODO implement me
-	panic("implement me")
+	e.brakePin.Up()
 }
 
-func (e engine) Dir() {
-	//TODO implement me
-	panic("implement me")
+func (e engine) UnBrake() {
+	e.brakePin.Down()
+}
+
+func (e engine) Forward() {
+	e.dirPin.Up()
+}
+
+func (e engine) Backward() {
+	e.dirPin.Down()
 }
 
 func (e engine) GetPosition() {
-	//TODO implement me
-	panic("implement me")
+	e.dirPin.Down()
 }

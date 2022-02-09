@@ -1,17 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"github.com/Enrikerf/pfm/commands/MotorController/app/Domain/Entity/Pin"
+	"github.com/Enrikerf/pfm/commands/MotorController/app/Adapter/Out/Periphio/Model"
+	"github.com/Enrikerf/pfm/commands/MotorController/app/Domain/Entity"
 )
 
 func main() {
-	x := Pin.NewPin("18")
-	helloPin(x)
-	b := Pin.FullDefinedPin("18", Pin.HighStatus)
-	helloPin(b)
-}
+	//TODO: this must be in config
+	pwmPin := Model.NewPwmPin("18")
+	brakePin := Model.NewOutPin("12")
+	dirPin := Model.NewOutPin("7")
 
-func helloPin(pin Pin.OutPin) {
-	fmt.Println(pin.GetId())
+	engine := Entity.NewEngine(brakePin, dirPin, pwmPin)
+	engine.UnBrake()
 }
