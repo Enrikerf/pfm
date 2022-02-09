@@ -15,6 +15,7 @@ type Engine interface {
 	Forward()
 	Backward()
 	GetPosition()
+	TearDown()
 }
 type engine struct {
 	brakePin Pin.OutPin
@@ -73,4 +74,9 @@ func (e engine) Backward() {
 
 func (e engine) GetPosition() {
 	e.dirPin.Down()
+}
+
+func (e engine) TearDown(){
+	e.dirPin.TearDown()
+	e.brakePin.TearDown()
 }

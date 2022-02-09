@@ -11,6 +11,8 @@ func main() {
 	brakePin := Model.NewOutPin("12")
 	dirPin := Model.NewOutPin("7")
 
-	engine := Entity.NewEngine(brakePin, dirPin, pwmPin)
-	engine.UnBrake()
+ 
+	e:= Entity.NewEngine(brakePin, dirPin, pwmPin)
+	e.TearDown()
+
 }
