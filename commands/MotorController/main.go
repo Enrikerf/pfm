@@ -7,7 +7,6 @@ import (
 
 	"github.com/Enrikerf/pfm/commands/MotorController/app/Adapter/Out/Periphio/Model"
 	"github.com/Enrikerf/pfm/commands/MotorController/app/Domain/Entity"
-	"github.com/Enrikerf/pfm/commands/MotorController/app/Domain/Entity/Pin"
 )
 
 func main() {
@@ -18,14 +17,24 @@ func main() {
 	encoderPinA := Model.NewEncoderPin("25")
 	encoderPinB := Model.NewEncoderPin("8")
 	encoder := Model.NewEncoder(encoderPinA, encoderPinB)
-	e := Entity.NewEngine(brakePin, dirPin, pwmPin, encoder)
-	
+	control := Entity.NewControlAlgorithm()
+	e := Entity.NewEngine(
+		360,
+		control,
+		brakePin,
+		dirPin,
+		pwmPin,
+		encoder,
+	)
+
 	channel := make(chan os.Signal, 1)
 	signal.Notify(channel, os.Interrupt)
 	go exitWatchdog(channel, e)
 
-	e.MakeLap()
-
+	// e.MakeLap()
+	rpm:= 60.0 * 2
+	e.RpmControl(rpm)
+	e.TearDown()
 }
 
 func SetGas(e Entity.Engine) {
@@ -35,7 +44,7 @@ func SetGas(e Entity.Engine) {
 		if err != nil {
 			panic("io error")
 		}
-		e.SetGas(Pin.Duty(i))
+		e.SetGas(Entity.GasLevel(i))
 	}
 }
 

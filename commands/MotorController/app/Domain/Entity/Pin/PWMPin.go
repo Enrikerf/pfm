@@ -1,17 +1,13 @@
 package Pin
 
-import "periph.io/x/conn/v3/physic"
-
 type Duty int32
-
-const (
-	MaxFrequency      = 100 * physic.KiloHertz
-	MaxDuty      Duty = 1 << 24
-	MinDuty      Duty = 1258292
-)
+type Frequency int64
 
 type PWMPin interface {
-	SetPWM(duty Duty, frequency physic.Frequency)
+	GetMaxDuty()Duty
+	GetMinDuty()Duty
+	GetMaxFrequency() Frequency
+	SetPWM(duty Duty, frequency Frequency)
 	StopPWM()
 	TearDown()
 }

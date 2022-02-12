@@ -1,19 +1,20 @@
 package Entity
 
 import (
+	"fmt"
+	"math"
+	"time"
+
 	"github.com/Enrikerf/pfm/commands/MotorController/app/Domain/Entity/Pin"
 )
 
-const (
-	MaxGas = Pin.MaxDuty
-	MinGas = Pin.MinDuty
-)
+type GasLevel int32
 
 type Engine interface {
-	SetGas(gas Pin.Duty)
+	SetGas(gas GasLevel)
 	SpeedUp()
 	MakeLap()
-	VelocityControl()
+	RpmControl(goal float64)
 	PositionControl()
 	Brake()
 	UnBrake()
@@ -22,28 +23,37 @@ type Engine interface {
 	GetPosition() int16
 	TearDown()
 }
+
 type engine struct {
-	brakePin   Pin.OutPin
-	dirPin     Pin.OutPin
-	pwmPin     Pin.PWMPin
-	encoder    Encoder
-	currentGas Pin.Duty
-	forward    bool
+	encoderSlots     int
+	resolution       float64
+	controlAlgorithm ControlAlgorithm
+	brakePin         Pin.OutPin
+	dirPin           Pin.OutPin
+	pwmPin           Pin.PWMPin
+	encoder          Encoder
+	currentGas       GasLevel
+	forward          bool
 }
 
 func NewEngine(
+	encoderSlots int,
+	controlAlgorithm ControlAlgorithm,
 	brakePin Pin.OutPin,
 	dirPin Pin.OutPin,
 	pwmPin Pin.PWMPin,
 	encoder Encoder,
 ) Engine {
 	e := engine{
-		brakePin:   brakePin,
-		dirPin:     dirPin,
-		pwmPin:     pwmPin,
-		encoder:    encoder,
-		currentGas: 0,
-		forward:    true,
+		encoderSlots:     encoderSlots,
+		resolution:       360.0 / float64(encoderSlots),
+		controlAlgorithm: controlAlgorithm,
+		brakePin:         brakePin,
+		dirPin:           dirPin,
+		pwmPin:           pwmPin,
+		encoder:          encoder,
+		currentGas:       0,
+		forward:          true,
 	}
 	e.watchdog()
 	e.initialState()
@@ -62,35 +72,85 @@ func (e *engine) initialState() {
 
 func (e *engine) MakeLap() {
 	e.UnBrake()
-	e.SetGas(MinGas)
+	e.SetGas(GasLevel(e.pwmPin.GetMinDuty()))
 
 	if e.forward {
 		for e.GetPosition() < 360 {
+			fmt.Println(e.GetPosition())
 		}
 	} else {
 		for e.GetPosition() > -360 {
+			fmt.Println(e.GetPosition())
 		}
 	}
 	e.Brake()
 }
 
 func (e *engine) SpeedUp() {
-	if e.currentGas < Pin.MinDuty {
-		e.currentGas = Pin.MinDuty
+	if e.currentGas < GasLevel(e.pwmPin.GetMinDuty()) {
+		e.currentGas = GasLevel(e.pwmPin.GetMinDuty())
 	} else {
 		e.currentGas++
 	}
-	e.pwmPin.SetPWM(e.currentGas, Pin.MaxFrequency)
+	e.pwmPin.SetPWM(Pin.Duty(e.currentGas), e.pwmPin.GetMaxFrequency())
 }
 
-func (e *engine) SetGas(gas Pin.Duty) {
+func (e *engine) SetGas(gas GasLevel) {
 	e.currentGas = gas
-	e.pwmPin.SetPWM(e.currentGas, Pin.MaxFrequency)
+	e.pwmPin.SetPWM(Pin.Duty(e.currentGas), e.pwmPin.GetMaxFrequency())
 }
 
-func (e *engine) VelocityControl() {
-	//TODO implement me
-	panic("implement me")
+func (e *engine) RpmControl(goal float64) {
+	sampleTime := time.Millisecond * 20
+	radPerSecondGoal := goal * (2 * math.Pi / 60)
+	e.controlAlgorithm.SetGoal(radPerSecondGoal)
+	e.controlAlgorithm.SetP(1)
+	e.controlAlgorithm.SetI(9 * float64(sampleTime) * math.Pow(10, 9))
+	e.controlAlgorithm.SetD(0)
+	prevAngle := 0.0
+
+	e.brakePin.Down()
+	for range time.Tick(sampleTime) {
+		angle := e.resolution * math.Abs(float64(e.encoder.GetPosition()))
+		degreesPerSecod := (angle - prevAngle) / float64(sampleTime) * math.Pow(10, 9)
+		radianPerSecod := degreesPerSecod * math.Pi / 180
+		pidOrig := e.controlAlgorithm.Calculate(radianPerSecod)
+		pidReescalated := e.reescalePid(pidOrig)
+		fmt.Println("------------------")
+		fmt.Println(angle)
+		fmt.Println(prevAngle)
+		fmt.Println(degreesPerSecod)
+		fmt.Println(degreesPerSecod / 360)
+		fmt.Println(Pin.Duty(pidOrig))
+		fmt.Println(Pin.Duty(pidReescalated))
+
+		e.pwmPin.SetPWM(Pin.Duty(pidReescalated), e.pwmPin.GetMaxFrequency())
+		prevAngle = angle
+		// time.Sleep(5 * time.Second)
+	}
+}
+
+func (e *engine) reescalePid(pid float64) float64 {
+	var reescalePid float64
+	if math.Abs(pid) > float64(e.pwmPin.GetMaxDuty()) {
+		reescalePid = float64(e.pwmPin.GetMaxDuty())
+		if pid < 0 {
+			reescalePid = reescalePid * -1
+		}
+	}
+	reescalePid = (reescalePid + float64(e.pwmPin.GetMaxDuty())) / 2
+	if math.Abs(pid) < float64(e.pwmPin.GetMinDuty()) {
+		reescalePid = float64(e.pwmPin.GetMinDuty())
+		if pid < 0 {
+			reescalePid = reescalePid * -1
+		}
+	}
+
+	
+
+	
+
+	return reescalePid
 }
 
 func (e *engine) PositionControl() {
