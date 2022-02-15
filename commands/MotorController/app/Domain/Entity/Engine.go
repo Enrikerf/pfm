@@ -12,6 +12,7 @@ type GasLevel int32
 
 type Engine interface {
 	SetGas(gas GasLevel)
+	StepResponse()
 	SpeedUp()
 	MakeLap()
 	RpmControl(goal float64)
@@ -100,33 +101,53 @@ func (e *engine) SetGas(gas GasLevel) {
 	e.pwmPin.SetPWM(Pin.Duty(e.currentGas), e.pwmPin.GetMaxFrequency())
 }
 
+func (e *engine) StepResponse() {
+	sampleTime := time.Millisecond * 10
+	prevAngle := 0.0
+	e.encoder.ResetPosition()
+	e.brakePin.Down()
+	cont := 0
+	for range time.Tick(sampleTime) {
+		angle := e.resolution * math.Abs(float64(e.encoder.GetPosition()))
+		degreesPerSecod := (angle - prevAngle) / sampleTime.Seconds()
+		radianPerSecod := degreesPerSecod * math.Pi / 180
+		fmt.Println(" ", radianPerSecod)
+		prevAngle = angle
+		if cont == 1 {
+			e.pwmPin.SetPWM(e.pwmPin.GetMinDuty()*5, e.pwmPin.GetMaxFrequency())
+		}
+		cont++
+	}
+}
+
 func (e *engine) RpmControl(goal float64) {
-	sampleTime := time.Millisecond * 20
+	sampleTime := time.Millisecond * 10
 	radPerSecondGoal := goal * (2 * math.Pi / 60)
 	e.controlAlgorithm.SetGoal(radPerSecondGoal)
-	e.controlAlgorithm.SetP(1)
-	e.controlAlgorithm.SetI(9 * float64(sampleTime) * math.Pow(10, 9))
+	e.controlAlgorithm.SetP(30)
+	e.controlAlgorithm.SetI(1)
 	e.controlAlgorithm.SetD(0)
+	e.controlAlgorithm.SetSampleTime(sampleTime.Seconds())
+
 	prevAngle := 0.0
 
 	e.brakePin.Down()
 	for range time.Tick(sampleTime) {
 		angle := e.resolution * math.Abs(float64(e.encoder.GetPosition()))
-		degreesPerSecod := (angle - prevAngle) / float64(sampleTime) * math.Pow(10, 9)
+		degreesPerSecod := (angle - prevAngle) / sampleTime.Seconds()
 		radianPerSecod := degreesPerSecod * math.Pi / 180
 		pidOrig := e.controlAlgorithm.Calculate(radianPerSecod)
 		pidReescalated := e.reescalePid(pidOrig)
-		fmt.Println("------------------")
-		fmt.Println(angle)
-		fmt.Println(prevAngle)
-		fmt.Println(degreesPerSecod)
-		fmt.Println(degreesPerSecod / 360)
-		fmt.Println(Pin.Duty(pidOrig))
-		fmt.Println(Pin.Duty(pidReescalated))
-
+		// fmt.Println(angle)
+		// fmt.Println(prevAngle)
+		// fmt.Print(radianPerSecod)
+		// fmt.Println(degreesPerSecod)
+		// fmt.Println(degreesPerSecod / 360)
+		// fmt.Print(" ", pidReescalated)
+		// fmt.Println(" ", e.controlAlgorithm.GetIntegralTerm())
+		// fmt.Println(" ", pidReescalated)
 		e.pwmPin.SetPWM(Pin.Duty(pidReescalated), e.pwmPin.GetMaxFrequency())
 		prevAngle = angle
-		// time.Sleep(5 * time.Second)
 	}
 }
 
@@ -141,14 +162,7 @@ func (e *engine) reescalePid(pid float64) float64 {
 	reescalePid = (reescalePid + float64(e.pwmPin.GetMaxDuty())) / 2
 	if math.Abs(pid) < float64(e.pwmPin.GetMinDuty()) {
 		reescalePid = float64(e.pwmPin.GetMinDuty())
-		if pid < 0 {
-			reescalePid = reescalePid * -1
-		}
 	}
-
-	
-
-	
 
 	return reescalePid
 }

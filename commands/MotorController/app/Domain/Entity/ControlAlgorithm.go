@@ -5,6 +5,8 @@ type ControlAlgorithm interface {
 	SetP(p float64)
 	SetI(i float64)
 	SetD(d float64)
+	SetSampleTime(d float64)
+	GetIntegralTerm() float64
 	Calculate(currentValue float64) float64
 }
 
@@ -13,6 +15,8 @@ type controlAlgorithm struct {
 	P            float64
 	I            float64
 	D            float64
+	integralTerm float64
+	sampleTime   float64
 	currentValue float64
 	currentError float64
 	pastError    float64
@@ -38,13 +42,27 @@ func (ca *controlAlgorithm) SetD(d float64) {
 	ca.D = d
 }
 
+func (ca *controlAlgorithm) GetIntegralTerm() float64 {
+	return ca.integralTerm
+}
+
+func (ca *controlAlgorithm) SetSampleTime(st float64) {
+	ca.sampleTime = st
+}
+
 func (ca *controlAlgorithm) Calculate(currentValue float64) float64 {
 	ca.currentValue = currentValue
 	ca.currentError = ca.goal - ca.currentValue
-	integralTerm := ca.I * ca.currentError
-	derivativeTerm := ca.D * (ca.currentError - ca.pastError)
+
 	proportionalTerm := ca.P * ca.currentError
+	ca.integralTerm = ca.integralTerm + ca.currentError*ca.sampleTime
+	derivativeTerm := ca.D * (ca.currentError - ca.pastError) / ca.sampleTime
+
+	// fmt.Print(" ", ca.currentError-ca.pastError)
+	// fmt.Print(" ", ca.currentError)
+	// fmt.Print(" ", proportionalTerm)
+	// fmt.Println(" ", ca.integralTerm)
 	ca.pastError = ca.currentError
-	return proportionalTerm + integralTerm + derivativeTerm
+	return proportionalTerm + ca.I*ca.integralTerm + derivativeTerm
 
 }
