@@ -16,4 +16,5 @@ require (
 	golang.org/x/sys v0.0.0-20210902050250-f475640dd07b // indirect
 	golang.org/x/text v0.3.5 // indirect
 	google.golang.org/genproto v0.0.0-20211118181313-81c1377c94b1 // indirect
+	periph.io/x/host/v3 v3.7.2 // indirect
 )
