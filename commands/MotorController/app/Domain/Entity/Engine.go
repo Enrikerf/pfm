@@ -16,6 +16,7 @@ type Engine interface {
 	SpeedUp()
 	MakeLap()
 	RpmControl(goal float64)
+	StopRmpControl()
 	PositionControl()
 	Brake()
 	UnBrake()
@@ -35,8 +36,10 @@ type engine struct {
 	encoder          Encoder
 	currentGas       GasLevel
 	forward          bool
+	isControlRunning chan bool
 }
 
+//TODO: make singleton
 func NewEngine(
 	encoderSlots int,
 	controlAlgorithm ControlAlgorithm,
@@ -55,6 +58,7 @@ func NewEngine(
 		encoder:          encoder,
 		currentGas:       0,
 		forward:          true,
+		isControlRunning: make(chan bool, 1),
 	}
 	e.watchdog()
 	e.initialState()
@@ -72,6 +76,7 @@ func (e *engine) initialState() {
 }
 
 func (e *engine) MakeLap() {
+	e.initialState()
 	e.UnBrake()
 	e.SetGas(GasLevel(e.pwmPin.GetMinDuty()))
 
@@ -121,6 +126,11 @@ func (e *engine) StepResponse() {
 }
 
 func (e *engine) RpmControl(goal float64) {
+	go e.contrlLoop(goal)
+}
+
+func (e *engine) contrlLoop(goal float64) {
+	e.isControlRunning <- true
 	sampleTime := time.Millisecond * 10
 	radPerSecondGoal := goal * (2 * math.Pi / 60)
 	e.controlAlgorithm.SetGoal(radPerSecondGoal)
@@ -138,16 +148,21 @@ func (e *engine) RpmControl(goal float64) {
 		radianPerSecod := degreesPerSecod * math.Pi / 180
 		pidOrig := e.controlAlgorithm.Calculate(radianPerSecod)
 		pidReescalated := e.reescalePid(pidOrig)
-		// fmt.Println(angle)
-		// fmt.Println(prevAngle)
-		// fmt.Print(radianPerSecod)
-		// fmt.Println(degreesPerSecod)
-		// fmt.Println(degreesPerSecod / 360)
-		// fmt.Print(" ", pidReescalated)
-		// fmt.Println(" ", e.controlAlgorithm.GetIntegralTerm())
-		// fmt.Println(" ", pidReescalated)
 		e.pwmPin.SetPWM(Pin.Duty(pidReescalated), e.pwmPin.GetMaxFrequency())
 		prevAngle = angle
+		if len(e.isControlRunning) == 0 {
+			e.pwmPin.SetPWM(Pin.Duty(0), e.pwmPin.GetMaxFrequency())
+			e.brakePin.Up()
+			break
+		}
+	}
+}
+
+func (e *engine) StopRmpControl() {
+	if len(e.isControlRunning) > 0 {
+		<-e.isControlRunning
+	} else {
+		fmt.Println("no command running")
 	}
 }
 

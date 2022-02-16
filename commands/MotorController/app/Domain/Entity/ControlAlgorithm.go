@@ -53,15 +53,9 @@ func (ca *controlAlgorithm) SetSampleTime(st float64) {
 func (ca *controlAlgorithm) Calculate(currentValue float64) float64 {
 	ca.currentValue = currentValue
 	ca.currentError = ca.goal - ca.currentValue
-
 	proportionalTerm := ca.P * ca.currentError
 	ca.integralTerm = ca.integralTerm + ca.currentError*ca.sampleTime
 	derivativeTerm := ca.D * (ca.currentError - ca.pastError) / ca.sampleTime
-
-	// fmt.Print(" ", ca.currentError-ca.pastError)
-	// fmt.Print(" ", ca.currentError)
-	// fmt.Print(" ", proportionalTerm)
-	// fmt.Println(" ", ca.integralTerm)
 	ca.pastError = ca.currentError
 	return proportionalTerm + ca.I*ca.integralTerm + derivativeTerm
 
