@@ -12,7 +12,10 @@ import (
 )
 
 func main() {
-	host.Init()
+	_, err := host.Init()
+	if err != nil {
+		return
+	}
 
 	pinPwm := gpioreg.ByName("18")
 	pinEncoderA := gpioreg.ByName("25")

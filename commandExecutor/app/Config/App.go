@@ -2,10 +2,11 @@ package Config
 
 import (
 	"fmt"
-	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp"
-	"github.com/joho/godotenv"
 	"log"
 	"os"
+
+	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp"
+	"github.com/joho/godotenv"
 )
 
 type App struct {
@@ -33,6 +34,6 @@ func (server *App) loadApiGrpc() {
 		os.Getenv("SERVER_HOST"),
 		os.Getenv("SERVER_PORT"),
 	)
-	server.apiGrpc.Run()
+	go server.apiGrpc.Run()
 
 }

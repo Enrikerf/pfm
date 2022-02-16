@@ -1,0 +1,28 @@
+@startuml
+legend
+<u><b>Legend</b></u>
+Render Aggregations: true
+Render Fields: true
+Render Methods: true
+Pritave Aggregations: true
+end legend
+namespace Entity {
+    interface OutPin  {
+        + GetId() string
+        + GetStatus() bool
+
+    }
+    class outPin << (S,Aquamarine) >> {
+        - id string
+        - status bool
+
+        + GetId() string
+        + GetStatus() bool
+
+    }
+}
+
+"Entity.OutPin" <|-- "implements""Entity.outPin"
+
+
+@enduml
