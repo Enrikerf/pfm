@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package step;
+option go_package = "./step";
+import "google/protobuf/wrappers.proto";
+
+service StepService{
+  rpc CreateStep (CreateStepRequest) returns (CreateStepResponse);
+  rpc ReadStep(ReadStepRequest) returns (ReadStepResponse);
+  rpc UpdateStep(UpdateStepRequest) returns (UpdateStepResponse);
+  rpc DeleteStep(DeleteStepRequest) returns (DeleteStepResponse);
+  rpc ListSteps(ListStepsRequest) returns (ListStepsResponse);
+}
+message Step{
+  string uuid = 1;
+  string task_uuid = 2;
+  string name = 3;
+}
+message CreateStepParams{
+  string task_uuid = 1;
+  string name = 2;
+}
+message EditableStepParams{
+  google.protobuf.StringValue task_uuid = 1;
+  google.protobuf.StringValue name = 2;
+}
+
+message CreateStepRequest{
+  CreateStepParams stepParams = 1;
+}
+message CreateStepResponse{
+  Step step = 1;
+}
+
+message ReadStepRequest{
+  string step_uuid = 1;
+}
+message ReadStepResponse{
+  Step step = 1;
+}
+
+message UpdateStepRequest{
+  string step_uuid = 1;
+  EditableStepParams stepParams = 2;
+}
+message UpdateStepResponse{}
+
+message DeleteStepRequest{
+  string step_uuid = 1;
+}
+message DeleteStepResponse{}
+
+message ListStepsRequest{}
+message ListStepsResponse{
+  repeated Step steps = 1;
+}
+
+
+
