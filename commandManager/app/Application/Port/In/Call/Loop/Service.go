@@ -53,14 +53,14 @@ func (service *Service) Loop() error {
 }
 
 func (service *Service) Iteration() {
-	fmt.Println("------------ LOOP -------------")
+	//fmt.Println("------------ LOOP -------------")
 	tasks := service.findTasksByPort.
 		FindBy(map[string]interface{}{"Status": ValueObject.Pending.String(), "execution_mode": ValueObject.Automatic.String()})
 	if tasks == nil {
 		fmt.Printf("error fetching task from db. \n")
 		service.exit = true
 	} else {
-		fmt.Printf("tasks %v. \n", len(tasks))
+		//fmt.Printf("tasks %v. \n", len(tasks))
 		var wg sync.WaitGroup
 		for index := range tasks {
 			service.printTask(index, tasks[index])

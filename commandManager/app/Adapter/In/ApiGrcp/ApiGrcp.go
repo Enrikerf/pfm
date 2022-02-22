@@ -1,6 +1,7 @@
 package ApiGrcp
 
 import (
+	"context"
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/Controller"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/batch"
@@ -192,8 +193,15 @@ func (api *ApiGrpc) configControllers() {
 }
 
 func (api *ApiGrpc) loadServer() {
-	var serverOptions []grpc.ServerOption
-	api.grpcServer = grpc.NewServer(serverOptions...)
+	//var serverOptions []grpc.ServerOption
+	errHandler := func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+		resp, err := handler(ctx, req)
+		if err != nil {
+			fmt.Printf("method %q failed: %s", info.FullMethod, err)
+		}
+		return resp, err
+	}
+	api.grpcServer = grpc.NewServer(grpc.UnaryInterceptor(errHandler))
 	if os.Getenv("APP_DEBUG") == "true" {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 	}

@@ -1,6 +1,14 @@
 version: "3.0"
 
 services:
+  envoy:
+    build:
+      context: ./envoy
+      dockerfile: ./envoy/Dockerfile
+    image: grpcweb/envoy
+    ports:
+      - "8080:8080"
+      - "9901:9901"
   mysql:
     image: mysql:8.0
     ports:
@@ -18,4 +26,4 @@ services:
           "--default-authentication-plugin=mysql_native_password",
       ]
     volumes:
-      - ./mysql/data:/var/lib/mysql:rw
+      - ./mysql/mysql/data:/var/lib/mysql:rw

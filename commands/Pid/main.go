@@ -56,6 +56,7 @@ func encoder(pinEncoderA gpio.PinIO, pinEncoderB gpio.PinIO) {
 	for {
 		// pinEncoderA.WaitForEdge(-1)
 		// fmt.Printf("-> %s\n", pinEncoderA.Read())
+		pinEncoderA.WaitForEdge()
 		n := pinEncoderA.Read()
 		if encoderPinALast == gpio.Low && n == gpio.High {
 			if pinEncoderB.Read() == gpio.Low {
