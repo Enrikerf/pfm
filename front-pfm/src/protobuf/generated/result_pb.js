@@ -337,7 +337,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.result.StreamResultsResponse = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.result.StreamResultsResponse.repeatedFields_, null);
 };
 goog.inherits(proto.result.StreamResultsResponse, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -381,7 +381,9 @@ proto.result.Result.toObject = function(includeInstance, msg) {
   var f, obj = {
     uuid: jspb.Message.getFieldWithDefault(msg, 1, ""),
     batchUuid: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    content: jspb.Message.getFieldWithDefault(msg, 3, "")
+    content: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    createdAt: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    updatedAt: jspb.Message.getFieldWithDefault(msg, 6, "")
   };
 
   if (includeInstance) {
@@ -430,6 +432,14 @@ proto.result.Result.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {string} */ (reader.readString());
       msg.setContent(value);
       break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCreatedAt(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUpdatedAt(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -477,6 +487,20 @@ proto.result.Result.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeString(
       3,
+      f
+    );
+  }
+  f = message.getCreatedAt();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
+      f
+    );
+  }
+  f = message.getUpdatedAt();
+  if (f.length > 0) {
+    writer.writeString(
+      6,
       f
     );
   }
@@ -534,6 +558,42 @@ proto.result.Result.prototype.getContent = function() {
  */
 proto.result.Result.prototype.setContent = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional string created_at = 5;
+ * @return {string}
+ */
+proto.result.Result.prototype.getCreatedAt = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.result.Result} returns this
+ */
+proto.result.Result.prototype.setCreatedAt = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
+};
+
+
+/**
+ * optional string updated_at = 6;
+ * @return {string}
+ */
+proto.result.Result.prototype.getUpdatedAt = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.result.Result} returns this
+ */
+proto.result.Result.prototype.setUpdatedAt = function(value) {
+  return jspb.Message.setProto3StringField(this, 6, value);
 };
 
 
@@ -2387,6 +2447,13 @@ proto.result.StreamResultsRequest.prototype.setBatchUuid = function(value) {
 
 
 
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.result.StreamResultsResponse.repeatedFields_ = [1];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -2418,7 +2485,8 @@ proto.result.StreamResultsResponse.prototype.toObject = function(opt_includeInst
  */
 proto.result.StreamResultsResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    result: (f = msg.getResult()) && proto.result.Result.toObject(includeInstance, f)
+    resultsList: jspb.Message.toObjectList(msg.getResultsList(),
+    proto.result.Result.toObject, includeInstance)
   };
 
   if (includeInstance) {
@@ -2458,7 +2526,7 @@ proto.result.StreamResultsResponse.deserializeBinaryFromReader = function(msg, r
     case 1:
       var value = new proto.result.Result;
       reader.readMessage(value,proto.result.Result.deserializeBinaryFromReader);
-      msg.setResult(value);
+      msg.addResults(value);
       break;
     default:
       reader.skipField();
@@ -2489,9 +2557,9 @@ proto.result.StreamResultsResponse.prototype.serializeBinary = function() {
  */
 proto.result.StreamResultsResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getResult();
-  if (f != null) {
-    writer.writeMessage(
+  f = message.getResultsList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
       1,
       f,
       proto.result.Result.serializeBinaryToWriter
@@ -2501,39 +2569,40 @@ proto.result.StreamResultsResponse.serializeBinaryToWriter = function(message, w
 
 
 /**
- * optional Result result = 1;
- * @return {?proto.result.Result}
+ * repeated Result results = 1;
+ * @return {!Array<!proto.result.Result>}
  */
-proto.result.StreamResultsResponse.prototype.getResult = function() {
-  return /** @type{?proto.result.Result} */ (
-    jspb.Message.getWrapperField(this, proto.result.Result, 1));
+proto.result.StreamResultsResponse.prototype.getResultsList = function() {
+  return /** @type{!Array<!proto.result.Result>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.result.Result, 1));
 };
 
 
 /**
- * @param {?proto.result.Result|undefined} value
+ * @param {!Array<!proto.result.Result>} value
  * @return {!proto.result.StreamResultsResponse} returns this
 */
-proto.result.StreamResultsResponse.prototype.setResult = function(value) {
-  return jspb.Message.setWrapperField(this, 1, value);
+proto.result.StreamResultsResponse.prototype.setResultsList = function(value) {
+  return jspb.Message.setRepeatedWrapperField(this, 1, value);
 };
 
 
 /**
- * Clears the message field making it undefined.
+ * @param {!proto.result.Result=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.result.Result}
+ */
+proto.result.StreamResultsResponse.prototype.addResults = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.result.Result, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
  * @return {!proto.result.StreamResultsResponse} returns this
  */
-proto.result.StreamResultsResponse.prototype.clearResult = function() {
-  return this.setResult(undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.result.StreamResultsResponse.prototype.hasResult = function() {
-  return jspb.Message.getField(this, 1) != null;
+proto.result.StreamResultsResponse.prototype.clearResultsList = function() {
+  return this.setResultsList([]);
 };
 
 

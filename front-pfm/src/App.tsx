@@ -1,12 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-// import {TaskServiceClient} from "./protobuf/generated/task_grpc_web_pb"
+import {TaskServiceClient} from "./protobuf/generated/task_grpc_web_pb"
 import {ResultServiceClient} from "./protobuf/generated/result_grpc_web_pb"
 
 function App() {
 
-/*  const getTasks = function ():void {
+  function getTasks():void {
     const messages = require('./protobuf/generated/task_pb');
     let listTaskRequest = new messages.ListTasksRequest()
     let metadata = {};
@@ -18,19 +18,46 @@ function App() {
         console.log(response);
       }
     })
-  }*/
-  const getResults = function ():void {
-    const messages = require('./protobuf/generated/result_pb');
-    let listTaskRequest = new messages.StreamResultsRequest({"batch_uuid":""})
-    let metadata = {};
-    let taskService = new ResultServiceClient("http://localhost:8080", null, null)
-    let stream = taskService.streamResults(listTaskRequest,metadata)
+  }
+  function getResults():void {
+    const resultMessages = require('./protobuf/generated/result_pb');
+    const taskMessages = require('./protobuf/generated/task_pb');
 
+    let updateTaskRequest = new taskMessages.UpdateTaskRequest()
+    let updateTaskParams = new taskMessages.EditableTaskParams()
+    updateTaskRequest.setTaskUuid("daa883d8-c9b0-4c49-9f9c-b87cd5603758")
+    updateTaskParams.setStatus(3)
+    updateTaskRequest.setParams(updateTaskParams)
+    let streamResultsRequest = new resultMessages.StreamResultsRequest()
+    streamResultsRequest.setBatchUuid("1142dfa2-058d-4e88-8a80-a308a2bdae6f")
+
+    let resultServiceClient = new ResultServiceClient("http://localhost:8080", null, null)
+    let taskServiceClient = new TaskServiceClient("http://localhost:8080",null,null)
+
+
+
+    let stream = resultServiceClient.streamResults(streamResultsRequest, {})
+    // @ts-ignore
+    let arrayResult =[]
     // @ts-ignore
     stream.on('data', function(response) {
-      console.log("data");
-      debugger
-      console.log(response.getResponseMessage());
+      let responseArray = response.getResultsList()
+      responseArray.map(
+          // @ts-ignore
+          result => arrayResult.push(result.getContent())
+      )
+      // @ts-ignore
+      console.log(arrayResult)
+      if(responseArray[responseArray.length -1].getContent()>359){
+        console.log("stopping")
+        taskServiceClient.updateTask(updateTaskRequest,{},function (err,response){
+          if (err){
+            console.log(err);
+          }else{
+            console.log(response);
+          }
+        })
+      }
     });
     // @ts-ignore
     stream.on('status', function(status) {
@@ -51,23 +78,10 @@ function App() {
 
 
   // getTasks()
-  getResults()
+  // getResults()
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <button onClick={getResults}> HOLA QUE TAL </button>
     </div>
   );
 }

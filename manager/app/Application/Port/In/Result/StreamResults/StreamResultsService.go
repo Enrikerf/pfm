@@ -28,6 +28,7 @@ func (service *Service) Stream(query Query) (results []Entity.Result, finish boo
 		if err != nil {
 			return nil, true
 		}
+		//TODO: channel to retrieve if error on execute task
 		go service.ManualCallUseCase.ExecuteTask(&task, query.BatchUuid)
 		service.started = true
 	}
