@@ -2,9 +2,10 @@ package Entity
 
 import (
 	"fmt"
-	"github.com/Enrikerf/pfm/commandExecutor/app/Domain/Entity/Pin"
 	"math"
 	"time"
+
+	"github.com/Enrikerf/pfm/commandExecutor/app/Domain/Entity/Pin"
 )
 
 type GasLevel int32
@@ -23,6 +24,7 @@ type Engine interface {
 	Backward()
 	GetPosition() int16
 	TearDown()
+	InitialState()
 }
 
 type engine struct {
@@ -60,7 +62,7 @@ func NewEngine(
 		isControlRunning: make(chan bool, 1),
 	}
 	e.watchdog()
-	e.initialState()
+	e.InitialState()
 	return &e
 }
 
@@ -68,24 +70,24 @@ func (e *engine) watchdog() {
 	go e.encoder.Watchdog()
 }
 
-func (e *engine) initialState() {
+func (e *engine) InitialState() {
 	e.Forward()
 	e.Brake()
 	e.encoder.ResetPosition()
 }
 
 func (e *engine) MakeLap() {
-	e.initialState()
+	e.InitialState()
 	e.UnBrake()
 	e.SetGas(GasLevel(e.pwmPin.GetMinDuty()))
 
 	if e.forward {
 		for e.GetPosition() < 360 {
-			fmt.Println(e.GetPosition())
+			//fmt.Println(e.GetPosition())
 		}
 	} else {
 		for e.GetPosition() > -360 {
-			fmt.Println(e.GetPosition())
+			//fmt.Println(e.GetPosition())
 		}
 	}
 	e.Brake()

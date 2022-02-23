@@ -6,12 +6,16 @@ import (
 	"io"
 	"log"
 	"os/exec"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp/gen/call"
+	"github.com/Enrikerf/pfm/commandExecutor/app/Application/Port/In/ManageEngine"
 )
 
 type CallController struct {
+	ManageEngineUseCase ManageEngine.UseCase
 	call.UnimplementedCallServiceServer
 }
 
@@ -55,19 +59,21 @@ func (s CallController) CallClientStream(server call.CallService_CallClientStrea
 
 func (s CallController) CallBidirectional(server call.CallService_CallBidirectionalServer) error {
 	fmt.Println("Bidirectional")
-	go bidiRecv(server)
+	s.ManageEngineUseCase.Reset()
+	go s.bidiRecv(server)
 	for {
 		sendError := server.Send(&call.CallResponse{
-			Result: "1",
+			Result: strconv.Itoa(int(s.ManageEngineUseCase.GetPosition())),
 		})
 		if sendError != nil {
 			fmt.Println("finished Bidirectional")
 			return nil
 		}
+		time.Sleep(time.Millisecond * 10)
 	}
 }
 
-func bidiRecv(server call.CallService_CallBidirectionalServer) {
+func (s CallController) bidiRecv(server call.CallService_CallBidirectionalServer) {
 	request, err := server.Recv()
 	if err == io.EOF {
 		return
@@ -75,34 +81,13 @@ func bidiRecv(server call.CallService_CallBidirectionalServer) {
 	if err != nil {
 		return
 	}
-	execCommand(request.GetCommand())
-}
-
-/*
-	fmt.Println("Bidirectional results")
-	var appEngine = Config.NewEngineApp()
-	appEngine.Run()
-	for {
-		request, err := server.Recv()
-		if err == io.EOF {
-			return nil
-		}
-		if err != nil {
-			log.Fatalf("error")
-			return err
-		}
-		result := execCommand(request.GetCommand())
-
-		sendError := server.Send(&call.CallResponse{
-			Result: result,
-		})
-		if sendError != nil {
-			log.Fatalf("error")
-			return sendError
-		}
-
+	switch request.GetCommand() {
+	case "makeLap":
+		s.ManageEngineUseCase.Turnaround()
+	case "Stop":
+	default:
 	}
-*/
+}
 
 func execCommand(command string) string {
 	var resultContent string

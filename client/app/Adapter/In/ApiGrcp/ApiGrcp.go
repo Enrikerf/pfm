@@ -2,29 +2,32 @@ package ApiGrcp
 
 import (
 	"fmt"
-	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp/Controller"
-	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp/gen/call"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 	"log"
 	"net"
 	"os"
-	"os/signal"
+
+	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp/Controller"
+	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp/gen/call"
+	"github.com/Enrikerf/pfm/commandExecutor/app/Application/Port/In/ManageEngine"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 type ApiGrpc struct {
-	serverHost string
-	serverPort string
-	grpcServer *grpc.Server
-	listener   net.Listener
+	serverHost          string
+	serverPort          string
+	grpcServer          *grpc.Server
+	listener            net.Listener
+	manageEngineUseCase ManageEngine.UseCase
 }
 
-func (api *ApiGrpc) Initialize(host string, port string) {
+func (api *ApiGrpc) Initialize(host string, port string, manageEngineUseCase ManageEngine.UseCase) {
 	fmt.Println("Starting Sentence Executor...")
 	api.serverHost = host
 	api.serverPort = port
+	api.manageEngineUseCase = manageEngineUseCase
 	api.loadServer()
-	api.configControllers()
+	api.configControllers(manageEngineUseCase)
 	api.loadListener()
 }
 
@@ -38,12 +41,17 @@ func (api *ApiGrpc) Run() {
 			log.Fatalf("fatal")
 		}
 	}()
+}
+
+func (api *ApiGrpc) Stop() {
 	// Wait for control C to exit
-	channel := make(chan os.Signal, 1)
-	signal.Notify(channel, os.Interrupt)
+	// channel := make(chan os.Signal, 1)
+	// signal.Notify(channel, os.Interrupt)
 	// Bock until a signal is received
-	<-channel
-	fmt.Println("Stopping the server")
+	// <-channel
+	fmt.Println("Stopping engine")
+	api.manageEngineUseCase.TearDown()
+	fmt.Println("Stopping apiGrpc")
 	api.grpcServer.Stop()
 	fmt.Println("closing the Listener")
 	err := api.listener.Close()
@@ -53,8 +61,11 @@ func (api *ApiGrpc) Run() {
 	fmt.Println("End of program")
 }
 
-func (api *ApiGrpc) configControllers() {
-	var callController = Controller.CallController{}
+func (api *ApiGrpc) configControllers(manageEngineUseCase ManageEngine.UseCase) {
+
+	var callController = Controller.CallController{
+		ManageEngineUseCase: manageEngineUseCase,
+	}
 	call.RegisterCallServiceServer(api.grpcServer, callController)
 }
 

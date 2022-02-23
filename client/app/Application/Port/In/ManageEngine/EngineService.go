@@ -6,6 +6,10 @@ type Service struct {
 	Engine Entity.Engine
 }
 
+func (service *Service) GetPosition() int16 {
+	return service.Engine.GetPosition()
+}
+
 func (service *Service) Turnaround() {
 	service.Engine.MakeLap()
 }
@@ -32,4 +36,8 @@ func (service *Service) UnBrake() {
 
 func (service *Service) TearDown() {
 	service.Engine.TearDown()
+}
+
+func (service *Service) Reset() {
+	service.Engine.InitialState()
 }
