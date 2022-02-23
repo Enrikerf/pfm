@@ -86,6 +86,7 @@ func (adapter Adapter) doBidirectional(task Entity.Task, client call.CallService
 		// we receive a bunch of messages form the client go routine
 		resultsChannel2 := make(chan string)
 		go receiveServerStream(stream, resultsChannel2)
+		//TODO: missig wait channels
 		for i := range resultsChannel1 {
 			result, _ := Entity.NewResult(task.Uuid, "")
 			result.Content = i

@@ -9,7 +9,7 @@ service ResultService{
   rpc UpdateResult(UpdateResultRequest) returns (UpdateResultResponse);
   rpc DeleteResult(DeleteResultRequest) returns (DeleteResultResponse);
   rpc ListResult(ListResultRequest) returns (ListResultResponse);
-  rpc StreamResult(stream StreamResultsRequest) returns (stream StreamResultsResponse);
+  rpc StreamResults(StreamResultsRequest) returns (stream StreamResultsResponse);
 
 }
 message Result{
@@ -60,9 +60,8 @@ message ListResultResponse{
 
 message StreamResultsRequest{
   string batch_uuid = 1;
-  bool stop = 2;
 }
 message StreamResultsResponse{
-  Result result = 1;
+  repeated Result results = 1;
 }
 

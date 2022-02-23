@@ -74,6 +74,10 @@ func (service *Service) Iteration() {
 
 func (service *Service) slot(wg *sync.WaitGroup, index int, task *Entity.Task) {
 	defer wg.Done()
+	service.ExecuteTask(index, task)
+}
+
+func (service *Service) ExecuteTask(index int, task *Entity.Task) {
 	service.updateTaskStatus(index, task, ValueObject.Running)
 	resultBatch := service.callRequestPort.Request(*task)
 	service.saveResults(index, resultBatch)

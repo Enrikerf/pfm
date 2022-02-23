@@ -1,12 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {TaskServiceClient} from "./protobuf/generated/task_grpc_web_pb"
+// import {TaskServiceClient} from "./protobuf/generated/task_grpc_web_pb"
+import {ResultServiceClient} from "./protobuf/generated/result_grpc_web_pb"
 
 function App() {
 
-  const call = function ():void {
-
+/*  const getTasks = function ():void {
     const messages = require('./protobuf/generated/task_pb');
     let listTaskRequest = new messages.ListTasksRequest()
     let metadata = {};
@@ -18,8 +18,40 @@ function App() {
         console.log(response);
       }
     })
+  }*/
+  const getResults = function ():void {
+    const messages = require('./protobuf/generated/result_pb');
+    let listTaskRequest = new messages.StreamResultsRequest({"batch_uuid":""})
+    let metadata = {};
+    let taskService = new ResultServiceClient("http://localhost:8080", null, null)
+    let stream = taskService.streamResults(listTaskRequest,metadata)
+
+    // @ts-ignore
+    stream.on('data', function(response) {
+      console.log("data");
+      debugger
+      console.log(response.getResponseMessage());
+    });
+    // @ts-ignore
+    stream.on('status', function(status) {
+      console.log("status");
+      console.log(status.code);
+      console.log(status.details);
+      console.log(status.metadata);
+    });
+    // @ts-ignore
+    stream.on('end', function(end) {
+      console.log("end");
+      stream.cancel()
+    });
+
+// to close the stream
+
   }
-  call()
+
+
+  // getTasks()
+  getResults()
   return (
     <div className="App">
       <header className="App-header">

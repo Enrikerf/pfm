@@ -2,6 +2,7 @@ package UpdateTask
 
 import (
 	"errors"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Manual"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Database/TaskPort"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/ValueObject"
 )
@@ -9,6 +10,7 @@ import (
 type Service struct {
 	FindTaskPort   TaskPort.Find
 	UpdateTaskPort TaskPort.Update
+	ManualCallPort Manual.UseCase
 }
 
 func (service Service) Update(command Command) error {

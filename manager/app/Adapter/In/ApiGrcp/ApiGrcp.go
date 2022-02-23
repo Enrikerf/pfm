@@ -17,6 +17,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ReadResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/StreamResults"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/CreateStep"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/DeleteStep"
@@ -43,11 +44,12 @@ type ApiGrpc struct {
 	deleteTaskUseCase DeleteTask.UseCase
 	updateTaskUseCase UpdateTask.UseCase
 
-	createResultUseCase CreateResult.UseCase
-	readResultUseCase   ReadResult.UseCase
-	updateResultUseCase UpdateResult.UseCase
-	deleteResultUseCase DeleteResult.UseCase
-	listResultsUseCase  ListResults.UseCase
+	createResultUseCase  CreateResult.UseCase
+	readResultUseCase    ReadResult.UseCase
+	updateResultUseCase  UpdateResult.UseCase
+	deleteResultUseCase  DeleteResult.UseCase
+	listResultsUseCase   ListResults.UseCase
+	streamResultsUseCase StreamResults.UseCase
 
 	createBatchUseCase CreateBatch.UseCase
 	readBatchUseCase   ReadBatch.UseCase
@@ -79,6 +81,7 @@ func (api *ApiGrpc) Initialize(
 	updateResultUseCase UpdateResult.UseCase,
 	deleteResultUseCase DeleteResult.UseCase,
 	listResultsUseCase ListResults.UseCase,
+	streamResultsUseCase StreamResults.UseCase,
 
 	createBatchUseCase CreateBatch.UseCase,
 	readBatchUseCase ReadBatch.UseCase,
@@ -109,6 +112,7 @@ func (api *ApiGrpc) Initialize(
 	api.updateResultUseCase = updateResultUseCase
 	api.deleteResultUseCase = deleteResultUseCase
 	api.listResultsUseCase = listResultsUseCase
+	api.streamResultsUseCase = streamResultsUseCase
 
 	api.createBatchUseCase = createBatchUseCase
 	api.readBatchUseCase = readBatchUseCase
@@ -165,11 +169,12 @@ func (api *ApiGrpc) configControllers() {
 	task.RegisterTaskServiceServer(api.grpcServer, taskController)
 
 	var resultController = Controller.ResultController{
-		CreateResultUseCase: api.createResultUseCase,
-		ReadResultUseCase:   api.readResultUseCase,
-		UpdateResultUseCase: api.updateResultUseCase,
-		DeleteResultUseCase: api.deleteResultUseCase,
-		ListResultsUseCase:  api.listResultsUseCase,
+		CreateResultUseCase:  api.createResultUseCase,
+		ReadResultUseCase:    api.readResultUseCase,
+		UpdateResultUseCase:  api.updateResultUseCase,
+		DeleteResultUseCase:  api.deleteResultUseCase,
+		ListResultsUseCase:   api.listResultsUseCase,
+		StreamResultsUseCase: api.streamResultsUseCase,
 	}
 	result.RegisterResultServiceServer(api.grpcServer, resultController)
 

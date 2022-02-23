@@ -5,6 +5,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Model"
 	ResultDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 	"gorm.io/gorm"
+	"time"
 )
 
 type ResultAdapter struct {
@@ -36,6 +37,27 @@ func (adapter ResultAdapter) FindBy(conditions interface{}) []ResultDomain.Resul
 	err := adapter.Orm.
 		Table("results").
 		Where(conditions).
+		Find(&results).
+		Error
+	if err != nil {
+		fmt.Printf("results %v. \n", err)
+		return nil
+	}
+
+	for _, result := range results {
+		domainResults = append(domainResults, result.ToDomain())
+	}
+	return domainResults
+}
+
+func (adapter ResultAdapter) FindStream(batchUuid string, lastDate time.Time) []ResultDomain.Result {
+
+	var results []Model.Result
+	domainResults := []ResultDomain.Result{}
+	err := adapter.Orm.
+		Table("results").
+		Where("batch_uuid = ? AND created_at > ?", batchUuid, lastDate.String()).
+		Order("created_at asc").
 		Find(&results).
 		Error
 	if err != nil {

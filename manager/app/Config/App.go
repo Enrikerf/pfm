@@ -12,10 +12,12 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ReadBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/UpdateBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Loop"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Manual"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ReadResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/StreamResults"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/CreateStep"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/DeleteStep"
@@ -41,7 +43,7 @@ type App struct {
 func (server *App) Run() {
 	server.loadDotEnv()
 	db := server.loadDb()
-	server.loadLoop(db)
+	//server.loadLoop(db)
 	server.loadApiGrpc(db)
 }
 
@@ -70,7 +72,7 @@ func (server *App) loadDb() *gorm.DB {
 		SkipInitializeWithVersion: false, // auto configure based on currently MySQL version
 	}), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("failed to connect database %v", err)
+		log.Fatalf("failed to connect database: %v", err)
 	}
 	return db
 }
@@ -99,6 +101,7 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 	var commandAdapter = Adapters.StepAdapter{Orm: db}
 	var batchAdapter = Adapters.BatchAdapter{Orm: db}
 	var resultAdapter = Adapters.ResultAdapter{Orm: db}
+	var callAdapter = Call.ManualAdapter{}
 
 	//TaskController
 	var createTaskService = CreateTask.Service{SaveTaskPort: taskAdapter}
@@ -148,6 +151,18 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 	}
 	var deleteResultService = DeleteResult.Service{DeleteResultPort: resultAdapter}
 	var listResultsService = ListResults.Service{FindResultsByPort: resultAdapter}
+	var manualCallUseCase = Manual.Service{
+		CallBidiPort:   &callAdapter,
+		FindTaskPort:   taskAdapter,
+		SaveResultPort: resultAdapter,
+	}
+	var streamResultsService = StreamResults.Service{
+		FindBatchPort:         batchAdapter,
+		FindTaskPort:          taskAdapter,
+		UpdateTaskPort:        taskAdapter,
+		FindResultsStreamPort: resultAdapter,
+		ManualCallUseCase:     &manualCallUseCase,
+	}
 
 	server.ApiGrpc = ApiGrcp.ApiGrpc{}
 	server.ApiGrpc.Initialize(
@@ -161,6 +176,7 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 		updateResultService,
 		deleteResultService,
 		listResultsService,
+		&streamResultsService,
 		createBatchService,
 		readBatchService,
 		updateBatchService,

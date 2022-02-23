@@ -27,5 +27,7 @@ func (resultModel *Result) ToDomain() Entity.Result {
 	selfEntity.Uuid = resultModel.Uuid
 	selfEntity.BatchUuid = resultModel.BatchUuid
 	selfEntity.Content = resultModel.Content
+	selfEntity.CreatedAt = resultModel.CreatedAt
+	selfEntity.UpdatedAt = resultModel.UpdatedAt
 	return selfEntity
 }

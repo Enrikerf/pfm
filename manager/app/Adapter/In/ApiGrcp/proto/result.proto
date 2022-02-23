@@ -9,11 +9,14 @@ service ResultService{
   rpc UpdateResult(UpdateResultRequest) returns (UpdateResultResponse);
   rpc DeleteResult(DeleteResultRequest) returns (DeleteResultResponse);
   rpc ListResult(ListResultRequest) returns (ListResultResponse);
+  rpc StreamResults(StreamResultsRequest) returns (stream StreamResultsResponse);
 }
 message Result{
   string uuid = 1;
   string batch_uuid = 2;
   string content = 3;
+  string created_at = 5;
+  string updated_at = 6;
 }
 message CreateResultParams{
   string batch_uuid = 1;
@@ -53,6 +56,13 @@ message DeleteResultResponse{
 message ListResultRequest{
 }
 message ListResultResponse{
+  repeated Result results = 1;
+}
+
+message StreamResultsRequest{
+  string batch_uuid = 1;
+}
+message StreamResultsResponse{
   repeated Result results = 1;
 }
 

@@ -77,6 +77,33 @@ func (s CallController) CallBidirectional(server call.CallService_CallBidirectio
 	}
 }
 
+func (s CallController) CallResultsBidirectional(server call.CallService_CallBidirectionalServer) error {
+	//fmt.Println("Bidirectional results")
+	//var appEngine = Config.NewEngineApp()
+	//appEngine.Run()
+	//for {
+	//	request, err := server.Recv()
+	//	if err == io.EOF {
+	//		return nil
+	//	}
+	//	if err != nil {
+	//		log.Fatalf("error")
+	//		return err
+	//	}
+	//	result := execCommand(request.GetCommand())
+	//
+	//	sendError := server.Send(&call.CallResponse{
+	//		Result: result,
+	//	})
+	//	if sendError != nil {
+	//		log.Fatalf("error")
+	//		return sendError
+	//	}
+	//
+	//}
+	return nil
+}
+
 func execCommand(command string) string {
 	var resultContent string
 	parts := strings.Fields(command)

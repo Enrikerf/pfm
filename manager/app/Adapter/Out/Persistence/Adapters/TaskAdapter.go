@@ -13,10 +13,21 @@ type TaskAdapter struct {
 
 func (adapter TaskAdapter) Find(uuid string) (TaskDomain.Task, error) {
 	var taskMysql = Model.Task{}
+	var resultsMysql = []Model.Step{}
 	err := adapter.Orm.First(&taskMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return TaskDomain.Task{}, err
 	}
+	err = adapter.Orm.
+		Table("steps").
+		Where("task_uuid = ?", taskMysql.Uuid).
+		Find(&resultsMysql).
+		Error
+	if err != nil {
+		fmt.Printf("results %v. \n", err)
+		return TaskDomain.Task{}, err
+	}
+	taskMysql.Steps = resultsMysql
 
 	return taskMysql.ToDomain(), nil
 }

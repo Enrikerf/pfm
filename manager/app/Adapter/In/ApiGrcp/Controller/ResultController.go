@@ -8,17 +8,21 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ReadResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/StreamResults"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
+	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"time"
 )
 
 type ResultController struct {
-	CreateResultUseCase CreateResult.UseCase
-	ReadResultUseCase   ReadResult.UseCase
-	UpdateResultUseCase UpdateResult.UseCase
-	DeleteResultUseCase DeleteResult.UseCase
-	ListResultsUseCase  ListResults.UseCase
+	CreateResultUseCase  CreateResult.UseCase
+	ReadResultUseCase    ReadResult.UseCase
+	UpdateResultUseCase  UpdateResult.UseCase
+	DeleteResultUseCase  DeleteResult.UseCase
+	ListResultsUseCase   ListResults.UseCase
+	StreamResultsUseCase StreamResults.UseCase
 	resultProto.UnimplementedResultServiceServer
 }
 
@@ -101,4 +105,41 @@ func (controller ResultController) ListResult(ctx context.Context, request *resu
 		})
 	}
 	return &resultProto.ListResultResponse{Results: resultProtoArray}, nil
+}
+
+func (controller ResultController) StreamResults(request *resultProto.StreamResultsRequest, stream resultProto.ResultService_StreamResultsServer) error {
+	fmt.Printf("streaming results %v\n", request)
+	lastDate, _ := time.Parse(time.RFC3339, "1000-01-01")
+	batchUuid, err := uuid.Parse(request.GetBatchUuid())
+	if err != nil {
+		return nil
+	}
+	for {
+		results, finish := controller.StreamResultsUseCase.Stream(StreamResults.Query{
+			BatchUuid: batchUuid,
+			LastDate:  lastDate,
+		})
+		if finish {
+			return nil
+		}
+		if len(results) > 0 {
+			resultProtoArray := []*resultProto.Result{}
+			for _, result := range results {
+				resultProtoArray = append(resultProtoArray, &resultProto.Result{
+					Uuid:      result.Uuid.String(),
+					BatchUuid: result.BatchUuid.String(),
+					Content:   result.Content,
+					CreatedAt: result.CreatedAt.String(),
+					UpdatedAt: result.UpdatedAt.String(),
+				})
+			}
+			response := &resultProto.StreamResultsResponse{Results: resultProtoArray}
+			err := stream.Send(response)
+			if err != nil {
+				return nil
+			}
+			lastDate = results[len(results)-1].CreatedAt
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
 }

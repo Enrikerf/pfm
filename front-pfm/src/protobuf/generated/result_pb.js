@@ -2288,8 +2288,7 @@ proto.result.StreamResultsRequest.prototype.toObject = function(opt_includeInsta
  */
 proto.result.StreamResultsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    batchUuid: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    stop: jspb.Message.getBooleanFieldWithDefault(msg, 2, false)
+    batchUuid: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -2330,10 +2329,6 @@ proto.result.StreamResultsRequest.deserializeBinaryFromReader = function(msg, re
       var value = /** @type {string} */ (reader.readString());
       msg.setBatchUuid(value);
       break;
-    case 2:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setStop(value);
-      break;
     default:
       reader.skipField();
       break;
@@ -2370,13 +2365,6 @@ proto.result.StreamResultsRequest.serializeBinaryToWriter = function(message, wr
       f
     );
   }
-  f = message.getStop();
-  if (f) {
-    writer.writeBool(
-      2,
-      f
-    );
-  }
 };
 
 
@@ -2395,24 +2383,6 @@ proto.result.StreamResultsRequest.prototype.getBatchUuid = function() {
  */
 proto.result.StreamResultsRequest.prototype.setBatchUuid = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
-};
-
-
-/**
- * optional bool stop = 2;
- * @return {boolean}
- */
-proto.result.StreamResultsRequest.prototype.getStop = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 2, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.result.StreamResultsRequest} returns this
- */
-proto.result.StreamResultsRequest.prototype.setStop = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 2, value);
 };
 
 

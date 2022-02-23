@@ -377,5 +377,61 @@ proto.result.ResultServicePromiseClient.prototype.listResult =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.result.StreamResultsRequest,
+ *   !proto.result.StreamResultsResponse>}
+ */
+const methodDescriptor_ResultService_StreamResults = new grpc.web.MethodDescriptor(
+  '/result.ResultService/StreamResults',
+  grpc.web.MethodType.SERVER_STREAMING,
+  proto.result.StreamResultsRequest,
+  proto.result.StreamResultsResponse,
+  /**
+   * @param {!proto.result.StreamResultsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.result.StreamResultsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.result.StreamResultsRequest} request The request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!grpc.web.ClientReadableStream<!proto.result.StreamResultsResponse>}
+ *     The XHR Node Readable Stream
+ */
+proto.result.ResultServiceClient.prototype.streamResults =
+    function(request, metadata) {
+  return this.client_.serverStreaming(this.hostname_ +
+      '/result.ResultService/StreamResults',
+      request,
+      metadata || {},
+      methodDescriptor_ResultService_StreamResults);
+};
+
+
+/**
+ * @param {!proto.result.StreamResultsRequest} request The request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!grpc.web.ClientReadableStream<!proto.result.StreamResultsResponse>}
+ *     The XHR Node Readable Stream
+ */
+proto.result.ResultServicePromiseClient.prototype.streamResults =
+    function(request, metadata) {
+  return this.client_.serverStreaming(this.hostname_ +
+      '/result.ResultService/StreamResults',
+      request,
+      metadata || {},
+      methodDescriptor_ResultService_StreamResults);
+};
+
+
 module.exports = proto.result;
 
