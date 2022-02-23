@@ -55,6 +55,33 @@ func (s CallController) CallClientStream(server call.CallService_CallClientStrea
 
 func (s CallController) CallBidirectional(server call.CallService_CallBidirectionalServer) error {
 	fmt.Println("Bidirectional")
+	go bidiRecv(server)
+	for {
+		sendError := server.Send(&call.CallResponse{
+			Result: "1",
+		})
+		if sendError != nil {
+			fmt.Println("finished Bidirectional")
+			return nil
+		}
+	}
+}
+
+func bidiRecv(server call.CallService_CallBidirectionalServer) {
+	request, err := server.Recv()
+	if err == io.EOF {
+		return
+	}
+	if err != nil {
+		return
+	}
+	execCommand(request.GetCommand())
+}
+
+/*
+	fmt.Println("Bidirectional results")
+	var appEngine = Config.NewEngineApp()
+	appEngine.Run()
 	for {
 		request, err := server.Recv()
 		if err == io.EOF {
@@ -64,8 +91,8 @@ func (s CallController) CallBidirectional(server call.CallService_CallBidirectio
 			log.Fatalf("error")
 			return err
 		}
-		//TODO: do it with async accept new commands but execute it in sync way waiting until the previous end
 		result := execCommand(request.GetCommand())
+
 		sendError := server.Send(&call.CallResponse{
 			Result: result,
 		})
@@ -75,34 +102,7 @@ func (s CallController) CallBidirectional(server call.CallService_CallBidirectio
 		}
 
 	}
-}
-
-func (s CallController) CallResultsBidirectional(server call.CallService_CallBidirectionalServer) error {
-	//fmt.Println("Bidirectional results")
-	//var appEngine = Config.NewEngineApp()
-	//appEngine.Run()
-	//for {
-	//	request, err := server.Recv()
-	//	if err == io.EOF {
-	//		return nil
-	//	}
-	//	if err != nil {
-	//		log.Fatalf("error")
-	//		return err
-	//	}
-	//	result := execCommand(request.GetCommand())
-	//
-	//	sendError := server.Send(&call.CallResponse{
-	//		Result: result,
-	//	})
-	//	if sendError != nil {
-	//		log.Fatalf("error")
-	//		return sendError
-	//	}
-	//
-	//}
-	return nil
-}
+*/
 
 func execCommand(command string) string {
 	var resultContent string

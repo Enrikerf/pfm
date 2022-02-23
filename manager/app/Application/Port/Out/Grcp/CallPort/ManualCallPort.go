@@ -6,7 +6,8 @@ import (
 )
 
 type Bidirectional interface {
-	Setup()
-	Write(step Entity.Step)
-	Read() ValueObject.ResultVo
+	Setup(host, port string) error
+	Write(step Entity.Step) error
+	Read() (ValueObject.ResultVo, error)
+	Close()
 }

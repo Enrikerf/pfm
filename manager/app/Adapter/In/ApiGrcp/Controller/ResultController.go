@@ -120,6 +120,7 @@ func (controller ResultController) StreamResults(request *resultProto.StreamResu
 			LastDate:  lastDate,
 		})
 		if finish {
+			fmt.Printf("finish streaming results \n")
 			return nil
 		}
 		if len(results) > 0 {
@@ -140,6 +141,6 @@ func (controller ResultController) StreamResults(request *resultProto.StreamResu
 			}
 			lastDate = results[len(results)-1].CreatedAt
 		}
-		time.Sleep(100 * time.Millisecond)
+		//time.Sleep(100 * time.Millisecond)
 	}
 }
