@@ -44,8 +44,7 @@ const headCells: readonly HeadCell[] = [
 ];
 
 export default function EnhancedTableHead(props: EnhancedTableProps) {
-    const {onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort} =
-        props;
+    const {heads,onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort} = props;
     const createSortHandler =
         (property: keyof TableData) => (event: React.MouseEvent<unknown>) => {
             onRequestSort(event, property);
@@ -65,19 +64,19 @@ export default function EnhancedTableHead(props: EnhancedTableProps) {
                         }}
                     />
                 </TableCell>
-                {headCells.map((headCell) => (
+                {heads.map((head) => (
                     <TableCell
-                        key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === headCell.id ? order : false}
+                        key={head.id}
+                        align={head.numeric ? 'right' : 'left'}
+                        padding={head.disablePadding ? 'none' : 'normal'}
+                        sortDirection={orderBy === head.id ? order : false}
                     >
                         <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
+                            active={orderBy === head.id}
+                            direction={orderBy === head.id ? order : 'asc'}
                         >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
+                            {head.label}
+                            {orderBy === head.id ? (
                                 <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                 </Box>

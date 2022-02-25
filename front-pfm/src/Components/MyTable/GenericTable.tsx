@@ -26,6 +26,25 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const heads = ()=>{
+        return rows[0].values.map((row,index)=> {
+            if(index ===0){
+                return {
+                    "id":row.name,
+                    "numeric": false,
+                    "disablePadding":true,
+                    "label": row.name
+                }
+            }else{
+                return {
+                    "id":row.name,
+                    "numeric": true,
+                    "disablePadding":false,
+                    "label": row.name
+                }
+            }
+        })
+    }
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -89,12 +108,9 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
             <Paper sx={{width: '100%', mb: 2}}>
                 <EnhancedTableToolbar numSelected={selected.length}/>
                 <TableContainer>
-                    <Table
-                        sx={{minWidth: 750}}
-                        aria-labelledby="tableTitle"
-                        size={dense ? 'small' : 'medium'}
-                    >
+                    <Table sx={{minWidth: 750}} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
                         <EnhancedTableHead
+                            heads={heads()}
                             numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
