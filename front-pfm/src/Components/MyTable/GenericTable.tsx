@@ -19,7 +19,7 @@ import {TableRowData} from "./TableRowData";
 
 export default function GenericTable(props: { rows: TableRowData[] }) {
     const functions = new TableFunctions()
-    const [rows, setRows] = React.useState<TableRowData[]>(props.rows);
+    const [rows,setRows] = React.useState<TableRowData[]>(props.rows);
     const [order, setOrder] = React.useState<TableOrder>('asc');
     const [orderBy, setOrderBy] = React.useState<string>('uuid');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -115,7 +115,7 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.values[0].name}
+                                            key={labelId}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
@@ -133,7 +133,8 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
                                                         return (
                                                             <TableCell
                                                                 component="th"
-                                                                id={value.name}
+                                                                id={labelId}
+                                                                key={i}
                                                                 scope="row"
                                                                 padding="none"
                                                             >
@@ -141,7 +142,7 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
                                                             </TableCell>
                                                         )
                                                     } else {
-                                                        return (<TableCell align="right">{value.value}</TableCell>)
+                                                        return (<TableCell key={i} align="right">{value.value}</TableCell>)
                                                     }
 
 
