@@ -26,7 +26,7 @@ function TasksList() {
                     newRows.push({
                         id: i + 1,
                         values: [
-                            {name: "run", value: "icon"},
+                            {name: "runner", value: "icon"},
                             {name: "uuid", value: protoTasks[i].getUuid()},
                             {name: "host", value: protoTasks[i].getHost()},
                             {name: "port", value: protoTasks[i].getPort()},
@@ -35,6 +35,7 @@ function TasksList() {
                             {name: "executionMode", value: protoTasks[i].getExecutionmode()},
                             {name: "batches", value: "icon"},
                             {name: "results", value: "icon"},
+                            {name: "steps", value: "icon"},
                             {name: "createdAt", value: ""},
                             {name: "updatedAt", value: ""},
                         ]
@@ -44,7 +45,8 @@ function TasksList() {
                 setRows(newRows)
             }
         })
-        return () => {};
+        return () => {
+        };
     }, [])
 
     async function handleGoTo(event: React.MouseEvent<unknown>, id: number, toGo: TableData) {

@@ -12,6 +12,8 @@ import TasksList from "./Tabs/TasksList";
 import BatchesTab from "./Tabs/BatchesTab";
 import ResultsTab from "./Tabs/ResultsTab";
 import TasksTab from "./Tabs/TasksTab";
+import RunnerTab from "./Tabs/RunTab";
+import StepsTab from "./Tabs/StepsTab";
 
 
 ReactDOM.render(
@@ -22,8 +24,10 @@ ReactDOM.render(
                 <Route path="/" element={<App/>}>
                     <Route path="tasks" element={<TasksTab/>}>
                         <Route index element={<TasksList/>}/>
+                        <Route path=":uuid/steps" element={<StepsTab/>}/>
                         <Route path=":uuid/batches" element={<BatchesTab/>}/>
                         <Route path=":uuid/results" element={<ResultsTab/>}/>
+                        <Route path=":uuid/runner" element={<RunnerTab/>}/>
                     </Route>
                     <Route path="/batches" element={<BatchesTab/>}/>
                     <Route path="/results" element={<ResultsTab/>}/>

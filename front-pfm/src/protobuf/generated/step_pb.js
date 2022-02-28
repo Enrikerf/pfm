@@ -337,7 +337,7 @@ proto.step.Step.toObject = function(includeInstance, msg) {
   var f, obj = {
     uuid: jspb.Message.getFieldWithDefault(msg, 1, ""),
     taskUuid: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 3, "")
+    sentence: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -384,7 +384,7 @@ proto.step.Step.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
-      msg.setName(value);
+      msg.setSentence(value);
       break;
     default:
       reader.skipField();
@@ -429,7 +429,7 @@ proto.step.Step.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getName();
+  f = message.getSentence();
   if (f.length > 0) {
     writer.writeString(
       3,
@@ -476,10 +476,10 @@ proto.step.Step.prototype.setTaskUuid = function(value) {
 
 
 /**
- * optional string name = 3;
+ * optional string sentence = 3;
  * @return {string}
  */
-proto.step.Step.prototype.getName = function() {
+proto.step.Step.prototype.getSentence = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
@@ -488,7 +488,7 @@ proto.step.Step.prototype.getName = function() {
  * @param {string} value
  * @return {!proto.step.Step} returns this
  */
-proto.step.Step.prototype.setName = function(value) {
+proto.step.Step.prototype.setSentence = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
 };
 
@@ -526,7 +526,7 @@ proto.step.CreateStepParams.prototype.toObject = function(opt_includeInstance) {
 proto.step.CreateStepParams.toObject = function(includeInstance, msg) {
   var f, obj = {
     taskUuid: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 2, "")
+    sentence: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -569,7 +569,7 @@ proto.step.CreateStepParams.deserializeBinaryFromReader = function(msg, reader) 
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setName(value);
+      msg.setSentence(value);
       break;
     default:
       reader.skipField();
@@ -607,7 +607,7 @@ proto.step.CreateStepParams.serializeBinaryToWriter = function(message, writer) 
       f
     );
   }
-  f = message.getName();
+  f = message.getSentence();
   if (f.length > 0) {
     writer.writeString(
       2,
@@ -636,10 +636,10 @@ proto.step.CreateStepParams.prototype.setTaskUuid = function(value) {
 
 
 /**
- * optional string name = 2;
+ * optional string sentence = 2;
  * @return {string}
  */
-proto.step.CreateStepParams.prototype.getName = function() {
+proto.step.CreateStepParams.prototype.getSentence = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -648,7 +648,7 @@ proto.step.CreateStepParams.prototype.getName = function() {
  * @param {string} value
  * @return {!proto.step.CreateStepParams} returns this
  */
-proto.step.CreateStepParams.prototype.setName = function(value) {
+proto.step.CreateStepParams.prototype.setSentence = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
 };
 
@@ -686,7 +686,7 @@ proto.step.EditableStepParams.prototype.toObject = function(opt_includeInstance)
 proto.step.EditableStepParams.toObject = function(includeInstance, msg) {
   var f, obj = {
     taskUuid: (f = msg.getTaskUuid()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f),
-    name: (f = msg.getName()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f)
+    sentence: (f = msg.getSentence()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -731,7 +731,7 @@ proto.step.EditableStepParams.deserializeBinaryFromReader = function(msg, reader
     case 2:
       var value = new google_protobuf_wrappers_pb.StringValue;
       reader.readMessage(value,google_protobuf_wrappers_pb.StringValue.deserializeBinaryFromReader);
-      msg.setName(value);
+      msg.setSentence(value);
       break;
     default:
       reader.skipField();
@@ -770,7 +770,7 @@ proto.step.EditableStepParams.serializeBinaryToWriter = function(message, writer
       google_protobuf_wrappers_pb.StringValue.serializeBinaryToWriter
     );
   }
-  f = message.getName();
+  f = message.getSentence();
   if (f != null) {
     writer.writeMessage(
       2,
@@ -819,10 +819,10 @@ proto.step.EditableStepParams.prototype.hasTaskUuid = function() {
 
 
 /**
- * optional google.protobuf.StringValue name = 2;
+ * optional google.protobuf.StringValue sentence = 2;
  * @return {?proto.google.protobuf.StringValue}
  */
-proto.step.EditableStepParams.prototype.getName = function() {
+proto.step.EditableStepParams.prototype.getSentence = function() {
   return /** @type{?proto.google.protobuf.StringValue} */ (
     jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.StringValue, 2));
 };
@@ -832,7 +832,7 @@ proto.step.EditableStepParams.prototype.getName = function() {
  * @param {?proto.google.protobuf.StringValue|undefined} value
  * @return {!proto.step.EditableStepParams} returns this
 */
-proto.step.EditableStepParams.prototype.setName = function(value) {
+proto.step.EditableStepParams.prototype.setSentence = function(value) {
   return jspb.Message.setWrapperField(this, 2, value);
 };
 
@@ -841,8 +841,8 @@ proto.step.EditableStepParams.prototype.setName = function(value) {
  * Clears the message field making it undefined.
  * @return {!proto.step.EditableStepParams} returns this
  */
-proto.step.EditableStepParams.prototype.clearName = function() {
-  return this.setName(undefined);
+proto.step.EditableStepParams.prototype.clearSentence = function() {
+  return this.setSentence(undefined);
 };
 
 
@@ -850,7 +850,7 @@ proto.step.EditableStepParams.prototype.clearName = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.step.EditableStepParams.prototype.hasName = function() {
+proto.step.EditableStepParams.prototype.hasSentence = function() {
   return jspb.Message.getField(this, 2) != null;
 };
 

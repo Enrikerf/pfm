@@ -26,7 +26,7 @@ func (controller StepController) CreateStep(ctx context.Context, request *stepPr
 	protoStep := request.GetStepParams()
 	var cmd CreateStep.Command
 	cmd.TaskUuid = protoStep.GetTaskUuid()
-	cmd.Sentence = protoStep.GetName()
+	cmd.Sentence = protoStep.GetSentence()
 	stepDomain, err := controller.CreateStepUseCase.Create(cmd)
 	if err != nil {
 		return nil, fmt.Errorf("error")
@@ -34,7 +34,7 @@ func (controller StepController) CreateStep(ctx context.Context, request *stepPr
 	newStep := stepProto.Step{
 		Uuid:     stepDomain.Uuid.String(),
 		TaskUuid: stepDomain.TaskUuid.String(),
-		Name:     stepDomain.Sentence,
+		Sentence: stepDomain.Sentence,
 	}
 	return &stepProto.CreateStepResponse{Step: &newStep}, nil
 }
@@ -51,7 +51,7 @@ func (controller StepController) ReadStep(ctx context.Context, request *stepProt
 	return &stepProto.ReadStepResponse{Step: &stepProto.Step{
 		Uuid:     step.Uuid.String(),
 		TaskUuid: step.TaskUuid.String(),
-		Name:     step.Sentence,
+		Sentence: step.Sentence,
 	}}, nil
 }
 
@@ -62,11 +62,11 @@ func (controller StepController) UpdateStep(ctx context.Context, request *stepPr
 	if params.GetTaskUuid() != nil {
 		cmd.TaskUuid.Change = true
 	}
-	if params.GetName() != nil {
+	if params.GetSentence() != nil {
 		cmd.Sentence.Change = true
 	}
 	cmd.TaskUuid.Value = params.GetTaskUuid().Value
-	cmd.Sentence.Value = params.GetName().Value
+	cmd.Sentence.Value = params.GetSentence().Value
 	err := controller.UpdateStepUseCase.Update(cmd)
 	return &stepProto.UpdateStepResponse{}, err
 }
@@ -97,7 +97,7 @@ func (controller StepController) ListSteps(ctx context.Context, request *stepPro
 		stepProtoArray = append(stepProtoArray, &stepProto.Step{
 			Uuid:     step.Uuid.String(),
 			TaskUuid: step.TaskUuid.String(),
-			Name:     step.Sentence,
+			Sentence: step.Sentence,
 		})
 	}
 	return &stepProto.ListStepsResponse{Steps: stepProtoArray}, nil

@@ -4,10 +4,13 @@ import taskMessages from "../protobuf/generated/task_pb";
 import resultMessages from "../protobuf/generated/result_pb";
 import {ResultServiceClient} from "../protobuf/generated/result_grpc_web_pb";
 import {TaskServiceClient} from "../protobuf/generated/task_grpc_web_pb";
+import {useParams} from "react-router-dom";
+import {useState} from "react";
 
 export default function RunTab() {
 
-
+    let {taskUuid} = useParams()
+    const [batchUuid,setBatchUuid] = useState("")
 
     function getResults(): void {
         const resultMessages = require('../protobuf/generated/result_pb');
@@ -65,6 +68,10 @@ export default function RunTab() {
 
     }
     return (
-        <EnhancedTable/>
+        <div>
+            <p>1 create batch on use effect</p>
+            <p>2 wait to press run</p>
+            <p>3 on run execute getResultsStream</p>
+        </div>
     );
 }
