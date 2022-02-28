@@ -1,86 +1,68 @@
 import * as React from "react";
-import EnhancedTable from "../Components/Table";
-import {TaskServiceClient} from "../protobuf/generated/task_grpc_web_pb";
-import {ResultServiceClient} from "../protobuf/generated/result_grpc_web_pb";
+import {useEffect, useState} from "react";
+import {BatchServiceClient} from "../protobuf/generated/batch_grpc_web_pb";
+import GenericTable from "../Components/MyTable/GenericTable";
+import {TableRowData} from "../Components/MyTable/TableRowData";
+import {TableData} from "../Components/MyTable/TableData";
+import {useNavigate} from "react-router-dom";
 
 
 function BatchesTab() {
+    let navigate = useNavigate();
 
-    function getTasks(): void {
-        const messages = require('../protobuf/generated/task_pb');
-        let listTaskRequest = new messages.ListTasksRequest()
+    const [lastId, setLastId] = useState(0)
+    const [rows, setRows] = useState([] as TableRowData[])
+    useEffect(() => {
+        const messages = require('../protobuf/generated/batch_pb');
+        let listTaskRequest = new messages.ListBatchesRequest()
         let metadata = {};
-        let taskService = new TaskServiceClient("http://localhost:8080", null, null)
-        taskService.listTasks(listTaskRequest, metadata, function (err, response) {
+        let taskService = new BatchServiceClient("http://localhost:8080", null, null)
+        taskService.listBatches(listTaskRequest, metadata, function (err, response) {
             if (err) {
                 console.log(err);
             } else {
-                console.log(response);
+                let protoTasks = response.getBatchesList()
+                let newRows: TableRowData[] = []
+                for (let i = 0; i < protoTasks.length; i++) {
+                    newRows.push({
+                        id: i + 1,
+                        values: [
+                            {name: "uuid", value: protoTasks[i].getUuid()},
+                            {name: "task_uuid", value: protoTasks[i].getTaskUuid()},
+                            {name: "created_at", value: protoTasks[i].getCreatedAt()},
+                            {name: "updated_at", value: protoTasks[i].getUpdatedAt()},
+                        ]
+                    })
+                }
+                setLastId(protoTasks.length)
+                setRows(newRows)
             }
         })
-    }
-
-    function getResults(): void {
-        const resultMessages = require('../protobuf/generated/result_pb');
-        const taskMessages = require('../protobuf/generated/task_pb');
-
-        let updateTaskRequest = new taskMessages.UpdateTaskRequest()
-        let updateTaskParams = new taskMessages.EditableTaskParams()
-        updateTaskRequest.setTaskUuid("daa883d8-c9b0-4c49-9f9c-b87cd5603758")
-        updateTaskParams.setStatus(3)
-        updateTaskRequest.setParams(updateTaskParams)
-        let streamResultsRequest = new resultMessages.StreamResultsRequest()
-        streamResultsRequest.setBatchUuid("1142dfa2-058d-4e88-8a80-a308a2bdae6f")
-
-        let resultServiceClient = new ResultServiceClient("http://localhost:8080", null, null)
-        let taskServiceClient = new TaskServiceClient("http://localhost:8080", null, null)
+        return () => {
+        };
+    }, [])
 
 
-        let stream = resultServiceClient.streamResults(streamResultsRequest, {})
-        // @ts-ignore
-        let arrayResult = []
-        // @ts-ignore
-        stream.on('data', function (response) {
-            let responseArray = response.getResultsList()
-            responseArray.map(
-                // @ts-ignore
-                result => arrayResult.push(result.getContent())
-            )
-            // @ts-ignore
-            console.log(arrayResult)
-            if (responseArray[responseArray.length - 1].getContent() > 359) {
-                console.log("stopping")
-                taskServiceClient.updateTask(updateTaskRequest, {}, function (err, response) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        console.log(response);
-                    }
-                })
+    async function handleGoTo(event: React.MouseEvent<unknown>, id: number, toGo: TableData) {
+        if (toGo.value === "icon") {
+            let uuid = rows.find(row => row.id === id)?.values.find(value => value.name === "uuid")
+            if (uuid) {
+                navigate(uuid.value + "/" + toGo.name, {});
             }
-        });
-        // @ts-ignore
-        stream.on('status', function (status) {
-            console.log("status");
-            console.log(status.code);
-            console.log(status.details);
-            console.log(status.metadata);
-        });
-        // @ts-ignore
-        stream.on('end', function (end) {
-            console.log("end");
-            stream.cancel()
-        });
-
-// to close the stream
+        } else {
+            switch (toGo.name) {
+                case "taskUuid":
+                    navigate("/tasks", {replace: true});
+                    break;
+            }
+        }
 
     }
 
     return (
         <div>
             <h1>Batches</h1>
-            <EnhancedTable/>
-            {/*<Button variant="contained" onClick={getResults}>RUN</Button>*/}
+            <GenericTable rows={rows} handleGoTo={handleGoTo}/>
         </div>
 
     );

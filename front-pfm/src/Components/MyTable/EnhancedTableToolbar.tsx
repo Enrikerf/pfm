@@ -38,7 +38,6 @@ export function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     id="tableTitle"
                     component="div"
                 >
-                    Nutrition
                 </Typography>
             )}
             {numSelected > 0 ? (

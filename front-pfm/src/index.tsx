@@ -3,17 +3,40 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import TasksList from "./Tabs/TasksList";
+import BatchesTab from "./Tabs/BatchesTab";
+import ResultsTab from "./Tabs/ResultsTab";
+import TasksTab from "./Tabs/TasksTab";
+
 
 ReactDOM.render(
     <React.StrictMode>
         <meta name="viewport" content="initial-scale=1, width=device-width"/>
         <BrowserRouter>
-            <App/>
+            <Routes>
+                <Route path="/" element={<App/>}>
+                    <Route path="tasks" element={<TasksTab/>}>
+                        <Route index element={<TasksList/>}/>
+                        <Route path=":uuid/batches" element={<BatchesTab/>}/>
+                        <Route path=":uuid/results" element={<ResultsTab/>}/>
+                    </Route>
+                    <Route path="/batches" element={<BatchesTab/>}/>
+                    <Route path="/results" element={<ResultsTab/>}/>
+                </Route>
+                <Route
+                    path="*"
+                    element={
+                        <main style={{ padding: "1rem" }}>
+                            <p>There's nothing here!</p>
+                        </main>
+                    }
+                />
+            </Routes>
         </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root')

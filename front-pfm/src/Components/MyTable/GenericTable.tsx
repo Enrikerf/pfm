@@ -1,50 +1,66 @@
 import * as React from 'react';
+import {useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import EnhancedTableHead from "./EnhancedTableHead";
-import {TableFunctions} from "./TableFunctions";
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import IconButton from "@mui/material/IconButton";
 import {TableOrder} from "./TableOrder";
-import {EnhancedTableToolbar} from "./EnhancedTableToolbar";
 import {TableData} from "./TableData";
-import {Checkbox} from "@mui/material";
 import {TableRowData} from "./TableRowData";
+import TableCell from '@mui/material/TableCell';
+import EnhancedTableHead from "./EnhancedTableHead";
+import {EnhancedTableToolbar} from "./EnhancedTableToolbar";
+import {Checkbox} from "@mui/material";
+import {HeadCell} from "./HeadCell";
 
-export default function GenericTable(props: { rows: TableRowData[] }) {
-    const functions = new TableFunctions()
-    const [rows,setRows] = React.useState<TableRowData[]>(props.rows);
+export default function GenericTable(props: {
+    rows: TableRowData[],
+    handleGoTo: (event: React.MouseEvent<unknown>, id: number, toGo: TableData) => void
+}) {
+    const [rows, setRows] = React.useState<TableRowData[]>([]);
+    const [heads, setHeads] = React.useState<HeadCell[]>([]);
     const [order, setOrder] = React.useState<TableOrder>('asc');
     const [orderBy, setOrderBy] = React.useState<string>('uuid');
-    const [selected, setSelected] = React.useState<readonly string[]>([]);
+    const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
+    const [dense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const heads = ()=>{
-        return rows[0].values.map((row,index)=> {
-            if(index ===0){
-                return {
-                    "id":row.name,
-                    "numeric": false,
-                    "disablePadding":true,
-                    "label": row.name
-                }
-            }else{
-                return {
-                    "id":row.name,
-                    "numeric": true,
-                    "disablePadding":false,
-                    "label": row.name
-                }
+
+    useEffect(() => {
+        function getHeads(currentRows: TableRowData[]): HeadCell[] {
+            if (currentRows.length <= 0) {
+                return []
             }
-        })
-    }
+            return currentRows[0].values.map((row, index) => {
+                if (index === 0) {
+                    return {
+                        "id": row.name,
+                        "numeric": false,
+                        "disablePadding": true,
+                        "label": row.name
+                    }
+                } else {
+                    return {
+                        "id": row.name,
+                        "numeric": true,
+                        "disablePadding": false,
+                        "label": row.name
+                    }
+                }
+            })
+        }
+
+        setRows(props.rows)
+        setHeads(getHeads(props.rows))
+        return () => {
+        };
+    }, [props.rows])
+
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -57,19 +73,19 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            // const newSelecteds = rows.values.map((n) => n.value);
-            // setSelected(newSelecteds);
-            // return;
+            const newSelecteds = rows.map((n) => n.id);
+            setSelected(newSelecteds);
+            return;
         }
         setSelected([]);
     };
 
-    const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-        const selectedIndex = selected.indexOf(name);
-        let newSelected: readonly string[] = [];
+    const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+        const selectedIndex = selected.indexOf(id);
+        let newSelected: readonly number[] = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
+            newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -84,6 +100,7 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
         setSelected(newSelected);
     };
 
+
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -93,11 +110,7 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
         setPage(0);
     };
 
-    const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDense(event.target.checked);
-    };
-
-    const isSelected = (name: string) => selected.indexOf(name) !== -1;
+    const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -110,7 +123,7 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
                 <TableContainer>
                     <Table sx={{minWidth: 750}} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
                         <EnhancedTableHead
-                            heads={heads()}
+                            heads={heads}
                             numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
@@ -121,13 +134,12 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
                         <TableBody>
                             {
                                 rows.map((row, index) => {
-                                    const isItemSelected = isSelected(row.values[0].name);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            // onClick={(event) => handleClick(event, row.uuid)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
@@ -136,6 +148,7 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
                                         >
                                             <TableCell padding="checkbox">
                                                 <Checkbox
+                                                    onClick={(event) => handleClick(event, row.id)}
                                                     color="primary"
                                                     checked={isItemSelected}
                                                     inputProps={{
@@ -146,19 +159,67 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
                                             {
                                                 row.values.map((value, i) => {
                                                     if (i === 0) {
-                                                        return (
-                                                            <TableCell
-                                                                component="th"
-                                                                id={labelId}
-                                                                key={i}
-                                                                scope="row"
-                                                                padding="none"
-                                                            >
-                                                                {value.value}
-                                                            </TableCell>
-                                                        )
-                                                    } else {
-                                                        return (<TableCell key={i} align="right">{value.value}</TableCell>)
+                                                        if (value.value === "icon") {
+                                                            return (
+                                                                <TableCell key={i}  component="th"
+                                                                           id={labelId}
+                                                                           scope="row"
+                                                                           padding="none">
+                                                                    <IconButton
+                                                                        onClick={
+                                                                            (event) =>
+                                                                                props.handleGoTo(event, row.id, value)
+                                                                        }
+                                                                    >
+                                                                        <ArrowCircleRightIcon/>
+                                                                    </IconButton>
+                                                                </TableCell>
+                                                            )
+                                                        } else {
+                                                            return (
+                                                                <TableCell
+                                                                    key={i}
+                                                                    component="th"
+                                                                    id={labelId}
+                                                                    scope="row"
+                                                                    padding="none"
+                                                                    onClick={
+                                                                        (event) =>
+                                                                            props.handleGoTo(event, row.id, value)
+                                                                    }
+                                                                >
+                                                                    {value.value}
+                                                                </TableCell>)
+                                                        }
+
+
+                                                } else {
+                                                        if (value.value === "icon") {
+                                                            return (
+                                                                <TableCell key={i} align="right">
+                                                                    <IconButton
+                                                                        onClick={
+                                                                            (event) =>
+                                                                                props.handleGoTo(event, row.id, value)
+                                                                        }
+                                                                    >
+                                                                        <ArrowCircleRightIcon/>
+                                                                    </IconButton>
+                                                                </TableCell>
+                                                            )
+                                                        } else {
+                                                            return (
+                                                                <TableCell
+                                                                    key={i}
+                                                                    align="right"
+                                                                    onClick={
+                                                                        (event) =>
+                                                                            props.handleGoTo(event, row.id, value)
+                                                                    }
+                                                                >
+                                                                    {value.value}
+                                                                </TableCell>)
+                                                        }
                                                     }
 
 
@@ -189,10 +250,6 @@ export default function GenericTable(props: { rows: TableRowData[] }) {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense}/>}
-                label="Dense padding"
-            />
         </Box>
     );
 }

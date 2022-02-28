@@ -29,7 +29,9 @@ export default function ResponsiveAppBar() {
     };
 
     const handleCloseNavMenu = (page:string) => {
-        navigate(page, { });
+        setTimeout(() => {
+            navigate(page, {});
+        }, 59);
         setAnchorElNav(null);
     };
 
