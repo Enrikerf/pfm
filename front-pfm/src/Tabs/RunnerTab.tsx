@@ -7,7 +7,7 @@ import {TaskServiceClient} from "../protobuf/generated/task_grpc_web_pb";
 import {useParams} from "react-router-dom";
 import {useState} from "react";
 
-export default function RunTab() {
+export default function RunnerTab() {
 
     let {taskUuid} = useParams()
     const [batchUuid,setBatchUuid] = useState("")
