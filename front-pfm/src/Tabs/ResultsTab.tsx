@@ -5,6 +5,7 @@ import GenericTable from "../Components/MyTable/GenericTable";
 import {TableRowData} from "../Components/MyTable/TableRowData";
 import {ResultServiceClient} from "../protobuf/generated/result_grpc_web_pb";
 import {TableData} from "../Components/MyTable/TableData";
+import messages from "../protobuf/generated/batch_pb";
 
 export default function ResultsTab() {
     let location = useLocation();
@@ -14,6 +15,13 @@ export default function ResultsTab() {
     useEffect(() => {
         const messages = require('../protobuf/generated/result_pb');
         let listTaskRequest = new messages.ListResultRequest()
+        let google_protobuf_wrappers_pb = require('google-protobuf/google/protobuf/wrappers_pb.js');
+        if (uuid) {
+            let uuidStringValue = new google_protobuf_wrappers_pb.StringValue([uuid])
+            let filters = new messages.Filters()
+            filters.setBatchUuid(uuidStringValue)
+            listTaskRequest.setFilters(filters)
+        }
         let metadata = {};
         let taskService = new ResultServiceClient("http://localhost:8080", null, null)
         taskService.listResult(listTaskRequest, metadata, function (err, response) {
@@ -47,7 +55,7 @@ export default function ResultsTab() {
 
     return (
         <div>
-            <h1>from task: {uuid}</h1>
+            <h1>from batch: {uuid}</h1>
             <h1>Results</h1>
             <GenericTable rows={rows} handleGoTo={handleGoTo}/>
         </div>

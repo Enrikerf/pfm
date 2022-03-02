@@ -1,6 +1,7 @@
 syntax = "proto3";
 package batch;
 option go_package = "./batch";
+import "google/protobuf/wrappers.proto";
 
 service BatchService{
   rpc CreateBatch (CreateBatchRequest) returns (CreateBatchResponse);
@@ -21,6 +22,9 @@ message CreateBatchParams{
 }
 message EditableBatchParams{
   string task_uuid = 1;
+}
+message Filters{
+  google.protobuf.StringValue task_uuid = 1;
 }
 
 message CreateBatchRequest{
@@ -48,9 +52,13 @@ message DeleteBatchRequest{
 }
 message DeleteBatchResponse{}
 
-message ListBatchesRequest{}
+message ListBatchesRequest{
+  Filters filters = 1;
+}
 message ListBatchesResponse{
   repeated Batch batches = 1;
 }
+
+
 
 

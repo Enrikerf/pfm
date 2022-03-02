@@ -9,6 +9,7 @@ package batch
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
 	reflect "reflect"
 	sync "sync"
 )
@@ -185,6 +186,53 @@ func (x *EditableBatchParams) GetTaskUuid() string {
 	return ""
 }
 
+type Filters struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	TaskUuid *wrapperspb.StringValue `protobuf:"bytes,1,opt,name=task_uuid,json=taskUuid,proto3" json:"task_uuid,omitempty"`
+}
+
+func (x *Filters) Reset() {
+	*x = Filters{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Filters) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Filters) ProtoMessage() {}
+
+func (x *Filters) ProtoReflect() protoreflect.Message {
+	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Filters.ProtoReflect.Descriptor instead.
+func (*Filters) Descriptor() ([]byte, []int) {
+	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *Filters) GetTaskUuid() *wrapperspb.StringValue {
+	if x != nil {
+		return x.TaskUuid
+	}
+	return nil
+}
+
 type CreateBatchRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -196,7 +244,7 @@ type CreateBatchRequest struct {
 func (x *CreateBatchRequest) Reset() {
 	*x = CreateBatchRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[3]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -209,7 +257,7 @@ func (x *CreateBatchRequest) String() string {
 func (*CreateBatchRequest) ProtoMessage() {}
 
 func (x *CreateBatchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[3]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -222,7 +270,7 @@ func (x *CreateBatchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateBatchRequest.ProtoReflect.Descriptor instead.
 func (*CreateBatchRequest) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{3}
+	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateBatchRequest) GetBatchParams() *CreateBatchParams {
@@ -243,7 +291,7 @@ type CreateBatchResponse struct {
 func (x *CreateBatchResponse) Reset() {
 	*x = CreateBatchResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[4]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -256,7 +304,7 @@ func (x *CreateBatchResponse) String() string {
 func (*CreateBatchResponse) ProtoMessage() {}
 
 func (x *CreateBatchResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[4]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -269,7 +317,7 @@ func (x *CreateBatchResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateBatchResponse.ProtoReflect.Descriptor instead.
 func (*CreateBatchResponse) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{4}
+	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *CreateBatchResponse) GetBatch() *Batch {
@@ -290,7 +338,7 @@ type ReadBatchRequest struct {
 func (x *ReadBatchRequest) Reset() {
 	*x = ReadBatchRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[5]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -303,7 +351,7 @@ func (x *ReadBatchRequest) String() string {
 func (*ReadBatchRequest) ProtoMessage() {}
 
 func (x *ReadBatchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[5]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -316,7 +364,7 @@ func (x *ReadBatchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadBatchRequest.ProtoReflect.Descriptor instead.
 func (*ReadBatchRequest) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{5}
+	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ReadBatchRequest) GetBatchUuid() string {
@@ -337,7 +385,7 @@ type ReadBatchResponse struct {
 func (x *ReadBatchResponse) Reset() {
 	*x = ReadBatchResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[6]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -350,7 +398,7 @@ func (x *ReadBatchResponse) String() string {
 func (*ReadBatchResponse) ProtoMessage() {}
 
 func (x *ReadBatchResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[6]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -363,7 +411,7 @@ func (x *ReadBatchResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadBatchResponse.ProtoReflect.Descriptor instead.
 func (*ReadBatchResponse) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{6}
+	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ReadBatchResponse) GetBatch() *Batch {
@@ -385,7 +433,7 @@ type UpdateBatchRequest struct {
 func (x *UpdateBatchRequest) Reset() {
 	*x = UpdateBatchRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[7]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -398,7 +446,7 @@ func (x *UpdateBatchRequest) String() string {
 func (*UpdateBatchRequest) ProtoMessage() {}
 
 func (x *UpdateBatchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[7]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -411,7 +459,7 @@ func (x *UpdateBatchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateBatchRequest.ProtoReflect.Descriptor instead.
 func (*UpdateBatchRequest) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{7}
+	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *UpdateBatchRequest) GetBatchUuid() string {
@@ -437,7 +485,7 @@ type UpdateBatchResponse struct {
 func (x *UpdateBatchResponse) Reset() {
 	*x = UpdateBatchResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[8]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -450,7 +498,7 @@ func (x *UpdateBatchResponse) String() string {
 func (*UpdateBatchResponse) ProtoMessage() {}
 
 func (x *UpdateBatchResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[8]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -463,7 +511,7 @@ func (x *UpdateBatchResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateBatchResponse.ProtoReflect.Descriptor instead.
 func (*UpdateBatchResponse) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{8}
+	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{9}
 }
 
 type DeleteBatchRequest struct {
@@ -477,7 +525,7 @@ type DeleteBatchRequest struct {
 func (x *DeleteBatchRequest) Reset() {
 	*x = DeleteBatchRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[9]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -490,7 +538,7 @@ func (x *DeleteBatchRequest) String() string {
 func (*DeleteBatchRequest) ProtoMessage() {}
 
 func (x *DeleteBatchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[9]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -503,7 +551,7 @@ func (x *DeleteBatchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteBatchRequest.ProtoReflect.Descriptor instead.
 func (*DeleteBatchRequest) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{9}
+	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *DeleteBatchRequest) GetBatchUuid() string {
@@ -522,7 +570,7 @@ type DeleteBatchResponse struct {
 func (x *DeleteBatchResponse) Reset() {
 	*x = DeleteBatchResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[10]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -535,7 +583,7 @@ func (x *DeleteBatchResponse) String() string {
 func (*DeleteBatchResponse) ProtoMessage() {}
 
 func (x *DeleteBatchResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[10]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -548,19 +596,21 @@ func (x *DeleteBatchResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteBatchResponse.ProtoReflect.Descriptor instead.
 func (*DeleteBatchResponse) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{10}
+	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{11}
 }
 
 type ListBatchesRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Filters *Filters `protobuf:"bytes,1,opt,name=filters,proto3" json:"filters,omitempty"`
 }
 
 func (x *ListBatchesRequest) Reset() {
 	*x = ListBatchesRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[11]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -573,7 +623,7 @@ func (x *ListBatchesRequest) String() string {
 func (*ListBatchesRequest) ProtoMessage() {}
 
 func (x *ListBatchesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[11]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -586,7 +636,14 @@ func (x *ListBatchesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListBatchesRequest.ProtoReflect.Descriptor instead.
 func (*ListBatchesRequest) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{11}
+	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ListBatchesRequest) GetFilters() *Filters {
+	if x != nil {
+		return x.Filters
+	}
+	return nil
 }
 
 type ListBatchesResponse struct {
@@ -600,7 +657,7 @@ type ListBatchesResponse struct {
 func (x *ListBatchesResponse) Reset() {
 	*x = ListBatchesResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[12]
+		mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -613,7 +670,7 @@ func (x *ListBatchesResponse) String() string {
 func (*ListBatchesResponse) ProtoMessage() {}
 
 func (x *ListBatchesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[12]
+	mi := &file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -626,7 +683,7 @@ func (x *ListBatchesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListBatchesResponse.ProtoReflect.Descriptor instead.
 func (*ListBatchesResponse) Descriptor() ([]byte, []int) {
-	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{12}
+	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ListBatchesResponse) GetBatches() []*Batch {
@@ -642,7 +699,9 @@ var file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDesc = []byte{
 	0x0a, 0x28, 0x61, 0x70, 0x70, 0x2f, 0x41, 0x64, 0x61, 0x70, 0x74, 0x65, 0x72, 0x2f, 0x49, 0x6e,
 	0x2f, 0x41, 0x70, 0x69, 0x47, 0x72, 0x63, 0x70, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x62,
 	0x61, 0x74, 0x63, 0x68, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x05, 0x62, 0x61, 0x74, 0x63,
-	0x68, 0x22, 0x76, 0x0a, 0x05, 0x42, 0x61, 0x74, 0x63, 0x68, 0x12, 0x12, 0x0a, 0x04, 0x75, 0x75,
+	0x68, 0x1a, 0x1e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
+	0x75, 0x66, 0x2f, 0x77, 0x72, 0x61, 0x70, 0x70, 0x65, 0x72, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x22, 0x76, 0x0a, 0x05, 0x42, 0x61, 0x74, 0x63, 0x68, 0x12, 0x12, 0x0a, 0x04, 0x75, 0x75,
 	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x75, 0x75, 0x69, 0x64, 0x12, 0x1b,
 	0x0a, 0x09, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x75, 0x75, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
 	0x09, 0x52, 0x08, 0x74, 0x61, 0x73, 0x6b, 0x55, 0x75, 0x69, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x63,
@@ -656,36 +715,43 @@ var file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDesc = []byte{
 	0x64, 0x69, 0x74, 0x61, 0x62, 0x6c, 0x65, 0x42, 0x61, 0x74, 0x63, 0x68, 0x50, 0x61, 0x72, 0x61,
 	0x6d, 0x73, 0x12, 0x1b, 0x0a, 0x09, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x75, 0x75, 0x69, 0x64, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x74, 0x61, 0x73, 0x6b, 0x55, 0x75, 0x69, 0x64, 0x22,
-	0x50, 0x0a, 0x12, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x3a, 0x0a, 0x0b, 0x62, 0x61, 0x74, 0x63, 0x68, 0x50, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x62, 0x61, 0x74,
-	0x63, 0x68, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x42, 0x61, 0x74, 0x63, 0x68, 0x50, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x52, 0x0b, 0x62, 0x61, 0x74, 0x63, 0x68, 0x50, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x22, 0x39, 0x0a, 0x13, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x42, 0x61, 0x74, 0x63, 0x68,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x22, 0x0a, 0x05, 0x62, 0x61, 0x74, 0x63,
-	0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x62, 0x61, 0x74, 0x63, 0x68, 0x2e,
-	0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x05, 0x62, 0x61, 0x74, 0x63, 0x68, 0x22, 0x31, 0x0a, 0x10,
-	0x52, 0x65, 0x61, 0x64, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x61, 0x74, 0x63, 0x68, 0x5f, 0x75, 0x75, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x61, 0x74, 0x63, 0x68, 0x55, 0x75, 0x69, 0x64, 0x22,
-	0x37, 0x0a, 0x11, 0x52, 0x65, 0x61, 0x64, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x22, 0x0a, 0x05, 0x62, 0x61, 0x74, 0x63, 0x68, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x62, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x42, 0x61, 0x74, 0x63,
-	0x68, 0x52, 0x05, 0x62, 0x61, 0x74, 0x63, 0x68, 0x22, 0x67, 0x0a, 0x12, 0x55, 0x70, 0x64, 0x61,
-	0x74, 0x65, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d,
-	0x0a, 0x0a, 0x62, 0x61, 0x74, 0x63, 0x68, 0x5f, 0x75, 0x75, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x09, 0x62, 0x61, 0x74, 0x63, 0x68, 0x55, 0x75, 0x69, 0x64, 0x12, 0x32, 0x0a,
-	0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
-	0x62, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x45, 0x64, 0x69, 0x74, 0x61, 0x62, 0x6c, 0x65, 0x42, 0x61,
-	0x74, 0x63, 0x68, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x22, 0x15, 0x0a, 0x13, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x42, 0x61, 0x74, 0x63, 0x68,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x33, 0x0a, 0x12, 0x44, 0x65, 0x6c, 0x65,
-	0x74, 0x65, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d,
-	0x0a, 0x0a, 0x62, 0x61, 0x74, 0x63, 0x68, 0x5f, 0x75, 0x75, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x09, 0x62, 0x61, 0x74, 0x63, 0x68, 0x55, 0x75, 0x69, 0x64, 0x22, 0x15, 0x0a,
-	0x13, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x14, 0x0a, 0x12, 0x4c, 0x69, 0x73, 0x74, 0x42, 0x61, 0x74, 0x63,
-	0x68, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x3d, 0x0a, 0x13, 0x4c, 0x69,
+	0x44, 0x0a, 0x07, 0x46, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x73, 0x12, 0x39, 0x0a, 0x09, 0x74, 0x61,
+	0x73, 0x6b, 0x5f, 0x75, 0x75, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e,
+	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
+	0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x08, 0x74, 0x61, 0x73,
+	0x6b, 0x55, 0x75, 0x69, 0x64, 0x22, 0x50, 0x0a, 0x12, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x42,
+	0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x3a, 0x0a, 0x0b, 0x62,
+	0x61, 0x74, 0x63, 0x68, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x18, 0x2e, 0x62, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x42,
+	0x61, 0x74, 0x63, 0x68, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x0b, 0x62, 0x61, 0x74, 0x63,
+	0x68, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x39, 0x0a, 0x13, 0x43, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x22,
+	0x0a, 0x05, 0x62, 0x61, 0x74, 0x63, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0c, 0x2e,
+	0x62, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x05, 0x62, 0x61, 0x74,
+	0x63, 0x68, 0x22, 0x31, 0x0a, 0x10, 0x52, 0x65, 0x61, 0x64, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x61, 0x74, 0x63, 0x68, 0x5f,
+	0x75, 0x75, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x61, 0x74, 0x63,
+	0x68, 0x55, 0x75, 0x69, 0x64, 0x22, 0x37, 0x0a, 0x11, 0x52, 0x65, 0x61, 0x64, 0x42, 0x61, 0x74,
+	0x63, 0x68, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x22, 0x0a, 0x05, 0x62, 0x61,
+	0x74, 0x63, 0x68, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x62, 0x61, 0x74, 0x63,
+	0x68, 0x2e, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x05, 0x62, 0x61, 0x74, 0x63, 0x68, 0x22, 0x67,
+	0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x61, 0x74, 0x63, 0x68, 0x5f, 0x75, 0x75,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x61, 0x74, 0x63, 0x68, 0x55,
+	0x75, 0x69, 0x64, 0x12, 0x32, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x62, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x45, 0x64, 0x69, 0x74,
+	0x61, 0x62, 0x6c, 0x65, 0x42, 0x61, 0x74, 0x63, 0x68, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52,
+	0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x15, 0x0a, 0x13, 0x55, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x33,
+	0x0a, 0x12, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x42, 0x61, 0x74, 0x63, 0x68, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x62, 0x61, 0x74, 0x63, 0x68, 0x5f, 0x75, 0x75,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x62, 0x61, 0x74, 0x63, 0x68, 0x55,
+	0x75, 0x69, 0x64, 0x22, 0x15, 0x0a, 0x13, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x42, 0x61, 0x74,
+	0x63, 0x68, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x3e, 0x0a, 0x12, 0x4c, 0x69,
+	0x73, 0x74, 0x42, 0x61, 0x74, 0x63, 0x68, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x28, 0x0a, 0x07, 0x66, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x0e, 0x2e, 0x62, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x46, 0x69, 0x6c, 0x74, 0x65, 0x72,
+	0x73, 0x52, 0x07, 0x66, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x73, 0x22, 0x3d, 0x0a, 0x13, 0x4c, 0x69,
 	0x73, 0x74, 0x42, 0x61, 0x74, 0x63, 0x68, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
 	0x65, 0x12, 0x26, 0x0a, 0x07, 0x62, 0x61, 0x74, 0x63, 0x68, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03,
 	0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x62, 0x61, 0x74, 0x63, 0x68, 0x2e, 0x42, 0x61, 0x74, 0x63, 0x68,
@@ -728,43 +794,47 @@ func file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescGZIP() []byte {
 	return file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDescData
 }
 
-var file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_app_Adapter_In_ApiGrcp_proto_batch_proto_goTypes = []interface{}{
-	(*Batch)(nil),               // 0: batch.Batch
-	(*CreateBatchParams)(nil),   // 1: batch.CreateBatchParams
-	(*EditableBatchParams)(nil), // 2: batch.EditableBatchParams
-	(*CreateBatchRequest)(nil),  // 3: batch.CreateBatchRequest
-	(*CreateBatchResponse)(nil), // 4: batch.CreateBatchResponse
-	(*ReadBatchRequest)(nil),    // 5: batch.ReadBatchRequest
-	(*ReadBatchResponse)(nil),   // 6: batch.ReadBatchResponse
-	(*UpdateBatchRequest)(nil),  // 7: batch.UpdateBatchRequest
-	(*UpdateBatchResponse)(nil), // 8: batch.UpdateBatchResponse
-	(*DeleteBatchRequest)(nil),  // 9: batch.DeleteBatchRequest
-	(*DeleteBatchResponse)(nil), // 10: batch.DeleteBatchResponse
-	(*ListBatchesRequest)(nil),  // 11: batch.ListBatchesRequest
-	(*ListBatchesResponse)(nil), // 12: batch.ListBatchesResponse
+	(*Batch)(nil),                  // 0: batch.Batch
+	(*CreateBatchParams)(nil),      // 1: batch.CreateBatchParams
+	(*EditableBatchParams)(nil),    // 2: batch.EditableBatchParams
+	(*Filters)(nil),                // 3: batch.Filters
+	(*CreateBatchRequest)(nil),     // 4: batch.CreateBatchRequest
+	(*CreateBatchResponse)(nil),    // 5: batch.CreateBatchResponse
+	(*ReadBatchRequest)(nil),       // 6: batch.ReadBatchRequest
+	(*ReadBatchResponse)(nil),      // 7: batch.ReadBatchResponse
+	(*UpdateBatchRequest)(nil),     // 8: batch.UpdateBatchRequest
+	(*UpdateBatchResponse)(nil),    // 9: batch.UpdateBatchResponse
+	(*DeleteBatchRequest)(nil),     // 10: batch.DeleteBatchRequest
+	(*DeleteBatchResponse)(nil),    // 11: batch.DeleteBatchResponse
+	(*ListBatchesRequest)(nil),     // 12: batch.ListBatchesRequest
+	(*ListBatchesResponse)(nil),    // 13: batch.ListBatchesResponse
+	(*wrapperspb.StringValue)(nil), // 14: google.protobuf.StringValue
 }
 var file_app_Adapter_In_ApiGrcp_proto_batch_proto_depIdxs = []int32{
-	1,  // 0: batch.CreateBatchRequest.batchParams:type_name -> batch.CreateBatchParams
-	0,  // 1: batch.CreateBatchResponse.batch:type_name -> batch.Batch
-	0,  // 2: batch.ReadBatchResponse.batch:type_name -> batch.Batch
-	2,  // 3: batch.UpdateBatchRequest.params:type_name -> batch.EditableBatchParams
-	0,  // 4: batch.ListBatchesResponse.batches:type_name -> batch.Batch
-	3,  // 5: batch.BatchService.CreateBatch:input_type -> batch.CreateBatchRequest
-	5,  // 6: batch.BatchService.ReadBatch:input_type -> batch.ReadBatchRequest
-	7,  // 7: batch.BatchService.UpdateBatch:input_type -> batch.UpdateBatchRequest
-	9,  // 8: batch.BatchService.DeleteBatch:input_type -> batch.DeleteBatchRequest
-	11, // 9: batch.BatchService.ListBatches:input_type -> batch.ListBatchesRequest
-	4,  // 10: batch.BatchService.CreateBatch:output_type -> batch.CreateBatchResponse
-	6,  // 11: batch.BatchService.ReadBatch:output_type -> batch.ReadBatchResponse
-	8,  // 12: batch.BatchService.UpdateBatch:output_type -> batch.UpdateBatchResponse
-	10, // 13: batch.BatchService.DeleteBatch:output_type -> batch.DeleteBatchResponse
-	12, // 14: batch.BatchService.ListBatches:output_type -> batch.ListBatchesResponse
-	10, // [10:15] is the sub-list for method output_type
-	5,  // [5:10] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	14, // 0: batch.Filters.task_uuid:type_name -> google.protobuf.StringValue
+	1,  // 1: batch.CreateBatchRequest.batchParams:type_name -> batch.CreateBatchParams
+	0,  // 2: batch.CreateBatchResponse.batch:type_name -> batch.Batch
+	0,  // 3: batch.ReadBatchResponse.batch:type_name -> batch.Batch
+	2,  // 4: batch.UpdateBatchRequest.params:type_name -> batch.EditableBatchParams
+	3,  // 5: batch.ListBatchesRequest.filters:type_name -> batch.Filters
+	0,  // 6: batch.ListBatchesResponse.batches:type_name -> batch.Batch
+	4,  // 7: batch.BatchService.CreateBatch:input_type -> batch.CreateBatchRequest
+	6,  // 8: batch.BatchService.ReadBatch:input_type -> batch.ReadBatchRequest
+	8,  // 9: batch.BatchService.UpdateBatch:input_type -> batch.UpdateBatchRequest
+	10, // 10: batch.BatchService.DeleteBatch:input_type -> batch.DeleteBatchRequest
+	12, // 11: batch.BatchService.ListBatches:input_type -> batch.ListBatchesRequest
+	5,  // 12: batch.BatchService.CreateBatch:output_type -> batch.CreateBatchResponse
+	7,  // 13: batch.BatchService.ReadBatch:output_type -> batch.ReadBatchResponse
+	9,  // 14: batch.BatchService.UpdateBatch:output_type -> batch.UpdateBatchResponse
+	11, // 15: batch.BatchService.DeleteBatch:output_type -> batch.DeleteBatchResponse
+	13, // 16: batch.BatchService.ListBatches:output_type -> batch.ListBatchesResponse
+	12, // [12:17] is the sub-list for method output_type
+	7,  // [7:12] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_app_Adapter_In_ApiGrcp_proto_batch_proto_init() }
@@ -810,7 +880,7 @@ func file_app_Adapter_In_ApiGrcp_proto_batch_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateBatchRequest); i {
+			switch v := v.(*Filters); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -822,7 +892,7 @@ func file_app_Adapter_In_ApiGrcp_proto_batch_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateBatchResponse); i {
+			switch v := v.(*CreateBatchRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -834,7 +904,7 @@ func file_app_Adapter_In_ApiGrcp_proto_batch_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReadBatchRequest); i {
+			switch v := v.(*CreateBatchResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -846,7 +916,7 @@ func file_app_Adapter_In_ApiGrcp_proto_batch_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ReadBatchResponse); i {
+			switch v := v.(*ReadBatchRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -858,7 +928,7 @@ func file_app_Adapter_In_ApiGrcp_proto_batch_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateBatchRequest); i {
+			switch v := v.(*ReadBatchResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -870,7 +940,7 @@ func file_app_Adapter_In_ApiGrcp_proto_batch_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateBatchResponse); i {
+			switch v := v.(*UpdateBatchRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -882,7 +952,7 @@ func file_app_Adapter_In_ApiGrcp_proto_batch_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteBatchRequest); i {
+			switch v := v.(*UpdateBatchResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -894,7 +964,7 @@ func file_app_Adapter_In_ApiGrcp_proto_batch_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteBatchResponse); i {
+			switch v := v.(*DeleteBatchRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -906,7 +976,7 @@ func file_app_Adapter_In_ApiGrcp_proto_batch_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ListBatchesRequest); i {
+			switch v := v.(*DeleteBatchResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -918,6 +988,18 @@ func file_app_Adapter_In_ApiGrcp_proto_batch_proto_init() {
 			}
 		}
 		file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListBatchesRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_app_Adapter_In_ApiGrcp_proto_batch_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ListBatchesResponse); i {
 			case 0:
 				return &v.state
@@ -936,7 +1018,7 @@ func file_app_Adapter_In_ApiGrcp_proto_batch_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_app_Adapter_In_ApiGrcp_proto_batch_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

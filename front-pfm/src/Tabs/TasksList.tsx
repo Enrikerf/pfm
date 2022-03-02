@@ -34,7 +34,6 @@ function TasksList() {
                             {name: "status", value: protoTasks[i].getStatus()},
                             {name: "executionMode", value: protoTasks[i].getExecutionmode()},
                             {name: "batches", value: "icon"},
-                            {name: "results", value: "icon"},
                             {name: "steps", value: "icon"},
                             {name: "createdAt", value: ""},
                             {name: "updatedAt", value: ""},

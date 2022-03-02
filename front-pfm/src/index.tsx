@@ -12,8 +12,9 @@ import TasksList from "./Tabs/TasksList";
 import BatchesTab from "./Tabs/BatchesTab";
 import ResultsTab from "./Tabs/ResultsTab";
 import TasksTab from "./Tabs/TasksTab";
-import RunnerTab from "./Tabs/RunTab";
 import StepsTab from "./Tabs/StepsTab";
+import RunnerTab from "./Tabs/RunnerTab";
+import BatchesList from "./Tabs/BatchesList";
 
 
 ReactDOM.render(
@@ -25,17 +26,20 @@ ReactDOM.render(
                     <Route path="tasks" element={<TasksTab/>}>
                         <Route index element={<TasksList/>}/>
                         <Route path=":uuid/steps" element={<StepsTab/>}/>
-                        <Route path=":uuid/batches" element={<BatchesTab/>}/>
+                        <Route path=":uuid/batches" element={<BatchesList/>}/>
                         <Route path=":uuid/results" element={<ResultsTab/>}/>
                         <Route path=":uuid/runner" element={<RunnerTab/>}/>
                     </Route>
-                    <Route path="/batches" element={<BatchesTab/>}/>
+                    <Route path="/batches" element={<BatchesTab/>}>
+                        <Route index element={<BatchesList/>}/>
+                        <Route path=":uuid/results" element={<ResultsTab/>}/>
+                    </Route>
                     <Route path="/results" element={<ResultsTab/>}/>
                 </Route>
                 <Route
                     path="*"
                     element={
-                        <main style={{ padding: "1rem" }}>
+                        <main style={{padding: "1rem"}}>
                             <p>There's nothing here!</p>
                         </main>
                     }

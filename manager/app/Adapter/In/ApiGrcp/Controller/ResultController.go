@@ -89,7 +89,12 @@ func (controller ResultController) DeleteResult(ctx context.Context, request *re
 }
 
 func (controller ResultController) ListResult(ctx context.Context, request *resultProto.ListResultRequest) (*resultProto.ListResultResponse, error) {
-	results := controller.ListResultsUseCase.List(ListResults.Query{})
+	query := ListResults.Query{}
+	if request.GetFilters().GetBatchUuid() != nil {
+		query.BatchUuid.Change = true
+	}
+	query.BatchUuid.Value = request.GetFilters().GetBatchUuid().GetValue()
+	results := controller.ListResultsUseCase.List(query)
 	if results == nil {
 		return &resultProto.ListResultResponse{}, status.Errorf(
 			codes.Internal,

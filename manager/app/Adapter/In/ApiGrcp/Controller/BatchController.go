@@ -78,7 +78,13 @@ func (controller BatchController) DeleteBatch(ctx context.Context, request *batc
 }
 
 func (controller BatchController) ListBatches(ctx context.Context, request *batchProto.ListBatchesRequest) (*batchProto.ListBatchesResponse, error) {
-	batches := controller.ListBatchesUseCase.List(ListBatches.Query{})
+	query := ListBatches.Query{}
+	if request.GetFilters().GetTaskUuid() != nil {
+		query.TaskUuid.Change = true
+	}
+	query.TaskUuid.Value = request.GetFilters().GetTaskUuid().Value
+
+	batches := controller.ListBatchesUseCase.List(query)
 	if batches == nil {
 		return &batchProto.ListBatchesResponse{}, status.Errorf(
 			codes.Internal,

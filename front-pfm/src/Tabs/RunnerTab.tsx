@@ -72,7 +72,7 @@ export default function RunnerTab() {
     }
     return (
         <div>
-            <button onClick={run}>Run</button>
+            <button onClick={getResults}>Run</button>
             <p>1 create batch on use effect</p>
             <p>2 wait to press run</p>
             <p>3 on run execute getResultsStream</p>
