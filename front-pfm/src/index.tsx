@@ -13,7 +13,7 @@ import BatchesTab from "./Tabs/BatchesTab";
 import ResultsTab from "./Tabs/ResultsTab";
 import TasksTab from "./Tabs/TasksTab";
 import StepsTab from "./Tabs/StepsTab";
-import RunnerTab from "./Tabs/RunnerTab";
+import RunnerTab from "./Tabs/Runner/RunnerTab";
 import BatchesList from "./Tabs/BatchesList";
 
 
