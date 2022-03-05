@@ -17,6 +17,9 @@ import EnhancedTableHead from "./EnhancedTableHead";
 import {EnhancedTableToolbar} from "./EnhancedTableToolbar";
 import {Checkbox} from "@mui/material";
 import {HeadCell} from "./HeadCell";
+import "./GenericTable.scss"
+import GenericTableCellIcon from "./Components/GenericTableCellIcon";
+import GenericTableCell from "./Components/GenericTableCell";
 
 export default function GenericTable(props: {
     rows: TableRowData[],
@@ -117,138 +120,98 @@ export default function GenericTable(props: {
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
     return (
-        <Box sx={{width: '100%'}}>
-            <Paper sx={{width: '100%', mb: 2}}>
-                <EnhancedTableToolbar numSelected={selected.length}/>
-                <TableContainer>
-                    <Table sx={{minWidth: 750}} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
-                        <EnhancedTableHead
-                            heads={heads}
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
-                        />
-                        <TableBody>
-                            {
-                                rows.map((row, index) => {
-                                    const isItemSelected = isSelected(row.id);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
+        <Box className="generic-table-container">
+            <Paper sx={{width: '100%', mb: 2, margin: 0}}>
+                <div className="generic-table-paper">
+                    <div className="generic-table-paper-content">
+                        <EnhancedTableToolbar numSelected={selected.length}/>
+                        <TableContainer className={"generic-table-paper-content-table-container"}>
+                            <Table sx={{minWidth: 750}} aria-labelledby="tableTitle" size={dense ? 'small' : 'medium'}>
+                                <EnhancedTableHead
+                                    heads={heads}
+                                    numSelected={selected.length}
+                                    order={order}
+                                    orderBy={orderBy}
+                                    onSelectAllClick={handleSelectAllClick}
+                                    onRequestSort={handleRequestSort}
+                                    rowCount={rows.length}
+                                />
+                                <TableBody>
+                                    {
+                                        rows.map((row, index) => {
+                                            const isItemSelected = isSelected(row.id);
+                                            const labelId = `enhanced-table-checkbox-${index}`;
 
-                                    return (
-                                        <TableRow
-                                            hover
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={labelId}
-                                            selected={isItemSelected}
-                                        >
-                                            <TableCell padding="checkbox">
-                                                <Checkbox
-                                                    onClick={(event) => handleClick(event, row.id)}
-                                                    color="primary"
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby': labelId,
-                                                    }}
-                                                />
-                                            </TableCell>
-                                            {
-                                                row.values.map((value, i) => {
-                                                    if (i === 0) {
-                                                        if (value.value === "icon") {
-                                                            return (
-                                                                <TableCell key={i}  component="th"
-                                                                           id={labelId}
-                                                                           scope="row"
-                                                                           padding="none">
-                                                                    <IconButton
-                                                                        onClick={
-                                                                            (event) =>
-                                                                                props.handleGoTo(event, row.id, value)
-                                                                        }
-                                                                    >
-                                                                        <ArrowCircleRightIcon/>
-                                                                    </IconButton>
-                                                                </TableCell>
-                                                            )
-                                                        } else {
-                                                            return (
-                                                                <TableCell
-                                                                    key={i}
-                                                                    component="th"
-                                                                    id={labelId}
-                                                                    scope="row"
-                                                                    padding="none"
-                                                                    onClick={
-                                                                        (event) =>
-                                                                            props.handleGoTo(event, row.id, value)
-                                                                    }
-                                                                >
-                                                                    {value.value}
-                                                                </TableCell>)
-                                                        }
+                                            return (
+                                                <TableRow
+                                                    hover
+                                                    role="checkbox"
+                                                    aria-checked={isItemSelected}
+                                                    tabIndex={-1}
+                                                    key={labelId}
+                                                    selected={isItemSelected}
 
-
-                                                } else {
-                                                        if (value.value === "icon") {
-                                                            return (
-                                                                <TableCell key={i} align="right">
-                                                                    <IconButton
-                                                                        onClick={
-                                                                            (event) =>
-                                                                                props.handleGoTo(event, row.id, value)
-                                                                        }
-                                                                    >
-                                                                        <ArrowCircleRightIcon/>
-                                                                    </IconButton>
-                                                                </TableCell>
-                                                            )
-                                                        } else {
-                                                            return (
-                                                                <TableCell
-                                                                    key={i}
-                                                                    align="right"
-                                                                    onClick={
-                                                                        (event) =>
-                                                                            props.handleGoTo(event, row.id, value)
-                                                                    }
-                                                                >
-                                                                    {value.value}
-                                                                </TableCell>)
-                                                        }
+                                                >
+                                                    <TableCell padding="checkbox">
+                                                        <Checkbox
+                                                            onClick={(event) => handleClick(event, row.id)}
+                                                            color="primary"
+                                                            checked={isItemSelected}
+                                                            inputProps={{
+                                                                'aria-labelledby': labelId,
+                                                            }}
+                                                        />
+                                                    </TableCell>
+                                                    {
+                                                        row.values.map((value, i) => {
+                                                            if (value.value === "icon") {
+                                                                return (
+                                                                    <GenericTableCellIcon
+                                                                        id={row.id}
+                                                                        tableData={value}
+                                                                        handleGoTo={props.handleGoTo}
+                                                                        align={i === 0 ? "left" : "right"}
+                                                                    />
+                                                                )
+                                                            } else {
+                                                                return (
+                                                                    <GenericTableCell
+                                                                        align={i === 0 ? "left" : "right"}
+                                                                        id={row.id}
+                                                                        tableData={value}
+                                                                        handleGoTo={props.handleGoTo}
+                                                                    />
+                                                                )
+                                                            }
+                                                        })
                                                     }
-
-
-                                                })
-                                            }
+                                                </TableRow>
+                                            );
+                                        })}
+                                    {emptyRows > 0 && (
+                                        <TableRow
+                                            style={{
+                                                height: (dense ? 33 : 53) * emptyRows,
+                                            }}
+                                        >
+                                            <TableCell colSpan={6}/>
                                         </TableRow>
-                                    );
-                                })}
-                            {emptyRows > 0 && (
-                                <TableRow
-                                    style={{
-                                        height: (dense ? 33 : 53) * emptyRows,
-                                    }}
-                                >
-                                    <TableCell colSpan={6}/>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </div>
+                    <TablePagination
+                        className="generic-table-paper-pagination"
+                        rowsPerPageOptions={[5, 10, 25]}
+                        component="div"
+                        count={rows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </div>
             </Paper>
         </Box>
     );

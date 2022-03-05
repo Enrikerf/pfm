@@ -1,15 +1,17 @@
+.runner-container{
+  height: 100%;
+}
+
 .runner-button-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  margin: 20px;
+  padding: 20px;
   .runner-button-container-button {
     margin: 10px;
   }
 }
 
-.runner-container{
-}
 .runner-dashboard{
   display: flex;
   flex-direction: row;

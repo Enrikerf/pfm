@@ -54,8 +54,7 @@ export default function ResultsTab() {
     }
 
     return (
-        <div>
-            <h1>from batch: {uuid}</h1>
+        <div style={{flex: " 1 1 auto", display: "flex", flexDirection: "column"}}>
             <h1>Results</h1>
             <GenericTable rows={rows} handleGoTo={handleGoTo}/>
         </div>

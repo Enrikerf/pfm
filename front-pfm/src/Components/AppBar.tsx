@@ -13,10 +13,11 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from "react-router-dom";
 
-const pages = ['tasks', 'batches', 'results'];
+const pages = [''];
 const settings = ['Logout'];
+const title = "TFM ETSII UMA"
 
-export default function ResponsiveAppBar() {
+export default function ResponsiveAppBar(props:any) {
     let navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -40,7 +41,7 @@ export default function ResponsiveAppBar() {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar className={props.className} position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Typography
@@ -49,7 +50,7 @@ export default function ResponsiveAppBar() {
                         component="div"
                         sx={{mr: 2, display: {xs: 'none', md: 'flex'}}}
                     >
-                        LOGO
+                        {title}
                     </Typography>
 
                     <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
@@ -94,7 +95,7 @@ export default function ResponsiveAppBar() {
                         component="div"
                         sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}
                     >
-                        LOGO
+                        {title}
                     </Typography>
                     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         {pages.map((page) => (
@@ -111,7 +112,7 @@ export default function ResponsiveAppBar() {
                     <Box sx={{flexGrow: 0}}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                                <Avatar alt="EAA" src="/static/images/avatar/2.jpg"/>
                             </IconButton>
                         </Tooltip>
                         <Menu
