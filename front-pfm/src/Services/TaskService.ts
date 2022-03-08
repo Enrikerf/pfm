@@ -1,9 +1,9 @@
 import {TaskServiceClient} from "../protobuf/generated/task_grpc_web_pb";
 
-const taskMessages = require('../../protobuf/generated/task_pb')
+const taskMessages = require('../protobuf/generated/task_pb')
 const regexExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
 
-export class BatchService {
+export class TaskService {
     client: TaskServiceClient
     messages
 
@@ -14,7 +14,7 @@ export class BatchService {
     }
 
     stop(uuid: string) {
-        if(regexExp.test(uuid)){
+        if (regexExp.test(uuid)) {
             let updateTaskRequest = new taskMessages.UpdateTaskRequest()
             let updateTaskParams = new taskMessages.EditableTaskParams()
             updateTaskRequest.setTaskUuid(uuid)
@@ -24,10 +24,10 @@ export class BatchService {
                 if (err) {
                     console.log(err);
                 } else {
-                    console.log(uuid + "stopped")
+                    console.log("stopped: " + uuid)
                 }
             })
-        }else{
+        } else {
             console.log("invalid uuid to stop")
         }
 
