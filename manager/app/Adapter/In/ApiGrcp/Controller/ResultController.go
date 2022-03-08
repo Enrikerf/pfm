@@ -114,15 +114,16 @@ func (controller ResultController) ListResult(ctx context.Context, request *resu
 
 func (controller ResultController) StreamResults(request *resultProto.StreamResultsRequest, stream resultProto.ResultService_StreamResultsServer) error {
 	fmt.Printf("streaming results %v\n", request)
-	lastDate, _ := time.Parse(time.RFC3339, "1000-01-01")
+	lastId := uint(0)
 	batchUuid, err := uuid.Parse(request.GetBatchUuid())
 	if err != nil {
+		fmt.Printf("Error! - finish streaming results \n")
 		return nil
 	}
 	for {
 		results, finish := controller.StreamResultsUseCase.Stream(StreamResults.Query{
 			BatchUuid: batchUuid,
-			LastDate:  lastDate,
+			LastId:    lastId,
 		})
 		if finish {
 			fmt.Printf("finish streaming results \n")
@@ -135,8 +136,8 @@ func (controller ResultController) StreamResults(request *resultProto.StreamResu
 					Uuid:      result.Uuid.String(),
 					BatchUuid: result.BatchUuid.String(),
 					Content:   result.Content,
-					CreatedAt: result.CreatedAt.String(),
-					UpdatedAt: result.UpdatedAt.String(),
+					CreatedAt: result.CreatedAt.Format(time.RFC3339),
+					UpdatedAt: result.UpdatedAt.Format(time.RFC3339),
 				})
 			}
 			response := &resultProto.StreamResultsResponse{Results: resultProtoArray}
@@ -144,8 +145,8 @@ func (controller ResultController) StreamResults(request *resultProto.StreamResu
 			if err != nil {
 				return nil
 			}
-			lastDate = results[len(results)-1].CreatedAt
+			lastId = results[len(results)-1].ID
 		}
-		//time.Sleep(100 * time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
 	}
 }

@@ -7,12 +7,12 @@ import (
 )
 
 type Service struct {
-	FindBatchPort TaskPort.Find
+	FindTaskPort  TaskPort.Find
 	SaveBatchPort BatchPort.Save
 }
 
 func (service Service) Create(command Command) (Entity.Batch, error) {
-	task, err := service.FindBatchPort.Find(command.TaskUuid)
+	task, err := service.FindTaskPort.Find(command.TaskUuid)
 	if err != nil {
 		return Entity.Batch{}, err
 	}

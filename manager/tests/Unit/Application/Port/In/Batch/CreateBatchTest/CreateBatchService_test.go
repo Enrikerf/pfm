@@ -81,7 +81,7 @@ var tests = []struct {
 func TestCreateBatchService(t *testing.T) {
 	for _, test := range tests {
 		var service = CreateBatch.Service{
-			FindBatchPort: test.findTaskPort,
+			FindTaskPort:  test.findTaskPort,
 			SaveBatchPort: test.batchSavePort,
 		}
 		_, err := service.Create(test.command)

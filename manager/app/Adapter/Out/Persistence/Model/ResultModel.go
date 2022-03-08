@@ -24,6 +24,7 @@ func (resultModel *Result) FromDomain(selfEntity Entity.Result) {
 
 func (resultModel *Result) ToDomain() Entity.Result {
 	selfEntity := Entity.Result{}
+	selfEntity.ID = resultModel.ID
 	selfEntity.Uuid = resultModel.Uuid
 	selfEntity.BatchUuid = resultModel.BatchUuid
 	selfEntity.Content = resultModel.Content

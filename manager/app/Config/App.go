@@ -128,7 +128,10 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 	var listStepsService = ListSteps.Service{FindStepByPort: commandAdapter}
 
 	// BatchController
-	var createBatchService = CreateBatch.Service{SaveBatchPort: batchAdapter}
+	var createBatchService = CreateBatch.Service{
+		FindTaskPort:  taskAdapter,
+		SaveBatchPort: batchAdapter,
+	}
 	var readBatchService = ReadBatch.Service{FindBatchPort: batchAdapter}
 	var updateBatchService = UpdateBatch.Service{
 		FindBatchPort:   batchAdapter,
