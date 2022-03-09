@@ -172,20 +172,14 @@ func (e *engine) StopRmpControl() {
 	}
 }
 
-func (e *engine) reescalePid(pid float64) float64 {
-	var reescalePid float64
-	if math.Abs(pid) > float64(e.pwmPin.GetMaxDuty()) {
-		reescalePid = float64(e.pwmPin.GetMaxDuty())
-		if pid < 0 {
-			reescalePid = reescalePid * -1
-		}
+func (e *engine) reescalePid(pid float64) int32 {
+	if pid < float64(e.pwmPin.GetMinDuty()) {
+		return int32(e.pwmPin.GetMinDuty())
 	}
-	reescalePid = (reescalePid + float64(e.pwmPin.GetMaxDuty())) / 2
-	if math.Abs(pid) < float64(e.pwmPin.GetMinDuty()) {
-		reescalePid = float64(e.pwmPin.GetMinDuty())
+	if pid > float64(e.pwmPin.GetMaxDuty()) {
+		return int32(e.pwmPin.GetMaxDuty())
 	}
-
-	return reescalePid
+	return int32(pid)
 }
 
 func (e *engine) PositionControl() {
