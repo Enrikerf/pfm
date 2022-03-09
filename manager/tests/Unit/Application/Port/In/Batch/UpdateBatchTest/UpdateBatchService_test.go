@@ -14,14 +14,14 @@ import (
 
 /**
 factors && equivalence classes
-	FindBatchPort
+	FindTaskPort
 		- batch || error
 	FindTaskPort
 		- task  || error
 	UpdateBatchPort
 		- nil   || error
 tests
-	case	FindBatchPort		FindTaskPort		UpdateBatchPort		result
+	case	FindTaskPort		FindTaskPort		UpdateBatchPort		result
 	----------------------------------------------------------------------------
 	1		err					err					err					error
 	2		err					err 				nil					error

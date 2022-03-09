@@ -15,6 +15,8 @@
 const grpc = {};
 grpc.web = require('grpc-web');
 
+
+var google_protobuf_wrappers_pb = require('google-protobuf/google/protobuf/wrappers_pb.js')
 const proto = {};
 proto.batch = require('./batch_pb.js');
 

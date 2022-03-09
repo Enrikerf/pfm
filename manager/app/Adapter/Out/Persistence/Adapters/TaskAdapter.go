@@ -72,7 +72,7 @@ func (adapter TaskAdapter) FindBy(conditions interface{}) []TaskDomain.Task {
 		Table("tasks").
 		Preload("Steps").
 		Where(conditions).
-		Joins("inner join steps on steps.task_id = tasks.id").
+		Joins("left join steps on steps.task_id = tasks.id").
 		Group("tasks.id").
 		Find(&tasks).
 		Error

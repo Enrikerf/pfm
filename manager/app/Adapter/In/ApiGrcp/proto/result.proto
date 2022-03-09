@@ -26,6 +26,10 @@ message EditableResultParams{
   google.protobuf.StringValue batch_uuid = 1;
   google.protobuf.StringValue content = 2;
 }
+message Filters{
+  google.protobuf.StringValue batch_uuid = 1;
+}
+
 
 message CreateResultRequest{
   CreateResultParams resultParams = 1;
@@ -54,6 +58,7 @@ message DeleteResultResponse{
 }
 
 message ListResultRequest{
+ Filters filters = 1;
 }
 message ListResultResponse{
   repeated Result results = 1;

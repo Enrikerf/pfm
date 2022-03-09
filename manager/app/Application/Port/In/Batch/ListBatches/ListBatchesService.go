@@ -10,5 +10,9 @@ type Service struct {
 }
 
 func (service Service) List(query Query) []Entity.Batch {
-	return service.FindBatchesByPort.FindBy(query)
+	conditions := map[string]interface{}{}
+	if query.TaskUuid.Change {
+		conditions = map[string]interface{}{"task_uuid": query.TaskUuid.Value}
+	}
+	return service.FindBatchesByPort.FindBy(conditions)
 }

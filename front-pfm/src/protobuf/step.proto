@@ -24,6 +24,10 @@ message EditableStepParams{
   google.protobuf.StringValue task_uuid = 1;
   google.protobuf.StringValue sentence = 2;
 }
+message Filters{
+  google.protobuf.StringValue task_uuid = 1;
+}
+
 
 message CreateStepRequest{
   CreateStepParams stepParams = 1;
@@ -50,7 +54,9 @@ message DeleteStepRequest{
 }
 message DeleteStepResponse{}
 
-message ListStepsRequest{}
+message ListStepsRequest{
+  Filters filters = 1;
+}
 message ListStepsResponse{
   repeated Step steps = 1;
 }

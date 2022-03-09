@@ -22,6 +22,7 @@ func (service *Service) Stream(query Query) (results []Entity.Result, finish boo
 	//TODO: control not found
 	batch, err := service.FindBatchPort.Find(query.BatchUuid.String())
 	task, err := service.FindTaskPort.Find(batch.TaskUuid.String())
+
 	if !service.started {
 		task.Status = ValueObject.Running
 		err := service.UpdateTaskPort.Update(task)
@@ -32,7 +33,6 @@ func (service *Service) Stream(query Query) (results []Entity.Result, finish boo
 		go service.ManualCallUseCase.ExecuteTask(&task, query.BatchUuid)
 		service.started = true
 	}
-
 	if err != nil {
 		return nil, true
 	}
@@ -40,5 +40,6 @@ func (service *Service) Stream(query Query) (results []Entity.Result, finish boo
 		service.started = false
 		return nil, true
 	}
-	return service.FindResultsStreamPort.FindStream(query.BatchUuid.String(), query.LastDate), false
+
+	return service.FindResultsStreamPort.FindStream(query.BatchUuid.String(), query.LastId), false
 }

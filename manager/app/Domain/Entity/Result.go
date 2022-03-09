@@ -7,6 +7,7 @@ import (
 )
 
 type Result struct {
+	ID        uint
 	Uuid      uuid.UUID
 	BatchUuid uuid.UUID
 	Content   string

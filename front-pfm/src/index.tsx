@@ -8,12 +8,12 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import TasksList from "./Tabs/TasksList";
-import BatchesTab from "./Tabs/BatchesTab";
-import ResultsTab from "./Tabs/ResultsTab";
-import TasksTab from "./Tabs/TasksTab";
-import RunnerTab from "./Tabs/RunTab";
+import TasksTab from "./Tabs/TasksTab/TasksTab";
 import StepsTab from "./Tabs/StepsTab";
+import BatchesList from "./Tabs/BatchesTab/BatchesList";
+import ResultsTab from "./Tabs/ResultsTab";
+import RunnerTab from "./Tabs/RunnerTab/RunnerTab";
+import BatchesTab from "./Tabs/BatchesTab/BatchesTab";
 
 
 ReactDOM.render(
@@ -22,20 +22,18 @@ ReactDOM.render(
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<App/>}>
-                    <Route path="tasks" element={<TasksTab/>}>
-                        <Route index element={<TasksList/>}/>
-                        <Route path=":uuid/steps" element={<StepsTab/>}/>
-                        <Route path=":uuid/batches" element={<BatchesTab/>}/>
+                    <Route index element={<TasksTab/>}/>
+                    <Route path=":uuid/steps" element={<StepsTab/>}/>
+                    <Route path=":uuid/batches" element={<BatchesTab/>}>
+                        <Route index element={<BatchesList/>}/>
                         <Route path=":uuid/results" element={<ResultsTab/>}/>
-                        <Route path=":uuid/runner" element={<RunnerTab/>}/>
                     </Route>
-                    <Route path="/batches" element={<BatchesTab/>}/>
-                    <Route path="/results" element={<ResultsTab/>}/>
+                    <Route path=":uuid/runner" element={<RunnerTab/>}/>
                 </Route>
                 <Route
                     path="*"
                     element={
-                        <main style={{ padding: "1rem" }}>
+                        <main style={{padding: "1rem"}}>
                             <p>There's nothing here!</p>
                         </main>
                     }
