@@ -63,15 +63,15 @@ func (s *CallController) CallBidirectional(server call.CallService_CallBidirecti
 	s.ManageEngineUseCase.Reset()
 	go s.bidiRecv(server)
 	for {
-		var valueToSend float64 = 0
+		var valueToSend string = "0"
 		if s.currentCommand == "makeLap" {
-			valueToSend = float64(s.ManageEngineUseCase.GetPosition())
+			valueToSend = strconv.Itoa(int(s.ManageEngineUseCase.GetPosition()))
 		}
 		if s.currentCommand == "rpmControl" {
-			valueToSend = s.ManageEngineUseCase.GetCurrentAngularSpeed()
+			valueToSend = fmt.Sprintf("%f", s.ManageEngineUseCase.GetCurrentAngularSpeed())
 		}
 		sendError := server.Send(&call.CallResponse{
-			Result: strconv.Itoa(int(valueToSend)),
+			Result: valueToSend,
 		})
 		if sendError != nil {
 			fmt.Println("finished Bidirectional")
