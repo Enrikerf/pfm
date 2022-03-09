@@ -23,21 +23,23 @@ type Engine interface {
 	Forward()
 	Backward()
 	GetPosition() int16
+	GetCurrentAngularSpeed() float64
 	TearDown()
 	InitialState()
 }
 
 type engine struct {
-	encoderSlots     int
-	resolution       float64
-	controlAlgorithm ControlAlgorithm
-	brakePin         Pin.OutPin
-	dirPin           Pin.OutPin
-	pwmPin           Pin.PWMPin
-	encoder          Encoder
-	currentGas       GasLevel
-	forward          bool
-	isControlRunning chan bool
+	encoderSlots        int
+	resolution          float64
+	controlAlgorithm    ControlAlgorithm
+	brakePin            Pin.OutPin
+	dirPin              Pin.OutPin
+	pwmPin              Pin.PWMPin
+	encoder             Encoder
+	currentGas          GasLevel
+	forward             bool
+	isControlRunning    chan bool
+	currentAngularSpeed float64
 }
 
 //TODO: make singleton
@@ -50,16 +52,17 @@ func NewEngine(
 	encoder Encoder,
 ) Engine {
 	e := engine{
-		encoderSlots:     encoderSlots,
-		resolution:       360.0 / float64(encoderSlots),
-		controlAlgorithm: controlAlgorithm,
-		brakePin:         brakePin,
-		dirPin:           dirPin,
-		pwmPin:           pwmPin,
-		encoder:          encoder,
-		currentGas:       0,
-		forward:          true,
-		isControlRunning: make(chan bool, 1),
+		encoderSlots:        encoderSlots,
+		resolution:          360.0 / float64(encoderSlots),
+		controlAlgorithm:    controlAlgorithm,
+		brakePin:            brakePin,
+		dirPin:              dirPin,
+		pwmPin:              pwmPin,
+		encoder:             encoder,
+		currentGas:          0,
+		forward:             true,
+		isControlRunning:    make(chan bool, 1),
+		currentAngularSpeed: 0,
 	}
 	e.watchdog()
 	e.InitialState()
@@ -117,6 +120,7 @@ func (e *engine) StepResponse() {
 		angle := e.resolution * math.Abs(float64(e.encoder.GetPosition()))
 		degreesPerSecod := (angle - prevAngle) / sampleTime.Seconds()
 		radianPerSecod := degreesPerSecod * math.Pi / 180
+		e.currentAngularSpeed = radianPerSecod
 		fmt.Println(" ", radianPerSecod)
 		prevAngle = angle
 		if cont == 1 {
@@ -147,6 +151,7 @@ func (e *engine) contrlLoop(goal float64) {
 		angle := e.resolution * math.Abs(float64(e.encoder.GetPosition()))
 		degreesPerSecod := (angle - prevAngle) / sampleTime.Seconds()
 		radianPerSecod := degreesPerSecod * math.Pi / 180
+		e.currentAngularSpeed = radianPerSecod
 		pidOrig := e.controlAlgorithm.Calculate(radianPerSecod)
 		pidReescalated := e.reescalePid(pidOrig)
 		e.pwmPin.SetPWM(Pin.Duty(pidReescalated), e.pwmPin.GetMaxFrequency())
@@ -217,4 +222,8 @@ func (e *engine) TearDown() {
 	e.pwmPin.TearDown()
 	e.encoder.TearDown()
 
+}
+
+func (e *engine) GetCurrentAngularSpeed() float64 {
+	return e.currentAngularSpeed
 }

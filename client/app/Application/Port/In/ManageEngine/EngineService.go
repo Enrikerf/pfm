@@ -41,3 +41,8 @@ func (service *Service) TearDown() {
 func (service *Service) Reset() {
 	service.Engine.InitialState()
 }
+
+
+func (service *Service)GetCurrentAngularSpeed()float64{
+	return service.Engine.GetCurrentAngularSpeed()
+}

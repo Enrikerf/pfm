@@ -10,4 +10,5 @@ type UseCase interface {
 	SetGas(gas int)
 	StepResponse()
 	TearDown()
+	GetCurrentAngularSpeed()float64
 }
