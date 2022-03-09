@@ -66,7 +66,7 @@ func (api *ApiGrpc) configControllers(manageEngineUseCase ManageEngine.UseCase) 
 	var callController = Controller.CallController{
 		ManageEngineUseCase: manageEngineUseCase,
 	}
-	call.RegisterCallServiceServer(api.grpcServer, callController)
+	call.RegisterCallServiceServer(api.grpcServer, &callController)
 }
 
 func (api *ApiGrpc) loadServer() {
