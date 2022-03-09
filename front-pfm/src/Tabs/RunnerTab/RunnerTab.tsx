@@ -33,8 +33,9 @@ export default function RunnerTab() {
             let newYmin: number = 0
             let newRows: GraphPoint[] = []
             let slice: GraphPoint[]
+            let protoResults: any
             stream.on('data', function (response: { getResultsList: () => any; }) {
-                let protoResults = response.getResultsList()
+                protoResults = response.getResultsList()
                 for (let i = 0; i < protoResults.length; i++) {
                     if (~~(protoResults[i].getContent()) > yMax) {
                         newYmax = ~~(protoResults[i].getContent())
@@ -54,13 +55,19 @@ export default function RunnerTab() {
                 if (newYmin > yMin) {
                     setYMin(newYmin)
                 }
-                if (rows.length + newRows.length > 1000) {
-                    slice = rows.slice(0, 1000 - (rows.length + newRows.length))
+                console.log("----")
+                console.log(newRows.length)
+                let maxRows = 200
+                if (newRows.length > maxRows) {
+                    console.log("slicing")
+                    slice = newRows.slice(newRows.length - 200)
+                    console.log(slice.length)
+                    setRows(slice)
                 } else {
-                    slice = rows
+                    slice = newRows.slice()
+                    setRows(slice)
                 }
-                let newTotalRows = [...slice, ...newRows]
-                setRows(newTotalRows)
+
             });
 
             stream.on('end', function () {
@@ -79,6 +86,8 @@ export default function RunnerTab() {
     async function stop() {
         if (uuid !== undefined) {
             taskService.stop(uuid)
+        } else {
+            console.log("cant stop")
         }
     }
 
