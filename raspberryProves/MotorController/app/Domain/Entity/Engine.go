@@ -2,6 +2,7 @@ package Entity
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"time"
 
@@ -24,6 +25,7 @@ type Engine interface {
 	Backward()
 	GetPosition() int16
 	TearDown()
+	ReescalePid(pid float64) float64 
 }
 
 type engine struct {
@@ -147,9 +149,12 @@ func (e *engine) contrlLoop(goal float64) {
 		degreesPerSecod := (angle - prevAngle) / sampleTime.Seconds()
 		radianPerSecod := degreesPerSecod * math.Pi / 180
 		pidOrig := e.controlAlgorithm.Calculate(radianPerSecod)
-		pidReescalated := e.reescalePid(pidOrig)
+		pidReescalated := e.ReescalePid(pidOrig)
 		e.pwmPin.SetPWM(Pin.Duty(pidReescalated), e.pwmPin.GetMaxFrequency())
 		prevAngle = angle
+		log.Printf("pidRes:%f", pidReescalated)
+		// log.Print(" ")
+		// log.Print(pidReescalated)
 		if len(e.isControlRunning) == 0 {
 			e.pwmPin.SetPWM(Pin.Duty(0), e.pwmPin.GetMaxFrequency())
 			e.brakePin.Up()
@@ -166,7 +171,7 @@ func (e *engine) StopRmpControl() {
 	}
 }
 
-func (e *engine) reescalePid(pid float64) float64 {
+func (e *engine) ReescalePid(pid float64) float64 {
 	var reescalePid float64
 	if math.Abs(pid) > float64(e.pwmPin.GetMaxDuty()) {
 		reescalePid = float64(e.pwmPin.GetMaxDuty())
