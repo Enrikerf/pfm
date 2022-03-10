@@ -1,7 +1,6 @@
 package DomainTest
 
 import (
-	"github.com/Enrikerf/pfm/commands/MotorController/app/Domain/Math"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -158,6 +157,6 @@ var tests1 = []struct {
 
 func TestMapBetweenRanges(t *testing.T) {
 	for index, test := range tests1 {
-		assert.Equal(t, test.result, Math.MapBetweenRanges(test.x, test.inMin, test.inMax, test.outMin, test.outMax), "must be equals in index: %d ", index)
+		assert.Equal(t, test.result, Converter.MapBetweenRanges(test.x, test.inMin, test.inMax, test.outMin, test.outMax), "must be equals in index: %d ", index)
 	}
 }
