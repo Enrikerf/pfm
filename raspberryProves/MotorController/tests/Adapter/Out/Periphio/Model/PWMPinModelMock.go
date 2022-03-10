@@ -2,7 +2,6 @@ package ModelTest
 
 import (
 	"github.com/Enrikerf/pfm/commands/MotorController/app/Domain/Entity/Pin"
-	"periph.io/x/conn/v3/gpio"
 	"periph.io/x/conn/v3/physic"
 )
 
@@ -11,21 +10,23 @@ const (
 )
 
 type pwmPinMock struct {
+	maxDuty int32
+	minDuty int32
 }
 
-func NewPwmPinMock() Pin.PWMPin {
-	return &pwmPinMock{}
+func NewPwmPinMock(maxDuty, minDuty int32) Pin.PWMPin {
+	return &pwmPinMock{maxDuty, minDuty}
 }
 
 func (outPin *pwmPinMock) TearDown() {
 }
 
 func (outPin *pwmPinMock) GetMaxDuty() Pin.Duty {
-	return Pin.Duty(gpio.DutyMax)
+	return Pin.Duty(outPin.maxDuty)
 }
 
 func (outPin *pwmPinMock) GetMinDuty() Pin.Duty {
-	return Pin.Duty(minDuty)
+	return Pin.Duty(outPin.minDuty)
 }
 
 func (outPin *pwmPinMock) GetMaxFrequency() Pin.Frequency {
