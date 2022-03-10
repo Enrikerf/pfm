@@ -2,7 +2,6 @@ package Entity
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"time"
 
@@ -137,7 +136,7 @@ func (e *engine) contrlLoop(goal float64) {
 	radPerSecondGoal := goal * (2 * math.Pi / 60)
 	e.controlAlgorithm.SetGoal(radPerSecondGoal)
 	e.controlAlgorithm.SetP(1)
-	e.controlAlgorithm.SetI(1)
+	e.controlAlgorithm.SetI(10)
 	e.controlAlgorithm.SetD(0)
 	e.controlAlgorithm.SetLowerConstraint(float64(e.pwmPin.GetMinDuty()))
 	e.controlAlgorithm.SetUpperConstraint(float64(e.pwmPin.GetMaxDuty()))
@@ -151,12 +150,14 @@ func (e *engine) contrlLoop(goal float64) {
 		degreesPerSecod := (angle - prevAngle) / sampleTime.Seconds()
 		radianPerSecod := degreesPerSecod * math.Pi / 180
 		pidOrig := e.controlAlgorithm.Calculate(radianPerSecod)
-		pidReescalated := e.ReescalePid(pidOrig)
-		e.pwmPin.SetPWM(Pin.Duty(pidReescalated), e.pwmPin.GetMaxFrequency())
+		if pidOrig == -1 { //TODO: control error properly
+			e.pwmPin.SetPWM(Pin.Duty(0), e.pwmPin.GetMaxFrequency())
+			e.brakePin.Up()
+			<-e.isControlRunning
+			break
+		}
+		e.pwmPin.SetPWM(Pin.Duty(pidOrig), e.pwmPin.GetMaxFrequency())
 		prevAngle = angle
-		log.Printf("pidRes:%d", pidReescalated)
-		// log.Print(" ")
-		// log.Print(pidReescalated)
 		if len(e.isControlRunning) == 0 {
 			e.pwmPin.SetPWM(Pin.Duty(0), e.pwmPin.GetMaxFrequency())
 			e.brakePin.Up()

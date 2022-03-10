@@ -31,33 +31,58 @@ type controlAlgorithm struct {
 	pastError       float64
 }
 
-func (ca *controlAlgorithm) Calculate(currentValue float64) float64 {
-	ca.currentValue = currentValue
+func (ca *controlAlgorithm) Reset() {
+	ca.integralTerm = 0
+	ca.currentValue = 0
+	ca.currentError = 0
+	ca.pastError = 0
+}
 
-	x := ca.rpm2radps(1.5)
-	y := ca.rpm2radps(200)
-	currentValueMapped := ca.mapBetweenRanges(ca.currentValue, x, y, ca.lowerConstraint, ca.upperConstraint)
-	goalMapped := ca.mapBetweenRanges(ca.goal, x, y, ca.lowerConstraint, ca.upperConstraint)
-	ca.currentError = goalMapped - currentValueMapped
-	// ca.currentError = ca.mapBetweenRanges(ca.goal-ca.currentValue, x, y, ca.lowerConstraint, ca.upperConstraint)
+func (ca *controlAlgorithm) Calculate(currentValue float64) float64 {
+	
+	ca.currentValue = currentValue
+	ca.currentError = ca.goal - ca.currentValue
 	proportionalTerm := ca.P * ca.currentError
 	ca.integralTerm = ca.integralTerm + ca.currentError*ca.sampleTime
 	derivativeTerm := ca.D * (ca.currentError - ca.pastError) / ca.sampleTime
 	ca.pastError = ca.currentError
 	pid := proportionalTerm + ca.I*ca.integralTerm + derivativeTerm
+	if pid > ca.getMaxPid() { // trash value on transitory
+		log.Printf("trash+")
+		return ca.upperConstraint
+	}
+	if pid < -ca.getMaxPid() { // trash value on transitory
+		log.Printf("trash-")
+		return ca.lowerConstraint
+	}
+	pidR := ca.mapBetweenRanges(pid, -ca.getMaxPid(), ca.getMaxPid(), ca.lowerConstraint, ca.upperConstraint)
+	
 	log.Print(" ")
 	log.Printf("currentValue: %f", ca.currentValue)
-	log.Printf("goal: %f", ca.goal)
-	log.Printf("x: %f", x)
-	log.Printf("y: %f", y)
-	log.Printf("low: %f", ca.lowerConstraint)
-	log.Printf("up: %f", ca.upperConstraint)
-	log.Printf("currentValueMapped: %f", currentValueMapped)
-	log.Printf("goalMapped: %f", goalMapped)
 	log.Printf("currentError: %f", ca.currentError)
-	log.Printf("propTerm: %f, integral: %f, derivative: %f", proportionalTerm, ca.integralTerm, derivativeTerm)
-	log.Printf("pid: %f", pid)
-	return goalMapped
+	// log.Printf("goal: %f", ca.goal)
+	// log.Printf("max: %f", ca.rpm2radps(200))
+	// log.Printf("minPid: %f", -ca.getMaxPid())
+	// log.Printf("maxPid: %f", ca.getMaxPid())
+	// log.Printf("minDuty: %f", ca.lowerConstraint)
+	// log.Printf("maxDuty: %f", ca.upperConstraint)
+	// log.Printf("currentError*sample: %f", ca.currentError*ca.sampleTime)
+	// log.Printf("integral: %f", ca.integralTerm)
+	// log.Printf("propTerm: %f, integral: %f, derivative: %f", proportionalTerm, ca.integralTerm, derivativeTerm)
+	// log.Printf("pid: %f", pid)
+	// log.Printf("pidR: %f", pidR)
+	return pidR
+}
+
+func (ca *controlAlgorithm) getMinPid() float64 {
+	minError := 0.0
+	minPid := ca.P*minError + ca.I*minError + ca.D*minError
+	return minPid
+}
+func (ca *controlAlgorithm) getMaxPid() float64 {
+	maxError := ca.rpm2radps(200)
+	maxPid := ca.P*maxError + ca.I*maxError*1 + ca.D*maxError
+	return maxPid
 }
 
 func (ca *controlAlgorithm) radps2rpm(radps float64) float64 {
@@ -73,7 +98,10 @@ func (ca *controlAlgorithm) degps2Radps(degreesPerSecod float64) float64 {
 }
 
 func (ca *controlAlgorithm) mapBetweenRanges(x, inMin, inMax, outMin, outMax float64) float64 {
-	return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin; 
+	if x < inMin {
+		return -1
+	}
+	return (x-inMin)*(outMax-outMin)/(inMax-inMin) + outMin
 }
 
 func (ca *controlAlgorithm) Reescale(value float64) float64 {
