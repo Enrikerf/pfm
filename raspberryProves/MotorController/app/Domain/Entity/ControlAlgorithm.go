@@ -2,6 +2,8 @@ package Entity
 
 import (
 	"errors"
+	"log"
+
 	"github.com/Enrikerf/pfm/commands/MotorController/app/Domain/Converter"
 )
 
@@ -45,6 +47,15 @@ func (ca *controlAlgorithm) Reset() {
 }
 
 func (ca *controlAlgorithm) Calculate(currentValue RadiansPerSecond) (PWMDuty, error) {
+	// log.Print(" ")
+	// log.Printf("currentValue: %f", ca.currentValue)
+	// log.Printf("currentError: %f", ca.currentError)
+	// log.Printf("goal: %f", ca.goal)
+	// log.Printf("inMin: %f", ca.getMinPid())
+	// log.Printf("inMax: %f", ca.getMaxPid())
+	// log.Printf("outMin: %f", ca.outMin)
+	// log.Printf("outMax: %f", ca.outMax)
+
 	ca.currentValue = currentValue
 	ca.currentError = ca.goal - ca.currentValue
 	proportionalTerm := ca.P * float64(ca.currentError)
@@ -53,7 +64,11 @@ func (ca *controlAlgorithm) Calculate(currentValue RadiansPerSecond) (PWMDuty, e
 	ca.pastError = ca.currentError
 	pid := proportionalTerm + ca.I*ca.integralTerm + ca.D*derivativeTerm
 
-	if pid < -ca.getMinPid() { // trash value on transitory
+	// log.Printf("propTerm: %f, integral: %f, derivative: %f", proportionalTerm, ca.integralTerm, derivativeTerm)
+	// log.Printf("pid: %f", pid)
+	
+
+	if pid < ca.getMinPid() { // trash value on transitory
 		return ca.outMin, nil
 	}
 	if pid > ca.getMaxPid() { // trash value on transitory
@@ -63,25 +78,9 @@ func (ca *controlAlgorithm) Calculate(currentValue RadiansPerSecond) (PWMDuty, e
 	if err != nil {
 		return 0, errors.New("pid out of range")
 	}
-	ca.logger()
-	return PWMDuty(pidR), nil
-}
-
-func (ca *controlAlgorithm) logger() {
-	//log.Print(" ")
-	//log.Printf("currentValue: %f", ca.currentValue)
-	//log.Printf("currentError: %f", ca.currentError)
-	// log.Printf("goal: %f", ca.goal)
-	// log.Printf("max: %f", ca.rpm2radps(200))
-	// log.Printf("minPid: %f", -ca.getMaxPid())
-	// log.Printf("maxPid: %f", ca.getMaxPid())
-	// log.Printf("minDuty: %f", ca.outMin)
-	// log.Printf("maxDuty: %f", ca.outMax)
-	// log.Printf("currentError*sample: %f", ca.currentError*ca.sampleTime)
-	// log.Printf("integral: %f", ca.integralTerm)
-	// log.Printf("propTerm: %f, integral: %f, derivative: %f", proportionalTerm, ca.integralTerm, derivativeTerm)
-	// log.Printf("pid: %f", pid)
 	// log.Printf("pidR: %f", pidR)
+	
+	return PWMDuty(pidR), nil
 }
 
 func (ca *controlAlgorithm) getMinPid() float64 {
