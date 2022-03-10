@@ -2,7 +2,6 @@ package Entity
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"time"
 
@@ -25,7 +24,7 @@ type Engine interface {
 	Backward()
 	GetPosition() int16
 	TearDown()
-	ReescalePid(pid float64) float64 
+	ReescalePid(pid float64) int32
 }
 
 type engine struct {
@@ -136,9 +135,11 @@ func (e *engine) contrlLoop(goal float64) {
 	sampleTime := time.Millisecond * 10
 	radPerSecondGoal := goal * (2 * math.Pi / 60)
 	e.controlAlgorithm.SetGoal(radPerSecondGoal)
-	e.controlAlgorithm.SetP(30)
-	e.controlAlgorithm.SetI(1)
+	e.controlAlgorithm.SetP(1)
+	e.controlAlgorithm.SetI(10)
 	e.controlAlgorithm.SetD(0)
+	e.controlAlgorithm.SetLowerConstraint(float64(e.pwmPin.GetMinDuty()))
+	e.controlAlgorithm.SetUpperConstraint(float64(e.pwmPin.GetMaxDuty()))
 	e.controlAlgorithm.SetSampleTime(sampleTime.Seconds())
 
 	prevAngle := 0.0
@@ -149,12 +150,14 @@ func (e *engine) contrlLoop(goal float64) {
 		degreesPerSecod := (angle - prevAngle) / sampleTime.Seconds()
 		radianPerSecod := degreesPerSecod * math.Pi / 180
 		pidOrig := e.controlAlgorithm.Calculate(radianPerSecod)
-		pidReescalated := e.ReescalePid(pidOrig)
-		e.pwmPin.SetPWM(Pin.Duty(pidReescalated), e.pwmPin.GetMaxFrequency())
+		if pidOrig == -1 { //TODO: control error properly
+			e.pwmPin.SetPWM(Pin.Duty(0), e.pwmPin.GetMaxFrequency())
+			e.brakePin.Up()
+			<-e.isControlRunning
+			break
+		}
+		e.pwmPin.SetPWM(Pin.Duty(pidOrig), e.pwmPin.GetMaxFrequency())
 		prevAngle = angle
-		log.Printf("pidRes:%f", pidReescalated)
-		// log.Print(" ")
-		// log.Print(pidReescalated)
 		if len(e.isControlRunning) == 0 {
 			e.pwmPin.SetPWM(Pin.Duty(0), e.pwmPin.GetMaxFrequency())
 			e.brakePin.Up()
@@ -171,20 +174,14 @@ func (e *engine) StopRmpControl() {
 	}
 }
 
-func (e *engine) ReescalePid(pid float64) float64 {
-	var reescalePid float64
-	if math.Abs(pid) > float64(e.pwmPin.GetMaxDuty()) {
-		reescalePid = float64(e.pwmPin.GetMaxDuty())
-		if pid < 0 {
-			reescalePid = reescalePid * -1
-		}
+func (e *engine) ReescalePid(pid float64) int32 {
+	if pid < float64(e.pwmPin.GetMinDuty()) {
+		return int32(e.pwmPin.GetMinDuty())
 	}
-	reescalePid = (reescalePid + float64(e.pwmPin.GetMaxDuty())) / 2
-	if math.Abs(pid) < float64(e.pwmPin.GetMinDuty()) {
-		reescalePid = float64(e.pwmPin.GetMinDuty())
+	if pid > float64(e.pwmPin.GetMaxDuty()) {
+		return int32(e.pwmPin.GetMaxDuty())
 	}
-
-	return reescalePid
+	return int32(pid)
 }
 
 func (e *engine) PositionControl() {
