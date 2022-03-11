@@ -2,6 +2,7 @@ package Entity
 
 import (
 	"fmt"
+	"github.com/Enrikerf/pfm/commandExecutor/app/Domain/Entity/Converter"
 	"math"
 	"time"
 
@@ -23,23 +24,20 @@ type Engine interface {
 	Forward()
 	Backward()
 	GetPosition() int16
-	GetCurrentAngularSpeed() float64
 	TearDown()
-	InitialState()
 }
 
 type engine struct {
-	encoderSlots        int
-	resolution          float64
-	controlAlgorithm    ControlAlgorithm
-	brakePin            Pin.OutPin
-	dirPin              Pin.OutPin
-	pwmPin              Pin.PWMPin
-	encoder             Encoder
-	currentGas          GasLevel
-	forward             bool
-	isControlRunning    chan bool
-	currentAngularSpeed float64
+	encoderSlots     int
+	resolution       float64
+	controlAlgorithm ControlAlgorithm
+	brakePin         Pin.OutPin
+	dirPin           Pin.OutPin
+	pwmPin           Pin.PWMPin
+	encoder          Encoder
+	currentGas       GasLevel
+	forward          bool
+	isControlRunning chan bool
 }
 
 //TODO: make singleton
@@ -52,20 +50,19 @@ func NewEngine(
 	encoder Encoder,
 ) Engine {
 	e := engine{
-		encoderSlots:        encoderSlots,
-		resolution:          360.0 / float64(encoderSlots),
-		controlAlgorithm:    controlAlgorithm,
-		brakePin:            brakePin,
-		dirPin:              dirPin,
-		pwmPin:              pwmPin,
-		encoder:             encoder,
-		currentGas:          0,
-		forward:             true,
-		isControlRunning:    make(chan bool, 1),
-		currentAngularSpeed: 0,
+		encoderSlots:     encoderSlots,
+		resolution:       360.0 / float64(encoderSlots),
+		controlAlgorithm: controlAlgorithm,
+		brakePin:         brakePin,
+		dirPin:           dirPin,
+		pwmPin:           pwmPin,
+		encoder:          encoder,
+		currentGas:       0,
+		forward:          true,
+		isControlRunning: make(chan bool, 1),
 	}
 	e.watchdog()
-	e.InitialState()
+	e.initialState()
 	return &e
 }
 
@@ -73,24 +70,24 @@ func (e *engine) watchdog() {
 	go e.encoder.Watchdog()
 }
 
-func (e *engine) InitialState() {
+func (e *engine) initialState() {
 	e.Forward()
 	e.Brake()
 	e.encoder.ResetPosition()
 }
 
 func (e *engine) MakeLap() {
-	e.InitialState()
+	e.initialState()
 	e.UnBrake()
 	e.SetGas(GasLevel(e.pwmPin.GetMinDuty()))
 
 	if e.forward {
 		for e.GetPosition() < 360 {
-			//fmt.Println(e.GetPosition())
+			fmt.Println(e.GetPosition())
 		}
 	} else {
 		for e.GetPosition() > -360 {
-			//fmt.Println(e.GetPosition())
+			fmt.Println(e.GetPosition())
 		}
 	}
 	e.Brake()
@@ -120,7 +117,6 @@ func (e *engine) StepResponse() {
 		angle := e.resolution * math.Abs(float64(e.encoder.GetPosition()))
 		degreesPerSecod := (angle - prevAngle) / sampleTime.Seconds()
 		radianPerSecod := degreesPerSecod * math.Pi / 180
-		e.currentAngularSpeed = radianPerSecod
 		fmt.Println(" ", radianPerSecod)
 		prevAngle = angle
 		if cont == 1 {
@@ -131,17 +127,21 @@ func (e *engine) StepResponse() {
 }
 
 func (e *engine) RpmControl(goal float64) {
-	go e.contrlLoop(goal)
+	go e.controlLoop(goal)
 }
 
-func (e *engine) contrlLoop(goal float64) {
+func (e *engine) controlLoop(goal float64) {
 	e.isControlRunning <- true
 	sampleTime := time.Millisecond * 10
 	radPerSecondGoal := goal * (2 * math.Pi / 60)
-	e.controlAlgorithm.SetGoal(radPerSecondGoal)
-	e.controlAlgorithm.SetP(30)
-	e.controlAlgorithm.SetI(1)
+	e.controlAlgorithm.SetGoal(RadiansPerSecond(radPerSecondGoal))
+	e.controlAlgorithm.SetP(1)
+	e.controlAlgorithm.SetI(10)
 	e.controlAlgorithm.SetD(0)
+	e.controlAlgorithm.SetInMin(RadiansPerSecond(Converter.Rpm2radps(-200)))
+	e.controlAlgorithm.SetInMax(RadiansPerSecond(Converter.Rpm2radps(+200)))
+	e.controlAlgorithm.SetOutMin(PWMDuty(e.pwmPin.GetMinDuty()))
+	e.controlAlgorithm.SetOutMax(PWMDuty(e.pwmPin.GetMaxDuty()))
 	e.controlAlgorithm.SetSampleTime(sampleTime.Seconds())
 
 	prevAngle := 0.0
@@ -149,12 +149,16 @@ func (e *engine) contrlLoop(goal float64) {
 	e.brakePin.Down()
 	for range time.Tick(sampleTime) {
 		angle := e.resolution * math.Abs(float64(e.encoder.GetPosition()))
-		degreesPerSecod := (angle - prevAngle) / sampleTime.Seconds()
-		radianPerSecod := degreesPerSecod * math.Pi / 180
-		e.currentAngularSpeed = radianPerSecod
-		pidOrig := e.controlAlgorithm.Calculate(radianPerSecod)
-		pidReescalated := e.reescalePid(pidOrig)
-		e.pwmPin.SetPWM(Pin.Duty(pidReescalated), e.pwmPin.GetMaxFrequency())
+		degreesPerSecond := (angle - prevAngle) / sampleTime.Seconds()
+		radianPerSecond := Converter.Degps2Radps(degreesPerSecond)
+		pidOrig, err := e.controlAlgorithm.Calculate(RadiansPerSecond(radianPerSecond))
+		if err != nil {
+			e.pwmPin.SetPWM(Pin.Duty(0), e.pwmPin.GetMaxFrequency())
+			e.brakePin.Up()
+			<-e.isControlRunning
+			break
+		}
+		e.pwmPin.SetPWM(Pin.Duty(pidOrig), e.pwmPin.GetMaxFrequency())
 		prevAngle = angle
 		if len(e.isControlRunning) == 0 {
 			e.pwmPin.SetPWM(Pin.Duty(0), e.pwmPin.GetMaxFrequency())
@@ -170,16 +174,6 @@ func (e *engine) StopRmpControl() {
 	} else {
 		fmt.Println("no command running")
 	}
-}
-
-func (e *engine) reescalePid(pid float64) int32 {
-	if pid < float64(e.pwmPin.GetMinDuty()) {
-		return int32(e.pwmPin.GetMinDuty())
-	}
-	if pid > float64(e.pwmPin.GetMaxDuty()) {
-		return int32(e.pwmPin.GetMaxDuty())
-	}
-	return int32(pid)
 }
 
 func (e *engine) PositionControl() {
@@ -216,8 +210,4 @@ func (e *engine) TearDown() {
 	e.pwmPin.TearDown()
 	e.encoder.TearDown()
 
-}
-
-func (e *engine) GetCurrentAngularSpeed() float64 {
-	return e.currentAngularSpeed
 }
