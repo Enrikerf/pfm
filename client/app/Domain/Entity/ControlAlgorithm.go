@@ -19,6 +19,7 @@ type ControlAlgorithm interface {
 	SetOutMax(outMax PWMDuty)
 	SetSampleTime(d float64)
 	Calculate(currentValue RadiansPerSecond) (PWMDuty, error)
+	GetCurrentValue() RadiansPerSecond
 }
 
 type controlAlgorithm struct {
@@ -124,4 +125,8 @@ func (ca *controlAlgorithm) SetInMax(inMax RadiansPerSecond) {
 
 func (ca *controlAlgorithm) SetSampleTime(st float64) {
 	ca.sampleTime = st
+}
+
+func (ca *controlAlgorithm) GetCurrentValue() RadiansPerSecond {
+	return ca.currentValue
 }

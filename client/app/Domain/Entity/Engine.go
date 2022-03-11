@@ -25,6 +25,8 @@ type Engine interface {
 	Backward()
 	GetPosition() int16
 	TearDown()
+	InitialState()
+	GetCurrentAngularSpeed() float64
 }
 
 type engine struct {
@@ -62,7 +64,7 @@ func NewEngine(
 		isControlRunning: make(chan bool, 1),
 	}
 	e.watchdog()
-	e.initialState()
+	e.InitialState()
 	return &e
 }
 
@@ -70,14 +72,14 @@ func (e *engine) watchdog() {
 	go e.encoder.Watchdog()
 }
 
-func (e *engine) initialState() {
+func (e *engine) InitialState() {
 	e.Forward()
 	e.Brake()
 	e.encoder.ResetPosition()
 }
 
 func (e *engine) MakeLap() {
-	e.initialState()
+	e.InitialState()
 	e.UnBrake()
 	e.SetGas(GasLevel(e.pwmPin.GetMinDuty()))
 
@@ -202,6 +204,10 @@ func (e *engine) Backward() {
 
 func (e *engine) GetPosition() int16 {
 	return e.encoder.GetPosition()
+}
+
+func (e *engine) GetCurrentAngularSpeed() float64 {
+	return float64(e.controlAlgorithm.GetCurrentValue())
 }
 
 func (e *engine) TearDown() {
