@@ -2,7 +2,6 @@ package Console
 
 import (
 	"fmt"
-	"github.com/Enrikerf/pfm/commandExecutor/app/Application/Port/In/ManageEngine"
 	"os"
 	"os/signal"
 )
@@ -11,10 +10,10 @@ type Console interface {
 	Run()
 }
 type console struct {
-	manageEngineUseCase ManageEngine.UseCase
+	manageEngineUseCase Engine.UseCase
 }
 
-func NewConsole(engine ManageEngine.UseCase) Console {
+func NewConsole(engine Engine.UseCase) Console {
 
 	return &console{manageEngineUseCase: engine}
 }

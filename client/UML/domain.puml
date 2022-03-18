@@ -1,0 +1,168 @@
+@startuml
+legend
+<u><b>Legend</b></u>
+Render Aggregations: true
+Render Fields: true
+Render Methods: true
+Pritave Aggregations: true
+end legend
+namespace Entity {
+    interface ControlAlgorithm  {
+        + SetGoal(goal RadiansPerSecond) 
+        + SetP(p float64) 
+        + SetI(i float64) 
+        + SetD(d float64) 
+        + SetInMin(inMin RadiansPerSecond) 
+        + SetInMax(inMax RadiansPerSecond) 
+        + SetOutMin(outMin PWMDuty) 
+        + SetOutMax(outMax PWMDuty) 
+        + SetSampleTime(d float64) 
+        + Calculate(currentValue RadiansPerSecond) (PWMDuty, error)
+        + GetCurrentValue() RadiansPerSecond
+
+    }
+    interface Encoder  {
+        + Watchdog() 
+        + ResetPosition() 
+        + GetPosition() int16
+        + TearDown() 
+
+    }
+    interface Engine  {
+        + SetGas(gas GasLevel) 
+        + StepResponse() 
+        + SpeedUp() 
+        + MakeLap() 
+        + RpmControl(goal float64) 
+        + StopRmpControl() 
+        + PositionControl() 
+        + Brake() 
+        + UnBrake() 
+        + Forward() 
+        + Backward() 
+        + GetPosition() int16
+        + TearDown() 
+        + InitialState() 
+        + GetCurrentAngularSpeed() float64
+
+    }
+    class Entity.GasLevel << (T, #FF7700) >>  {
+    }
+    class Entity.PWMDuty << (T, #FF7700) >>  {
+    }
+    class Entity.RadiansPerSecond << (T, #FF7700) >>  {
+    }
+    class controlAlgorithm << (S,Aquamarine) >> {
+        - goal RadiansPerSecond
+        - inMin RadiansPerSecond
+        - inMax RadiansPerSecond
+        - outMin PWMDuty
+        - outMax PWMDuty
+        - integralTerm float64
+        - sampleTime float64
+        - currentValue RadiansPerSecond
+        - currentError RadiansPerSecond
+        - pastError RadiansPerSecond
+
+        + P float64
+        + I float64
+        + D float64
+
+        - getMinPid() float64
+        - getMaxPid() float64
+
+        + Reset() 
+        + Calculate(currentValue RadiansPerSecond) (PWMDuty, error)
+        + SetGoal(goal RadiansPerSecond) 
+        + SetP(p float64) 
+        + SetI(i float64) 
+        + SetD(d float64) 
+        + SetOutMin(outMin PWMDuty) 
+        + SetOutMax(outMax PWMDuty) 
+        + SetInMin(inMin RadiansPerSecond) 
+        + SetInMax(inMax RadiansPerSecond) 
+        + SetSampleTime(st float64) 
+        + GetCurrentValue() RadiansPerSecond
+
+    }
+    class engine << (S,Aquamarine) >> {
+        - encoderSlots int
+        - resolution float64
+        - controlAlgorithm ControlAlgorithm
+        - brakePin Pin.OutPin
+        - dirPin Pin.OutPin
+        - pwmPin Pin.PWMPin
+        - encoder Encoder
+        - currentGas GasLevel
+        - forward bool
+        - isControlRunning <font color=blue>chan</font> bool
+
+        - watchdog() 
+        - controlLoop(goal float64) 
+
+        + InitialState() 
+        + MakeLap() 
+        + SpeedUp() 
+        + SetGas(gas GasLevel) 
+        + StepResponse() 
+        + RpmControl(goal float64) 
+        + StopRmpControl() 
+        + PositionControl() 
+        + Brake() 
+        + UnBrake() 
+        + Forward() 
+        + Backward() 
+        + GetPosition() int16
+        + GetCurrentAngularSpeed() float64
+        + TearDown() 
+
+    }
+}
+
+"Entity.ControlAlgorithm" <|-- "implements""Entity.controlAlgorithm"
+"Entity.Engine" <|-- "implements""Entity.engine"
+
+"Entity.controlAlgorithm""uses" o-- "Entity.PWMDuty"
+"Entity.controlAlgorithm""uses" o-- "Entity.RadiansPerSecond"
+"Entity.engine""uses" o-- "Entity.ControlAlgorithm"
+"Entity.engine""uses" o-- "Entity.Encoder"
+"Entity.engine""uses" o-- "Entity.GasLevel"
+"Entity.engine""uses" o-- "Pin.OutPin"
+"Entity.engine""uses" o-- "Pin.PWMPin"
+
+namespace Pin {
+    interface EncoderPin  {
+        + Read() bool
+        + TearDown() 
+        + WaitForEdge() 
+
+    }
+    interface OutPin  {
+        + Up() 
+        + Down() 
+        + TearDown() 
+
+    }
+    interface PWMPin  {
+        + GetMaxDuty() Duty
+        + GetMinDuty() Duty
+        + GetMaxFrequency() Frequency
+        + SetPWM(duty Duty, frequency Frequency) 
+        + StopPWM() 
+        + TearDown() 
+
+    }
+    class Pin.Duty << (T, #FF7700) >>  {
+    }
+    class Pin.Frequency << (T, #FF7700) >>  {
+    }
+}
+
+
+
+"__builtin__.float64" #.. "alias of""Entity.PWMDuty"
+"__builtin__.float64" #.. "alias of""Entity.RadiansPerSecond"
+"__builtin__.int32" #.. "alias of""Entity.GasLevel"
+"__builtin__.int32" #.. "alias of""Pin.Duty"
+"__builtin__.int64" #.. "alias of""Pin.Frequency"
+@enduml

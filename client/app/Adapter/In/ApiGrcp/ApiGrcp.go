@@ -2,13 +2,13 @@ package ApiGrcp
 
 import (
 	"fmt"
+	"github.com/Enrikerf/pfm/commandExecutor/app/Application/Port/In/Engine"
 	"log"
 	"net"
 	"os"
 
 	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp/Controller"
 	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp/gen/call"
-	"github.com/Enrikerf/pfm/commandExecutor/app/Application/Port/In/ManageEngine"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -18,10 +18,10 @@ type ApiGrpc struct {
 	serverPort          string
 	grpcServer          *grpc.Server
 	listener            net.Listener
-	manageEngineUseCase ManageEngine.UseCase
+	manageEngineUseCase Engine.UseCase
 }
 
-func (api *ApiGrpc) Initialize(host string, port string, manageEngineUseCase ManageEngine.UseCase) {
+func (api *ApiGrpc) Initialize(host string, port string, manageEngineUseCase Engine.UseCase) {
 	fmt.Println("Starting Sentence Executor...")
 	api.serverHost = host
 	api.serverPort = port
@@ -61,7 +61,7 @@ func (api *ApiGrpc) Stop() {
 	fmt.Println("End of program")
 }
 
-func (api *ApiGrpc) configControllers(manageEngineUseCase ManageEngine.UseCase) {
+func (api *ApiGrpc) configControllers(manageEngineUseCase Engine.UseCase) {
 
 	var callController = Controller.CallController{
 		ManageEngineUseCase: manageEngineUseCase,

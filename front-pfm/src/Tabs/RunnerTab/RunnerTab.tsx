@@ -50,7 +50,7 @@ export default function RunnerTab() {
                     })
                 }
                 if (newYmax > yMax) {
-                    setYMax(newYmax)
+                    setYMax(newYmax*1.3)
                 }
                 if (newYmin > yMin) {
                     setYMin(newYmin)

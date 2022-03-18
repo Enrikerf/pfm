@@ -57,13 +57,9 @@ export default function GenericTable(props: {
                 }
             })
         }
-
         setRows(props.rows)
         setHeads(getHeads(props.rows))
-        return () => {
-        };
     }, [props.rows])
-
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
