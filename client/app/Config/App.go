@@ -38,7 +38,7 @@ func (server *App) loadDotEnv() {
 }
 
 func (server *App) loadApiGrpc() {
-	pwmPin := Model.NewPwmPin("18")
+	pwmPin := Model.NewPw[]mPin("18")
 	brakePin := Model.NewOutPin("12")
 	dirPin := Model.NewOutPin("7")
 	encoderPinA := Model.NewEncoderPin("25")

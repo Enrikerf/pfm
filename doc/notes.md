@@ -22,7 +22,7 @@
 
 you could download go from goland
 
-![asedfasdf](golandSdk.png)
+![asedfasdf](../thesis/golandSdk.png)
 
 And then edit gopath
 
