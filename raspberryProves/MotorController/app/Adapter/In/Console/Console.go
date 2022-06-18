@@ -32,7 +32,7 @@ func (console *console) Run() {
 		case "1":
 			console.manageEngineUseCase.Turnaround()
 		case "2":
-			console.manageEngineUseCase.RpmControl(60.0 * 2)
+			console.manageEngineUseCase.RpmControl(60.0)
 		case "3":
 			console.manageEngineUseCase.StopRpmControl()
 		case "4":
