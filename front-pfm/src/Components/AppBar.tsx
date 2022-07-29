@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from "react-router-dom";
 
-const pages = ['/'];
+const pages = ['Tasks'];
 const settings = ['Logout'];
 const title = "TFM ETSII UMA"
 
@@ -31,7 +31,7 @@ export default function ResponsiveAppBar(props:any) {
 
     const handleCloseNavMenu = (page:string) => {
         setTimeout(() => {
-            navigate(page, {});
+            navigate("/", {});
         }, 59);
         setAnchorElNav(null);
     };

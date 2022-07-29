@@ -3,6 +3,7 @@ package Controller
 import (
 	"context"
 	"fmt"
+	"github.com/Enrikerf/pfm/commandExecutor/app/Application/Port/In/Engine"
 	"io"
 	"log"
 	"os/exec"
@@ -11,11 +12,10 @@ import (
 	"time"
 
 	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp/gen/call"
-	"github.com/Enrikerf/pfm/commandExecutor/app/Application/Port/In/ManageEngine"
 )
 
 type CallController struct {
-	ManageEngineUseCase ManageEngine.UseCase
+	ManageEngineUseCase Engine.UseCase
 	call.UnimplementedCallServiceServer
 	currentCommand string
 }

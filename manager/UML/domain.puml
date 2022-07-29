@@ -22,9 +22,12 @@ namespace Entity {
 
     }
     class Result << (S,Aquamarine) >> {
+        + ID uint
         + Uuid uuid.UUID
         + BatchUuid uuid.UUID
         + Content string
+        + CreatedAt time.Time
+        + UpdatedAt time.Time
 
     }
     class Step << (S,Aquamarine) >> {
@@ -49,6 +52,7 @@ namespace Entity {
 "Entity.Batch""uses" o-- "Entity.Result"
 "Entity.Batch""uses" o-- "time.Time"
 "Entity.Batch""uses" o-- "uuid.UUID"
+"Entity.Result""uses" o-- "time.Time"
 "Entity.Result""uses" o-- "uuid.UUID"
 "Entity.Step""uses" o-- "uuid.UUID"
 "Entity.Task""uses" o-- "Entity.Step"
@@ -70,6 +74,12 @@ namespace ValueObject {
         + UNARY() string
 
     }
+    class ResultVo << (S,Aquamarine) >> {
+        + Content string
+        + CreatedAt time.Time
+        + UpdatedAt time.Time
+
+    }
     class StepVo << (S,Aquamarine) >> {
         + Sentence string
 
@@ -87,6 +97,7 @@ namespace ValueObject {
 }
 
 
+"ValueObject.ResultVo""uses" o-- "time.Time"
 
 "__builtin__.int" #.. "alias of""ValueObject.ExecutionMode"
 "__builtin__.int" #.. "alias of""ValueObject.Modes"

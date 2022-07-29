@@ -8,7 +8,6 @@ import (
 
 	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/ApiGrcp"
 	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/Out/Periphio/Model"
-	"github.com/Enrikerf/pfm/commandExecutor/app/Application/Port/In/ManageEngine"
 	"github.com/Enrikerf/pfm/commandExecutor/app/Domain/Entity"
 	"github.com/joho/godotenv"
 )
@@ -39,7 +38,7 @@ func (server *App) loadDotEnv() {
 }
 
 func (server *App) loadApiGrpc() {
-	pwmPin := Model.NewPwmPin("18")
+	pwmPin := Model.NewPw[]mPin("18")
 	brakePin := Model.NewOutPin("12")
 	dirPin := Model.NewOutPin("7")
 	encoderPinA := Model.NewEncoderPin("25")
@@ -54,7 +53,7 @@ func (server *App) loadApiGrpc() {
 		pwmPin,
 		encoder,
 	)
-	engineService := ManageEngine.Service{Engine: engine}
+	engineService := Engine.Service{Engine: engine}
 	server.apiGrpc = ApiGrcp.ApiGrpc{}
 	server.apiGrpc.Initialize(
 		os.Getenv("SERVER_HOST"),

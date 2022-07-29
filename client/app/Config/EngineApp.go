@@ -3,7 +3,6 @@ package Config
 import (
 	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/In/Console"
 	"github.com/Enrikerf/pfm/commandExecutor/app/Adapter/Out/Periphio/Model"
-	"github.com/Enrikerf/pfm/commandExecutor/app/Application/Port/In/ManageEngine"
 	"github.com/Enrikerf/pfm/commandExecutor/app/Domain/Entity"
 )
 
@@ -30,7 +29,7 @@ func NewEngineApp() EngineApp {
 		pwmPin,
 		encoder,
 	)
-	service := ManageEngine.Service{Engine: engine}
+	service := Engine.Service{Engine: engine}
 	console := Console.NewConsole(&service)
 	return &engineApp{console: console}
 }

@@ -1,0 +1,529 @@
+@startuml
+legend
+<u><b>Legend</b></u>
+Render Aggregations: true
+Render Fields: true
+Render Methods: true
+Pritave Aggregations: true
+end legend
+namespace ApiGrcp {
+    class ApiGrpc << (S,Aquamarine) >> {
+        - serverHost string
+        - serverPort string
+        - grpcServer *grpc.Server
+        - listener net.Listener
+        - manageEngineUseCase ManageEngine.UseCase
+
+        - configControllers(manageEngineUseCase ManageEngine.UseCase) 
+        - loadServer() 
+        - loadListener() 
+
+        + Initialize(host string, port string, manageEngineUseCase ManageEngine.UseCase) 
+        + Run() 
+        + Stop() 
+
+    }
+}
+
+"Config.EngineApp" <|-- "implements""ApiGrcp.ApiGrpc"
+"Console.Console" <|-- "implements""ApiGrcp.ApiGrpc"
+
+"ApiGrcp.ApiGrpc""uses" o-- "ManageEngine.UseCase"
+"ApiGrcp.ApiGrpc""uses" o-- "grpc.Server"
+"ApiGrcp.ApiGrpc""uses" o-- "net.Listener"
+
+namespace Config {
+    class App << (S,Aquamarine) >> {
+        - apiGrpc ApiGrcp.ApiGrpc
+
+        - loadDotEnv() 
+        - loadApiGrpc() 
+
+        + Run() 
+
+    }
+    interface EngineApp  {
+        + Run() 
+
+    }
+    class engineApp << (S,Aquamarine) >> {
+        - console Console.Console
+
+        + Run() 
+
+    }
+}
+
+"Config.EngineApp" <|-- "implements""Config.App"
+"Console.Console" <|-- "implements""Config.App"
+"Config.EngineApp" <|-- "implements""Config.engineApp"
+"Console.Console" <|-- "implements""Config.engineApp"
+
+"Config.App""uses" o-- "ApiGrcp.ApiGrpc"
+"Config.engineApp""uses" o-- "Console.Console"
+
+namespace Console {
+    interface Console  {
+        + Run() 
+
+    }
+    class console << (S,Aquamarine) >> {
+        - manageEngineUseCase ManageEngine.UseCase
+
+        - getOption() string
+        - setGas() 
+        - exitWatchdog(channel <font color=blue>chan</font> os.Signal) 
+
+        + Run() 
+
+    }
+}
+
+"Config.EngineApp" <|-- "implements""Console.console"
+"Console.Console" <|-- "implements""Console.console"
+
+"Console.console""uses" o-- "ManageEngine.UseCase"
+
+namespace Controller {
+    class CallController << (S,Aquamarine) >> {
+        - currentCommand string
+
+        + ManageEngineUseCase ManageEngine.UseCase
+
+        - bidiRecv(server call.CallService_CallBidirectionalServer) 
+
+        + CallUnary(ctx context.Context, request *call.CallRequest) (*call.CallResponse, error)
+        + CallServerStream(request *call.CallRequest, server call.CallService_CallServerStreamServer) error
+        + CallClientStream(server call.CallService_CallClientStreamServer) error
+        + CallBidirectional(server call.CallService_CallBidirectionalServer) error
+
+    }
+}
+"call.UnimplementedCallServiceServer" *-- "extends""Controller.CallController"
+
+
+"Controller.CallController""uses" o-- "ManageEngine.UseCase"
+
+namespace Entity {
+    interface ControlAlgorithm  {
+        + SetGoal(goal RadiansPerSecond) 
+        + SetP(p float64) 
+        + SetI(i float64) 
+        + SetD(d float64) 
+        + SetInMin(inMin RadiansPerSecond) 
+        + SetInMax(inMax RadiansPerSecond) 
+        + SetOutMin(outMin PWMDuty) 
+        + SetOutMax(outMax PWMDuty) 
+        + SetSampleTime(d float64) 
+        + Calculate(currentValue RadiansPerSecond) (PWMDuty, error)
+        + GetCurrentValue() RadiansPerSecond
+
+    }
+    interface Encoder  {
+        + Watchdog() 
+        + ResetPosition() 
+        + GetPosition() int16
+        + TearDown() 
+
+    }
+    interface Engine  {
+        + SetGas(gas GasLevel) 
+        + StepResponse() 
+        + SpeedUp() 
+        + MakeLap() 
+        + RpmControl(goal float64) 
+        + StopRmpControl() 
+        + PositionControl() 
+        + Brake() 
+        + UnBrake() 
+        + Forward() 
+        + Backward() 
+        + GetPosition() int16
+        + TearDown() 
+        + InitialState() 
+        + GetCurrentAngularSpeed() float64
+
+    }
+    class Entity.GasLevel << (T, #FF7700) >>  {
+    }
+    class Entity.PWMDuty << (T, #FF7700) >>  {
+    }
+    class Entity.RadiansPerSecond << (T, #FF7700) >>  {
+    }
+    class controlAlgorithm << (S,Aquamarine) >> {
+        - goal RadiansPerSecond
+        - inMin RadiansPerSecond
+        - inMax RadiansPerSecond
+        - outMin PWMDuty
+        - outMax PWMDuty
+        - integralTerm float64
+        - sampleTime float64
+        - currentValue RadiansPerSecond
+        - currentError RadiansPerSecond
+        - pastError RadiansPerSecond
+
+        + P float64
+        + I float64
+        + D float64
+
+        - getMinPid() float64
+        - getMaxPid() float64
+
+        + Reset() 
+        + Calculate(currentValue RadiansPerSecond) (PWMDuty, error)
+        + SetGoal(goal RadiansPerSecond) 
+        + SetP(p float64) 
+        + SetI(i float64) 
+        + SetD(d float64) 
+        + SetOutMin(outMin PWMDuty) 
+        + SetOutMax(outMax PWMDuty) 
+        + SetInMin(inMin RadiansPerSecond) 
+        + SetInMax(inMax RadiansPerSecond) 
+        + SetSampleTime(st float64) 
+        + GetCurrentValue() RadiansPerSecond
+
+    }
+    class engine << (S,Aquamarine) >> {
+        - encoderSlots int
+        - resolution float64
+        - controlAlgorithm ControlAlgorithm
+        - brakePin Pin.OutPin
+        - dirPin Pin.OutPin
+        - pwmPin Pin.PWMPin
+        - encoder Encoder
+        - currentGas GasLevel
+        - forward bool
+        - isControlRunning <font color=blue>chan</font> bool
+
+        - watchdog() 
+        - controlLoop(goal float64) 
+
+        + InitialState() 
+        + MakeLap() 
+        + SpeedUp() 
+        + SetGas(gas GasLevel) 
+        + StepResponse() 
+        + RpmControl(goal float64) 
+        + StopRmpControl() 
+        + PositionControl() 
+        + Brake() 
+        + UnBrake() 
+        + Forward() 
+        + Backward() 
+        + GetPosition() int16
+        + GetCurrentAngularSpeed() float64
+        + TearDown() 
+
+    }
+}
+
+"Entity.ControlAlgorithm" <|-- "implements""Entity.controlAlgorithm"
+"Entity.Engine" <|-- "implements""Entity.engine"
+
+"Entity.controlAlgorithm""uses" o-- "Entity.PWMDuty"
+"Entity.controlAlgorithm""uses" o-- "Entity.RadiansPerSecond"
+"Entity.engine""uses" o-- "Entity.ControlAlgorithm"
+"Entity.engine""uses" o-- "Entity.Encoder"
+"Entity.engine""uses" o-- "Entity.GasLevel"
+"Entity.engine""uses" o-- "Pin.OutPin"
+"Entity.engine""uses" o-- "Pin.PWMPin"
+
+namespace ManageEngine {
+    class Service << (S,Aquamarine) >> {
+        + Engine Entity.Engine
+
+        + GetPosition() int16
+        + Turnaround() 
+        + RpmControl(rpm float64) 
+        + StopRpmControl() 
+        + SetGas(gas int) 
+        + StepResponse() 
+        + UnBrake() 
+        + TearDown() 
+        + Reset() 
+        + GetCurrentAngularSpeed() float64
+
+    }
+    interface UseCase  {
+        + Reset() 
+        + GetPosition() int16
+        + Turnaround() 
+        + RpmControl(rpm float64) 
+        + StopRpmControl() 
+        + UnBrake() 
+        + SetGas(gas int) 
+        + StepResponse() 
+        + TearDown() 
+        + GetCurrentAngularSpeed() float64
+
+    }
+}
+
+"ManageEngine.UseCase" <|-- "implements""ManageEngine.Service"
+
+"ManageEngine.Service""uses" o-- "Entity.Engine"
+
+namespace Model {
+    class EncoderModel << (S,Aquamarine) >> {
+        - encoderPinA Pin.EncoderPin
+        - encoderPinB Pin.EncoderPin
+        - lastState state
+        - position int16
+        - forward bool
+        - risingEdges []*risingEdgeDetected
+        - lock *"sync.Mutex
+
+        - calculatePos(t risingEdgeDetected) 
+        - waitA() 
+        - waitB() 
+
+        + GetPosition() int16
+        + ResetPosition() 
+        + TearDown() 
+        + Watchdog() 
+
+    }
+    class EncoderPinModel << (S,Aquamarine) >> {
+        - periphInPin gpio.PinIO
+        - id string
+
+        + Read() bool
+        + TearDown() 
+        + WaitForEdge() 
+
+    }
+    class Model.state << (T, #FF7700) >>  {
+    }
+    class outPin << (S,Aquamarine) >> {
+        - id string
+        - status bool
+        - periphPin gpio.PinIO
+
+        + TearDown() 
+        + Up() 
+        + Down() 
+
+    }
+    class pwmPin << (S,Aquamarine) >> {
+        - periphPin gpio.PinIO
+        - id string
+        - status bool
+
+        + TearDown() 
+        + GetMaxDuty() Pin.Duty
+        + GetMinDuty() Pin.Duty
+        + GetMaxFrequency() Pin.Frequency
+        + SetPWM(duty Pin.Duty, frequency Pin.Frequency) 
+        + StopPWM() 
+
+    }
+    class risingEdgeDetected << (S,Aquamarine) >> {
+        - pinAStatus bool
+        - pinBStatus bool
+
+    }
+}
+
+"Entity.Encoder" <|-- "implements""Model.EncoderModel"
+"Pin.EncoderPin" <|-- "implements""Model.EncoderPinModel"
+"Pin.OutPin" <|-- "implements""Model.outPin"
+"Pin.PWMPin" <|-- "implements""Model.pwmPin"
+
+
+"Model.EncoderModel""uses" o-- "Model.risingEdgeDetected"
+"Model.EncoderModel""uses" o-- "Model.state"
+"Model.EncoderModel""uses" o-- "Pin.EncoderPin"
+"Model.EncoderPinModel""uses" o-- "gpio.PinIO"
+"Model.outPin""uses" o-- "gpio.PinIO"
+"Model.pwmPin""uses" o-- "gpio.PinIO"
+
+namespace Pin {
+    interface EncoderPin  {
+        + Read() bool
+        + TearDown() 
+        + WaitForEdge() 
+
+    }
+    interface OutPin  {
+        + Up() 
+        + Down() 
+        + TearDown() 
+
+    }
+    interface PWMPin  {
+        + GetMaxDuty() Duty
+        + GetMinDuty() Duty
+        + GetMaxFrequency() Frequency
+        + SetPWM(duty Duty, frequency Frequency) 
+        + StopPWM() 
+        + TearDown() 
+
+    }
+    class Pin.Duty << (T, #FF7700) >>  {
+    }
+    class Pin.Frequency << (T, #FF7700) >>  {
+    }
+}
+
+
+
+namespace call {
+    class CallRequest << (S,Aquamarine) >> {
+        - state protoimpl.MessageState
+        - sizeCache protoimpl.SizeCache
+        - unknownFields protoimpl.UnknownFields
+
+        + Command string
+
+        + Reset() 
+        + String() string
+        + ProtoMessage() 
+        + ProtoReflect() protoreflect.Message
+        + Descriptor() ([]byte, []int)
+        + GetCommand() string
+
+    }
+    class CallResponse << (S,Aquamarine) >> {
+        - state protoimpl.MessageState
+        - sizeCache protoimpl.SizeCache
+        - unknownFields protoimpl.UnknownFields
+
+        + Result string
+
+        + Reset() 
+        + String() string
+        + ProtoMessage() 
+        + ProtoReflect() protoreflect.Message
+        + Descriptor() ([]byte, []int)
+        + GetResult() string
+
+    }
+    interface CallServiceClient  {
+        + CallUnary(ctx "context.Context, in *CallRequest, opts ...grpc.CallOption) (*CallResponse, error)
+        + CallServerStream(ctx "context.Context, in *CallRequest, opts ...grpc.CallOption) (CallService_CallServerStreamClient, error)
+        + CallClientStream(ctx "context.Context, opts ...grpc.CallOption) (CallService_CallClientStreamClient, error)
+        + CallBidirectional(ctx "context.Context, opts ...grpc.CallOption) (CallService_CallBidirectionalClient, error)
+
+    }
+    interface CallServiceServer  {
+        - mustEmbedUnimplementedCallServiceServer() 
+
+        + CallUnary( "context.Context,  *CallRequest) (*CallResponse, error)
+        + CallServerStream( *CallRequest,  CallService_CallServerStreamServer) error
+        + CallClientStream( CallService_CallClientStreamServer) error
+        + CallBidirectional( CallService_CallBidirectionalServer) error
+
+    }
+    interface CallService_CallBidirectionalClient  {
+        + Send( *CallRequest) error
+        + Recv() (*CallResponse, error)
+
+    }
+    interface CallService_CallBidirectionalServer  {
+        + Send( *CallResponse) error
+        + Recv() (*CallRequest, error)
+
+    }
+    interface CallService_CallClientStreamClient  {
+        + Send( *CallRequest) error
+        + CloseAndRecv() (*CallResponse, error)
+
+    }
+    interface CallService_CallClientStreamServer  {
+        + SendAndClose( *CallResponse) error
+        + Recv() (*CallRequest, error)
+
+    }
+    interface CallService_CallServerStreamClient  {
+        + Recv() (*CallResponse, error)
+
+    }
+    interface CallService_CallServerStreamServer  {
+        + Send( *CallResponse) error
+
+    }
+    class UnimplementedCallServiceServer << (S,Aquamarine) >> {
+        - mustEmbedUnimplementedCallServiceServer() 
+
+        + CallUnary( "context.Context,  *CallRequest) (*CallResponse, error)
+        + CallServerStream( *CallRequest,  CallService_CallServerStreamServer) error
+        + CallClientStream( CallService_CallClientStreamServer) error
+        + CallBidirectional( CallService_CallBidirectionalServer) error
+
+    }
+    interface UnsafeCallServiceServer  {
+        - mustEmbedUnimplementedCallServiceServer() 
+
+    }
+    class callServiceCallBidirectionalClient << (S,Aquamarine) >> {
+        + Send(m *CallRequest) error
+        + Recv() (*CallResponse, error)
+
+    }
+    class callServiceCallBidirectionalServer << (S,Aquamarine) >> {
+        + Send(m *CallResponse) error
+        + Recv() (*CallRequest, error)
+
+    }
+    class callServiceCallClientStreamClient << (S,Aquamarine) >> {
+        + Send(m *CallRequest) error
+        + CloseAndRecv() (*CallResponse, error)
+
+    }
+    class callServiceCallClientStreamServer << (S,Aquamarine) >> {
+        + SendAndClose(m *CallResponse) error
+        + Recv() (*CallRequest, error)
+
+    }
+    class callServiceCallServerStreamClient << (S,Aquamarine) >> {
+        + Recv() (*CallResponse, error)
+
+    }
+    class callServiceCallServerStreamServer << (S,Aquamarine) >> {
+        + Send(m *CallResponse) error
+
+    }
+    class callServiceClient << (S,Aquamarine) >> {
+        - cc grpc.ClientConnInterface
+
+        + CallUnary(ctx "context.Context, in *CallRequest, opts ...grpc.CallOption) (*CallResponse, error)
+        + CallServerStream(ctx "context.Context, in *CallRequest, opts ...grpc.CallOption) (CallService_CallServerStreamClient, error)
+        + CallClientStream(ctx "context.Context, opts ...grpc.CallOption) (CallService_CallClientStreamClient, error)
+        + CallBidirectional(ctx "context.Context, opts ...grpc.CallOption) (CallService_CallBidirectionalClient, error)
+
+    }
+}
+"grpc.ClientStream" *-- "extends""call.callServiceCallBidirectionalClient"
+"grpc.ServerStream" *-- "extends""call.callServiceCallBidirectionalServer"
+"grpc.ClientStream" *-- "extends""call.callServiceCallClientStreamClient"
+"grpc.ServerStream" *-- "extends""call.callServiceCallClientStreamServer"
+"grpc.ClientStream" *-- "extends""call.callServiceCallServerStreamClient"
+"grpc.ServerStream" *-- "extends""call.callServiceCallServerStreamServer"
+
+"call.CallServiceServer" <|-- "implements""call.UnimplementedCallServiceServer"
+"call.UnsafeCallServiceServer" <|-- "implements""call.UnimplementedCallServiceServer"
+"call.CallService_CallBidirectionalClient" <|-- "implements""call.callServiceCallBidirectionalClient"
+"call.CallService_CallServerStreamClient" <|-- "implements""call.callServiceCallBidirectionalClient"
+"call.CallService_CallBidirectionalServer" <|-- "implements""call.callServiceCallBidirectionalServer"
+"call.CallService_CallServerStreamServer" <|-- "implements""call.callServiceCallBidirectionalServer"
+"call.CallService_CallClientStreamClient" <|-- "implements""call.callServiceCallClientStreamClient"
+"call.CallService_CallClientStreamServer" <|-- "implements""call.callServiceCallClientStreamServer"
+"call.CallService_CallServerStreamClient" <|-- "implements""call.callServiceCallServerStreamClient"
+"call.CallService_CallServerStreamServer" <|-- "implements""call.callServiceCallServerStreamServer"
+"call.CallServiceClient" <|-- "implements""call.callServiceClient"
+
+"call.CallRequest""uses" o-- "protoimpl.MessageState"
+"call.CallRequest""uses" o-- "protoimpl.SizeCache"
+"call.CallRequest""uses" o-- "protoimpl.UnknownFields"
+"call.CallResponse""uses" o-- "protoimpl.MessageState"
+"call.CallResponse""uses" o-- "protoimpl.SizeCache"
+"call.CallResponse""uses" o-- "protoimpl.UnknownFields"
+"call.callServiceClient""uses" o-- "grpc.ClientConnInterface"
+
+"__builtin__.float64" #.. "alias of""Entity.PWMDuty"
+"__builtin__.float64" #.. "alias of""Entity.RadiansPerSecond"
+"__builtin__.int32" #.. "alias of""Entity.GasLevel"
+"__builtin__.int32" #.. "alias of""Pin.Duty"
+"__builtin__.int64" #.. "alias of""Pin.Frequency"
+"__builtin__.int8" #.. "alias of""Model.state"
+@enduml

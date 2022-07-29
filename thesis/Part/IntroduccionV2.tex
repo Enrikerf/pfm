@@ -1,0 +1,47 @@
+Este trabajo se concibe con el objetivo de evaluar Golang Go como lenguaje de programación y entender los aspectos positivos y negativos a la hora de usarlo en un entorno profesional. Para ello se necesita abordar un proyecto con suficiente entidad, permitiendo a llevar lo más al límite posible el lenguaje, y a la vez que cuya complejidad no haga que el trabajo se escape del contexto y alcance con el que están concebidos. Vamos a centrarnos en poner a prueba puntos que el lenguaje vende como bondades o que forman una parte en la mayoría de soluciones:
+
+\begin{itemize}
+	\item comunicación entre sistemas con distintos protocolos
+	\item asincronía y gestión de concurrencia
+	\item ecosistema, documentación y comunidad del lenguaje
+	\item sintaxis, facilidad de mantener la simpleza y limpieza en el código
+\end{itemize} 
+
+para probar todos estos conceptos se concibe el siguiente sistema:
+
+\begin{itemize}
+	\item Un servicio central de control
+	\item una interfaz de usuario para controla de forma amigable el sistema central
+	\item un software cliente que recepcione comandos creados en el sistema central
+	\item un programa de control automático que ejecute dicho comando
+\end{itemize} 
+
+la comunicación entre sistemas será por RPC para poner a prueba con un sistema de comunicación que tiene paquetes experimentales y en desarrollo, esto nos ayudará a ver el ecosistema a la hora de buscar documentacion, paquetes, soluciones estandarizadas
+
+
+en el sistema central de control se pondrá a prueba la facilidad para implementar arquitecturas más estandar para este tipo de sistemas como son las API crud para la gestión de datos y a su vez luego la comunicación con los sistemas clientes. Es donde se centrará el grueso del tiempo del proyecto ya que en un software profesional la arquitectura hexagonal en estos tipos de sistemas es un desarrollo básico y ampliamente extendido para poner a prueba los conceptos generales. con ello también aprenderemos a manejarnos con lo básico que ofrece el lenguaje de programación y así enfrentar detalles de implementación más específicos como son la asincronía o la algoritmia de control PID con más soltura.
+
+
+en el frontal podremos poner a prueba la facilidad de maquetación e iteración en el diseño
+
+
+en el software cliente pondremos a prueba una de las características más importantes del lenguaje y es su capacidad para ser compilado en distintas plataformas sin máquina virtual, es un lenguaje compilado y el resultado es un ejecutable nativo en la máquina final. aquí se plantea ser compilados en arquitecturas típidas de pc personal como son los intel o amd y luego la maquina final sera en una raspberry 
+
+
+programa de control automático, se pondrá a prueba la versatilidad del lenguaje para desarrollar algoritmos de la forma más limpia y mantenible posible.
+
+
+como resultado se tendrá un sistema que contendrá los elementos más tipicos de una solución comercial hoy en día. un sistema web API y servicios intercomunicandose a través del mismo, Un frontal y servicios clientes.
+
+
+Se va hacer incapié en el proceso y no solo en el resultado, aplicando todos los procesos que se siguen como referencia en la industria a día de hoy.  Las principales herramientas o conceptos que a día de hoy se usan se puede categorizar de la siguiente forma:
+
+\begin{itemize}
+	\item respecto a cómo se va entregando valor de forma iterativa: scrum, kanban, agile, extreme programing...
+	\item respecto a cómo se garantiza cumplir la expectativa del cliente con el producto la calidad y la robustez del mismo: Testing (TDD,BDD...) diseño de casos de uso, diagramas UML, UX, UI
+	\item respecto a cómo se garantiza la posibilidad de cambio y mantenimiento: arquitectura de capas o hexagonal, DDD... 
+\end{itemize} 
+
+De todas ellas, hemos escogido como relevantes para este trabajo las herramientas de diseño que garantizan la posibilidad de cambio en el futuro y el cumplimiento de las expectativas del cliente: arquitectura de capas, DDD y testing. aunque se utilicen todas no se hará incapié en ellas en este documento.
+
+
