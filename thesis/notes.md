@@ -75,3 +75,7 @@ goplantuml -aggregate-private-members -recursive -show-aggregations -show-aliase
     }
     
 ```
+
+## containers
+
+https://blog.jetbrains.com/go/2020/05/04/go-development-with-docker-containers/
