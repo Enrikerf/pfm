@@ -1,22 +1,27 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[margin=2.54cm,]{geometry}
-
+\usepackage[pdftex]{graphicx}
 \begin{document}
 
-\input{./InsertHeads}	
+%\input{./InsertHeads}
 	\section{Glosario}\label{glossary}
-		\begin{itemize}
-			\item API
-			\item frontend
-			\item backend
-			\item PID
-		\end{itemize} 
-	 \section{Introducción}\label{Introduccion}
-		\input{./Part/IntroduccionV2}
+%		\input{./part/Glosario}
+	\section{Introducción}\label{Introduccion}
+%		\input{./part/IntroduccionV2}
 	\section{Objetivos}\label{Objetivos}
-		\input{./Part/Objetivos}
+%		\input{./part/Objetivos}
 	\section{Estructura de la memoria}\label{Estructura}
-		\input{./Part/Estructura.tex}
+%		\input{./part/Estructura.tex}
+	\section{Proyecto Básico}\label{Proyecto_bas}
+		\input{./part/Proyecto_basico.tex}
+	\section{Ejecución}\label{Ejecucion}
+		\input{./part/Ejecucion.tex}
+	\section{Aplicaciones del sistema}\label{Aplicaciones_del_sistema}
+		\input{./part/Aplicaciones_del_sistema.tex}
+	\section{Conclusiones}\label{Conclusiones}
+		\input{./part/Conclusiones.tex}
+	\section{Lineas Futuras}\label{Lineas_futuras}
+		\input{./part/Lineas_futuras.tex}
 \newpage
 
 \end{document}
