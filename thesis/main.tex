@@ -1,26 +1,45 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[margin=2.54cm,]{geometry}
 \usepackage[pdftex]{graphicx}
+\usepackage{color}
+\usepackage{listing}
+\usepackage{listings}
+\usepackage{dirtree}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\setlength{\parskip}{\baselineskip}%
+\setlength{\parindent}{0pt}%
+\lstset{language=Go,
+		basicstyle=\ttfamily\scriptsize,
+		keywordstyle=\color{blue}\ttfamily,
+		stringstyle=\color{red}\ttfamily,
+		commentstyle=\color{green}\ttfamily}
+
 \begin{document}
+%pruebas
+%\input{./part/memoria_descriptiva/arquitectura_de_capas.tex}
+%\input{./part/memoria_descriptiva/folder_estructure.tex}
+%------
+
 
 \input{./InsertHeads}
-	\section{Glosario}\label{glossary}
-%		\input{./part/Glosario}
-	\section{Introducción}\label{Introduccion}
-%		\input{./part/IntroduccionV2}
-	\section{Objetivos}\label{Objetivos}
-%		\input{./part/Objetivos}
-	\section{Estructura de la memoria}\label{Estructura}
-%		\input{./part/Estructura.tex}
-	\section{Proyecto Básico}\label{Proyecto_bas}
+	\section{Glosario}\label{sec:glossary}
+		\input{./part/Glosario}
+	\section{Introducción}\label{sec:introduccion}
+		\input{./part/IntroduccionV2}
+	\section{Objetivos}\label{sec:objetivos}
+		\input{./part/Objetivos}
+	\section{Estructura de la memoria}\label{sec:estructura}
+		\input{./part/Estructura.tex}
+	\section{Proyecto Básico}\label{sec:proyecto_bas}
 		\input{./part/Proyecto_basico.tex}
-	\section{Ejecución}\label{Ejecucion}
+	\section{Ejecución}\label{sec:ejecucion}
 		\input{./part/Ejecucion.tex}
-	\section{Aplicaciones del sistema}\label{Aplicaciones_del_sistema}
+	\section{Aplicaciones del sistema}\label{sec:aplicaciones_del_sistema}
 		\input{./part/Aplicaciones_del_sistema.tex}
-	\section{Conclusiones}\label{Conclusiones}
+	\section{Conclusiones}\label{sec:conclusiones}
 		\input{./part/Conclusiones.tex}
-	\section{Lineas Futuras}\label{Lineas_futuras}
+	\section{Lineas Futuras}\label{sec:lineas_futuras}
 		\input{./part/Lineas_futuras.tex}
 \newpage
 

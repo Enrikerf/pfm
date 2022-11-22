@@ -1,0 +1,34 @@
+
+\dirtree{%
+    .1 Project .
+        .2 Adapter.
+            .3 in.
+                .4 GRPC.
+                    .5 CreateEntityGrpcCall.
+                .4 Console.
+                    .5 CreateEntityTerminalCommand.
+            .3 out.
+                .4 Email.
+                    .5 SendEmailOnCreationImplementation (*1).
+                .4 Mysql.
+                    .5 SaveEntityImplementation (*2).
+        .2 Application.
+            .3 Port.
+                .4 in.
+                    .5 Entity.
+                        .6 CreateUseCase.
+                            .7 CreateCommand.
+                                .8 CreateCommand (using sendEmail param in this example).
+                                .8 CreateUseCase.
+                            .7 SomeEventHandler.
+                                .8 CreationEvent.
+                                .8 CreationEventUseCase.
+                .4 out.
+                    .5 Email.
+                        .6 SendEmailConCreation (interface for *1).
+        .2 Domain.
+            .3 Entity.
+                .4 EntityName.go.
+                .4 RecorderService.go (using Recorder.go and ensuring to raise CreationEvent together with the recording).
+                .4 recorder.go (interface for *2).
+}\label{directoryStructureOut}

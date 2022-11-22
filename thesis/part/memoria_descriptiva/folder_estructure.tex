@@ -1,0 +1,29 @@
+
+\dirtree{%
+    .1 Project .
+        .2 Adapter.
+            .3 in.
+                .4 Http.
+                .4 GRPC.
+            .3 out.
+                .4 Mysql.
+                .4 GRPC.
+        .2 Application.
+            .3 Port.
+                .4 in.
+                    .5 <Domain Concept>.
+                        .6 UseCase.
+                            .7 SomeCommands.
+                                .8 Command.
+                                .8 CommandUseCase.
+                            .7 SomeQuery.
+                                .8 Query.
+                                .8 QueryUseCase.
+                            .7 SomeEventHandler.
+                                .8 Event.
+                                .8 EventUseCase.
+                .4 out.
+                    .5 External out interactions.
+        .2 Domain.
+            .3 EntityName.
+}\label{directoryStructure}
