@@ -22,7 +22,7 @@ func (adapter BatchAdapter) Find(uuid string) (ResultDomain.Batch, error) {
 }
 
 func (adapter BatchAdapter) Save(batch ResultDomain.Batch) error {
-	var taskMysql Model.Task
+	var taskMysql Model.TaskDb
 	var batchMysql Model.Batch
 	response := adapter.Orm.First(&taskMysql, "uuid = ?", batch.TaskUuid)
 	if response.Error != nil {
@@ -54,7 +54,7 @@ func (adapter BatchAdapter) FindAll() ([]ResultDomain.Batch, error) {
 }
 
 func (adapter BatchAdapter) Update(batch ResultDomain.Batch) error {
-	var taskMysql Model.Task
+	var taskMysql Model.TaskDb
 	var currentBatchMysql Model.Batch
 	var batchValuesToUpdate = Model.Batch{}
 	err := adapter.Orm.First(&taskMysql, "uuid = ?", batch.TaskUuid).Error

@@ -36,17 +36,17 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 		return nil, fmt.Errorf("error")
 	}
 	var commandNames []string
-	for _, command := range task.Steps {
-		commandNames = append(commandNames, command.Sentence)
+	for _, command := range task.GetSteps() {
+		commandNames = append(commandNames, command.GetSentence())
 	}
 	newTask := taskProto.Task{
-		Uuid:          task.Uuid.String(),
-		Host:          task.Host,
-		Port:          task.Port,
+		Uuid:          task.GetUuidString(),
+		Host:          task.GetHost().GetValue(),
+		Port:          task.GetPort().GetValue(),
 		Commands:      commandNames,
-		Mode:          task.Mode.String(),
-		Status:        task.Status.String(),
-		ExecutionMode: task.ExecutionMode.String(),
+		Mode:          string(task.GetCommunicationMode()),
+		Status:        string(task.GetStatus()),
+		ExecutionMode: string(task.GetExecutionMode()),
 	}
 	return &taskProto.CreateTaskResponse{Task: &newTask}, nil
 }

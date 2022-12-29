@@ -104,7 +104,7 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 	var callAdapter = Call.ManualAdapter{}
 
 	//TaskController
-	var createTaskService = CreateTask.Service{SaveTaskPort: taskAdapter}
+	var createTaskService = CreateTask.New(taskAdapter)
 	var readTaskService = ReadTask.Service{FindTaskPort: taskAdapter}
 	var updateTaskService = UpdateTask.Service{
 		FindTaskPort:   taskAdapter,

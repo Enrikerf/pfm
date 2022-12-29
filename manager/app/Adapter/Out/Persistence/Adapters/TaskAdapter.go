@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Model"
 	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task"
 	"gorm.io/gorm"
 )
 
@@ -12,8 +13,8 @@ type TaskAdapter struct {
 }
 
 func (adapter TaskAdapter) Find(uuid string) (TaskDomain.Task, error) {
-	var taskMysql = Model.Task{}
-	var resultsMysql = []Model.Step{}
+	var taskMysql = Model.TaskDb{}
+	var resultsMysql = []Model.StepDb{}
 	err := adapter.Orm.First(&taskMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return TaskDomain.Task{}, err
@@ -32,8 +33,14 @@ func (adapter TaskAdapter) Find(uuid string) (TaskDomain.Task, error) {
 	return taskMysql.ToDomain(), nil
 }
 
+func (adapter TaskAdapter) Persist(task Task.Task) {
+	var taskMysql = Model.TaskDb{}
+	taskMysql.FromDomainV2(task)
+	_ = adapter.Orm.Create(&taskMysql).Error
+}
+
 func (adapter TaskAdapter) Delete(uuid string) error {
-	var taskMysql = Model.Task{}
+	var taskMysql = Model.TaskDb{}
 	err := adapter.Orm.Delete(&taskMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return err
@@ -41,20 +48,9 @@ func (adapter TaskAdapter) Delete(uuid string) error {
 	return nil
 }
 
-func (adapter TaskAdapter) Save(task TaskDomain.Task) error {
-	var taskMysql = Model.Task{}
-	taskMysql.FromDomain(task)
-	err := adapter.Orm.Create(&taskMysql).Error
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (adapter TaskAdapter) Update(task TaskDomain.Task) error {
-	var currentTaskMysql Model.Task
-	var taskValuesToUpdate = Model.Task{}
+	var currentTaskMysql Model.TaskDb
+	var taskValuesToUpdate = Model.TaskDb{}
 	taskValuesToUpdate.FromDomain(task)
 	err := adapter.Orm.First(&currentTaskMysql, "uuid = ?", taskValuesToUpdate.Uuid).Error
 	if err != nil {
@@ -66,7 +62,7 @@ func (adapter TaskAdapter) Update(task TaskDomain.Task) error {
 
 func (adapter TaskAdapter) FindBy(conditions interface{}) []TaskDomain.Task {
 
-	var tasks []Model.Task
+	var tasks []Model.TaskDb
 	domainTasks := []TaskDomain.Task{}
 	err := adapter.Orm.
 		Table("tasks").

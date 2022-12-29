@@ -4,10 +4,12 @@ ARG GO_VERSION
 RUN apt update && apt install -y curl
 WORKDIR /tmp
 RUN URL=https://storage.googleapis.com/golang/go1.${GO_VERSION}.linux-amd64.tar.gz \
-    && curl ${URL} -o go.tar.gz  \
-    && tar -C /usr/local -xzf go.tar.gz  \
-    && rm -rf go.tar.gz
+        && curl ${URL} -o go.tar.gz  \
+        && tar -zxf go.tar.gz  \
+        && rm -rf go.tar.gz  \
+        && mv go /usr/local/go
 
+ENV GOPATH /usr/local/go
 ENV PATH $PATH:/usr/local/go/bin
 # If you enable this, then gcc is needed to debug your app
 ENV CGO_ENABLED 0
@@ -16,12 +18,13 @@ FROM compiler AS dev
 
 WORKDIR /app
 EXPOSE 8000 40000
-RUN apt update && apt install -y curl vim fish \
+RUN apt update && apt install -y build-essential curl vim fish git sudo \
     && groupadd -g 1000 docker-user \
     && useradd -d /home/docker-user -s /bin/bash -u 1000 -g 1000 docker-user \
     && mkdir /home/docker-user \
     && chown -R docker-user:docker-user /home/docker-user \
-    && go install github.com/go-delve/delve/cmd/dlv@latest
+    && go install github.com/go-delve/delve/cmd/dlv@latest \
+    && ls -s /usr/local/go/bin/dlv /usr/local/bin
 
 FROM compiler AS compile
 

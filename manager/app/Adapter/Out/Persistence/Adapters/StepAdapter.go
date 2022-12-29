@@ -12,8 +12,8 @@ type StepAdapter struct {
 }
 
 func (adapter StepAdapter) Save(selfDomain TaskDomain.Step) error {
-	var taskMysql Model.Task
-	var selfPersistence Model.Step
+	var taskMysql Model.TaskDb
+	var selfPersistence Model.StepDb
 	response := adapter.Orm.First(&taskMysql, "uuid = ?", selfDomain.TaskUuid)
 	if response.Error != nil {
 		fmt.Printf("tasks %v.\n", response.Error)
@@ -30,7 +30,7 @@ func (adapter StepAdapter) Save(selfDomain TaskDomain.Step) error {
 }
 
 func (adapter StepAdapter) Find(uuid string) (TaskDomain.Step, error) {
-	var selfPersistence = Model.Step{}
+	var selfPersistence = Model.StepDb{}
 	err := adapter.Orm.First(&selfPersistence, "uuid = ?", uuid).Error
 	if err != nil {
 		return TaskDomain.Step{}, err
@@ -40,9 +40,9 @@ func (adapter StepAdapter) Find(uuid string) (TaskDomain.Step, error) {
 }
 
 func (adapter StepAdapter) Update(selfDomain TaskDomain.Step) error {
-	var taskMysql Model.Task
-	var selfPersistence Model.Step
-	var selfValuesToUpdate = Model.Step{}
+	var taskMysql Model.TaskDb
+	var selfPersistence Model.StepDb
+	var selfValuesToUpdate = Model.StepDb{}
 	err := adapter.Orm.First(&taskMysql, "uuid = ?", selfDomain.TaskUuid).Error
 	if err != nil {
 		return err
@@ -58,7 +58,7 @@ func (adapter StepAdapter) Update(selfDomain TaskDomain.Step) error {
 }
 
 func (adapter StepAdapter) Delete(uuid string) error {
-	var selfPersistence = Model.Step{}
+	var selfPersistence = Model.StepDb{}
 	err := adapter.Orm.Delete(&selfPersistence, "uuid = ?", uuid).Error
 	if err != nil {
 		return err
@@ -68,7 +68,7 @@ func (adapter StepAdapter) Delete(uuid string) error {
 
 func (adapter StepAdapter) FindBy(conditions interface{}) []TaskDomain.Step {
 
-	var selfArrayPersistence []Model.Step
+	var selfArrayPersistence []Model.StepDb
 	selfArrayDomain := []TaskDomain.Step{}
 	err := adapter.Orm.
 		Table("steps").

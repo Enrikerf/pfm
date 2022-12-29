@@ -36,21 +36,21 @@ message EditableTaskParams{
 }
 enum Status {
   StatusNotChange = 0;
-  Pending = 1;
-  Running = 2;
-  Done = 3;
+  PENDING = 1;
+  RUNNING = 2;
+  DONE = 3;
 }
 enum Mode {
   ModeNotChange = 0;
-  Unary = 1;
-  ClientStream = 2;
-  ServerStream = 3;
-  Bidirectional = 4;
+  UNARY = 1;
+  CLIENT_STREAM = 2;
+  SERVER_STREAM = 3;
+  BIDIRECTIONAL = 4;
 }
 enum ExecutionMode {
   ExecutionModeMotChange = 0;
-  Automatic = 1;
-  Manual = 2;
+  AUTOMATIC = 1;
+  MANUAL = 2;
 }
 
 message CreateTaskRequest{
