@@ -26,7 +26,9 @@ enter: ## Access to container
 run: ## run main.go
 	docker exec -ti go-dev go run main.go
 debug: ## run on debug mode, remember to listen on the IDE
-	docker exec -ti go-manager /go/bin/dlv --headless --listen=:40000 --api-version=2 debug
+	docker exec -ti go-manager dlv --headless --listen=:40000 --api-version=2 debug
+debug-test: ## run on debug mode, remember to listen on the IDE
+	docker exec -ti go-manager dlv --headless --listen=:40000 --api-version=2 test
 runTests: ##@tests Start all or <container_name> containers in foreground
 	cd tests; go test ./... -v; cd -
 
@@ -37,8 +39,6 @@ protoGen: ## @proto Start all or <container_name> containers in foreground
 ## —— Git —————————————————————————————————————————
 clearGit: ## @git Start all or <container_name> containers in foreground
 	git branch --merged | egrep -v "(^\*|master|main|dev)" | xargs git branch -d
-
-
 
 ## —— Database —————————————————————————————————————————
 

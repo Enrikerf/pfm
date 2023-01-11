@@ -1,16 +1,11 @@
 package ExecutionMode
 
+import "errors"
+
 type UnknownError interface {
-	Error() string
+	error
 }
 
-type unknownError struct {
-}
-
-func (e *unknownError) Error() string {
-	return "execution mode not valid"
-}
-
-func NewUnknownError() *unknownError {
-	return &unknownError{}
+func NewUnknownError() UnknownError {
+	return errors.New("execution mode not valid")
 }

@@ -1,16 +1,11 @@
 package Host
 
+import "errors"
+
 type InvalidHostError interface {
-	Error() string
+	error
 }
 
-type invalidHostError struct {
-}
-
-func (e *invalidHostError) Error() string {
-	return "invalid host format"
-}
-
-func NewInvalidHostError() *invalidHostError {
-	return &invalidHostError{}
+func NewInvalidHostError() InvalidHostError {
+	return errors.New("invalid host format")
 }

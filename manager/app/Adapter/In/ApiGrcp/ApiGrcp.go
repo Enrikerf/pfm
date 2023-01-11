@@ -140,7 +140,7 @@ func (api *ApiGrpc) Run() {
 	go func() {
 		fmt.Println("Starting at: " + api.serverHost + api.serverPort)
 		if err := api.grpcServer.Serve(api.listener); err != nil {
-			log.Fatalf("fatal")
+			log.Fatalf(err.Error())
 		}
 	}()
 	// Wait for control C to exit
@@ -215,7 +215,8 @@ func (api *ApiGrpc) loadServer() {
 func (api *ApiGrpc) loadListener() {
 	listener, err := net.Listen("tcp", api.serverHost+api.serverPort)
 	if err != nil {
-		log.Fatalf("failed to listen at: " + api.serverHost + api.serverPort)
+		//log.Fatalf("failed to listen at: " + api.serverHost + api.serverPort)
+		log.Fatalf(err.Error())
 	}
 	api.listener = listener
 }

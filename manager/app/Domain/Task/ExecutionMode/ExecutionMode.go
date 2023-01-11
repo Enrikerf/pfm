@@ -1,13 +1,13 @@
 package ExecutionMode
 
-type ExecutionMode string
+type Mode string
 
 const (
-	Manual    ExecutionMode = "MANUAL"
-	Automatic ExecutionMode = "AUTOMATIC"
+	Manual    Mode = "MANUAL"
+	Automatic Mode = "AUTOMATIC"
 )
 
-func FromString(mode string) (ExecutionMode, error) {
+func FromString(mode string) (Mode, error) {
 	switch mode {
 	case "MANUAL":
 		return Manual, nil

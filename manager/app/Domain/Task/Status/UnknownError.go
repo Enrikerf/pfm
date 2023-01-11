@@ -1,16 +1,11 @@
 package Status
 
+import "errors"
+
 type UnknownError interface {
-	Error() string
+	error
 }
 
-type unknownError struct {
-}
-
-func (e *unknownError) Error() string {
-	return "status not valid"
-}
-
-func NewUnknownError() *unknownError {
-	return &unknownError{}
+func NewUnknownError() UnknownError {
+	return errors.New("status not valid")
 }

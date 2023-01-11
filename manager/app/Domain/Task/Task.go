@@ -7,27 +7,25 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Port"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Status"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Step"
-	"github.com/google/uuid"
 )
 
 type Task interface {
-	GetUuid() uuid.UUID
-	GetUuidString() string
+	GetId() Id
 	GetHost() Host.Vo
 	GetPort() Port.Vo
 	GetSteps() []Step.Step
 	GetCommunicationMode() CommunicationMode.Mode
-	GetExecutionMode() ExecutionMode.ExecutionMode
+	GetExecutionMode() ExecutionMode.Mode
 	GetStatus() Status.Status
 }
 
 type task struct {
-	uuid              uuid.UUID
+	id                Id
 	host              Host.Vo
 	port              Port.Vo
 	steps             []Step.Step
 	communicationMode CommunicationMode.Mode
-	executionMode     ExecutionMode.ExecutionMode
+	executionMode     ExecutionMode.Mode
 	status            Status.Status
 }
 
@@ -36,10 +34,10 @@ func New(
 	port Port.Vo,
 	stepVos []Step.Vo,
 	communicationMode CommunicationMode.Mode,
-	executionMode ExecutionMode.ExecutionMode,
-) (Task, error) {
+	executionMode ExecutionMode.Mode,
+) Task {
 	task := &task{}
-	task.uuid = uuid.New()
+	task.id = NewId()
 	for _, stepVo := range stepVos {
 		step := Step.New(stepVo)
 		task.steps = append(task.steps, step)
@@ -49,15 +47,33 @@ func New(
 	task.executionMode = executionMode
 	task.communicationMode = communicationMode
 	task.status = Status.Pending
-	return task, nil
+	return task
 }
 
-func (t task) GetUuid() uuid.UUID {
-	return t.uuid
+func Load(
+	id Id,
+	host Host.Vo,
+	port Port.Vo,
+	stepVos []Step.Vo,
+	communicationMode CommunicationMode.Mode,
+	executionMode ExecutionMode.Mode,
+) Task {
+	task := &task{}
+	task.id = id
+	for _, stepVo := range stepVos {
+		step := Step.New(stepVo)
+		task.steps = append(task.steps, step)
+	}
+	task.host = host
+	task.port = port
+	task.executionMode = executionMode
+	task.communicationMode = communicationMode
+	task.status = Status.Pending
+	return task
 }
 
-func (t task) GetUuidString() string {
-	return t.uuid.String()
+func (t task) GetId() Id {
+	return t.id
 }
 
 func (t task) GetHost() Host.Vo {
@@ -76,7 +92,7 @@ func (t task) GetCommunicationMode() CommunicationMode.Mode {
 	return t.communicationMode
 }
 
-func (t task) GetExecutionMode() ExecutionMode.ExecutionMode {
+func (t task) GetExecutionMode() ExecutionMode.Mode {
 	return t.executionMode
 }
 

@@ -1,16 +1,11 @@
 package Port
 
+import "errors"
+
 type InvalidPortError interface {
-	Error() string
+	error
 }
 
-type invalidPortError struct {
-}
-
-func (e *invalidPortError) Error() string {
-	return "invalid host format"
-}
-
-func NewInvalidPortError() *invalidPortError {
-	return &invalidPortError{}
+func NewInvalidPortError() InvalidPortError {
+	return errors.New("invalid host format")
 }

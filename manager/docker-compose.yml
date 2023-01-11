@@ -10,7 +10,7 @@ services:
         GO_VERSION: 19.2
     image: go-manager:19.2-${target}
     ports:
-      - "9090:9090"
+      - "8081:8081"
       - "40000:40000"
     security_opt:
       - "seccomp:unconfined"

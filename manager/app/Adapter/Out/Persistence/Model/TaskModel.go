@@ -3,6 +3,11 @@ package Model
 import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
 	TaskDomain "github.com/Enrikerf/pfm/commandManager/app/Domain/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/CommunicationMode"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/ExecutionMode"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Host"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Port"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Step"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/ValueObject"
 	"github.com/google/uuid"
 	"time"
@@ -26,7 +31,7 @@ func (TaskDb) TableName() string {
 }
 
 func (taskDb *TaskDb) FromDomainV2(selfEntity TaskDomain.Task) {
-	taskDb.Uuid = selfEntity.GetUuid()
+	taskDb.Uuid = selfEntity.GetId().GetUuid()
 	taskDb.Host = selfEntity.GetHost().GetValue()
 	taskDb.Port = selfEntity.GetPort().GetValue()
 	for _, stepDomain := range selfEntity.GetSteps() {
@@ -65,4 +70,43 @@ func (taskDb *TaskDb) ToDomain() Entity.Task {
 	selfEntity.Status, _ = ValueObject.GetStatus(taskDb.Status)
 	selfEntity.ExecutionMode, _ = ValueObject.GetExecutionMode(taskDb.ExecutionMode)
 	return selfEntity
+}
+
+func (taskDb *TaskDb) ToDomainV2() (TaskDomain.Task, error) {
+	host, err := Host.NewVo(taskDb.Host)
+	if err != nil {
+		return nil, err
+	}
+	port, err := Port.NewVo(taskDb.Port)
+	if err != nil {
+		return nil, err
+	}
+	communicationMode, err := CommunicationMode.FromString(taskDb.Mode)
+	if err != nil {
+		return nil, err
+	}
+	executionMode, err := ExecutionMode.FromString(taskDb.ExecutionMode)
+	if err != nil {
+		return nil, err
+	}
+	var stepVos []Step.Vo
+	for _, commandSentence := range taskDb.Steps {
+		stepVo, err := Step.NewVo(commandSentence.Sentence)
+		if err != nil {
+			return nil, err
+		}
+		stepVos = append(stepVos, stepVo)
+	}
+	if err != nil {
+		return nil, err
+	}
+	task := TaskDomain.Load(
+		TaskDomain.LoadId(taskDb.Uuid),
+		host,
+		port,
+		stepVos,
+		communicationMode,
+		executionMode,
+	)
+	return task, nil
 }

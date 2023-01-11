@@ -40,7 +40,7 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 		commandNames = append(commandNames, command.GetSentence())
 	}
 	newTask := taskProto.Task{
-		Uuid:          task.GetUuidString(),
+		Uuid:          task.GetId().GetUuidString(),
 		Host:          task.GetHost().GetValue(),
 		Port:          task.GetPort().GetValue(),
 		Commands:      commandNames,

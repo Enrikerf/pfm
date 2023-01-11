@@ -6,6 +6,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/LoopManager"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Grcp/Call"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Adapters"
+	AdaptersV2 "github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Adapters/Task"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/CreateBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/DeleteBatch"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ListBatches"
@@ -98,6 +99,7 @@ func (server *App) loadLoop(db *gorm.DB) {
 
 func (server *App) loadApiGrpc(db *gorm.DB) {
 	var taskAdapter = Adapters.TaskAdapter{Orm: db}
+	var newTaskAdapter = AdaptersV2.TaskAdapter{Orm: db}
 	var commandAdapter = Adapters.StepAdapter{Orm: db}
 	var batchAdapter = Adapters.BatchAdapter{Orm: db}
 	var resultAdapter = Adapters.ResultAdapter{Orm: db}
@@ -110,7 +112,7 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 		FindTaskPort:   taskAdapter,
 		UpdateTaskPort: taskAdapter,
 	}
-	var deleteTaskService = DeleteTask.Service{DeleteTaskPort: taskAdapter}
+	var deleteTaskService = DeleteTask.New(newTaskAdapter, newTaskAdapter)
 	var listTasksService = ListTasks.Service{FindTasksByPort: taskAdapter}
 
 	// CommandController

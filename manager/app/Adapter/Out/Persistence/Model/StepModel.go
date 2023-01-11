@@ -22,7 +22,7 @@ func (StepDb) TableName() string {
 }
 
 func (stepModel *StepDb) FromDomainV2(taskUuid uuid.UUID, selfEntity StepDomain.Step) {
-	stepModel.Uuid = selfEntity.GetUuid()
+	stepModel.Uuid = selfEntity.GetId().GetUuid()
 	stepModel.TaskUuid = taskUuid
 	stepModel.Sentence = selfEntity.GetSentence()
 }
@@ -39,4 +39,18 @@ func (stepModel *StepDb) ToDomain() Entity.Step {
 	selfEntity.TaskUuid = stepModel.TaskUuid
 	selfEntity.Sentence = stepModel.Sentence
 	return selfEntity
+}
+
+func (stepModel *StepDb) ToDomainV2() (StepDomain.Step, error) {
+
+	vo, err := StepDomain.NewVo(stepModel.Sentence)
+	if err != nil {
+		return nil, err
+	}
+	selfEntity := StepDomain.Load(
+		StepDomain.LoadId(stepModel.Uuid),
+		vo,
+	)
+
+	return selfEntity, nil
 }

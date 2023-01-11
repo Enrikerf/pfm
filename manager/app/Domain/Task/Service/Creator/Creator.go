@@ -1,4 +1,4 @@
-package Service
+package Creator
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ import (
 )
 
 type Creator struct {
-	Recorder Repository.Recorder
+	SaveRepository Repository.Save
 }
 
 func (creator *Creator) Create(
@@ -20,17 +20,21 @@ func (creator *Creator) Create(
 	port Port.Vo,
 	stepVos []Step.Vo,
 	communicationMode CommunicationMode.Mode,
-	executionMode ExecutionMode.ExecutionMode,
-) (Task.Task, error) {
+	executionMode ExecutionMode.Mode,
+) Task.Task {
 
-	var task, _ = Task.New(
+	var task = Task.New(
 		host,
 		port,
 		stepVos,
 		communicationMode,
 		executionMode,
 	)
-	fmt.Println("TaskCreatedEvent")
-	creator.Recorder.Persist(task)
-	return task, nil
+	creator.SaveRepository.Persist(task)
+
+	if task.GetExecutionMode() == ExecutionMode.Automatic {
+		fmt.Println("TaskCreatedEvent: activate loop pending")
+	}
+
+	return task
 }

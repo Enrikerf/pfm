@@ -1,26 +1,17 @@
 package Step
 
-import (
-	"github.com/google/uuid"
-)
-
 type Step interface {
-	GetUuid() uuid.UUID
-	GetUuidString() string
+	GetId() Id
 	GetSentence() string
 }
 
 type step struct {
-	uuid     uuid.UUID
+	id       Id
 	sentence string
 }
 
-func (s step) GetUuid() uuid.UUID {
-	return s.uuid
-}
-
-func (s step) GetUuidString() string {
-	return s.uuid.String()
+func (s step) GetId() Id {
+	return s.id
 }
 
 func (s step) GetSentence() string {
@@ -29,7 +20,13 @@ func (s step) GetSentence() string {
 
 func New(stepVo Vo) Step {
 	self := &step{}
-	self.uuid = uuid.New()
+	self.id = NewId()
+	self.sentence = stepVo.GetSentence()
+	return self
+}
+func Load(id Id, stepVo Vo) Step {
+	self := &step{}
+	self.id = id
 	self.sentence = stepVo.GetSentence()
 	return self
 }

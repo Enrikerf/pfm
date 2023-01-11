@@ -1,0 +1,246 @@
+@startuml
+legend
+<u><b>Legend</b></u>
+Render Aggregations: true
+Render Fields: true
+Render Methods: true
+Pritave Aggregations: true
+end legend
+namespace CommunicationMode {
+    class CommunicationMode.Mode << (T, #FF7700) >>  {
+    }
+    interface UnknownError  {
+        + Error() string
+
+    }
+    class unknownError << (S,Aquamarine) >> {
+        + Error() string
+
+    }
+}
+
+"CommunicationMode.UnknownError" <|-- "implements""CommunicationMode.unknownError"
+"ExecutionMode.UnknownError" <|-- "implements""CommunicationMode.unknownError"
+"Host.InvalidHostError" <|-- "implements""CommunicationMode.unknownError"
+"Port.InvalidPortError" <|-- "implements""CommunicationMode.unknownError"
+"Step.InvalidSentenceLengthError" <|-- "implements""CommunicationMode.unknownError"
+
+
+namespace ExecutionMode {
+    class ExecutionMode.ExecutionMode << (T, #FF7700) >>  {
+    }
+    interface UnknownError  {
+        + Error() string
+
+    }
+    class unknownError << (S,Aquamarine) >> {
+        + Error() string
+
+    }
+}
+
+"CommunicationMode.UnknownError" <|-- "implements""ExecutionMode.unknownError"
+"ExecutionMode.UnknownError" <|-- "implements""ExecutionMode.unknownError"
+"Host.InvalidHostError" <|-- "implements""ExecutionMode.unknownError"
+"Port.InvalidPortError" <|-- "implements""ExecutionMode.unknownError"
+"Step.InvalidSentenceLengthError" <|-- "implements""ExecutionMode.unknownError"
+
+
+namespace Host {
+    interface InvalidHostError  {
+        + Error() string
+
+    }
+    interface Vo  {
+        + GetValue() string
+
+    }
+    class invalidHostError << (S,Aquamarine) >> {
+        + Error() string
+
+    }
+    class vo << (S,Aquamarine) >> {
+        - value string
+
+        + GetValue() string
+
+    }
+}
+
+"CommunicationMode.UnknownError" <|-- "implements""Host.invalidHostError"
+"ExecutionMode.UnknownError" <|-- "implements""Host.invalidHostError"
+"Host.InvalidHostError" <|-- "implements""Host.invalidHostError"
+"Port.InvalidPortError" <|-- "implements""Host.invalidHostError"
+"Step.InvalidSentenceLengthError" <|-- "implements""Host.invalidHostError"
+"Host.Vo" <|-- "implements""Host.vo"
+"Port.Vo" <|-- "implements""Host.vo"
+
+
+namespace Port {
+    interface InvalidPortError  {
+        + Error() string
+
+    }
+    interface Vo  {
+        + GetValue() string
+
+    }
+    class invalidPortError << (S,Aquamarine) >> {
+        + Error() string
+
+    }
+    class vo << (S,Aquamarine) >> {
+        - value string
+
+        + GetValue() string
+
+    }
+}
+
+"CommunicationMode.UnknownError" <|-- "implements""Port.invalidPortError"
+"ExecutionMode.UnknownError" <|-- "implements""Port.invalidPortError"
+"Host.InvalidHostError" <|-- "implements""Port.invalidPortError"
+"Port.InvalidPortError" <|-- "implements""Port.invalidPortError"
+"Step.InvalidSentenceLengthError" <|-- "implements""Port.invalidPortError"
+"Host.Vo" <|-- "implements""Port.vo"
+"Port.Vo" <|-- "implements""Port.vo"
+
+
+namespace Repository {
+    interface Recorder  {
+        + Persist(task Task.Task) 
+
+    }
+}
+
+
+
+namespace Service {
+    class Creator << (S,Aquamarine) >> {
+        + Recorder Repository.Recorder
+
+        + Create(host Host.Vo, port Port.Vo, stepVos []Step.Vo, communicationMode CommunicationMode.Mode, executionMode ExecutionMode.ExecutionMode) (Task.Task, error)
+
+    }
+}
+
+
+"Service.Creator""uses" o-- "Repository.Recorder"
+
+namespace Status {
+    class Status.Status << (T, #FF7700) >>  {
+    }
+    interface UnknownError  {
+        + Error() string
+        + _statusError() 
+
+    }
+    class unknownError << (S,Aquamarine) >> {
+        + Error() string
+        + _statusError() 
+
+    }
+}
+
+"CommunicationMode.UnknownError" <|-- "implements""Status.unknownError"
+"ExecutionMode.UnknownError" <|-- "implements""Status.unknownError"
+"Host.InvalidHostError" <|-- "implements""Status.unknownError"
+"Port.InvalidPortError" <|-- "implements""Status.unknownError"
+"Status.UnknownError" <|-- "implements""Status.unknownError"
+"Step.InvalidSentenceLengthError" <|-- "implements""Status.unknownError"
+
+
+namespace Step {
+    interface InvalidSentenceLengthError  {
+        + Error() string
+
+    }
+    interface Step  {
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+        + GetSentence() string
+
+    }
+    interface Vo  {
+        + GetSentence() string
+
+    }
+    class invalidSentenceLengthError << (S,Aquamarine) >> {
+        + Error() string
+
+    }
+    class step << (S,Aquamarine) >> {
+        - uuid uuid.UUID
+        - sentence string
+
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+        + GetSentence() string
+
+    }
+    class vo << (S,Aquamarine) >> {
+        - sentence string
+
+        + GetSentence() string
+
+    }
+}
+
+"CommunicationMode.UnknownError" <|-- "implements""Step.invalidSentenceLengthError"
+"ExecutionMode.UnknownError" <|-- "implements""Step.invalidSentenceLengthError"
+"Host.InvalidHostError" <|-- "implements""Step.invalidSentenceLengthError"
+"Port.InvalidPortError" <|-- "implements""Step.invalidSentenceLengthError"
+"Step.InvalidSentenceLengthError" <|-- "implements""Step.invalidSentenceLengthError"
+"Step.Step" <|-- "implements""Step.step"
+"Step.Vo" <|-- "implements""Step.step"
+"Step.Vo" <|-- "implements""Step.vo"
+
+"Step.step""uses" o-- "uuid.UUID"
+
+namespace Task {
+    interface Task  {
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+        + GetHost() Host.Vo
+        + GetPort() Port.Vo
+        + GetSteps() []Step.Step
+        + GetCommunicationMode() CommunicationMode.Mode
+        + GetExecutionMode() ExecutionMode.ExecutionMode
+        + GetStatus() Status.Status
+
+    }
+    class task << (S,Aquamarine) >> {
+        - uuid uuid.UUID
+        - host Host.Vo
+        - port Port.Vo
+        - steps []Step.Step
+        - communicationMode CommunicationMode.Mode
+        - executionMode ExecutionMode.ExecutionMode
+        - status Status.Status
+
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+        + GetHost() Host.Vo
+        + GetPort() Port.Vo
+        + GetSteps() []Step.Step
+        + GetCommunicationMode() CommunicationMode.Mode
+        + GetExecutionMode() ExecutionMode.ExecutionMode
+        + GetStatus() Status.Status
+
+    }
+}
+
+"Task.Task" <|-- "implements""Task.task"
+
+"Task.task""uses" o-- "CommunicationMode.Mode"
+"Task.task""uses" o-- "ExecutionMode.ExecutionMode"
+"Task.task""uses" o-- "Host.Vo"
+"Task.task""uses" o-- "Port.Vo"
+"Task.task""uses" o-- "Status.Status"
+"Task.task""uses" o-- "Step.Step"
+"Task.task""uses" o-- "uuid.UUID"
+
+"__builtin__.string" #.. "alias of""CommunicationMode.Mode"
+"__builtin__.string" #.. "alias of""ExecutionMode.ExecutionMode"
+"__builtin__.string" #.. "alias of""Status.Status"
+@enduml

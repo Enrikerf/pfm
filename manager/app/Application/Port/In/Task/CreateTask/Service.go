@@ -7,7 +7,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Host"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Port"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Repository"
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Service"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Service/Creator"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Step"
 )
 
@@ -15,12 +15,12 @@ type UseCase interface {
 	Create(command Command) (Task.Task, error)
 }
 
-func New(recorder Repository.Recorder) UseCase {
-	return &useCase{Service.Creator{Recorder: recorder}}
+func New(saveRepository Repository.Save) UseCase {
+	return &useCase{Creator.Creator{SaveRepository: saveRepository}}
 }
 
 type useCase struct {
-	creator Service.Creator
+	creator Creator.Creator
 }
 
 func (useCase *useCase) Create(command Command) (Task.Task, error) {
@@ -51,7 +51,7 @@ func (useCase *useCase) Create(command Command) (Task.Task, error) {
 	if err != nil {
 		return nil, err
 	}
-	task, _ := useCase.creator.Create(
+	task := useCase.creator.Create(
 		host,
 		port,
 		stepVos,

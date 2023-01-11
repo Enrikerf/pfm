@@ -26,7 +26,7 @@ func TestFromString(t *testing.T) {
 	for _, test := range tests {
 		communicationMode, err := CommunicationMode.FromString(test.CommunicationMode)
 		if test.ResultKO != nil {
-			assert.Error(t, err)
+			assert.ErrorIs(t, err, test.ResultKO)
 		} else {
 			assert.Equal(t, test.ResultOK, communicationMode)
 		}

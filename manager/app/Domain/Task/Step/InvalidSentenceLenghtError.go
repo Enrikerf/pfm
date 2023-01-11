@@ -1,16 +1,11 @@
 package Step
 
+import "errors"
+
 type InvalidSentenceLengthError interface {
-	Error() string
+	error
 }
 
-type invalidSentenceLengthError struct {
-}
-
-func (e *invalidSentenceLengthError) Error() string {
-	return "step.sentence length must be less than 255"
-}
-
-func NewInvalidSentenceLengthError() *invalidSentenceLengthError {
-	return &invalidSentenceLengthError{}
+func NewInvalidSentenceLengthError() InvalidSentenceLengthError {
+	return errors.New("step.sentence length must be less than 255")
 }

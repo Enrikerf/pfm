@@ -2,6 +2,6 @@ package Repository
 
 import "github.com/Enrikerf/pfm/commandManager/app/Domain/Task"
 
-type Recorder interface {
+type Save interface {
 	Persist(task Task.Task)
 }

@@ -1,16 +1,11 @@
 package CommunicationMode
 
+import "errors"
+
 type UnknownError interface {
-	Error() string
+	error
 }
 
-type unknownError struct {
-}
-
-func (e *unknownError) Error() string {
-	return "communication mode not valid"
-}
-
-func NewUnknownError() *unknownError {
-	return &unknownError{}
+func NewUnknownError() UnknownError {
+	return errors.New("communication mode not valid")
 }
