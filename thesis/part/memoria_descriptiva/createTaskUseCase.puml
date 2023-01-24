@@ -1,0 +1,26 @@
+@startuml
+
+start
+if (hostValid) then (no)
+  :throw InvalidHostError/
+  stop
+elseif (validPort) then (no)
+  :trhow InvalidPortError/
+  stop
+elseif (validCommunicationMode) then (no)
+  :trhow invalidCMode/
+  stop
+elseif (validExecutionMode) then (no)
+  :trhow invalidEMode/
+  stop
+elseif (validSteps) then (no)
+  :trhow invalidSteps/
+  stop
+else ()
+  :CreateTask: Status = pending/
+  :PersistTask/
+  :trigger TaskCreatedEvent/
+endif
+:return new Task id/
+stop
+@enduml

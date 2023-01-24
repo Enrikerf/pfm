@@ -1,0 +1,102 @@
+@startuml
+
+skinparam linetype polyline
+left to right direction
+' Horizontal lines: -->, <--, <-->
+' Vertical lines: ->, <-, <->
+title Manager Domain
+
+
+package Core{
+    object Id
+    object Error
+    object Event
+}
+package TaskModule{
+    object Task{
+
+    }
+    object TaskId{
+        uuid: Uuid
+    }
+    object Host{
+        uuid: Uuid
+    }
+    object Port{
+        value: string
+    }
+    enum CommunicationMode{
+        UNARY
+        SERVER_STREAM
+        CLIENT_STREAM
+        BIDIRECTIONAL
+    }
+    enum ExecutionMode{
+        MANUAL
+        AUTOMATIC
+    }
+    enum Status{
+        PENDING
+        RUNNING
+        SUCCESSFUL
+        FAILED
+    }
+
+    object Step{
+        Sentence: string
+    }
+    object StepId{
+        uuid: Uuid
+    }
+    object TaskCreatedEvent
+    object TaskModifiedEvent
+    object TaskDeletedEvent
+    object : "repositories,services,????"
+
+}
+
+package ResultModule{
+    object Result{
+        content: string
+    }
+    object Batch{
+        createdAt
+        updatedAt
+    }
+    object BatchId{
+        uuid: Uuid
+    }
+    object ResultId{
+        uuid: Uuid
+    }
+
+}
+
+TaskId --|> Id
+BatchId --|> Id
+ResultId --|> Id
+StepId --|> Id
+
+TaskCreatedEvent --|> Event
+TaskDeletedEvent --|> Event
+TaskModifiedEvent --|> Event
+
+
+Task *-- TaskId
+Task *-- Host
+Task *-- Port
+Task "n" *- Step
+Task *-- CommunicationMode
+Task *-- ExecutionMode
+Task *-- Status
+Step *- StepId
+
+Batch *- BatchId
+Batch *-- TaskId
+Batch "n" *-- Result
+Result *- ResultId
+
+
+
+
+@enduml

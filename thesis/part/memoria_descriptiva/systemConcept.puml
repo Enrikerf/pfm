@@ -1,0 +1,32 @@
+@startuml
+
+left to right direction
+' Horizontal lines: -->, <--, <-->
+' Vertical lines: ->, <-, <->
+
+Actor "User" as User
+archimate #Technology "Manager Server" as managerServer <<technology-device>>
+package "1 ClientMachine"{
+    archimate #Technology "Client Server" as clientServer1 <<technology-device>>
+    rectangle "Executed program"  as ExecutedProgram1 <<$archimate/business-process>> #Business
+}
+package "n ClientMachine"{
+    archimate #Technology "Client Server" as clientServer <<technology-device>>
+    rectangle "Executed program"  as ExecutedProgram <<$archimate/business-process>> #Business
+}
+
+
+User -> managerServer : "CRUD         "
+User <-- managerServer : "\nresponse"
+
+managerServer --> clientServer : "cmd"
+clientServer  --> managerServer : "response"
+
+ExecutedProgram <-> clientServer : "cmd\nresponse       "
+
+managerServer --> clientServer1 : "cmd"
+clientServer1  --> managerServer : "response"
+
+ExecutedProgram1 <-> clientServer1 : "cmd\nresponse       "
+
+@enduml

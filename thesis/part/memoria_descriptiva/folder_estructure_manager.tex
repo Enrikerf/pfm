@@ -1,0 +1,94 @@
+En el proyecto constará de 4 carpetas principales
+\dirtree{%
+    .1 Project .
+        .2 Adapter.
+        .2 Application.
+        .2 Domain.
+        .2 Bootstrap.
+}
+
+Bootstrap será donde hagamos la composición de la aplicación, es decir la inyección de dependencias.
+
+Vamos a desplegar la estructura capa por capa
+
+\textbf{Adapters}
+
+\dirtree{%
+.1 Adapter.
+    .2 in.
+        .3 GRPC.
+            .4 CreateEntityGrpcCall.
+        .3 Console.
+            .4 CreateEntityTerminalCommand.
+    .2 out.
+        .3 Email.
+            .4 SendEmailOnCreationImplementation (*1).
+        .3 Mysql.
+            .4 SaveEntityImplementation (*2).
+}
+
+\textbf{Aplicación}
+
+\dirtree{%
+.1 Application.
+    .2 Port.
+        .3 in.
+            .4 Entity.
+                .5 CreateUseCase.
+                    .6 CreateCommand.
+                        .7 CreateCommand (using sendEmail param in this example).
+                        .7 CreateUseCase.
+                    .6 SomeEventHandler.
+                        .7 CreationEvent.
+                        .7 CreationEventUseCase.
+        .3 out.
+            .4 Email.
+                .5 SendEmailConCreation (interface for *1).
+}
+
+\textbf{Dominio}
+
+\dirtree{%
+.1 Domain.
+    .2 Core.
+        .3 Id.
+        .3 Event.
+        .3 Error.
+    .2 Task.
+        .3 Id.
+        .3 Task.
+        .3 Host.
+        .3 Port.
+        .3 CommunicationMode.
+        .3 ExecutionMode.
+        .3 Status.
+        .3 Step.
+            .4 Id.
+            .4 StepEntity.
+            .4 StepVo.
+            .4 Repository.
+                .5 Find.
+                .5 Save.
+                .5 Search.
+                .5 Delete.
+                .5 Update.
+            .4 Service.
+                .5 Finder.
+                .5 Creator.
+                .5 Updater.
+                .5 Eraser.
+                .5 Searcher.
+        .3 Repository.
+            .4 Find.
+            .4 Save.
+            .4 Search.
+            .4 Delete.
+            .4 Update.
+        .3 Service.
+            .4 Finder.
+            .4 Creator.
+            .4 Updater.
+            .4 Eraser.
+            .4 Searcher.
+    .2 Result.
+}

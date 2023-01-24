@@ -1,0 +1,13 @@
+@startuml
+
+database "database"
+archimate #Technology "Manager Server" as vpnServerA <<technology-device>>
+archimate #Technology "Client Server" as vpnServerB <<technology-device>>
+
+Actor "User" as User
+
+"database" <--> vpnServerA
+vpnServerA <--> vpnServerB
+User --> vpnServerA
+
+@enduml

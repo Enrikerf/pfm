@@ -1,0 +1,17 @@
+@startuml
+
+start
+if (validId) then (no)
+  :throw InvalidIdError/
+  stop
+elseif (task Exists) then (no)
+  :throw NotFoundError/
+  stop
+elseif (task.Status == RUNNING) then (yes)
+  :throw TaskOnRunningStatusCanNotBeDeleted/
+  stop
+else (no)
+    :delete task/
+    :trigger taskDeletedEvent/
+    stop
+@enduml

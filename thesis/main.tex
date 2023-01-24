@@ -5,6 +5,7 @@
 \usepackage{listing}
 \usepackage{listings}
 \usepackage{dirtree}
+\usepackage{float}
 \usepackage{hyperref}
 \usepackage{cleveref}
 \usepackage{ulem}
@@ -15,6 +16,19 @@
 		keywordstyle=\color{blue}\ttfamily,
 		stringstyle=\color{red}\ttfamily,
 		commentstyle=\color{green}\ttfamily}
+\usepackage{titlesec}
+
+\setcounter{secnumdepth}{5}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\titleformat{\subparagraph}
+{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{}
+\titlespacing*{\subparagraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
 \begin{document}
 %pruebas
@@ -24,16 +38,16 @@
 
 
 \input{./InsertHeads}
-%	\section{Glosario}\label{sec:glossary}
-%		\input{./part/Glosario}
-%	\section{Introducción}\label{sec:introduccion}
-%		\input{./part/IntroduccionV2}
-%	\section{Objetivos}\label{sec:objetivos}
-%		\input{./part/Objetivos}
-%	\section{Estructura de la memoria}\label{sec:estructura}
-%		\input{./part/Estructura.tex}
-%	\section{Proyecto Básico}\label{sec:proyecto_bas}
-		\input{./part/Proyecto_basico.tex}
+	\section{Glosario}\label{sec:glossary}
+		\input{./part/Glosario}
+	\section{Introducción}\label{sec:introduccion}
+		\input{./part/IntroduccionV2}
+	\section{Objetivos}\label{sec:objetivos}
+		\input{./part/Objetivos}
+	\section{Estructura de la memoria}\label{sec:estructura}
+		\input{./part/Estructura.tex}
+	\section{Proyecto Ejecutivo}\label{sec:proyecto_ejecutivo}
+		\input{./part/Proyecto_ejecutivo.tex}
 	\section{Ejecución}\label{sec:ejecucion}
 		\input{./part/Ejecucion.tex}
 %	\section{Aplicaciones del sistema}\label{sec:aplicaciones_del_sistema}

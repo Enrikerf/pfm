@@ -1,0 +1,14 @@
+@startuml
+
+start
+if (validId) then (no)
+  :throw InvalidIdError/
+  stop
+elseif (task Exists) then (no)
+  :trhow NotFoundError/
+  stop
+else ()
+    :return new Task id/
+    stop
+
+@enduml
