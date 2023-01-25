@@ -1,0 +1,31 @@
+@startuml
+start
+repeat
+:get batch of pending tasks/
+if(tasks) then (no)
+:disable loop/
+stop
+else (yes)
+endif
+repeat
+  :executeTask asynchronously;
+  note left
+    * Task.Status = <b>RUNNING</b>
+    * Task.Updater(Task)
+    * result = task.Executor(Task)
+    * Result.Recorder(results)
+    * Task.Status = <b>SUCCESSFUL</b>
+    * Task.Updater(Task)
+  end note
+repeat while (More pending tasks) is (yes) not (no)
+
+fork
+    :task 1;
+fork again
+    :...;
+fork again
+    :task N;
+end fork
+repeat while ()
+
+@enduml

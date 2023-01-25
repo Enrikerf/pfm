@@ -1,0 +1,44 @@
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/systemConcept}
+    \caption[]{}\label{fig:systemConcept}
+\end{figure}
+
+Los componentes de esta solucion seran:
+\begin{itemize}
+    \item el manager server que guardará las tareas, las ejecutará y guardará el resultado.
+    \item el client server que recepcionará las llamadas del manager con el comando y las ejecutará en el servidor cliente devolviendo los resultados al manager
+    \item el programa a ejecutar. En nuestro caso haremos pruebas con varios ejecutables básicos, pero habrá un programa de control PID par aun motor de corriente continua
+\end{itemize}
+
+Se puede ver un diagrama conceptual del sistema en la figura~\ref{fig:systemConcept}. Vamos a proceder a describir cada uno de los programas de forma detallada. Esta descripción estará compuesta de los siguientes elementos:
+
+\begin{itemize}
+    \item diagrama de los componentes con los elementos con los que interacciona
+    \item diagrama de objetos de sus elementos de dominio
+    \item casos de uso: descripción y diagrama
+    \item diagramas de procesos
+    \item estructura de carpeta para la organización del código
+\end{itemize}
+
+\paragraph{Manager Server}
+    \input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/manager.text.tex}
+\paragraph{Client Server}
+
+Hay que tener en cuenta que en este programa será casi todo infrestructura. ya que una vez recepcionado el comando mediante el RPC
+solo quedará
+
+En esta memoria descriptiva vamos a diseñar un sistema que tenga palabras clave para diferenciar un comando de pid y otro totalmente distinto. ya que si queremos ejecutar un simple comando de consola en el servidor cliente.
+
+Las posibilidades son tantas como comandos haya instalados en el servidor cliente.
+
+por ejemplo si el comando es ./runMyComand --arg=arg
+
+como un típico comando de consola quedará a cargo del usuario de este progrmaa cliente implementar la interfaz
+
+\paragraph{Control Program}
+
+Casos de uso todas las funciones del engine y diseñarlo para que la infra sea a través de consola de comandos (preparando para que luego debido a la comunicación rpc devolver los datos sea muy complicado si lo dividimos en otro comando y decidimos absorver este dominio)
+
+El sistema está pensado para que el programa a ejecutar sea de libre decisión del cliente. pero vamos a aprovechar la oportunidad para crear un programa de control y profundizar tanto en el uso del lenguaje como en los conocimientos relacionados con este master. En concreto el control automático. Uno do los programas que podrá ejecutar será un control PID.

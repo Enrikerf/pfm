@@ -269,7 +269,7 @@ en el proceso iterativo del desarrollo hay partes que van quedando más rígidas
 Veamos un ejemplo:
 
 \begin{figure}[H]
-    \input{./part/memoria_descriptiva/folder_estructure.tex}
+    \input{./part/Proyecto_ejecutivo/memoria_descriptiva/infoPreviaAntecedentes/folder_estructure.tex}
     \caption{}
     \label{fig:ProjectfolderStructure}
 \end{figure}
@@ -289,7 +289,7 @@ Cada vez que se crea una Entity mediante GRPC queremos puntualmente que si la en
 pero si se crea mediante terminal significa que lo está haciendo la propia administración y por tanto el correo no es necesario. Si en el Dominio Recorder implementamos la lógica de enviar siempre el correo no podríamos evitarlo, además de que no es un concepto de consistencia de dominio. si no se enviara el correo los datos son validos. si quisieramos meterlo en dominio tendríamos que enviar la información de quién lo está creado para saber si mandar el correo o no haciéndo la lógica más compleja y difusa por algo que en realidad no trata de la consistencia de la aplicación si no de un caso de uso en concreto. En este caso creariamos un Port.Out.Email.EmailSenderOnCreation(name) y lo implementariamos en los adaptadores de salida donde configuraríamos el correo de administración. este puerto de salida sería utilizado en el puerto de entrada de grpc Create
 
 \begin{figure}[H]
-    \input{./part/memoria_descriptiva/folder_estructure_application_port_out.tex}
+    \input{./part/Proyecto_ejecutivo/memoria_descriptiva/infoPreviaAntecedentes/folder_estructure_application_port_out.tex}
     \caption{}
     \label{fig:ProjectfolderStructurePortOut}
 \end{figure}

@@ -9,6 +9,7 @@
 \usepackage{hyperref}
 \usepackage{cleveref}
 \usepackage{ulem}
+\usepackage{xcolor}
 \setlength{\parskip}{\baselineskip}%
 \setlength{\parindent}{0pt}%
 \lstset{language=Go,
@@ -17,9 +18,7 @@
 		stringstyle=\color{red}\ttfamily,
 		commentstyle=\color{green}\ttfamily}
 \usepackage{titlesec}
-
 \setcounter{secnumdepth}{5}
-
 \titleformat{\paragraph}
 {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 \titlespacing*{\paragraph}
@@ -32,8 +31,7 @@
 
 \begin{document}
 %pruebas
-%\input{./part/memoria_descriptiva/arquitectura_de_capas.tex}
-%\input{./part/memoria_descriptiva/folder_estructure.tex}
+%	\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/manager.text.tex}
 %------
 
 
@@ -47,15 +45,15 @@
 	\section{Estructura de la memoria}\label{sec:estructura}
 		\input{./part/Estructura.tex}
 	\section{Proyecto Ejecutivo}\label{sec:proyecto_ejecutivo}
-		\input{./part/Proyecto_ejecutivo.tex}
+		\input{part/Proyecto_ejecutivo/Proyecto_ejecutivo.tex}
 	\section{Ejecución}\label{sec:ejecucion}
 		\input{./part/Ejecucion.tex}
-%	\section{Aplicaciones del sistema}\label{sec:aplicaciones_del_sistema}
-%		\input{./part/Aplicaciones_del_sistema.tex}
-%	\section{Conclusiones}\label{sec:conclusiones}
-%		\input{./part/Conclusiones.tex}
-%	\section{Lineas Futuras}\label{sec:lineas_futuras}
-%		\input{./part/Lineas_futuras.tex}
+	\section{Aplicaciones del sistema}\label{sec:aplicaciones_del_sistema}
+		\input{./part/Aplicaciones_del_sistema.tex}
+	\section{Conclusiones}\label{sec:conclusiones}
+		\input{./part/Conclusiones.tex}
+	\section{Lineas Futuras}\label{sec:lineas_futuras}
+		\input{./part/Lineas_futuras.tex}
 \newpage
 
 \end{document}

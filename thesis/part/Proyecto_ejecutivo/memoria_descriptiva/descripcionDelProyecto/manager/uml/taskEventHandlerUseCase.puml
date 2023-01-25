@@ -1,0 +1,16 @@
+@startuml
+
+start
+if (task Exists) then (no)
+  :throw NotFoundError/
+  stop
+elseif (task.ExecutionMode == AUTOMATIC && task.status == PENDING) then (no)
+  stop
+else (yes)
+    if (TaskLoop disabled) then (no)
+      stop
+    else (yes)
+        :enable TaskLoop/
+    stop
+endif
+@enduml
