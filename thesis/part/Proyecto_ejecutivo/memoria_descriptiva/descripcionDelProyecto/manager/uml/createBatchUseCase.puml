@@ -1,0 +1,17 @@
+@startuml
+
+start
+if (task uuid valid) then (no)
+  :throw InvalidTaskIdError/
+  stop
+elseif (taskExists) then (no)
+  :throw TaskNotFoundError/
+  stop
+else ()
+   label  asdf
+  :CreateBatch/
+  :PersistBatch/
+endif
+:return new Batch id/
+end
+@enduml

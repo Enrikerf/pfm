@@ -4,11 +4,13 @@ start
 if (validId) then (no)
   :throw InvalidIdError/
   stop
-elseif (task Exists) then (no)
+elseif (batch Exists) then (no)
   :trhow NotFoundError/
   stop
 else ()
-    :return Task/
-    stop
+    :get Results/
 
+endif
+:return Results/
+end
 @enduml

@@ -23,20 +23,9 @@ Se puede ver un diagrama conceptual del sistema en la figura~\ref{fig:systemConc
 \end{itemize}
 
 \paragraph{Manager Server}
-    \input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/manager.text.tex}
-\paragraph{Client Server}
-
-Hay que tener en cuenta que en este programa será casi todo infrestructura. ya que una vez recepcionado el comando mediante el RPC
-solo quedará
-
-En esta memoria descriptiva vamos a diseñar un sistema que tenga palabras clave para diferenciar un comando de pid y otro totalmente distinto. ya que si queremos ejecutar un simple comando de consola en el servidor cliente.
-
-Las posibilidades son tantas como comandos haya instalados en el servidor cliente.
-
-por ejemplo si el comando es ./runMyComand --arg=arg
-
-como un típico comando de consola quedará a cargo del usuario de este progrmaa cliente implementar la interfaz
-
+    \input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/manager.tex}
+\paragraph{Client Program}
+    \input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/client.tex}
 \paragraph{Control Program}
 
 Casos de uso todas las funciones del engine y diseñarlo para que la infra sea a través de consola de comandos (preparando para que luego debido a la comunicación rpc devolver los datos sea muy complicado si lo dividimos en otro comando y decidimos absorver este dominio)

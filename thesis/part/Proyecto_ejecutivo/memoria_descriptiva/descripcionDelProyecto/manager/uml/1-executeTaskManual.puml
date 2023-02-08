@@ -1,0 +1,13 @@
+@startuml
+
+start
+
+if (task.ExecutionMode == MANUAL) then (no)
+  :throw TaskNotManualError/
+  stop
+endif
+#OliveDrab:= <:warning:>  goroutine: __TaskProcessor__ /
+
+
+end
+@enduml

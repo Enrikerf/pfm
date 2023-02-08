@@ -1,0 +1,25 @@
+@startuml
+
+skinparam linetype polyline
+left to right direction
+' Horizontal lines: -->, <--, <-->
+' Vertical lines: ->, <-, <->
+
+
+package ClientDomain{
+
+    object Step{
+        Sentence: string
+    }
+
+    object Result{
+        Content: string
+    }
+
+}
+
+
+
+
+
+@enduml

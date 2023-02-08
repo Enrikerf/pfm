@@ -1,0 +1,60 @@
+En el proyecto constará de 4 carpetas principales
+
+\tiny
+\dirtree{%
+    .1 Project .
+        .2 Domain.
+        .2 Application.
+        .2 Adapter.
+        .2 Bootstrap.
+}
+\normalsize
+
+\textbf{Dominio}
+
+\begin{figure}[H]
+    \tiny
+\dirtree{%
+    .1 Domain.
+        .2 Step.
+            .3 StepVo.
+            .3 Repository.
+                .4 consoleWrite.
+            .3 Services.
+                .4 Executor.
+        .2 Result.
+            .3 ResultVo.
+}
+\normalsize
+    \caption[Diagrama de objetos de dominio]{}\label{fig:1-ClientDomainFolderStructure}
+\end{figure}
+
+\textbf{Aplicación}
+
+\tiny
+\dirtree{%
+.1 Application.
+    .2 Port.
+        .3 in.
+            .4 Step.
+                .5 Execute.
+                    .6 Command.
+                    .6 UseCase.
+}
+\normalsize
+
+\textbf{Adapters}
+
+\tiny
+\dirtree{%
+    .1 Adapter.
+        .2 in.
+            .3 GRPC.
+                .4 Harán uso de los useCases de aplicación cuando llegue una request RPC.
+            .3 Console.
+                .4 Por ejemplo si quisieramos ejecutar los casos de uso mediante terminal.
+        .2 out.
+            .3 console.
+                .4 implementación de los repository de llamada a los servidores clientes.
+}
+\normalsize

@@ -5,16 +5,16 @@ if (hostValid) then (no)
   :throw InvalidHostError/
   stop
 elseif (validPort) then (no)
-  :trhow InvalidPortError/
+  :throw InvalidPortError/
   stop
 elseif (validCommunicationMode) then (no)
-  :trhow invalidCMode/
+  :throw invalidCMode/
   stop
 elseif (validExecutionMode) then (no)
-  :trhow invalidEMode/
+  :throw invalidEMode/
   stop
 elseif (validSteps) then (no)
-  :trhow invalidSteps/
+  :throw invalidSteps/
   stop
 else ()
   :CreateTask: Status = pending/

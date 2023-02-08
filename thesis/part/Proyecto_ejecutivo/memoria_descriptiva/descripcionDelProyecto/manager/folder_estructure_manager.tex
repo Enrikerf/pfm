@@ -1,94 +1,126 @@
 En el proyecto constará de 4 carpetas principales
+
+\tiny
 \dirtree{%
     .1 Project .
-        .2 Adapter.
-        .2 Application.
         .2 Domain.
+        .2 Application.
+        .2 Adapter.
         .2 Bootstrap.
 }
+\normalsize
 
 Bootstrap será donde hagamos la composición de la aplicación, es decir la inyección de dependencias.
 
 Vamos a desplegar la estructura capa por capa
 
-\textbf{Adapters}
 
+\textbf{Dominio}
+
+Podemos ver en la figura\ref{fig:1-TaskDomainFolderStructure} por cada aggregate root tenemos una carpeta. En core tenemos la base de la cual extienden determinadas cosas que son comunes en toda a aplicación como los Errores o los eventos. La lógica común. Hay que mencionar que los errores no se han puesto por simplificar se encontrarán en el mismo contexto en el que se utilicen.
+
+\begin{figure}[H]
+    \tiny
 \dirtree{%
-.1 Adapter.
-    .2 in.
-        .3 GRPC.
-            .4 CreateEntityGrpcCall.
-        .3 Console.
-            .4 CreateEntityTerminalCommand.
-    .2 out.
-        .3 Email.
-            .4 SendEmailOnCreationImplementation (*1).
-        .3 Mysql.
-            .4 SaveEntityImplementation (*2).
+    .1 Domain.
+        .2 Core.
+            .3 Id.
+            .3 Event.
+            .3 Error.
+        .2 Task.
+            .3 Id.
+            .3 Task.
+            .3 Host.
+            .3 Port.
+            .3 CommunicationMode.
+            .3 ExecutionMode.
+            .3 Status.
+            .3 Step.
+                .4 Id.
+                .4 StepEntity.
+                .4 StepVo.
+                .4 Repository.
+                    .5 "...".
+                .4 Service.
+                    .5 "...".
+            .3 Repository.
+                .4 Find.
+                .4 Save.
+                .4 Search.
+                .4 Delete.
+                .4 Update.
+            .3 Service.
+                .4 Finder.
+                .4 Creator.
+                .4 Updater.
+                .4 Eraser.
+                .4 Searcher.
+        .2 Result.
+            .3 ResultId.
+            .3 BatchId.
+            .3 Result.
+            .3 Batch.
+            .3 Repository.
+                .4 "...".
+            .3 Service.
+                .4 "...".
 }
+\normalsize
+    \caption[Diagrama de objetos de dominio]{}\label{fig:1-TaskDomainFolderStructure}
+\end{figure}
 
 \textbf{Aplicación}
 
+\tiny
 \dirtree{%
 .1 Application.
     .2 Port.
         .3 in.
-            .4 Entity.
-                .5 CreateUseCase.
-                    .6 CreateCommand.
-                        .7 CreateCommand (using sendEmail param in this example).
-                        .7 CreateUseCase.
-                    .6 SomeEventHandler.
-                        .7 CreationEvent.
-                        .7 CreationEventUseCase.
+            .4 Task.
+                .5 LoopExecutor.
+                    .6 Command.
+                    .6 UseCase: (uses Application out port for grpc call, implementation on Adapters).
+                .5 ManuallyExecutor(Command).
+                .5 Create(Command).
+                .5 Update(Command).
+                .5 Delete(Command).
+                .5 Get.
+                    .6 Query.
+                    .6 UseCase.
+                .5 List(Query).
+                .5 TaskEvent.
+                    .6 Event.
+                    .6 Handler.
+            .4 Batch.
+                .5 Create(Command).
+                .5 Delete(Command).
+                .5 Get(Query).
+                .5 List(Query).
+                .5 ListResults(Query).
         .3 out.
-            .4 Email.
-                .5 SendEmailConCreation (interface for *1).
+            .4 GRPC.
+                .5 Unary .
+                .5 ServerStream.
+                .5 ClientStream.
+                .5 Bidirectional.
 }
+\normalsize
 
-\textbf{Dominio}
 
+\textbf{Adapters}
+
+\tiny
 \dirtree{%
-.1 Domain.
-    .2 Core.
-        .3 Id.
-        .3 Event.
-        .3 Error.
-    .2 Task.
-        .3 Id.
-        .3 Task.
-        .3 Host.
-        .3 Port.
-        .3 CommunicationMode.
-        .3 ExecutionMode.
-        .3 Status.
-        .3 Step.
-            .4 Id.
-            .4 StepEntity.
-            .4 StepVo.
-            .4 Repository.
-                .5 Find.
-                .5 Save.
-                .5 Search.
-                .5 Delete.
-                .5 Update.
-            .4 Service.
-                .5 Finder.
-                .5 Creator.
-                .5 Updater.
-                .5 Eraser.
-                .5 Searcher.
-        .3 Repository.
-            .4 Find.
-            .4 Save.
-            .4 Search.
-            .4 Delete.
-            .4 Update.
-        .3 Service.
-            .4 Finder.
-            .4 Creator.
-            .4 Updater.
-            .4 Eraser.
-            .4 Searcher.
-    .2 Result.
+    .1 Adapter.
+    .2 in.
+    .3 GRPC.
+    .4 Harán uso de los useCases de aplicación cuando llegue una request RPC.
+    .3 Console.
+    .4 Por ejemplo si quisieramos ejecutar los casos de uso mediante terminal.
+    .2 out.
+    .3 Mysql.
+    .4 Implementación de los respository (*2).
+    .3 GRPC.
+    .4 implementación de los repository de llamada a los servidores clientes.
 }
+\normalsize
