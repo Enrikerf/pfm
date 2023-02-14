@@ -22,6 +22,8 @@ Las posibilidades son tantas como comandos haya instalados en el servidor client
     ./pidControl --setP=1
     ./pidControl --setI=0
     ./pidControl --setD=0
+    ./pidControl --enabled=true
+    ./pidControl --enabled=false
 \end{verbatim}
 
 aquí podemos ver por ejemplo los comándos básicos de un control pid que podremos ejecutar. En la descripción del programa de control y su dominio lo veremos en más detalle
@@ -46,15 +48,92 @@ aquí podemos ver por ejemplo los comándos básicos de un control pid que podre
 
 \subparagraph{casos de uso}
 
-Vamos a describir los casos de uso que podrán ejecutarse en el programa manager. Tenemos 2 Entities y dos aggregate root.
+Vamos a describir los casos de uso que podrán ejecutarse en el programa client. En este caso no tendremos Entities porque no necesitamos identificadores.
+Tendremos los Value Objects para los steps que nos llegaran a modo de request y el necesario para responder. En este sistema no hay persistencia.
 
 \begin{itemize}
-    \item Step
-    \item Result
+    \item StepVo
+    \item ResultVo
 \end{itemize}
 
-\textbf{ejecutar Step}
+\textbf{execute Unary Step}
 
+Centrando en un caso de uso de este tipo de steps en nuestro programa de control sirve por ejemplo para establecer un parámetro de control del PID. Cualquiera de los siguientes.
+\begin{verbatim}
+    ./pidControl --velocity=30rpm
+\end{verbatim}
+
+Podemos ver en~\ref{fig:executeUnaryStep} el diagrama de flujo que responde a este caso de uso
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeUnaryStep}
+    \caption[Diagrama de objetos de dominio]{}\label{fig:executeUnaryStep}
+\end{figure}
+
+\textbf{execute ClientStream Step}
+
+Centrando en un caso de uso de este tipo de steps en nuestro programa de control sirve por ejemplo para establecer una configuración completa con una sola llamada para nuestro PID:
+\begin{verbatim}
+    ./pidControl --velocity=30rpm
+    ./pidControl --position=180deg
+    ./pidControl --setP=1
+    ./pidControl --setI=0
+    ./pidControl --setD=0
+\end{verbatim}
+
+Podemos ver en~\ref{fig:executeClientStreamStep} el diagrama de flujo que responde a este caso de uso
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeClientStreamStep}
+    \caption[Diagrama de objetos de dominio]{}\label{fig:executeClientStreamStep}
+\end{figure}
+
+\textbf{execute ServerStream Step}
+
+Centrando en un caso de uso de este tipo de steps en nuestro programa de control sirve por ejemplo para habilitar el control del pid durante un determinado tiempo e ir devolviendo el estado la variable de control
+\begin{verbatim}
+    ./pidControl --enabled=true --time=10s
+\end{verbatim}
+
+O dejar el control activado indefinidamente hasta que llege otra request de tipo Unary que lo detenga
+
+\begin{verbatim}
+    ./pidControl --enabled=false
+\end{verbatim}
+
+Podemos ver en~\ref{fig:executeServerStreamStep} el diagrama de flujo que responde a este caso de uso
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeServerStreamStep}
+    \caption[Diagrama de objetos de dominio]{}\label{fig:executeServerStreamStep}
+\end{figure}
+
+\textbf{execute Bidirectional Step}
+
+Usando el ejemplo anterior, si no queremos habilitar el control indefinidamente y deshabilitarlo mediante otra request podemos usar este caso de uso.
+
+\begin{verbatim}
+    ./pidControl --enabled=true --time=10s
+\end{verbatim}
+
+y posteriormente cuando el Cliente decida.
+
+\begin{verbatim}
+    ./pidControl --enabled=false
+\end{verbatim}
+
+Este caso de uso es el que utilizaremos para el control manual.
+
+Podemos ver en~\ref{fig:executeBidiStep} el diagrama de flujo que responde a este caso de uso
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeBidiStep}
+    \caption[Diagrama de objetos de dominio]{}\label{fig:executeBidiStep}
+\end{figure}
 
 \subparagraph{estructura de carpetas}
 

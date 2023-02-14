@@ -18,18 +18,15 @@ En el proyecto constará de 4 carpetas principales
     .1 Domain.
         .2 Step.
             .3 StepVo.
-            .3 ResultVo.
             .3 Repository.
                 .4 consoleWrite.
             .3 Services.
-                .4 UnaryExecutor.
-                .4 ClientStreamExecutor.
-                .4 ServerStreamExecutor.
-                .4 BidirectionalExecutor.
+                .4 Executor.
+        .2 Result.
+            .3 ResultVo.
 }
-
 \normalsize
-    \caption[Diagrama de objetos de dominio]{}\label{fig:1-ClientDomainFolderStructure}
+    \caption[Diagrama de objetos de dominio]{}\label{fig:1-controlDomain}
 \end{figure}
 
 \textbf{Aplicación}
@@ -40,12 +37,9 @@ En el proyecto constará de 4 carpetas principales
     .2 Port.
         .3 in.
             .4 Step.
-                .5 ExecuteUnary.
+                .5 Execute.
                     .6 Command.
                     .6 UseCase.
-                .5 ExecuteServerStream (Command).
-                .5 ExecuteClientStream (Command).
-                .5 ExecuteBidi (Command).
 }
 \normalsize
 
@@ -57,8 +51,10 @@ En el proyecto constará de 4 carpetas principales
         .2 in.
             .3 GRPC.
                 .4 Harán uso de los useCases de aplicación cuando llegue una request RPC.
+            .3 Console.
+                .4 Por ejemplo si quisieramos ejecutar los casos de uso mediante terminal.
         .2 out.
             .3 console.
-                .4 implementacion de consoleWrite para ejecutar los comandos en el sistema y obtener los resultados.
+                .4 implementación de los repository de llamada a los servidores clientes.
 }
 \normalsize

@@ -1,0 +1,43 @@
+Casos de uso todas las funciones del engine y diseñarlo para que la infra sea a través de consola de comandos (preparando para que luego debido a la comunicación rpc devolver los datos sea muy complicado si lo dividimos en otro comando y decidimos absorver este dominio)
+
+El sistema está pensado para que el programa a ejecutar sea de libre decisión del cliente. pero vamos a aprovechar la oportunidad para crear un programa de control y profundizar tanto en el uso del lenguaje como en los conocimientos relacionados con este master. En concreto el control automático. Uno do los programas que podrá ejecutar será un control PID.
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/controlConcept}
+    \caption[Diagrama componentes]{}\label{fig:controlConcept}
+\end{figure}
+
+\subparagraph{Dominio}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/controlDomain}
+    \caption[Diagrama de objetos de dominio]{}\label{fig:controlDomain}
+\end{figure}
+
+\begin{itemize}
+    \item StepDomain
+\end{itemize}
+
+\subparagraph{casos de uso}
+
+Vamos a describir los casos de uso que podrán ejecutarse en el programa manager. Tenemos 2 Entities y dos aggregate root.
+
+\begin{itemize}
+    \item Step
+    \item Result
+\end{itemize}
+
+\textbf{ejecutar Step}
+
+\subparagraph{estructura de carpetas}
+
+\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/control_estructure_client.tex}
+
+
+
+
+

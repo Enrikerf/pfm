@@ -1,0 +1,12 @@
+@startuml
+
+start
+    :executeStep/
+repeat
+
+    :Results[] = getResults/
+    :returnResults/
+repeat while (more results?)
+
+end
+@enduml

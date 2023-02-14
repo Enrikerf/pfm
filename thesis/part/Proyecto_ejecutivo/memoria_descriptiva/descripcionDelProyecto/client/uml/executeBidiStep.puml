@@ -1,0 +1,15 @@
+@startuml
+
+start
+    fork
+        repeat
+            :currentStep = getStep/
+        repeat while (more steps)
+    fork again
+        repeat
+            :results = executeStep(currentStep)/
+            :returnResults/
+        repeat while (more results)
+    end fork
+end
+@enduml
