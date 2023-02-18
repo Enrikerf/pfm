@@ -1,0 +1,25 @@
+@startuml
+
+start
+if (rpm valid) then (no)
+  :throw InvalidRPMValue/
+  stop
+endif
+:enginePidController = getEnginePidController/
+if (:enginePidController.enableRPMControl(goal RPM)) then (no)
+  :return HardwareError/
+  stop
+endif
+fork
+    :return OK/
+
+fork again
+    repeat
+    : as = enginePidController.engine.getCurrentAngularSpeed()/
+    : newDuty = enginePidController.pidAlgoritm.calculate(error = goal-as)/
+    : enginePidController.engine.setDuty(newDuty)/
+    repeat while (:enginePidController.isControlEnabled)
+end fork
+
+end
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+
+start
+if (angle valid) then (no)
+  :throw InvalidAngleValue/
+  stop
+endif
+:enginePidController = getEnginePidController/
+if (:enginePidController.enablePositionControl(goal Angle)) then (no)
+  :return HardwareError/
+  stop
+endif
+fork
+    :return OK/
+fork again
+    repeat
+    : pos = enginePidController.engine.getCurrentPosition()/
+    : newDuty = enginePidController.pidAlgoritm.calculate(error = goal-pos)/
+    : enginePidController.engine.setDuty(newDuty)/
+    repeat while (:enginePidController.isControlEnabled)
+end fork
+
+end
+@enduml

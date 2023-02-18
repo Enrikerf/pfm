@@ -1,0 +1,18 @@
+@startuml
+
+left to right direction
+' Horizontal lines: -->, <--, <-->
+' Vertical lines: ->, <-, <->
+
+   archimate #Technology "      Client Program     " as clientServer <<technology-service>>
+   archimate #Technology "    Control Program    " as controlProgram <<technology-service>>
+   rectangle "Hardware"  as SERVER <<$archimate/physical-equipment>> #Technology {
+       archimate #Technology "   Engine    " as engine <<physical-equipment>>
+       archimate #Technology "   H-Bridge Driver    " as hbridgedriver <<driver>>
+   }
+
+clientServer <-> controlProgram : "cmd\nresponses        "
+controlProgram <- engine : "\n\n\n\n\n         sensors"
+engine <- hbridgedriver : "signal        "
+controlProgram --> hbridgedriver : "\n\n\n\n\nsignal"
+@enduml

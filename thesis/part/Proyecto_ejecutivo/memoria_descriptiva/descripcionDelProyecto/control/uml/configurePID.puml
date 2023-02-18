@@ -1,0 +1,8 @@
+@startuml
+
+start
+: enginePidController = getEnginePidController()/
+: enginePidController.Configure(P,I,D,SampleTime)/
+:return OK/
+end
+@enduml

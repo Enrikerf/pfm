@@ -19,19 +19,57 @@ El sistema está pensado para que el programa a ejecutar sea de libre decisión 
 \end{figure}
 
 \begin{itemize}
-    \item StepDomain
+    \item PhysicModule: contendrá todas las variables físicas, son interfaces de int y floats que usaremos para garantizar la congruencia en las operaciones. Aunque los tipos sean float hay variables que no pueden operar entre sí sin atender a su realidad física, es decir sus unidades.
+    \item PinModule: para abstraernos del sistema donde se ejecute el código crearemos la abstracción de el hardware necesario para atender a interfaz física de un motor:
+    \begin{itemize}
+        \item EncoderPinModule: sabemos que vamos a necesitar un pin de entrada tipo pull de entrada y esperar a los flancos de subida que entrarán del encoder. Ya sea en los hardwares comerciales más conocidos como arduino o raspberry como cualquier otro.
+        \item OutPinModule: para activar o desactivar frenos y triggers de dirección necesitaremos pin de salida
+        \item PWMPinModule: para tener un control PWM necesitaremos un pin que nos permita salida pero con una frecuencia y un ciclo de trabajo.
+    \end{itemize}
+    \item EncoderModule: estará compuesto por dos pines de tipo Encoder para leer los pulsos y calcular si está en una dirección
+    \item EngineModule: este modulo contendrá tanto la interfaz del motor como la implementación, donde haciendo uso de los pines calculará y contendrá las variables intrínsecas del motor.
+    \item EnginePIDControllerModule: contendrá todo lo relativo al controlador PId. El controlador usará una instancia de Engine y una instancia de PIDAlgorithm
 \end{itemize}
 
 \subparagraph{casos de uso}
 
-Vamos a describir los casos de uso que podrán ejecutarse en el programa manager. Tenemos 2 Entities y dos aggregate root.
+Los casos de usos actuarán sobre El objeto de dominio EnginePIDController, que en este caso al no haber base de datos ni identificadores serán ValueObjects. Particularmente en nuestro programa solo instanciaremos uno. No implementaremos un patrón singleton sobre ellos debido a que podría desearse controlar varios motores a la vez si el hardware lo permitiera.
 
-\begin{itemize}
-    \item Step
-    \item Result
-\end{itemize}
+\textbf{configure PID}
 
-\textbf{ejecutar Step}
+El primer paso a ejecutar antes de habilitar el control PID será sintonizarlo.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/configurePID}
+    \caption[Diagrama de objetos de dominio]{}\label{fig:configurePID}
+\end{figure}
+
+\textbf{enable RPM control}
+
+Cuando se habilita el control rpm se genera una goRutine, es decir una nuevo proceso que se quedará ejecutando hasta que se ejecute el caso de uso Disable Control
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enableRPMControl}
+    \caption[Diagrama de objetos de dominio]{}\label{fig:enableRMPControl}
+\end{figure}
+
+\textbf{enable Position control}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enablePositionControl}
+    \caption[Diagrama de objetos de dominio]{}\label{fig:enablePositionControl}
+\end{figure}
+
+\textbf{disable control}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/disableControl}
+    \caption[Diagrama de objetos de dominio]{}\label{fig:disableControl}
+\end{figure}
 
 \subparagraph{estructura de carpetas}
 

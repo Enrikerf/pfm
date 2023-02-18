@@ -1,0 +1,8 @@
+@startuml
+
+start
+: enginePidController = getEnginePidController()/
+: enginePidController.disableControl()/
+:return OK/
+end
+@enduml

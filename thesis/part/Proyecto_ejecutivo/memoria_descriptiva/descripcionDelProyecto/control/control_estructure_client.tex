@@ -1,4 +1,3 @@
-En el proyecto constará de 4 carpetas principales
 
 \tiny
 \dirtree{%
@@ -16,14 +15,32 @@ En el proyecto constará de 4 carpetas principales
     \tiny
 \dirtree{%
     .1 Domain.
-        .2 Step.
-            .3 StepVo.
+        .2 EnginePidController.
+            .3 EnginePidController.
+            .3 Service.
+                .4 Configurator.
+                .4 RPMControllerActivator.
+                .4 PositionControllerActivator.
+                .4 ControlDisabler.
+        .2 Engine.
+            .3 EngineVo.
             .3 Repository.
-                .4 consoleWrite.
-            .3 Services.
-                .4 Executor.
-        .2 Result.
-            .3 ResultVo.
+                .4 Find.
+        .2 Encoder.
+            .3 Encoder.
+        .2 Pin.
+            .3 EncoderPin.
+                .4 EncoderPinInterface: actuan como repositorios.
+            .3 OutPin.
+                .4 OutPinInterface: actuan como repositorios.
+            .3 PWMPin.
+                .4 PWMPinInterface: actuan como repositorios.
+        .2 Physic.
+            .3 Angle.
+            .3 LinearSpeed.
+            .3 AngularSpeed.
+            .3 Frequency.
+            .3 Duty.
 }
 \normalsize
     \caption[Diagrama de objetos de dominio]{}\label{fig:1-controlDomain}
@@ -36,10 +53,13 @@ En el proyecto constará de 4 carpetas principales
 .1 Application.
     .2 Port.
         .3 in.
-            .4 Step.
-                .5 Execute.
+            .4 EnginePidController.
+                .5 Configure.
                     .6 Command.
                     .6 UseCase.
+                .5 EnableRpmControl (Command).
+                .5 EnablePositionControl (Command).
+                .5 Disable (Command).
 }
 \normalsize
 
@@ -54,7 +74,7 @@ En el proyecto constará de 4 carpetas principales
             .3 Console.
                 .4 Por ejemplo si quisieramos ejecutar los casos de uso mediante terminal.
         .2 out.
-            .3 console.
-                .4 implementación de los repository de llamada a los servidores clientes.
+            .3 pin.
+                .4 implementación con librerías para actuar sobre los pines, Se buscará una librería que pueda ser configurada para actuar sobre pines de varias plataformas.
 }
 \normalsize
