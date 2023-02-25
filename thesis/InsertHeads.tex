@@ -3,7 +3,8 @@
 \renewcommand{\tablename}{Tabla}
 \input{./1-Portada/portada}
 \thispagestyle{empty}
-\newpage
+\afterpage{\blankpage}
+\includepdf[pages=-]{./part/DeclaracionOriginalidad.pdf}
 \tableofcontents
 \newpage
 \cleardoublepage

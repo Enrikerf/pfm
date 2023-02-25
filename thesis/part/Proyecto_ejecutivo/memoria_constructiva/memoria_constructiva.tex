@@ -1,11 +1,20 @@
-\subsubsection{Golang}
-\input{./part/Proyecto_ejecutivo/memoria_constructiva/golang.tex}
-\subsubsection{RPC vs REST}
-\input{./part/Proyecto_ejecutivo/memoria_constructiva/rpc_vs_rest.text.tex}
-\subsubsection{Docker}
-\input{./part/Proyecto_ejecutivo/memoria_constructiva/docker.text.tex}
-\subsubsection{Raspberry}
-vs arduino, aunque aportaría más valor de cara a probar la compilación a una plataforma que suponga más reto que la raspberry resta mucho tiempo de cara a tiempos de desarrollo y no se le ve tanto interés
-\subsubsection{Motor CC y puente H}
-\subsubsection{Mysql}
-\subsubsection{CI/CD}
+\subsubsection{lenguajes}
+    \input{./part/Proyecto_ejecutivo/memoria_constructiva/golang/golang.tex}
+\subsubsection{comunicaciones}\label{subsubsec:communications}
+    \input{part/Proyecto_ejecutivo/memoria_constructiva/rpc/rpc_vs_rest.tex}
+\subsubsection{Infraestructura}\label{subsubsec:infraestructura}
+\paragraph{Docker}
+    \input{part/Proyecto_ejecutivo/memoria_constructiva/docker/docker.tex}
+\paragraph{Raspberry}
+    \input{part/Proyecto_ejecutivo/memoria_constructiva/raspb/raspberry.tex}
+\paragraph{Motor CC y puente H}\label{par:motorcc}
+    \input{part/Proyecto_ejecutivo/memoria_constructiva/motor/motor.tex}
+    \input{part/Proyecto_ejecutivo/memoria_constructiva/motor/ElectronicaPot.tex}
+\paragraph{Mysql}\label{par:mysql}
+    Para la base de datos escogeremos Mysql por ser también la solución más estandar y que más domino, para no tener que añadir mayor esfuerzo de investigación.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale = 0.15]{part/Proyecto_ejecutivo/memoria_constructiva/dbSchema}
+        \caption{Esquema de la base de datos \\ Fuente: elaboración propia.}\label{fig:dbSchema}
+    \end{figure}
+%\paragraph{CI/CD}\label{par:cicd}

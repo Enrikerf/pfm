@@ -1,0 +1,50 @@
+\paragraph{Utilización}
+    De cara al usuario cliente de este sistema dispondrá de:
+    \begin{itemize}
+        \item Un sistema para introducir y gestionar tareas para ejecutar en sistemas remotos de forma automática o manual
+        \item Un programa cliente para ofrecer al público. Cualquier servidor con este programa instalado podrá recibir tareas desde el manager que se ejecutarán en su servidor de forma automática.
+        \item Un programa de control pid para un microcontrolador para controlar un motor de corriente continua ejecutable desde consola. Por lo tanto cualquier cliente podrá instalarlo en su servidor y temporizar tareas sobre este programa.
+    \end{itemize}
+
+En un ejemplo básico de uso podríamos tener una puerta automática controlada por un microcontrolador y ejecutar la apertura desde el manager.
+
+\paragraph{Seguridad y calidad}
+proteger el sistema frente al error humano es esencial para garantizar la entrega de código con confianza y calidad. Para ello se emplearán herramientas de CI-CD~\ref{par:cicd} que se encargarán de realizar comprobaciones antes de permitir la llegada a servicio del nuevo código. Estos principalmente constan de los siguientes apartados:
+
+\begin{itemize}
+    \item ejecución de los tests
+    \item ejecución de una comprobación de los estándar de estilo de código, nomenclatura, smell codes
+    \item interactuar con la base de datos~\ref{par:mysql}
+\end{itemize}
+
+Los tests son un apartado importante en la garantía de entrega de código libre de errores. En este proyecto se va a centrar el control de calidad en el dominio. Es decir, va a existir una suite de test unitarios por cada elemento de dominio que exista. Los test unitarios de aplicación e infraestructura quedan como un elemento deseable a tener, pero dependerá de los tiempos. los test de integración quedan fuera de esta primera versión del sistema. Se entiende que al no disponer de experiencia suficiente en la infraestructura realizar una aproximación TDD en la investigación del mismo no tiene sentido.
+
+\paragraph{Robustez ante nuevos desarrollo}
+
+Uno de los puntos más relevantes de un proyecto de software es garantizar la viabilidad en la continuidad del desarrollo futuro; ya sea por mantenimiento o adición de nuevas características.
+
+Para esto hay que tener en cuenta que uno de los factores más limitantes es la acumulación de conocimiento acerca del sistema en los ténicos. Tener un sistema que evite tener que conocer todo el proyecto en profundidad para realizar cambios es crítico. Uno de estos puntos es la infraestructura. El hecho de instalar el sistema en su modo para el desarrollo es en sí un reto. Instalar dependencias y garantizar que todo está funcional.
+
+Por ello es importante, no sólo la documentación, si herramientas que levanten el sistema de forma automatizada y generalizada para cualquier dispositivo. A nuestra disposición tenemos Docker~\ref{subsubsec:docker}, scripts y archivos Makefile.
+
+Dentro de esos contendores Docker dispondremos de todas las herramientas ya instaladas para manejar el sistema sin tener que instalarlas en nuestra propia máquina.
+
+Para este proyecto necesitaremos garantizar:
+
+\begin{itemize}
+    \item versión fija de golang para compilar los programas
+    \item versión fija de la las librerias
+    \item versión fija de la base de datos
+    \item configuración del protocolo de comunicación entre sistemas
+\end{itemize}
+
+tendremos un archivo Makefile en cada programa para:
+
+\begin{itemize}
+    \item interactuar con el sistema de contenedores docker~\ref{subsubsec:docker}
+    \item interactuar con el protocolo GRPC~\ref{subsubsec:rpcVsrest}
+    \item interactuar con la base de datos~\ref{par:mysql}
+\end{itemize}
+
+
+

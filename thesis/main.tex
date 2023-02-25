@@ -1,6 +1,7 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[margin=2.54cm,]{geometry}
 \usepackage[pdftex]{graphicx}
+\usepackage{pdfpages}
 \usepackage{color}
 \usepackage{listing}
 \usepackage{listings}
@@ -30,11 +31,17 @@
 \titlespacing*{\subparagraph}
 {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
+\usepackage{afterpage}
+
+\newcommand\blankpage{%
+	\null
+	\thispagestyle{empty}%
+	\addtocounter{page}{-1}%
+	\newpage}
+
 \begin{document}
 %pruebas
-%	\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/manager.tex}
-%	\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/client.tex}
-%	\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/control.tex}
+%	\input{./part/Proyecto_ejecutivo/memoria_constructiva/memoria_constructiva.tex}
 %------
 
 
@@ -58,5 +65,8 @@
 	\section{Lineas Futuras}\label{sec:lineas_futuras}
 		\input{./part/Lineas_futuras.tex}
 \newpage
+
+\bibliographystyle{plain} % We choose the "plain" reference style
+\bibliography{/Users/enrikerf/workspace/thesis/out/refs} % Entries are in the refs.bib file
 
 \end{document}
