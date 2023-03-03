@@ -1,0 +1,91 @@
+
+Disponiendo siempre del código como referencia, vamos a exponer la ejecución del proyecto haciendo foco en el código más relevante y el resto se expondrá de una forma más gráfica con diagramas que hagan comprensible la estructura y no tanto los detalles de implementación.
+
+Una de las primeras características que cabe resaltar de golang es que no tiene clases ni herencia. como estructura
+principal de datos tiene los structs. Si queremos garantizar la encapsulación, sobre todo en los elementos de dominio y aplicación. Garantizar que dichose elementos  se creen bajo una misma logica que no se pueda evitar, por ejemplo, declaración inicial de variables de dichos structs que representen las Entities, los Value Objects, etc.
+
+De tal forma que debemos entender que olang sólo expone elementos, ya sea structs, funciones o demás tipos fuera de un módulo si están escritos en Mayuscula. Un módulo son todos los archivos dentro de un mismo directorio.
+
+Por lo tanto una forma de crear una estructura equivalente a una clase es definir una interfaz pública y crear un struct privado que la implemente. los struct pueden implementar metodos pasandose a si mismos por referencia en una funcion. De tal forma se puede ver en\ref{fig:golang class equivalent}
+
+\begin{figure}[H]
+    \centering
+    \begin{lstlisting}[label={lst:lstlisting}]
+        type ClassName interface {
+            GetVariable() string
+            GetAnotherVariable() string
+            SetVariable(newValue string)
+        }
+
+        type className struct {
+            variable string
+            anotherVariable string
+        }
+
+        func NewClassName(variable string) (ClassName, error) {
+            if variable == "invalid" {
+                return nil, errors.New("error")
+            }
+            return &className{variable,"DEFAULT"},nil
+        }
+
+        func (c *className) GetVariable() string {
+            return c.variable
+        }
+
+        func (c *className) GetAnotherVariable() string {
+            return c.anotherVariable
+        }
+
+        func (c *className) SetVariable(newValue string) {
+            c.variable = newValue
+        }
+    \end{lstlisting}
+    \caption{fig:golang class equivalent}\label{fig:golang class equivalent}
+\end{figure}
+
+Donde podemos ver que \textbf{C}lassName interface la 'C' es mayúscula exponiendolo al exterior del módulo y \textbf{c}lassName struct en minuscula encapsulándolo.
+lo cual resulta en un diagrama UML\ref{fig: uml Diagram Class Equivalent in Golang}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_constructiva/ClassEquivalentInGolang}
+    \caption{UML diagram: Class equivalent in Golang}\label{fig: uml Diagram Class Equivalent in Golang}
+\end{figure}
+
+por qué es importante concebir esta estructura:
+
+\begin{itemize}
+    \item Evitamos la instanciación no consistente, lo cual solo se garantiza a traves del método si exportado NewClass
+    \item evitamos accesos no deseados al seteo de variables. Si las pusieramos publicas seria posible. esto es de vital importancia a la hora de establecer el concepto de inmutabilidad en la que se basan los value objects.
+    \item otro punto de limpieza que aporta, es a la hora de gestionar errores en golang. Si en cualquier punto queremos devolver como resultado de una función un objeto o el error, característica de golang que permite devolver varios elementos como resultado, Nos veríamos obligados a instanciar el objeto con contenido vacío y el error, creando un elemento inconsistente sólo por exigencias del lenguaje. De esta forma, podemos poner como parámetro de retorno dicha interfaz que sí puede ser null.
+\end{itemize}
+
+como contrapartida tenemos que escribir más codigo. poniendo como comparación una clase java o C++ no podemos decir que en cantidad de lineas escritas se aumente o disminuya. En cuestión de conceptos aprendidos en Golang sólamente trabaja con interfaces y structs contra el concepto de clase y herencia.
+
+Una vez presentado este concepto clave de golang pasamos a exponer el código que se ha ejecutado. Siendo programas extensos hemos decidido escoger el caso de uso más extenso el cuál incluye la gestión de los eventos y el proceso de intercomunicación. También expondremos expondremos el programa de control.
+
+Vamos a dividir esta sección en:
+\begin{itemize}
+    \item CreateTaskUseCase
+    \item TaskEventHandler
+    \item TaskLooper
+    \item CallAdapter
+\end{itemize}
+
+Que son los puntos que han presentado mayor complejidad.
+
+\subsubsection{CreateTaskUseCase}
+    \input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase.tex}
+\subsubsection{TaskEventHandler}
+%    \input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase.tex}
+\subsubsection{TaskLooper}
+%    \input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase.tex}
+\subsubsection{CallAdapter}
+%    \input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase.tex}
+\subsubsection{Asincronía}\label{subsec:asincronia}
+    \paragraph{Encoder}
+    \paragraph{RPC Server streaming}
+    \paragraph{RPC Bidirectional}
+\subsubsection{Testing}
+\subsubsection{Puesta a punto y resultados}
