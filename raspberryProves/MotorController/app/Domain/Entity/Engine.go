@@ -2,6 +2,7 @@ package Entity
 
 import (
 	"fmt"
+	"github.com/Enrikerf/pfm/commands/MotorController/app/Domain/Converter"
 	"math"
 	"time"
 
@@ -126,17 +127,21 @@ func (e *engine) StepResponse() {
 }
 
 func (e *engine) RpmControl(goal float64) {
-	go e.contrlLoop(goal)
+	go e.controlLoop(goal)
 }
 
-func (e *engine) contrlLoop(goal float64) {
+func (e *engine) controlLoop(goal float64) {
 	e.isControlRunning <- true
 	sampleTime := time.Millisecond * 10
 	radPerSecondGoal := goal * (2 * math.Pi / 60)
-	e.controlAlgorithm.SetGoal(radPerSecondGoal)
-	e.controlAlgorithm.SetP(30)
-	e.controlAlgorithm.SetI(1)
+	e.controlAlgorithm.SetGoal(RadiansPerSecond(radPerSecondGoal))
+	e.controlAlgorithm.SetP(1)
+	e.controlAlgorithm.SetI(10)
 	e.controlAlgorithm.SetD(0)
+	e.controlAlgorithm.SetInMin(RadiansPerSecond(Converter.Rpm2radps(-200)))
+	e.controlAlgorithm.SetInMax(RadiansPerSecond(Converter.Rpm2radps(+200)))
+	e.controlAlgorithm.SetOutMin(PWMDuty(e.pwmPin.GetMinDuty()))
+	e.controlAlgorithm.SetOutMax(PWMDuty(e.pwmPin.GetMaxDuty()))
 	e.controlAlgorithm.SetSampleTime(sampleTime.Seconds())
 
 	prevAngle := 0.0
@@ -144,11 +149,16 @@ func (e *engine) contrlLoop(goal float64) {
 	e.brakePin.Down()
 	for range time.Tick(sampleTime) {
 		angle := e.resolution * math.Abs(float64(e.encoder.GetPosition()))
-		degreesPerSecod := (angle - prevAngle) / sampleTime.Seconds()
-		radianPerSecod := degreesPerSecod * math.Pi / 180
-		pidOrig := e.controlAlgorithm.Calculate(radianPerSecod)
-		pidReescalated := e.reescalePid(pidOrig)
-		e.pwmPin.SetPWM(Pin.Duty(pidReescalated), e.pwmPin.GetMaxFrequency())
+		degreesPerSecond := (angle - prevAngle) / sampleTime.Seconds()
+		radianPerSecond := Converter.Degps2Radps(degreesPerSecond)
+		pidOrig, err := e.controlAlgorithm.Calculate(RadiansPerSecond(radianPerSecond))
+		if err != nil {
+			e.pwmPin.SetPWM(Pin.Duty(0), e.pwmPin.GetMaxFrequency())
+			e.brakePin.Up()
+			<-e.isControlRunning
+			break
+		}
+		e.pwmPin.SetPWM(Pin.Duty(pidOrig), e.pwmPin.GetMaxFrequency())
 		prevAngle = angle
 		if len(e.isControlRunning) == 0 {
 			e.pwmPin.SetPWM(Pin.Duty(0), e.pwmPin.GetMaxFrequency())
@@ -164,22 +174,6 @@ func (e *engine) StopRmpControl() {
 	} else {
 		fmt.Println("no command running")
 	}
-}
-
-func (e *engine) reescalePid(pid float64) float64 {
-	var reescalePid float64
-	if math.Abs(pid) > float64(e.pwmPin.GetMaxDuty()) {
-		reescalePid = float64(e.pwmPin.GetMaxDuty())
-		if pid < 0 {
-			reescalePid = reescalePid * -1
-		}
-	}
-	reescalePid = (reescalePid + float64(e.pwmPin.GetMaxDuty())) / 2
-	if math.Abs(pid) < float64(e.pwmPin.GetMinDuty()) {
-		reescalePid = float64(e.pwmPin.GetMinDuty())
-	}
-
-	return reescalePid
 }
 
 func (e *engine) PositionControl() {
