@@ -1,16 +1,7 @@
 
 El codigo de colores utilizado en los diagramas de esta seccion se refieren al equivalente a clase en golang en azul y a las interfaces puras en turquesa  y a los structs en marron
 
-%El tipico diagráma cuando se habla de arquitectura hexagonal es tal y como se muestra en la figura\ref{fig:hexagonalDiagram} Si bien consideramos que no tiene mucho sentido y de cara a la parte didáctica confunde, ya que el hexágono es una simple licencia estética. en el caso de existir más puertos de salida y entrada que los representados el hexágono pierde todo el sentido y cuando se enfrenta por primera vez este diagrama se tiende a intentar descifrar el sentído del hexagono.
-%
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[height=0.3\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/HexagonalDiagram}
-%    \caption{Hexagonal architecture diagram\cite{TomHombergs2019GYHD}}\label{fig:hexagonalDiagram}
-%\end{figure}
-
 Tomando como referencia \ref{fig:hexagonalDiagram} el diagrmaa tipico de una arquitectura hexagonal, en nuestro caso si intercambiamos ExternalSystemAdapter por nuestro Dispatcher de eventos e introducimos servicios de dominio entre el caso de uso y la Entidad tendremos nuestro esquema de alto nivel de nuestra arquitectura hexagonal. El esbozo de este diagrama lo podemos encontrar en la figura\ref{fig:CreateTaskHexagonalDiagram} Como vemos no tiene tanto sentido el dibujo ya que hay puertos de salida que se convierten en puertos de entrada como es el dispatcher y cuando queremos quitar lógica de negocio del caso de uso mediante servicios de dominio que impidan el acceso directo a los repositorios de persistencia dicho diagrama se va quedando pequeño. Es perferible diagramas UML tal y comose muestra en\ref{fig:createTaskUseCaseArchitecture}
-
 
 \begin{figure}[H]
     \centering
@@ -32,14 +23,6 @@ Acercandonos más al código podemos ver en el diagrama \ref{fig:createTaskUseCa
     \caption{CreateTaskUseCase folder Structure}\label{fig:createTaskUseCaseArchitectureFolderStructure}
 \end{figure}
 
-%Un punto interesante a comentar es el concepto de la estrategia de mapping que hay entre capas. Cada capa requiere sus objetos de trabajo. Tal y como sale descrito en \cite{TomHombergs2019GYHD} Tenemos tantas estratégias como atajos dentro de este paradigma queramos asumir. podemos ver en la figura \ref{fig:mapping types} Los tipos de mapping que se documentan en este libro:
-%\begin{itemize}
-%    \item The NoMapping Strategy
-%    \item The Two-Way MappingStrategy
-%    \item The Full MappingStrategy
-%    \item The One-Way MappingStrategy
-%\end{itemize}
-
 Con respecto a la estrategia de mapping Golang nos permite hacer un full strategy casi por defecto porque al necesitar la implementaci'on de clase para garantizar la cohesión ya estamos utilizando interfaces para todas las clases. Así que en este caso utilizamos un fullMapping adaptado. lo cierto es que las versiones intermedias son todas las combinaciones posibles.
 
 De cara a decidir extraemos la recomendacion de  \cite{TomHombergs2019GYHD}:"
@@ -58,7 +41,7 @@ En nuestra opinión dentro de la estrategia fullmapping se debe implementar un m
 
 Claramente esto aumenta la burocracia y finalmente la opción que hemos tomado se puede ver en la figura\ref{fig:CreateTaskUseCaseMapping}
 
-En rojo se han marcado los atajos que se han tomado, es decir, el mapeo que no se ha implementado. El objetivo es aislarse bien de los puertos de entrada, es decir el GRPC, y no tanto de los puertos de salida. ya que la persistencia está bien aislada mediante las interfaces. Dentro de los adaptadores se hará el trabajo de mappeo entre las entidades de dominio y los modelos de persistencia y se traducirá de nuevo a dominio para responder.
+En rojo se han marcado los atajos que se han tomado, es decir, el mapeo que no se ha implementado. El objetivo es aislarse bien de los puertos de entrada, es decir el GRPC, y no tanto de los puertos de salida. ya que la persistencia está bien aislada mediante las interfaces. Dentro de los adaptadores se hará el trabajo de mapeo entre las entidades de dominio y los modelos de persistencia y se traducirá de nuevo a dominio para responder.
 
 \begin{figure}[H]
     \centering
@@ -76,11 +59,15 @@ Ahora vamos a exponer el código final de este caso de uso, vamos a hacer refere
     \item DispatcherPort \ref{fig:DispatcherPort}
 \end{itemize}
 
+En el controller podemos ver como \ref{fig:TaskControler} haciendo uso de la request entrante componemos el comando que corresponde y utilizando el usecase inyectado en el controller lo ejecutamos. El recuadro rojo de la imagen lo resalta. También es interesante resaltar que una vez ejecutado el caso de uso hacemos uso de la respuesta, que contiene el id de la nueva Task creada para devolverlo, pero tal y como vemos en el diagrama \ref{fig:CreateTaskUseCaseMapping} no hacemos uso directo de esta respuesta si no que componemos una nueva para el protocolo de comunicación que está utilizando el cliente, en este caso RPC
+
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.5\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - TaskController}
     \caption{TaskController.go}\label{fig:TaskControler}
 \end{figure}
+
+En el caso de uso que podemos ver en \ref{fig:CreateTaskUseCaseCode} se resalta los imports, que suele ser un check rápido de que la arquitectura y los boundaries se están respetando. en este caso vemos que todo corresponde a Dominio. Siendo el caso de uso correspondiente a aplicación las dependencias van hacia adentro. También vemos que no tiene imports de librerías de terceros, es decir, infraestructura. Vemos que la interface UseCase está en mayúsculas exponiendola hacia afuera, mientras que el struct useCase está en minuscula no pudiendo ser utilizado fuera del package. Vemos que en el caso de uso se realiza la creación de los ValueObjects necesarios para la creación de una Task. Asegurando que no dan ningún error los datos de entrada y luego, haciendo uso del servicio se procede a crearla.
 
 \begin{figure}[H]
     \centering
@@ -88,26 +75,28 @@ Ahora vamos a exponer el código final de este caso de uso, vamos a hacer refere
     \caption{CreateTaskUseCaseCode.go}\label{fig:CreateTaskUseCaseCode}
 \end{figure}
 
+El servicio de Dominio Creator se encarga de encapsular y atomizar los procesos que tienen que ocurrir en bloque siempre que se desee crear una Task. Entre los cuales está instanciar la tarea con los ValueObjects que recibe como parámetros. Persistir la misma en la base de datos a través del puerto de salida, interfaz que implementará un adaptador. y emitir el evento de creación a través del otro puerto de salida, el Dispatcher interfaz que implementará otro adaptador. Volvemos a señalar los imports, para que podamos apreciar que, efectivamente, no se importan elementos de infraestructura ni de aplicación y que nos encontramos contenidos dentro de nuestro Dominio. Aislados del exterior.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.5\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - creator}
+    \includegraphics[height=0.6\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - creator}
     \caption{Creator.go}\label{fig:Creator}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - SavePort}
-    \caption{Creator.go}\label{fig:SavePort}
+    \includegraphics[height=0.1\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - SavePort}
+    \caption{SavePort.go}\label{fig:SavePort}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - SaveAdapter}
-    \caption{Creator.go}\label{fig:SaveAdapter}
+    \includegraphics[height=0.1\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - SaveAdapter}
+    \caption{SaveAdapter.go}\label{fig:SaveAdapter}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - Dispatcher}
-    \caption{Creator.go}\label{fig:DispatcherPort}
+    \includegraphics[height=0.1\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - Dispatcher}
+    \caption{Dispatcher.go}\label{fig:DispatcherPort}
 \end{figure}

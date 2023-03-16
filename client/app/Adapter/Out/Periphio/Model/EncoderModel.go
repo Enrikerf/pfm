@@ -34,7 +34,7 @@ func NewEncoder(
 	encoderPinA Pin.EncoderPin,
 	encoderPinB Pin.EncoderPin,
 ) Entity.Encoder {
-	v := []*risingEdgeDetected{}
+	var v []*risingEdgeDetected
 	e := EncoderModel{
 		encoderPinA: encoderPinA,
 		encoderPinB: encoderPinB,
@@ -72,8 +72,6 @@ func (encoder *EncoderModel) Watchdog() {
 			encoder.risingEdges = encoder.risingEdges[1:]
 			encoder.calculatePos(*risingEdge)
 			encoder.lock.Unlock()
-			//TODO: logg in dev environment
-			//fmt.Printf("%v,%v,%v\n", encoder.position, risingEdge.pinAStatus, risingEdge.pinBStatus)
 		}
 	}
 }

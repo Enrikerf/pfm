@@ -19,3 +19,11 @@ Las claves de Docker se basan en:
 \end{itemize}
 
 Como este proyecto se basa en 3 softwares entregables: el servicio de manager, el servicio cliente(el cual puede ser requerido en multiples máquinas y habrá de ser desplegada dicha réplica) y el programa de control. Vamos a extraer toda la utilidad de Docker para que se entrege y despliege de forma consistente y sencilla dicho software.
+
+%Tal y como podemos ver en la \ref{lst:dockerfile} Tenemos 3 stages: dev, compile, prod.
+
+%Los contenedores basados en esta imagen tendrán instalado un debian con las dependencias básicas actualizadas.
+%
+%Para el desarrollo tendrá un usuario llamado docker-user que tendrá acceso a sudo, go para poder compilar el programa cuando se vayan escribiendo nuevo código y delve como debugger.
+%
+%Si nos fijamos en

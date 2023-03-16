@@ -1,13 +1,22 @@
 @startuml
 
 start
-
-if (task.ExecutionMode == MANUAL) then (no)
-  :throw TaskNotManualError/
+if (task uuid valid) then (yes)
+  :throw InvalidTaskIdError/
   stop
+elseif (taskExists) then (no)
+  :throw TaskNotFoundError/
+  stop
+elseif (task.Status == PENDING) then (no)
+  :throw TaskAlreadyRunningError/
+  stop
+elseif (task.ExecutionMode == MANUAL) then (no)
+  :throw AutomaticTaskCanNotBeExecutedManually/
+  stop
+else ()
 endif
-#OliveDrab:= <:warning:>  goroutine: __TaskProcessor__ /
 
+#OliveDrab:= <:warning:>  goroutine: __TaskProcessor__ /
 
 end
 @enduml

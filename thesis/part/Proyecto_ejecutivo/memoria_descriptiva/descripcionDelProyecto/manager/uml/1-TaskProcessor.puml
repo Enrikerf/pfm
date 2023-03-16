@@ -13,7 +13,6 @@ elseif (task.Status == PENDING) then (no)
   stop
 else ()
 endif
-  :getTask/
   :task.Status = RUNNING/
   :updateTask/
   :createBatch/

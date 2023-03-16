@@ -11,47 +11,24 @@
 \usepackage{cleveref}
 \usepackage{ulem}
 \usepackage{xcolor}
-\setlength{\parskip}{\baselineskip}%
-\setlength{\parindent}{0pt}%
-\lstset{language=Go,
-		basicstyle=\ttfamily\scriptsize,
-		keywordstyle=\color{blue}\ttfamily,
-		stringstyle=\color{red}\ttfamily,
-		commentstyle=\color{green}\ttfamily}
+\usepackage{listingsutf8}
 \usepackage{titlesec}
-\setcounter{tocdepth}{5}
-\setcounter{secnumdepth}{5}
-\titleformat{\paragraph}
-{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
-\titlespacing*{\paragraph}
-{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
-
-\titleformat{\subparagraph}
-{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{}
-\titlespacing*{\subparagraph}
-{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
-
+\usepackage{etoolbox}
 \usepackage{afterpage}
 
-\newcommand\blankpage{%
-	\null
-	\thispagestyle{empty}%
-	\addtocounter{page}{-1}%
-	\newpage}
 
 \begin{document}
+	\input{./packagesConfig}
 %pruebas
-%	\input{./part/Ejecucion/Seguimiento/seguimiento.tex}
-%	\input{./part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase.tex}
-%	\input{./part/Proyecto_ejecutivo/memoria_descriptiva/infoPreviaAntecedentes/infoPreviaAntecedentes.tex}
+%	\input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase.tex}
 %------
-%
+
 
 \input{./InsertHeads}
-	\section{Glosario}\label{sec:glossary}
+	\section{Palabras clave}\label{sec:glossary}
 		\input{./part/Glosario}
-	\section{Introducción}\label{sec:introduccion}
-		\input{./part/IntroduccionV2}
+	\section{Resumen}\label{sec:introduccion}
+		\input{./part/IntroduccionV3}
 	\section{Objetivos}\label{sec:objetivos}
 		\input{./part/Objetivos}
 	\section{Estructura de la memoria}\label{sec:estructura}
@@ -67,9 +44,7 @@
 	\section{Lineas Futuras}\label{sec:lineas_futuras}
 		\input{./part/Lineas_futuras.tex}
 \newpage
-
 	\section{References}\label{sec:references}
-		\cite{docker}
 		\bibliographystyle{plain} % We choose the "plain" reference style
 		\bibliography{/Users/enrikerf/workspace/thesis/out/refs} % Entries are in the refs.bib file
 

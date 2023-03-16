@@ -1,66 +1,66 @@
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/managerServerConcept}
-    \caption[Diagrama componentes]{}\label{fig:managerServerConcept}
+    \caption{Diagrama UML de despliegue del manager}\label{fig:Diagrama UML de despliegue del manager}
 \end{figure}
 
 \subparagraph{Dominio}
 
-En el diagrama UML~\ref{fig:managerDomain} vemos que el dominio de Manager se compone de dos modulos: uno para las tareas y otro para los resultados. Vamos a ir explicando uno por uno:
+En el diagrama UML~\ref{fig:Diagrama UML de el dominio de manager} vemos que el dominio de Manager se compone de dos modulos: uno para las tareas y otro para los resultados. Vamos a ir explicando uno por uno:
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/managerDomain}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:managerDomain}
+    \caption{Diagrama UML de el dominio de manager}\label{fig:Diagrama UML de el dominio de manager}
 \end{figure}
 
 \begin{itemize}
     \item CoreDomain
-    \begin{itemize}
-        \item Id todos los ids extenderan de este id, contiene un uuid, no sabemos que paquete usaremos para generarlos, es una de las pocas dependencias externas que vamos a tener dentro del dominio y queremo encapsularla lo máximo posible por si hubera que cambiarla. Además de esta forma los ids de las entities no se confunden en su tipo. si por ejemplo buscas una task mediante un id que corresponde a un result, si fueran del mismo tipo daría lugar a confusión porque no lo encontraríamos pero no nos advertiría de nuestro error
-        \item Event todos los eventos del sistema extenderan del evento este
-    \end{itemize}
-    \item TaskDomain
-    \begin{itemize}
-        \item Task: AggregateRoot
-        \item TaskId
-        \item Host: es un Value Object compuesto por el valor del host, es un string pero el Value Object garantiza que es un valor válido, si no devuelve un error
-        \item Port: es un Value Object compuesto por el valor del puerto, es un string pero el Value Object garantiza que es un valor válido, si no devuelve un error
-        \item CommunicationMode: es un enum para expresar esa tarea de las formas de comunicación posibles que hay entre dos servidores cual sera la utilizada
         \begin{itemize}
-            \item UNARY
-            \item SERVER\_STREAM
-            \item CLIENT\_STREAM
-            \item BIDIRECTIONAL
+            \item \textbf{Id}: todos los ids extenderan de este id, contiene un uuid, no sabemos que paquete usaremos para generarlos, es una de las pocas dependencias externas que vamos a tener dentro del dominio y queremo encapsularla lo máximo posible por si hubera que cambiarla. Además de esta forma los ids de las entities no se confunden en su tipo. si por ejemplo buscas una task mediante un id que corresponde a un result, si fueran del mismo tipo daría lugar a confusión porque no lo encontraríamos pero no nos advertiría de nuestro error
+            \item Event todos los eventos del sistema extenderan del evento este
         \end{itemize}
-        \item ExecutionMode: es un enum
+    \item TaskDomain
+        \begin{itemize}
+        \item \textbf{Task}: AggregateRoot
+        \item \textbf{TaskId}
+        \item \textbf{Host}: es un Value Object compuesto por el valor del host, es un string pero el Value Object garantiza que es un valor válido, si no devuelve un error
+        \item \textbf{Port}: es un Value Object compuesto por el valor del puerto, es un string pero el Value Object garantiza que es un valor válido, si no devuelve un error
+        \item \textbf{CommunicationMode}: es un enum para expresar esa tarea de las formas de comunicación posibles que hay entre dos servidores cual sera la utilizada
+            \begin{itemize}
+                \item UNARY
+                \item SERVER\_STREAM
+                \item CLIENT\_STREAM
+                \item BIDIRECTIONAL
+            \end{itemize}
+        \item \textbf{ExecutionMode}: es un enum
         \begin{itemize}
             \item MANUAL
             \item AUTOMATIC
         \end{itemize}
-        \item Status: es un enum
+        \item \textbf{Status}: es un enum \label{taskStatus}
         \begin{itemize}
             \item PENDING
             \item RUNNING
             \item SUCCESSFUL
             \item FAILED
         \end{itemize}
-        \item Step: cada tarea puede componerse en distintos pasos. Por ejemplo queremos poder poner en marcha el motor durante 15 segudos y luego llevarlo a una posición de inicio
+        \item \textbf{Step}: cada tarea puede componerse en distintos pasos. Por ejemplo queremos poder poner en marcha el motor durante 15 segudos y luego llevarlo a una posición de inicio
         \begin{itemize}
-            \item StepId
-            \item sentence: será un string de contenido libre que el servidor cliente ejecutará en su sistema, dependerá de él tener instalado dicho programa y corroborar que la sintaxis es la correcta
+            \item \textbf{StepId}
+            \item \textbf{sentence}: será un string de contenido libre que el servidor cliente ejecutará en su sistema, dependerá de él tener instalado dicho programa y corroborar que la sintaxis es la correcta
         \end{itemize}
-        \item TaskCreatedEvent. Cuando se cree una tarea se emitirá un evento, habrá un manejador de eventos que actuará en consecuencia. Si es una tarea automatizada y el loop de ejecución está parado lo pondrá en marcha.
-        \item TaskModifiedEvent: si una tarea es modificada se emitirá un evento, habrá un manejador de eventos que actuará en consecuencia. Si la tarea vuelve a ser puesta a pending, es automatizada y el loop de ejecución está parado lo pondrá en marcha
-        \item TaskDeletedEvent: si una tarea es modificada se emitirá un evento, habrá un manejador de eventos que actuará en consecuencia.
+        \item \textbf{TaskCreatedEvent}: Cuando se cree una tarea se emitirá un evento, habrá un manejador de eventos que actuará en consecuencia. Si es una tarea automatizada y el loop de ejecución está parado lo pondrá en marcha.
+        \item \textbf{TaskModifiedEvent}: si una tarea es modificada se emitirá un evento, habrá un manejador de eventos que actuará en consecuencia. Si la tarea vuelve a ser puesta a pending, es automatizada y el loop de ejecución está parado lo pondrá en marcha
+        \item \textbf{TaskDeletedEvent}: si una tarea es modificada se emitirá un evento, habrá un manejador de eventos que actuará en consecuencia.
     \end{itemize}
-    \item ResultDomain
-    \begin{itemize}
-        \item BatchId
-        \item Batch: aggregate root para referencial el conjunto de resultados correspondiente a la ejecución de una tarea. Una tarea se puede ejecutar varias veces, cada vez con distintos resultados. Para agruparlos necesitaremos este aggregate root
-        \item ResultId
-        \item Result: contendrá un string con el resultado en plano. Cada tarea y proceso tendrá a su disposición este strings para crear su propio formato de respuesta. Será tarea de cada cliente interpretarlos.
-    \end{itemize}
+    \item \textbf{ResultDomain}
+        \begin{itemize}
+            \item \textbf{BatchId}
+            \item \textbf{Batch}: aggregate root para referencial el conjunto de resultados correspondiente a la ejecución de una tarea. Una tarea se puede ejecutar varias veces, cada vez con distintos resultados. Para agruparlos necesitaremos este aggregate root
+            \item \textbf{ResultId}
+            \item \textbf{Result}: contendrá un string con el resultado en plano. Cada tarea y proceso tendrá a su disposición este strings para crear su propio formato de respuesta. Será tarea de cada cliente interpretarlos.
+        \end{itemize}
 \end{itemize}
 
 \subparagraph{casos de uso}
@@ -74,88 +74,97 @@ Vamos a describir los casos de uso que podrán ejecutarse en el programa manager
     \subitem Result
 \end{itemize}
 
-Vamos a hacer el CRUD completo de Task; este contempla la edición de los steps a través de Task ya que es su aggregate root y por definición no se debe poder acceder a sus componentes si no es a través del aggregate. De Batch no vamos a hacer el update porque no tiene sentido a nivel de caso de uso poder actualizar un Batch, teniendo en cuenta que sus variables están ligadas al Task con el que se encuentra ligado y las fechas no dependen del usuario. y lo mismo pasa con result
+Vamos a hacer el \textit{CRUD} completo de Task, dentro de éste, se contempla la edición de los steps a través de Task ya que es su \textit{Aggregate Root} y por definición no se debe poder acceder a sus componentes si no es a través del \textit{Aggregate Root}. De Batch y Result no vamos a permitir el update por lógica de dominio este caso de uso no debe existir, ya que sus variables son autogeneradas en el momento de creación.
 
+\textbf{Create Task}
 
-\textbf{crear tarea}
+La lógica de crear tareas se basará en la comprobación de que la información de entrada es correcta y suficiente, es decir, no hay parámetros opcionales. Por lo tanto deberán estar todos y ser validos. Esto se hará en la instanciación de los \textit{Value Object}. Si alguno de los datos no es válido el flujo se detendrá, devolviendo el error corespondiente al usario para que pueda subsanarlo y enviar una nueva petición.
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/createTaskUseCase}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:createTaskUseCase}
+    \caption{Use Case: Create Task}\label{fig:Use Case-Create Task}
 \end{figure}
 
-\textbf{obtener tarea}
+\textbf{Read Task}
+
+La obtención de una Task se hará a través de su identificador \textit{UUID}. Se comprobará que efectivamente existe una Task con dicho identificador y de se devolverá el resultado de dicha búsqueda.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/getTaskUseCase}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:getTaskUseCase}
+    \includegraphics[height=0.15\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/getTaskUseCase}
+    \caption{Use Case: Read Task}\label{fig:Use Case-Read Task}
 \end{figure}
 
-\textbf{listar tareas}
+\textbf{Read Tasks}
 
-Uno de los puntos más amplios en una API CRUD es el filtrado de datos. No entra dentro del ámbito de este proyecto crear un sistema de filtrado que incluya la paginación. En este caso habría que crear una nomenclatura de filtros de cara al usuario y un sistema que los procese, devolviendo error ante un filtro erroneo o el listado de tareas que responda a dicho filtro. En nuestro caso devolveremos todas las tareas.
+Uno de los puntos más amplios en una \textit{API CRUD} es el filtrado de datos. No entra dentro del ámbito de este proyecto crear un sistema de filtrado que incluya la paginación. En este caso habría que crear una nomenclatura de filtros de cara al usuario y un sistema que los procese, devolviendo error ante un filtro erroneo o el listado de tareas que responda a dicho filtro. En nuestro caso devolveremos todas las tareas.
 
-\textbf{actualizar tareas}
+\textbf{Update Task}
+
+A diferencia del flujo de creación en este caso si ha parámetros opcionales. Ya que este flujo equivale a lo que en REST se entiende como \textit{PATCH}, es decir una actualización parcial, los parámetros que no se reciban en la petición quedarán intactos. En un PUT el parámetro que no se recive se entiende que ha de ser eliminado.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.5\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/updateTaskUseCase}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:updateTaskUseCase}
+    \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/updateTaskUseCase}
+    \caption{Use Case: Update Task}\label{fig:Use Case-Update Task}
 \end{figure}
 
-\textbf{eliminar tareas}
+\textbf{Delete Task}
+
+En el flujo de eliminación de tareas, además de confirmar que la tarea que se desea eliminar existe, se añadirán más validaciones para garantizar al consistencia del sistema. No se permitirán eliminar tareas que estén en status \textit{RUNNING}\ref{taskStatus}
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/deleteTaskUseCase}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:deleteTaskUseCase}
+    \caption{Use Case: Delete Task}\label{fig:Use Case-Delete Task}
 \end{figure}
 
 \textbf{TaskEventHandler}
 
-tanto en TaskCreatedEvent como TaskUpdatedEvent el handler va a ser el mismo. TaskDeletedEvent lo dejaremos en este diseño inicial.
+Tanto en TaskCreatedEvent como TaskUpdatedEvent el handler va a ser el mismo. TaskDeletedEvent no será utilizado en este diseño inicial, pero se dejará preparado.
+
+
+Con respecto al gestor de eventos vemos que tanto para la creación como para la actualización la lógica que estará presente será la comprobación de que si la tarea es de tipo automática, o se ha modificado a tipo automática; y si se acaba de crear, y por lo tanto el status es PENDING, o se ha modificado a dicho tipo; Entonces se comprobará que el loop de gestión de tareas está habilitado; de no ser así se habilitará.
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/taskEventHandlerUseCase}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:taskCreatedEventHandtaskEventHandlerUseCaselerUseCase}
+    \caption{Use Case: TaskEventHandler}\label{fig:Use Case-TaskEventHandler}
 \end{figure}
 
-\textbf{TaskLoop: ejecutar tareas automáticas pendientes}
+\textbf{TaskLoop: ejecutar tareas automáticas}
 
 Una vez que el TaskEventHandler ponga en marcha el TaskLoop este obtendrá de base de datos todas las tareas automáticas pendientes y iterando sobre ellas lanzará un hilo de ejecución para ejecutarlas. Una vez terminadas todas volverá a intentar obtener tareas pendientes ya que en el periodo que haya estado ejecutandolas pueden haberse introducido nuevas. Si no hay más tareas pendientes el loop se desactivará.
 
-Un punto a mencionar de este Task loop es que se implementará en aplicación porque aquí intervendrán todavía puntos de la aplicación y la tecnología que no están investigados y son complejos. Es donde esta arquitectura mostrará toda su flexibilidad y fiabilidad de cara a proteger los elementos básicos de la aplicación de los cambios.
-
-Una vez desarrollado, o puede que incluso durante el mismo desarrollo habrá en este proceso muchos conceptos que descubriremos core de la aplicación y debieran ser dominio, pero como tenemos que descubrirlos vamos a implementarlos en aplicación haciendo uso de interfaces de infraestructura y de elementos de dominio. Si vemos claramente que algo puede convertirse en dominio lo introduciremos.
-
-\sout{Será el único punto en donde una interfaz de dominio será implementada por un elemento de aplicación en vez de infraestructura.} \textcolor{red}{El diseño de esto es complejo y todavía no lo tengo. Event handler necesita todo para crearse?}
+Si hay que reseñar que este caso de uso es el core de la aplicación, donde se pondrá en juego la asincronía y todo el potencial del lenguaje. Es por tanto una primera versión del diseño. Igual que los otros casos de uso son lógica rutinaria que no debiera diferir mucho del diseño original, en este caso sí que podemos encontrarnos con lógicas que no estén previstas y por lo tanto haya que modificar. Todo quedará reflejado en la memoria explicativa de cambios \ref{subsec:memoria explicativa de cambios}
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/executeTaskLoop}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:executeTaskLoop}
+    \caption{Use Case: TaskLoop}\label{fig:Use Case-TaskLoop}
 \end{figure}
 
-\textbf{TaskProcessor} que aparece en la figura\ref{fig:executeTaskLoop} en color verde es el proceso asíncrono donde se hará uso del las gorutines que permiten la gestión de tareas asíncronas de forma sencilla. Una de las bondades que vende el lenguaje y donde se pondrá a prueba. se lanzarán todas las tareas pendientes en paralelo y se hará un bloqueo del loop mientras todas terminan. Como en el tiempo que esto ocurre han podido entrar nuevas tareas pendientes se repetirá la lógica hasta que no haya más.
+Atendiendo por tanto a esta posibilidad de cambio se hará uso de la arquitectura para desacoplarnos de dicha incertidumbre \textbf{TaskProcessor} que aparece en la figura \ref{fig:Use Case-TaskLoop} en color verde es el proceso asíncrono donde se hará uso del las gorutines que permiten la gestión de tareas asíncronas de forma sencilla. Lo definiremos como un puerto de salida e implementaremos un adaptador para encapsular esa incertidumbre.
 
-Se puede ver el flujo lógico de esta lógica en la figura\ref{fig:1-TaskProcessor}
+Es de preveer que dentro de ese adaptador se implemente lógica que habrá de ser de negocio. Sin embargo, a no poder vislumbrarla con claridad, preferimos dejar pendiente de una refactorización. La refactorización posterior podrá ir introduciendo en dominio y limpiando dicho adaptador de el posible mal código resultado de la investigación mientras se construye, en vez de ensuciar el dominio y acoplar nuestro código base a esta incertidumbre.
+
+A pesar de dicho desconocimiento inicial que nos impide diseñar con exactitud el flujo, El objetivo de este proyecto ejecutivo es hacer siempre una primera iteración en la medida que se pueda. Por lo tanto una primera iteración se puede ver en la figura \ref{fig:Use Case-Task Processor}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.5\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/1-TaskProcessor}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:1-TaskProcessor}
+    \includegraphics[height=0.55\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/1-TaskProcessor}
+    \caption{Use Case: Task Processor}\label{fig:Use Case-Task Processor}
 \end{figure}
 
+Podemos ver que está muy acoplado a la interacción de los flujos de comunicación \textit{RPC}\ref{subsubsec:communications} de ahí nuestra incertidumbre al no haber trabajado todavía con dicha tecnología.
 
 \textbf{Create Batch}
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/createBatchUseCase}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:createBatchUseCase}
+    \caption{Use Case: Create Batch}\label{fig:Use Case: Create Batch}
 \end{figure}
 
 \textbf{Delete Batch}
@@ -163,43 +172,51 @@ Se puede ver el flujo lógico de esta lógica en la figura\ref{fig:1-TaskProcess
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/deleteBatchUseCase}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:deleteBatchUseCase}
+    \caption{Use Case: Delete Batch}\label{fig:Use Case: Delete Batch}
 \end{figure}
 
-\textbf{obtener batch}
+\textbf{Read batch}
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/getBatchUseCase}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:getBatchUseCase}
+    \caption{Use Case: Read Batch}\label{fig:Use Case: Read Batch}
 \end{figure}
 
-\textbf{listar batches}
+\textbf{Read batches of a Task}
 
-Uno de los puntos más amplios en una API CRUD es el filtrado de datos. No entra dentro del ámbito de este proyecto crear un sistema de filtrado que incluya la paginación. En este caso habría que crear una nomenclatura de filtros de cara al usuario y un sistema que los procese, devolviendo error ante un filtro erroneo o el listado de tareas que responda a dicho filtro. En nuestro caso devolveremos todas las tareas.
+Este caso de uso será necesario para obtener todos los Batches correspondientes a todas las ejecuciones de una misma tarea.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/getTaskBatchUseCase}
+    \caption{Use Case: Read Batches of Task}\label{fig:Use Case-Read Batches of Task}
+\end{figure}
 
 \textbf{Obtener los results de un batch}
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/getBatchResultsUseCase}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:getBatchResultsUseCase}
+    \caption{Read Results of a Batch Use Case}\label{fig:Read Results of a Batch Use Case}
 \end{figure}
 
 \textbf{Execute task manually}
 
-\textcolor{red}{Ahora mismo es el stream result}
-
 solo se puede ejecutar una tarea manual por vez, en este primer diseño. El motivo es que como se quiere graficar en tiempo real la respuesta, por ejemplo para monitorizar la velocidad del motor en tiempo real, no queremos meternos en la complejidad de graficar varios resultados a la vez.
-
-Podemos apreciar que cuando se ejecuta manualmente una tarea se pone en estado running y entra enun bucle infinito. Hasta que un usuario no pona esa tarea en DONE no para de ejecutar el comando. O Hasta que uno de los steps para el proceso
-
-\textcolor{red}{Decir que esto es el primer esbozo. Se deja claro que depende mucho de como funcione el RPC o las limitaciones tecnicas que nos encontremos. esto no esta implementado asi. el diagrama esta mal porque ejecuta una y otra vez los steps, en lo que hay ahora solo ejecuta el primer step y se queda esperando}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/1-executeTaskManual}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:1-executeTaskManual}
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/1-executeTaskManual}
+    \caption{Use Case: Execute Task Manually}\label{fig:Use Case-Execute Task Manually}
+\end{figure}
+
+El diagrama de secuencia para el caso de que una tarea sea de tipo BIDIRECTIONAL se puede apreciar en el diagrama \ref{fig:executeTaskManualInteraction}. Este es el caso que utilizaremos por ejemplo para el control en velocidad y posición del motor de corriente continua. Se enviará una consigna y se recibirán resultados hasta que el cliente envíe la orden de detener dicho control. Para otros tipos más simples, por ejemplo, ejecutar manualmente la tarea de configurar el PID, simplemente será de tipo UNARY, se enviará una request y se obtendrá una respuesta.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/1-ExecuteTaskManuallyInteraction}
+    \caption{Execute task manually interaction}\label{fig:executeTaskManualInteraction}
 \end{figure}
 
 \subparagraph{estructura de carpetas}

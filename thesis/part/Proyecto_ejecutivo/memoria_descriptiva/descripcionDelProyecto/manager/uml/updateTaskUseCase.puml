@@ -1,53 +1,16 @@
 @startuml
 start
-if (host) then (yes)
-    if (valid) then (no)
-        :throw invalidHostError/
-        stop
-    else (yes)
-    endif
-else (no)
-endif
-if (Port) then (yes)
-        if (valid) then (no)
-            :throw invalidPortError/
+
+repeat
+if (is param present) then (yes)
+        if (is valid) then (no)
+            :throw Invalid Param/
             stop
         else (yes)
         endif
 else (no)
 endif
-if (CommunicationMode) then (yes)
-        if (valid) then (no)
-            :throw invalidCommunicationModeError/
-            stop
-        else (yes)
-        endif
-else (no)
-endif
-if (ExecutionMode) then (yes)
-        if (valid) then (no)
-            :throw invalidExecutionModeError/
-            stop
-        else (yes)
-        endif
-else (no)
-endif
-if (steps) then (yes)
-        if (valid) then (no)
-            :throw invalidStepsError/
-            stop
-        else (yes)
-        endif
-else (no)
-endif
-if (status) then (yes)
-        if (valid) then (no)
-            :throw invalidStatusError/
-            stop
-        else (yes)
-        endif
-else (no)
-endif
+repeat while(task parameters)
 :UpdateTask/
 :trigger TaskUpdatedEvent/
 stop

@@ -6,16 +6,16 @@ El sistema está pensado para que el programa a ejecutar sea de libre decisión 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/controlConcept}
-    \caption[Diagrama componentes]{}\label{fig:controlConcept}
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/controlConcept}
+    \caption{Control: Diagrama UML de despliegue}\label{fig:Control-Diagrama UML de despliegue}
 \end{figure}
 
 \subparagraph{Dominio}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/controlDomain}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:controlDomain}
+    \includegraphics[height=0.45\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/controlDomain}
+    \caption{Control: Diagrama UML de el dominio}\label{fig:Control-Diagrama UML de el dominio}
 \end{figure}
 
 \begin{itemize}
@@ -31,49 +31,49 @@ El sistema está pensado para que el programa a ejecutar sea de libre decisión 
     \item EnginePIDControllerModule: contendrá todo lo relativo al controlador PId. El controlador usará una instancia de Engine y una instancia de PIDAlgorithm
 \end{itemize}
 
-\subparagraph{casos de uso}
+\subparagraph{Casos de uso}
 
 Los casos de usos actuarán sobre El objeto de dominio EnginePIDController, que en este caso al no haber base de datos ni identificadores serán ValueObjects. Particularmente en nuestro programa solo instanciaremos uno. No implementaremos un patrón singleton sobre ellos debido a que podría desearse controlar varios motores a la vez si el hardware lo permitiera.
 
-\textbf{configure PID}
+\textbf{Configure PID}
 
 El primer paso a ejecutar antes de habilitar el control PID será sintonizarlo.
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/configurePID}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:configurePID}
+    \caption{Use Case: Configure PID}\label{fig:Use Case-Configure PID}
 \end{figure}
 
-\textbf{enable RPM control}
+\textbf{Enable RPM control}
 
 Cuando se habilita el control rpm se genera una goRutine, es decir una nuevo proceso que se quedará ejecutando hasta que se ejecute el caso de uso Disable Control
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enableRPMControl}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:enableRMPControl}
+    \includegraphics[height=0.5\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enableRPMControl}
+    \caption{Use Case: Enable RPM control}\label{fig:Use Case- Enable RPM control}
 \end{figure}
 
-\textbf{enable Position control}
+\textbf{Enable Position control}
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enablePositionControl}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:enablePositionControl}
+    \caption{Use Case: Enable Position control}\label{fig:Use Case- Enable Position control}
 \end{figure}
 
-\textbf{disable control}
+\textbf{Disable control}
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/disableControl}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:disableControl}
+    \caption{Use Case: Disable control}\label{fig:Use Case- Disable control}
 \end{figure}
 
 \subparagraph{estructura de carpetas}
 
-\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/control_estructure_client.tex}
+\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/control_estructure_control.tex}
 
 
 

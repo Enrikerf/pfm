@@ -1,6 +1,5 @@
 En el proyecto constará de 4 carpetas principales
 
-\tiny
 \dirtree{%
     .1 Project .
         .2 Domain.
@@ -8,7 +7,6 @@ En el proyecto constará de 4 carpetas principales
         .2 Adapter.
         .2 Bootstrap.
 }
-\normalsize
 
 Bootstrap será donde hagamos la composición de la aplicación, es decir la inyección de dependencias.
 
@@ -20,41 +18,49 @@ Vamos a desplegar la estructura capa por capa
 Podemos ver en la figura\ref{fig:1-TaskDomainFolderStructure} por cada aggregate root tenemos una carpeta. En core tenemos la base de la cual extienden determinadas cosas que son comunes en toda a aplicación como los Errores o los eventos. La lógica común. Hay que mencionar que los errores no se han puesto por simplificar se encontrarán en el mismo contexto en el que se utilicen.
 
 \begin{figure}[H]
-    \tiny
+    \setlength{\DTbaselineskip}{10pt}
+    \DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
+%    \DTsetlength{1em}{3em}{0.1em}{1pt}{4pt}
 \dirtree{%
     .1 Domain.
         .2 Core.
-            .3 Id.
-            .3 Event.
-            .3 Error.
+            .3 \textcolor{blue}{Id}.
+            .3 \textcolor{blue}{Event}.
+            .3 \textcolor{blue}{Error}.
         .2 Task.
-            .3 Id.
-            .3 Task.
+            .3 \textcolor{blue}{Id.go}.
+            .3 \textcolor{blue}{Task.go}.
             .3 Host.
+                .4 \textcolor{blue}{InvalidHostError}.
+                .4 \textcolor{blue}{Host.go}.
             .3 Port.
+                .4 \textcolor{blue}{InvalidPortError.go}.
+                .4 \textcolor{blue}{Port.go}.
             .3 CommunicationMode.
+                .4 \textcolor{blue}{InvalidPortError.go}.
+                .4 \textcolor{blue}{Port.go}.
             .3 ExecutionMode.
             .3 Status.
             .3 Step.
-                .4 Id.
-                .4 StepEntity.
-                .4 StepVo.
+                .4 \textcolor{blue}{Id}.
+                .4 \textcolor{blue}{StepEntity}.
+                .4 \textcolor{blue}{StepVo}.
                 .4 Repository.
                     .5 "...".
                 .4 Service.
                     .5 "...".
             .3 Repository.
-                .4 Find.
-                .4 Save.
-                .4 Search.
-                .4 Delete.
-                .4 Update.
+                .4 \textcolor{blue}{Find}.
+                .4 \textcolor{blue}{Save}.
+                .4 \textcolor{blue}{Search}.
+                .4 \textcolor{blue}{Delete}.
+                .4 \textcolor{blue}{Update}.
             .3 Service.
-                .4 Finder.
-                .4 Creator.
-                .4 Updater.
-                .4 Eraser.
-                .4 Searcher.
+                .4 \textcolor{blue}{Finder}.
+                .4 \textcolor{blue}{Creator}.
+                .4 \textcolor{blue}{Updater}.
+                .4 \textcolor{blue}{Eraser}.
+                .4 \textcolor{blue}{Searcher}.
         .2 Result.
             .3 ResultId.
             .3 BatchId.
@@ -65,13 +71,14 @@ Podemos ver en la figura\ref{fig:1-TaskDomainFolderStructure} por cada aggregate
             .3 Service.
                 .4 "...".
 }
-\normalsize
-    \caption[Diagrama de objetos de dominio]{}\label{fig:1-TaskDomainFolderStructure}
+    \caption{Manager: Estructura de carpetas de Dominio}\label{fig:ManagerEstructura de carpetas de Dominio}
 \end{figure}
 
 \textbf{Aplicación}
 
-\tiny
+\begin{figure}[H]
+\setlength{\DTbaselineskip}{10pt}
+\DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
 \dirtree{%
 .1 Application.
     .2 Port.
@@ -79,7 +86,7 @@ Podemos ver en la figura\ref{fig:1-TaskDomainFolderStructure} por cada aggregate
             .4 Task.
                 .5 LoopExecutor.
                     .6 Command.
-                    .6 UseCase: (uses Application out port for grpc call, implementation on Adapters).
+                    .6 UseCase
                 .5 ManuallyExecutor(Command).
                 .5 Create(Command).
                 .5 Update(Command).
@@ -104,12 +111,15 @@ Podemos ver en la figura\ref{fig:1-TaskDomainFolderStructure} por cada aggregate
                 .5 ClientStream.
                 .5 Bidirectional.
 }
-\normalsize
+    \caption{Manager: Estructura de carpetas de Aplicación}\label{fig:ManagerEstructura de carpetas de Aplicación}
+\end{figure}
 
 
 \textbf{Adapters}
 
-\tiny
+\begin{figure}[H]
+    \setlength{\DTbaselineskip}{10pt}
+    \DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
 \dirtree{%
     .1 Adapter.
     .2 in.
@@ -123,4 +133,5 @@ Podemos ver en la figura\ref{fig:1-TaskDomainFolderStructure} por cada aggregate
     .3 GRPC.
     .4 implementación de los repository de llamada a los servidores clientes.
 }
-\normalsize
+    \caption{Manager: Estructura de carpetas de Infraestructura}\label{fig:ManagerEstructura de carpetas de Infraestructura}
+\end{figure}

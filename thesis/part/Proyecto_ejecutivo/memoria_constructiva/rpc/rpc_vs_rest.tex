@@ -8,39 +8,13 @@ network between programs written in a high-level language.¨ \cite{Birrell198439
 
 RPC permite ejecutar una llamada a un servicio en un servidor remoto mediante formularios predefinidos, obteniendo respuestas con el mismo formato. El estilo del servidor que realiza la llamada, no se tiene en cuenta por diseño.
 
-Google Remote Procedure Call\cite{grpc} - es un subtipo del diseño RPC. gRPC es una arquitectura global de alto rendimiento y de código abierto RPC que garantiza la flexibilidad y la velocidad de la arquitectura de microservicios. Las llamadas a funciones se utilizan gRPC para garantizar la interacción con el cliente en los microservicios creados con varios lenguajes de codificación.
+Google Remote Procedure Call \cite{grpc} - es un subtipo del diseño RPC. gRPC es una arquitectura global de alto rendimiento y de código abierto RPC que garantiza la flexibilidad y la velocidad de la arquitectura de microservicios. Las llamadas a funciones se utilizan gRPC para garantizar la interacción con el cliente en los microservicios creados con varios lenguajes de codificación.
 
 Esta técnica implementa las peticiones de la API en RPC utilizando el estándar HTTP 2.0, pero ni el servidor ni el programador de la API tienen conocimiento de HTTP. Como resultado, la complicación disminuye porque no hay que preocuparse por cómo se traducen los principios de RPC a HTTP.
 
 La llamada a procedimientos remotos de Google pretende acelerar la transferencia de datos entre microservicios. Para permitir la devolución y la llamada remotas, se basa en una estrategia que identifica un servicio, establece las metodologías y especifica las variables pertinentes.
 
 Además, utiliza un IDL -lenguaje de descripción de interfaces- para especificar el paradigma de la API RPC, lo que simplifica la identificación de las funciones remotas. El IDL emplea por defecto Protocol Buffers para definir la interfaz del servicio y el formato de los mensajes de carga útil.
-
-¿Cómo funciona gRPC funciona?
-
-El protocolo HTTP/2, el streaming y los búferes de protocolo o protobufs son utilizados por gRPC APIs para transmitir mensajes. Un estándar de serialización llamado protobuf permite la creación automática de bibliotecas de usuario y la construcción sencilla de microservicios. En los archivos proto, los diseñadores de APIs describen las operaciones y los mensajes que se envían entre servidores y clientes.
-
-El compilador de protoc carga los archivos y crea el software de usuario y servidor para comunicarse con los servicios remotos. En comparación con los formatos XML o JSON, los mensajes codificados con búferes de protocolo son considerablemente más pequeños, lo que hace que el procesamiento sea menos intensivo en CPU.
-
-Además, el uso de HTTP/2, gRPC las API aportan varias mejoras al diseño de RPC. El protocolo añade una capa de formato binario que divide los paquetes en mensajes más pequeños con marco binario, lo que los hace transportables y pequeños. La ejecución de muchas llamadas dentro de un mismo canal es posible gracias al soporte de HTTP/2 para múltiples consultas simultáneas con la arquitectura de comunicación bidireccional.
-
-El protocolo de transporte HTTP/2 admite múltiples flujos simultáneos, pero gRPC Las APIs amplían esta funcionalidad a través de los canales. Cada canal puede albergar varios flujos que se ejecutan simultáneamente a través de muchas conexiones concurrentes. Los canales ofrecen un método sencillo para conectarse al servidor de la API en una dirección y un puerto determinados.
-
-HTTP 1.1 frente a HTTP 2
-
-El enfoque solicitud-respuesta utilizado por las APIs de REST se basa principalmente en HTTP 1.1. Esto significa que el modelo debe procesar cada consulta individualmente si un microservicio recibe muchas consultas de múltiples clientes, lo que arrastra todo el sistema. REST Las APIs pueden desarrollarse sobre HTTP 2, pero como la arquitectura de comunicación sigue siendo petición-respuesta, no pueden aprovechar plenamente las ventajas de HTTP 2, como la compatibilidad bidireccional y la interacción en flujo.
-
-gRPC Las API no se enfrentan a este reto. Se adhiere a un modelo de conexión cliente-respuesta y se basa en HTTP 2. gRPC puede aceptar muchas consultas de varios clientes y procesar esas peticiones al mismo tiempo mediante el flujo de información. Estas circunstancias permiten una comunicación bidireccional con interacción en flujo. Además, gRPC soporta interacciones unarias como las creadas por HTTP 1.1.
-
-gRPC Las APIs pueden gestionar:
-
-\begin{itemize}
-    \item Interacciones unarias. Llamada respuesta
-    \item Streaming de servidor: una llamada provoca un flujo de mensajes de respuesta del servidor
-    \item Streaming de cliente: un flujo de mensajes del cliente provoca una unica respuesta del servidor
-    \item Streaming bidireccional: un flujo de mensajes de entrada y salidas independientes
-\end{itemize}
-
 
 \textbf{REST}
 
@@ -58,7 +32,6 @@ Los principios que lo describen son:
     \item Sistema por capas. Tiene relación con la separación de responsabilidades
 \end{itemize}
 
-
 Cada componente que combina el sistema de microservicios puede mostrarse al usuario o al cliente como un recurso cuando la API REST se hace accesible públicamente. Este recurso puede consultarse mediante los comandos HTTP GET, POST, PUT y DELETE .
 
 En una API RESTful, el usuario envía una consulta a una URL - Localizador Uniforme de Recursos, que provoca una respuesta con una carga útil en JSON, XML o cualquier formato de datos compatible. Esta carga útil representa el recurso que desea el usuario. Las peticiones comunes de los clientes incluyen
@@ -70,53 +43,42 @@ En una API RESTful, el usuario envía una consulta a una URL - Localizador Unifo
     \item Una carga útil de mensaje específica del cliente
 \end{itemize}
 
-
 El servidor de la API envía una cabecera de tipo de contenido que identifica el formato de entrega del mensaje empleado en el cuerpo de la respuesta junto con la carga útil de datos que entrega al usuario que realiza la consulta. También se incluye en el cuerpo de la respuesta un código de respuesta que informa al usuario del estado del resultado de la llamada a la API.
+
+\textbf{HTTP 1.1 frente a HTTP 2}
+
+El protocolo HTTP/2 para transmitir mensajes permite flujos multiplexados y una comunicación bidireccional. gRPC admite varios tipos de interacciones, incluyendo interacciones unarias, streaming de servidor, streaming de cliente y streaming bidireccional. En contraste, REST utiliza el modelo de petición-respuesta de HTTP 1.1, lo que puede causar problemas de latencia y no aprovechar completamente las ventajas de HTTP/2. En general, gRPC puede proporcionar una transmisión de datos más rápida y eficiente y una comunicación más flexible y bidireccional en comparación con REST. HTTP 1.1, que permite REST, utiliza un método de handshaking TCP para cada consulta. REST Por ello, las APIs suelen tener problemas de latencia, ya que el handshake lleva tiempo.
+
+\textbf{La estructura de datos de la carga útil}
+
+Si nos fijamos en la estructura de datos de la carga útil, utilizada en el intercambio que se produce en la comunicación, gRPC utiliza Protocol Buffers para serializar y deserializar datos, lo que permite una transmisión más rápida y eficiente de información. Este método es más ligero, ya que los mensajes son una estructura más comprimida. Están en formato binario, lo que hace que el procesamiento sea menos intensivo en CPU. En el intercambio de datos, serializa y deserializa la información de forma automática.
+
+Por otro lado, en REST, se utiliza principalmente JSON o XML para enviar y recibir información. La facilidad de lectura humana de JSON es una ventaja de REST, pero no es tan rápido o ligero cuando se trata de la transferencia de datos. Esto se debe al requerimiento de que JSON debe ser serializado y traducido a los lenguajes de programación utilizados en ambos extremos, el servidor y el cliente. Este paso adicional en el proceso de transmisión de datos puede afectar la eficiencia y aumentar la probabilidad de errores.
 
 
 \textbf{Compatibilidad con los navegadores}
 
-Dado que la mayor parte de la interacción de la API web se produce en línea, la compatibilidad con el navegador es una consideración clave en el debate entre gRPC vs. REST. La compatibilidad con los navegadores es probablemente una de las principales ventajas de las APIs REST frente a gRPC. Todos los navegadores ofrecen la capacidad completa de la API REST y la compatibilidad con el navegador. Sin embargo, la funcionalidad de gRPC en los navegadores, sin embargo, sigue siendo relativamente restringida. Lamentablemente, las transiciones entre HTTP 1.1 y HTTP 2 necesitan gRPC-web así como una capa proxy. Como resultado, gRPC Las APIs tienden a terminar siendo utilizadas principalmente para sistemas internos o privados, por ejemplo, en aplicaciones API empleadas para la información y funcionalidad del backend de organizaciones específicas.
+Dado que la mayor parte de la interacción de la API web se produce en línea, la compatibilidad con el navegador es una consideración clave en el debate entre gRPC vs. REST. La compatibilidad con los navegadores es probablemente una de las principales ventajas de las APIs REST frente a gRPC. Todos los navegadores ofrecen la capacidad completa de la API REST y la compatibilidad con el navegador. Sin embargo, para gRPC los navegadores sigue siendo relativamente restringida.
 
-Con el protocolo HTTP/2 se utilizan flujos multiplexados. Como resultado, numerosos clientes pueden enviar consultas en paralelo sin necesidad de abrir una nueva sesión TCP para cada uno. Además, el servidor puede utilizar el enlace existente para entregar los mensajes a los clientes.
-
-El modelo de transferencia de estado representativo cuenta con un amplio apoyo de los navegadores porque integra HTTP 1.1. HTTP 1.1, que permite REST, utiliza un método de handshaking TCP para cada consulta. REST Por ello, las APIs suelen tener problemas de latencia, ya que el handshake lleva tiempo.
-
-La estructura de datos de la carga útil
-Si nos fijamos en la estructura de datos de la carga útil al ver gRPC vs REST, gRPC Las APIs serializan los datos de la carga útil utilizando Protocol Buffers por diseño. Este método es más ligero, ya que hace que los mensajes sean más pequeños y permite una estructura muy comprimida. Los búferes de protocolo están en formato binario; por lo tanto, para el intercambio de datos, serializa y deserializa la información. Protobuf puede traducir automáticamente mensajes muy escritos a los lenguajes de programación del cliente y del servidor.
-
-REST Sin embargo, la mayoría de las veces se utiliza JSON o formularios XML para entregar y recibir información. JSON es el formato más utilizado por su adaptabilidad y capacidad para comunicar datos dinámicos sin atenerse a una estructura precisa, aunque no requiere ninguna. La calidad de lectura humana de JSON, que Protobuf aún no puede igualar, es otra ventaja importante.
-
-JSON no es, sin embargo, tan rápido o ligero cuando se trata de la transferencia de datos. Esto se debe al requisito de que JSON debe ser serializado y traducido a los lenguajes de programación empleados tanto en el extremo del servidor como del cliente cuando se utiliza REST. Se trata de un paso adicional en el proceso de transmisión de datos, que podría perjudicar la eficiencia y aumentar la probabilidad de errores.
-
+Para la comunicación entre HTTP 1.1 y HTTP 2 que necesita la interacción entre la web y gRPC se hace necesario establecer una capa proxy; lo cual presenta un elemento más de complejidad y mantenimiento, es por lo tanto un inconveniente en el uso de gRPC.
 
 \textbf{Generación de código}
 
-Los ingenieros deben emplear herramientas de terceros, como Postman, para la generación de código para las consultas de la API, ya que, a diferencia de gRPCla API REST carece de funciones de generación de código integradas. Por el contrario, , gRPC ofrece funciones de generación de código nativo gracias a su compilador protoc, que admite muchos lenguajes de programación. La generación de código es especialmente ventajosa para los microservicios que combinan numerosos servicios creados en múltiples plataformas y lenguajes. En general, su generación de código integrada facilita la construcción del kit de desarrollo de software (SDK).
+Para gRPC existe un compilador llamado protoc que carga los archivos .proto y genera código nativo para comunicarse con los servicios remotos que admite múltiples lenguajes de programación. En REST los ingenieros deben emplear herramientas de terceros, como Postman, para la generación de código para las consultas de la API.
 
-REST La API, por otro lado, no proporciona funciones de generación de código nativo. Debe utilizar un programa de terceros para producir la generación de código para las llamadas a la API en varios idiomas. Aunque no es una molestia, es importante tener en cuenta que gRPC no depende de ningún otro servicio para la generación de código.
+La generación de código es especialmente ventajosa para los microservicios que combinan numerosos servicios creados en múltiples plataformas y lenguajes, facilitando la construcción del kit de desarrollo de software (SDK) para cada lenguaje y actualizándose de forma sencilla cuando se enfrenta a cambios.
 
 \textbf{Justificación de uso de gRPC}
 
-Tanto en gRPC vs REST, la mayoría de las herramientas de terceros todavía no proporcionan una funcionalidad integrada para gRPC cumplimiento. En consecuencia, gRPC las API se utilizan sobre todo para crear sistemas o estructuras internas inaccesibles para los usuarios externos. Teniendo en cuenta esta calificación, las siguientes situaciones podrían hacer uso de gRPC APIs:
+Aunque actualmente la mayoría de las herramientas de terceros no ofrecen una funcionalidad integrada para gRPC, es una tecnología adecuada para la interacción entre sistemas internos, como microservicios. Además, gRPC permite la interoperabilidad entre distintos lenguajes de programación, lo cual es otro de sus puntos fuertes. Esto se logra mediante el sistema generador de código, que se produce utilizando los archivos proto como interfaz de comunicación, lo que brinda una herramienta útil para aquellos que desean agregar funcionalidades mediante otro lenguaje y comunicarse fácilmente con el sistema ya existente. Todo lo que se necesita hacer es compilar los archivos proto en el lenguaje destino.
 
-Conexiones de microservicios
-gRPC Las APIs son especialmente útiles para enlazar arquitecturas formadas por microservicios ligeros en los que la eficacia de la entrega de mensajes es crucial debido a su baja latencia y a la rapidez de la comunicación del ancho de banda.
+Otro beneficio del uso de gRPC es la transmisión de información en tiempo real mediante buffers de comunicación. En nuestro caso, el control en tiempo real de dispositivos mediante sistemas PID hace que esta característica sea esencial. gRPC permite establecer conexiones tanto de streaming por parte del cliente como del servidor, lo que nos permite establecer canales de comunicación versátiles según la situación a la que nos enfrentemos. Además, para la monitorización de los dispositivos controlados, necesitamos una optimización en el uso del ancho de banda. Aquí es donde gRPC sobresale, ya que proporciona una comunicación ligera, mayor eficiencia y rapidez.
 
-Sistemas multilingües
-gRPC destaca en el manejo de las comunicaciones en un contexto políglota gracias a su capacidad de generación de código nativo para una amplia gama de lenguajes de programación.
 
-Transmisión en tiempo real
-Si la comunicación en tiempo real es necesaria, su sistema puede transmitir y recibir datos en tiempo real sin tener que esperar a la interacción cliente-respuesta unitaria gracias a la capacidad de gRPC para manejar el streaming bidireccional.
-
-Redes de bajo consumo y bajo ancho de banda
-Estas redes pueden beneficiarse del uso de sesiones Protobuf serializadas por parte de gRPC, ya que proporcionan una comunicación ligera, una mayor eficiencia y rapidez. Por ejemplo, una red que se beneficiaría de la gRPC API es el Internet de las cosas.
-
-comparación entre las características de los dos protocolos de comunicación
+Como resumén final hacemos referencia a a figura \ref{fig:gRPC vs REST} que resume la comparación entre los dos sistemas
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_constructiva/rpc/img/rpcComparison}
     \caption{gRPC vs REST.\cite{berga_santos_2023}}\label{fig:gRPC vs REST}
 \end{figure}
-

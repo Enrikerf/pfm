@@ -1,7 +1,7 @@
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/clientServerConcept}
-    \caption[Diagrama componentes]{}\label{fig:clientServerConcept}
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/clientServerConcept}
+    \caption{Diagrama UML de despliegue del cliente}\label{fig:Diagrama UML de despliegue del cliente}
 \end{figure}
 
 \subparagraph{Dominio}
@@ -31,8 +31,8 @@ aquí podemos ver por ejemplo los comándos básicos de un control pid que podre
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/clientDomain}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:clientDomain}
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/clientDomain}
+    \caption{Diagrama UML de el dominio de cliente}\label{fig:Diagrama UML de el dominio de cliente}
 \end{figure}
 
 \begin{itemize}
@@ -51,27 +51,22 @@ aquí podemos ver por ejemplo los comándos básicos de un control pid que podre
 Vamos a describir los casos de uso que podrán ejecutarse en el programa client. En este caso no tendremos Entities porque no necesitamos identificadores.
 Tendremos los Value Objects para los steps que nos llegaran a modo de request y el necesario para responder. En este sistema no hay persistencia.
 
-\begin{itemize}
-    \item StepVo
-    \item ResultVo
-\end{itemize}
-
-\textbf{execute Unary Step}
+\textbf{Execute Unary Step}
 
 Centrando en un caso de uso de este tipo de steps en nuestro programa de control sirve por ejemplo para establecer un parámetro de control del PID. Cualquiera de los siguientes.
 \begin{verbatim}
     ./pidControl --velocity=30rpm
 \end{verbatim}
 
-Podemos ver en~\ref{fig:executeUnaryStep} el diagrama de flujo que responde a este caso de uso
+Podemos ver en~\ref{fig:Use Case-Execute Unary Step} el diagrama de flujo que responde a este caso de uso
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeUnaryStep}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:executeUnaryStep}
+    \caption{Use Case: Execute Unary Step}\label{fig:Use Case-Execute Unary Step}
 \end{figure}
 
-\textbf{execute ClientStream Step}
+\textbf{Execute ClientStream Step}
 
 Centrando en un caso de uso de este tipo de steps en nuestro programa de control sirve por ejemplo para establecer una configuración completa con una sola llamada para nuestro PID:
 \begin{verbatim}
@@ -82,15 +77,15 @@ Centrando en un caso de uso de este tipo de steps en nuestro programa de control
     ./pidControl --setD=0
 \end{verbatim}
 
-Podemos ver en~\ref{fig:executeClientStreamStep} el diagrama de flujo que responde a este caso de uso
+Podemos ver en~\ref{fig:Use Case-Execute ClientStream Step} el diagrama de flujo que responde a este caso de uso
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeClientStreamStep}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:executeClientStreamStep}
+    \caption{Use Case: Execute ClientStream Step}\label{fig:Use Case-Execute ClientStream Step}
 \end{figure}
 
-\textbf{execute ServerStream Step}
+\textbf{Execute ServerStream Step}
 
 Centrando en un caso de uso de este tipo de steps en nuestro programa de control sirve por ejemplo para habilitar el control del pid durante un determinado tiempo e ir devolviendo el estado la variable de control
 \begin{verbatim}
@@ -103,15 +98,15 @@ O dejar el control activado indefinidamente hasta que llege otra request de tipo
     ./pidControl --enabled=false
 \end{verbatim}
 
-Podemos ver en~\ref{fig:executeServerStreamStep} el diagrama de flujo que responde a este caso de uso
+Podemos ver en~\ref{fig:Use Case-Execute ServerStream Step} el diagrama de flujo que responde a este caso de uso
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeServerStreamStep}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:executeServerStreamStep}
+    \caption{Use Case: Execute ServerStream Step}\label{fig:Use Case-Execute ServerStream Step}
 \end{figure}
 
-\textbf{execute Bidirectional Step}
+\textbf{Execute Bidirectional Step}
 
 Usando el ejemplo anterior, si no queremos habilitar el control indefinidamente y deshabilitarlo mediante otra request podemos usar este caso de uso.
 
@@ -127,12 +122,12 @@ y posteriormente cuando el Cliente decida.
 
 Este caso de uso es el que utilizaremos para el control manual.
 
-Podemos ver en~\ref{fig:executeBidiStep} el diagrama de flujo que responde a este caso de uso
+Podemos ver en~\ref{fig:Use Case-Execute Bidirectional Step} el diagrama de flujo que responde a este caso de uso
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeBidiStep}
-    \caption[Diagrama de objetos de dominio]{}\label{fig:executeBidiStep}
+    \caption{Use Case: Execute Bidirectional Step}\label{fig:Use Case-Execute Bidirectional Step}
 \end{figure}
 
 \subparagraph{estructura de carpetas}
