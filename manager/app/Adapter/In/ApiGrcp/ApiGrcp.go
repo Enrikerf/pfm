@@ -108,7 +108,8 @@ func (api *ApiGrpc) configControllers() {
 	task.RegisterTaskServiceServer(api.grpcServer, taskController)
 
 	var resultController = Controller.ResultController{
-		ExecuteTaskManuallyUseCase:       api.executeTaskManually,
+		CreateBatchAndFillUseCase:        api.executeTaskManually,
+		GetTaskBatchesUseCase:            api.getTaskBatches,
 		GetBatchResultsUseCase:           api.getBatchResultsUseCase,
 		StreamResultsUseCase:             api.streamResultsUseCase,
 		UnimplementedResultServiceServer: result.UnimplementedResultServiceServer{},

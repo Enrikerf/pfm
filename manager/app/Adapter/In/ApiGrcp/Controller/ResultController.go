@@ -6,15 +6,18 @@ import (
 	resultProto "github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/result"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateBatchAndFill"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetBatchResults"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetTaskBatches"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/StreamResults"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task"
 	"time"
 )
 
 type ResultController struct {
-	ExecuteTaskManuallyUseCase CreateBatchAndFill.UseCase
-	GetBatchResultsUseCase     GetBatchResults.UseCase
-	StreamResultsUseCase       StreamResults.UseCase
+	CreateBatchAndFillUseCase CreateBatchAndFill.UseCase
+	GetTaskBatchesUseCase     GetTaskBatches.UseCase
+	GetBatchResultsUseCase    GetBatchResults.UseCase
+	StreamResultsUseCase      StreamResults.UseCase
 	resultProto.UnimplementedResultServiceServer
 }
 
@@ -24,7 +27,7 @@ func (controller ResultController) CreateBatchAndFill(
 ) (*resultProto.CreateBatchAndFillResponse, error) {
 	var command CreateBatchAndFill.Command
 	command.TaskUuid = request.GetTaskUuid()
-	batch, err := controller.ExecuteTaskManuallyUseCase.Execute(command)
+	batch, err := controller.CreateBatchAndFillUseCase.Execute(command)
 	if err != nil {
 		return nil, fmt.Errorf("error")
 	}
@@ -58,7 +61,23 @@ func (controller ResultController) GetTaskBatches(
 	ctx context.Context,
 	request *resultProto.GetTaskBatchesRequest,
 ) (*resultProto.ListBatchesResponse, error) {
-	return &resultProto.ListBatchesResponse{}, nil
+	taskId, err := Task.LoadIdFromString(request.GetTaskUuid())
+	if err != nil {
+		return nil, err
+	}
+	batches, err := controller.GetTaskBatchesUseCase.List(GetTaskBatches.Query{TaskId: taskId})
+	if err != nil {
+		return nil, err
+	}
+	var batchProtoArray []*resultProto.Batch
+	for _, batch := range batches {
+		batchProtoArray = append(batchProtoArray, &resultProto.Batch{
+			Uuid:      batch.GetId().GetUuidString(),
+			TaskUuid:  batch.GetTaskId().GetUuidString(),
+			CreatedAt: batch.GetCreatedAt().Format(time.RFC3339),
+		})
+	}
+	return &resultProto.ListBatchesResponse{Batches: batchProtoArray}, nil
 }
 
 func (controller ResultController) StreamResults(

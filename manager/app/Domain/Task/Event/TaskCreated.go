@@ -1,5 +1,7 @@
 package Event
 
+const TaskCreatedEventName = "task.created"
+
 type TaskCreated interface {
 	GetName() string
 	GetEntityId() string
@@ -11,7 +13,7 @@ type taskCreated struct {
 }
 
 func NewTaskCreated(entityId string) TaskCreated {
-	self := &taskCreated{"task.created", entityId}
+	self := &taskCreated{TaskCreatedEventName, entityId}
 	return self
 }
 

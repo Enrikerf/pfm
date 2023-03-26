@@ -1,5 +1,7 @@
 package Event
 
+const BatchCreatedToBeFilledEventName = "batch.created_to_be_filled"
+
 type BatchCreatedToBeFilled interface {
 	GetName() string
 	GetEntityId() string
@@ -11,7 +13,8 @@ type batchCreatedToBeFilled struct {
 }
 
 func NewBatchCreatedToBeFilled(entityId string) BatchCreatedToBeFilled {
-	self := &batchCreatedToBeFilled{"batch.created_to_be_filled", entityId}
+
+	self := &batchCreatedToBeFilled{BatchCreatedToBeFilledEventName, entityId}
 	return self
 }
 

@@ -14,7 +14,6 @@ message Batch{
   string uuid = 1;
   string task_uuid = 2;
   string created_at = 3;
-  string updated_at = 4;
 }
 message CreateBatchAndFillRequest{
   string task_uuid = 1;
@@ -23,7 +22,7 @@ message CreateBatchAndFillResponse{
   string batch_uuid = 1;
 }
 message GetTaskBatchesRequest{
-  google.protobuf.StringValue task_uuid = 1;
+  string task_uuid = 1;
 }
 message ListBatchesResponse{
   repeated Batch batches = 1;

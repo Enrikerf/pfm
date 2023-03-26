@@ -10,6 +10,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/ExecutionMode"
 	TaskRepository "github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Repository"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Service/Finder"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Status"
 )
 
 type CreatorAndFiller interface {
@@ -42,11 +43,12 @@ func (e *executor) CreateAndFill(taskId Task.Id) (Result.Batch, error) {
 	if err != nil {
 		return nil, err
 	}
-	if task.GetExecutionMode() != ExecutionMode.Manual {
+	if task.GetExecutionMode() == ExecutionMode.Manual {
 		return nil, Error.NewTaskNotManualCanNotBeExecutedManuallyError()
 	}
 	batch := Result.NewBatch(task.GetId())
 	e.saveBatchRepository.Persist(batch)
+	task.SetStatus(Status.New(Status.Running))
 	e.saveTaskRepository.Persist(task)
 	go e.dispatcher.Dispatch(ResultEvent.NewBatchCreatedToBeFilled(batch.GetId().GetUuidString()))
 	return batch, nil

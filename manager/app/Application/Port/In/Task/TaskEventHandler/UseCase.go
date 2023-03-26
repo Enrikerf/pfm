@@ -10,11 +10,11 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Status"
 )
 
-type TaskEventHandler interface {
+type UseCase interface {
 	Handle(created Event.TaskCreated)
 }
 
-func New(findRepository Repository.Find) TaskEventHandler {
+func New(findRepository Repository.Find) UseCase {
 	return &taskEventHandler{
 		Finder.Finder{FindRepository: findRepository},
 		NewLooper(),

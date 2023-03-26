@@ -1,6 +1,7 @@
 package ResultAdapter
 
 import (
+	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Model"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Result"
 	"gorm.io/gorm"
@@ -11,12 +12,22 @@ type PersistAdapter struct {
 }
 
 func (adapter PersistAdapter) Persist(result Result.Result) {
-	var currentResultMysql Model.ResultDb
-	var resultValuesToUpdate = Model.ResultDb{}
-	resultValuesToUpdate.FromDomainV2(result)
-	err := adapter.Orm.First(&currentResultMysql, "uuid = ?", resultValuesToUpdate.Uuid).Error
+	var currentMysqlModel Model.ResultDb
+	var modelToUpdate = Model.ResultDb{}
+	err := adapter.Orm.First(&currentMysqlModel, "uuid = ?", modelToUpdate.Uuid).Error
 	if err != nil {
-		_ = adapter.Orm.Create(&resultValuesToUpdate).Error
+		var batchDb Model.BatchDb
+		err := adapter.Orm.First(&batchDb, "uuid = ?", result.GetBatchId().GetUuidString()).Error
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		modelToUpdate.FromDomainV2(result)
+		modelToUpdate.BatchID = batchDb.ID
+		err = adapter.Orm.Create(&modelToUpdate).Error
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+	} else {
+		adapter.Orm.Model(&currentMysqlModel).Updates(modelToUpdate)
 	}
-	adapter.Orm.Model(&currentResultMysql).Updates(resultValuesToUpdate)
 }

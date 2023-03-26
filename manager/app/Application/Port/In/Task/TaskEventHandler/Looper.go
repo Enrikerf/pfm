@@ -5,9 +5,9 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Grcp/CallPort"
 	ResultRepository "github.com/Enrikerf/pfm/commandManager/app/Domain/Result/Repository"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/ExecutionMode"
 	TaskRepository "github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Repository"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Status"
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/ValueObject"
 	"os"
 	"sync"
 	"text/tabwriter"
@@ -51,8 +51,8 @@ func (l *looper) Enable() {
 func (l *looper) loop() {
 	for l.IsEnabled() {
 		tasks, err := l.findTasksByRepository.FindBy(map[string]interface{}{
-			"Status":         ValueObject.Pending.String(),
-			"execution_mode": ValueObject.Automatic.String(),
+			"Status":         Status.Pending,
+			"execution_mode": ExecutionMode.Automatic,
 		})
 		if err != nil {
 			fmt.Printf(err.Error())

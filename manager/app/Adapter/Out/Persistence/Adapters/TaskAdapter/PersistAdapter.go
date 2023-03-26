@@ -21,8 +21,4 @@ func (adapter PersistAdapter) Persist(task Task.Task) {
 		_ = adapter.Orm.Create(&taskMysql).Error
 	}
 	adapter.Orm.Model(&currentTaskMysql).Updates(taskValuesToUpdate)
-	//var taskMysql = Model.TaskDb{}
-	//taskMysql.FromDomainV2(task)
-	//_ = adapter.Orm.CreateAndFill(&taskMysql).Error
-	////TODO: go funcion to save this action in a queue and try it again
 }

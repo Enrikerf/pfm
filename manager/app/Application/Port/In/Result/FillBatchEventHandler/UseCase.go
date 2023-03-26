@@ -4,6 +4,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/Out/Grcp/CallPort"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Event"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Result/Content"
 	ResultRepository "github.com/Enrikerf/pfm/commandManager/app/Domain/Result/Repository"
 	TaskRepository "github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Repository"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Service/Finder"
@@ -67,6 +68,12 @@ func (useCase *useCase) Handle(event Event.Event) {
 		}
 		resultsContent, err := useCase.callBidiPort.Read()
 		if err != nil {
+			content, err := Content.NewContent(err.Error())
+			if err != nil {
+				break
+			}
+			result := Result.New(batchId, content)
+			useCase.saveResultPort.Persist(result)
 			break
 		}
 		if len(resultsContent.GetValue()) > 0 {
