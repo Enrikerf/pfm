@@ -1,0 +1,241 @@
+@startuml
+
+namespace CommunicationMode {
+    class CommunicationMode.Mode << (T, #FF7700) >>  {
+    }
+    interface UnknownError  {
+    }
+}
+
+"__builtin__.error" *-- "extends""CommunicationMode.UnknownError"
+
+
+
+namespace Creator {
+    class Creator << (S,Aquamarine) >> {
+        + SaveRepository Repository.Save
+
+        + Create(host Host.Vo, port Port.Vo, stepVos []Step.Vo, communicationMode CommunicationMode.Mode, executionMode ExecutionMode.Mode) Task.Task
+
+    }
+}
+
+
+"Creator.Creator""uses" o-- "Repository.Save"
+
+namespace Eraser {
+    interface AdapterError  {
+    }
+    class Eraser << (S,Aquamarine) >> {
+        + FindRepository Repository.Find
+        + DeleteRepository Repository.Delete
+
+        + Erase(id Task.Id) error
+
+    }
+    interface RunningTaskCantBeDeleted  {
+    }
+    interface TaskNotFoundError  {
+    }
+}
+"__builtin__.error" *-- "extends""Eraser.AdapterError"
+"__builtin__.error" *-- "extends""Eraser.RunningTaskCantBeDeleted"
+"__builtin__.error" *-- "extends""Eraser.TaskNotFoundError"
+
+
+"Eraser.Eraser""uses" o-- "Repository.Delete"
+"Eraser.Eraser""uses" o-- "Repository.Find"
+
+namespace ExecutionMode {
+    class ExecutionMode.Mode << (T, #FF7700) >>  {
+    }
+    interface UnknownError  {
+    }
+}
+"__builtin__.error" *-- "extends""ExecutionMode.UnknownError"
+
+
+
+namespace Finder {
+    class Finder << (S,Aquamarine) >> {
+        + FindRepository Repository.Find
+
+        + Find(id Task.Id) (Task.Task, error)
+
+    }
+    interface TaskNotFoundError  {
+    }
+}
+"__builtin__.error" *-- "extends""Finder.TaskNotFoundError"
+
+"Repository.Find" <|-- "implements""Finder.Finder"
+
+"Finder.Finder""uses" o-- "Repository.Find"
+
+namespace Host {
+    interface InvalidHostError  {
+    }
+    interface Vo  {
+        + GetValue() string
+
+    }
+    class vo << (S,Aquamarine) >> {
+        - value string
+
+        + GetValue() string
+
+    }
+}
+"__builtin__.error" *-- "extends""Host.InvalidHostError"
+
+"Host.Vo" <|-- "implements""Host.vo"
+"Port.Vo" <|-- "implements""Host.vo"
+
+
+namespace Port {
+    interface InvalidPortError  {
+    }
+    interface Vo  {
+        + GetValue() string
+
+    }
+    class vo << (S,Aquamarine) >> {
+        - value string
+
+        + GetValue() string
+
+    }
+}
+"__builtin__.error" *-- "extends""Port.InvalidPortError"
+
+"Host.Vo" <|-- "implements""Port.vo"
+"Port.Vo" <|-- "implements""Port.vo"
+
+
+namespace Repository {
+    interface Delete  {
+        + Delete(id Task.Id) error
+
+    }
+    interface Find  {
+        + Find(id Task.Id) (Task.Task, error)
+
+    }
+    interface Save  {
+        + Persist(task Task.Task) 
+
+    }
+}
+
+
+
+namespace Status {
+    class Status.Status << (T, #FF7700) >>  {
+    }
+    interface UnknownError  {
+    }
+}
+"__builtin__.error" *-- "extends""Status.UnknownError"
+
+
+
+namespace Step {
+    interface Id  {
+    }
+    interface InvalidSentenceLengthError  {
+    }
+    interface Step  {
+        + GetId() Id
+        + GetSentence() string
+
+    }
+    interface Vo  {
+        + GetSentence() string
+
+    }
+    class id << (S,Aquamarine) >> {
+        - uuid uuid.UUID
+
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+
+    }
+    class step << (S,Aquamarine) >> {
+        - id Id
+        - sentence string
+
+        + GetId() Id
+        + GetSentence() string
+
+    }
+    class vo << (S,Aquamarine) >> {
+        - sentence string
+
+        + GetSentence() string
+
+    }
+}
+"__builtin__.error" *-- "extends""Step.InvalidSentenceLengthError"
+
+"Step.Step" <|-- "implements""Step.step"
+"Step.Vo" <|-- "implements""Step.step"
+"Step.Vo" <|-- "implements""Step.vo"
+
+"Step.id""uses" o-- "uuid.UUID"
+"Step.step""uses" o-- "Step.Id"
+
+namespace Task {
+    interface Id  {
+    }
+    interface Task  {
+        + GetId() Id
+        + GetHost() Host.Vo
+        + GetPort() Port.Vo
+        + GetSteps() []Step.Step
+        + GetCommunicationMode() CommunicationMode.Mode
+        + GetExecutionMode() ExecutionMode.Mode
+        + GetStatus() Status.Status
+
+    }
+    class id << (S,Aquamarine) >> {
+        - uuid uuid.UUID
+
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+
+    }
+    class task << (S,Aquamarine) >> {
+        - id Id
+        - host Host.Vo
+        - port Port.Vo
+        - steps []Step.Step
+        - communicationMode CommunicationMode.Mode
+        - executionMode ExecutionMode.Mode
+        - status Status.Status
+
+        + GetId() Id
+        + GetHost() Host.Vo
+        + GetPort() Port.Vo
+        + GetSteps() []Step.Step
+        + GetCommunicationMode() CommunicationMode.Mode
+        + GetExecutionMode() ExecutionMode.Mode
+        + GetStatus() Status.Status
+
+    }
+}
+
+"Task.Task" <|-- "implements""Task.task"
+
+"Task.id""uses" o-- "uuid.UUID"
+"Task.task""uses" o-- "CommunicationMode.Mode"
+"Task.task""uses" o-- "ExecutionMode.Mode"
+"Task.task""uses" o-- "Host.Vo"
+"Task.task""uses" o-- "Port.Vo"
+"Task.task""uses" o-- "Status.Status"
+"Task.task""uses" o-- "Step.Step"
+"Task.task""uses" o-- "Task.Id"
+
+"__builtin__.string" #.. "alias of""CommunicationMode.Mode"
+"__builtin__.string" #.. "alias of""ExecutionMode.Mode"
+"__builtin__.string" #.. "alias of""Status.Status"
+@enduml

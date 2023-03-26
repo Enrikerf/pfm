@@ -6,7 +6,7 @@ type Service struct {
 	Engine Entity.Engine
 }
 
-func (service *Service) GetPosition() int16 {
+func (service *Service) GetPosition() int64 {
 	return service.Engine.GetPosition()
 }
 
@@ -42,7 +42,6 @@ func (service *Service) Reset() {
 	service.Engine.InitialState()
 }
 
-
-func (service *Service)GetCurrentAngularSpeed()float64{
+func (service *Service) GetCurrentAngularSpeed() float64 {
 	return service.Engine.GetCurrentAngularSpeed()
 }

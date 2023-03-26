@@ -10,7 +10,7 @@ export class BatchService {
 
 
     constructor() {
-        this.client = new BatchServiceClient("http://localhost:8080", null, null)
+        this.client = new BatchServiceClient("http://2ab0-77-225-241-204.ngrok.io", null, null)
         this.messages = batchMessages
         this.newUuid = ""
     }

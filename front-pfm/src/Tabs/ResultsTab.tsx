@@ -23,7 +23,7 @@ export default function ResultsTab() {
             listTaskRequest.setFilters(filters)
         }
         let metadata = {};
-        let taskService = new ResultServiceClient("http://localhost:8080", null, null)
+        let taskService = new ResultServiceClient("http://2ab0-77-225-241-204.ngrok.io", null, null)
         taskService.listResult(listTaskRequest, metadata, function (err, response) {
             if (err) {
                 console.log(err);

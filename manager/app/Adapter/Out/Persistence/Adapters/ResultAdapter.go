@@ -12,8 +12,8 @@ type ResultAdapter struct {
 }
 
 func (adapter ResultAdapter) Save(result ResultDomain.Result) error {
-	var batchMysql Model.Batch
-	var resultMysql Model.Result
+	var batchMysql Model.BatchDb
+	var resultMysql Model.ResultDb
 	response := adapter.Orm.First(&batchMysql, "uuid = ?", result.BatchUuid)
 	if response.Error != nil {
 		fmt.Printf("tasks %v. \n", response.Error)
@@ -31,7 +31,7 @@ func (adapter ResultAdapter) Save(result ResultDomain.Result) error {
 
 func (adapter ResultAdapter) FindBy(conditions interface{}) []ResultDomain.Result {
 
-	var results []Model.Result
+	var results []Model.ResultDb
 	domainResults := []ResultDomain.Result{}
 	err := adapter.Orm.
 		Table("results").
@@ -51,7 +51,7 @@ func (adapter ResultAdapter) FindBy(conditions interface{}) []ResultDomain.Resul
 
 func (adapter ResultAdapter) FindStream(batchUuid string, lastId uint) []ResultDomain.Result {
 
-	var results []Model.Result
+	var results []Model.ResultDb
 	domainResults := []ResultDomain.Result{}
 	err := adapter.Orm.
 		Table("results").
@@ -71,7 +71,7 @@ func (adapter ResultAdapter) FindStream(batchUuid string, lastId uint) []ResultD
 }
 
 func (adapter ResultAdapter) Delete(uuid string) error {
-	var taskMysql = Model.Result{}
+	var taskMysql = Model.ResultDb{}
 	err := adapter.Orm.Delete(&taskMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return err
@@ -80,9 +80,9 @@ func (adapter ResultAdapter) Delete(uuid string) error {
 }
 
 func (adapter ResultAdapter) Update(result ResultDomain.Result) error {
-	var batchMysql Model.Batch
-	var currentResultMysql Model.Result
-	var resultValuesToUpdate = Model.Result{}
+	var batchMysql Model.BatchDb
+	var currentResultMysql Model.ResultDb
+	var resultValuesToUpdate = Model.ResultDb{}
 	err := adapter.Orm.First(&batchMysql, "uuid = ?", result.BatchUuid).Error
 	if err != nil {
 		return err
@@ -98,7 +98,7 @@ func (adapter ResultAdapter) Update(result ResultDomain.Result) error {
 }
 
 func (adapter ResultAdapter) Find(uuid string) (ResultDomain.Result, error) {
-	var resultMysql = Model.Result{}
+	var resultMysql = Model.ResultDb{}
 	err := adapter.Orm.First(&resultMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return ResultDomain.Result{}, err

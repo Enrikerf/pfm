@@ -9,6 +9,11 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ReadTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/UpdateTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/CommunicationMode"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/ExecutionMode"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Host"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Port"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Status"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -22,7 +27,10 @@ type TaskController struct {
 	taskProto.UnimplementedTaskServiceServer
 }
 
-func (controller TaskController) CreateTask(ctx context.Context, request *taskProto.CreateTaskRequest) (*taskProto.CreateTaskResponse, error) {
+func (controller TaskController) CreateTask(
+	ctx context.Context,
+	request *taskProto.CreateTaskRequest,
+) (*taskProto.CreateTaskResponse, error) {
 	protoTask := request.GetTaskParams()
 	var command CreateTask.Command
 	command.Host = protoTask.GetHost()
@@ -45,13 +53,16 @@ func (controller TaskController) CreateTask(ctx context.Context, request *taskPr
 		Port:          task.GetPort().GetValue(),
 		Commands:      commandNames,
 		Mode:          string(task.GetCommunicationMode()),
-		Status:        string(task.GetStatus()),
+		Status:        string(task.GetStatus().Value()),
 		ExecutionMode: string(task.GetExecutionMode()),
 	}
 	return &taskProto.CreateTaskResponse{Task: &newTask}, nil
 }
 
-func (controller TaskController) ReadTask(ctx context.Context, request *taskProto.ReadTaskRequest) (*taskProto.ReadTaskResponse, error) {
+func (controller TaskController) ReadTask(
+	ctx context.Context,
+	request *taskProto.ReadTaskRequest,
+) (*taskProto.ReadTaskResponse, error) {
 	var query = ReadTask.Query{Uuid: request.GetTaskUuid()}
 	task, err := controller.ReadTaskUseCase.Read(query)
 	if err != nil {
@@ -62,41 +73,41 @@ func (controller TaskController) ReadTask(ctx context.Context, request *taskProt
 	}
 
 	return &taskProto.ReadTaskResponse{Task: &taskProto.Task{
-		Uuid:          task.Uuid.String(),
-		Host:          task.Host,
-		Port:          task.Port,
+		Uuid:          task.GetId().GetUuidString(),
+		Host:          task.GetHost().GetValue(),
+		Port:          task.GetPort().GetValue(),
 		Commands:      nil,
-		Mode:          task.Mode.String(),
-		Status:        task.Status.String(),
-		ExecutionMode: task.ExecutionMode.String(),
+		Mode:          string(task.GetCommunicationMode()),
+		Status:        string(task.GetStatus().Value()),
+		ExecutionMode: string(task.GetExecutionMode()),
 	}}, nil
 }
 
 func (controller TaskController) UpdateTask(ctx context.Context, request *taskProto.UpdateTaskRequest) (*taskProto.UpdateTaskResponse, error) {
-	cmd := UpdateTask.Command{}
+
 	params := request.GetParams()
-	cmd.Uuid = request.GetTaskUuid()
-	if params.GetHost() != nil {
-		cmd.Host.Change = true
+	var host Host.Vo
+	var port Port.Vo
+	var communicationMode CommunicationMode.Mode
+	var executionMode ExecutionMode.Mode
+	var s Status.Status
+	if params.GetHost() == nil {
+		host, _ = Host.NewVo(params.GetHost().GetValue())
 	}
-	if params.GetPort() != nil {
-		cmd.Port.Change = true
+	if params.GetPort() == nil {
+		port, _ = Port.NewVo(params.GetPort().GetValue())
 	}
-	if params.GetMode() != 0 {
-		cmd.Mode.Change = true
+	if params.GetStatus() == 0 {
+		s, _ = Status.FromString(params.GetStatus().String())
 	}
-	if params.GetStatus() != 0 {
-		cmd.Status.Change = true
-	}
-	if params.GetExecutionMode() != 0 {
-		cmd.ExecutionMode.Change = true
-	}
-	cmd.Host.Value = params.GetHost().GetValue()
-	cmd.Port.Value = params.GetPort().GetValue()
-	cmd.Mode.Value = params.GetMode().String()
-	cmd.Status.Value = params.GetStatus().String()
-	cmd.ExecutionMode.Value = params.GetExecutionMode().String()
-	err := controller.UpdateTaskUseCase.Update(cmd)
+	err := controller.UpdateTaskUseCase.Update(UpdateTask.Command{
+		Uuid:              request.GetTaskUuid(),
+		Host:              host,
+		Port:              port,
+		CommunicationMode: communicationMode,
+		ExecutionMode:     executionMode,
+		Status:            s,
+	})
 	return &taskProto.UpdateTaskResponse{}, err
 }
 
@@ -106,7 +117,7 @@ func (controller TaskController) DeleteTask(ctx context.Context, request *taskPr
 	if err != nil {
 		return &taskProto.DeleteTaskResponse{}, status.Errorf(
 			codes.NotFound,
-			fmt.Sprintf("error"),
+			fmt.Sprintf(err.Error()),
 		)
 	}
 
@@ -114,24 +125,31 @@ func (controller TaskController) DeleteTask(ctx context.Context, request *taskPr
 }
 
 func (controller TaskController) ListTasks(ctx context.Context, in *taskProto.ListTasksRequest) (*taskProto.ListTasksResponse, error) {
-	tasks := controller.ListTasksUseCase.List(ListTasks.Query{})
-	if tasks == nil {
+	tasks, err := controller.ListTasksUseCase.List(ListTasks.Query{})
+	if err != nil {
 		return &taskProto.ListTasksResponse{}, status.Errorf(
 			codes.Internal,
-			fmt.Sprintf("error"),
+			err.Error(),
 		)
 	}
-	tasksProtoArray := []*taskProto.Task{}
+	var tasksProtoArray []*taskProto.Task
 	for _, task := range tasks {
-		tasksProtoArray = append(tasksProtoArray, &taskProto.Task{
-			Uuid:          task.Uuid.String(),
-			Host:          task.Host,
-			Port:          task.Port,
-			Commands:      nil,
-			Mode:          task.Mode.String(),
-			Status:        task.Status.String(),
-			ExecutionMode: task.ExecutionMode.String(),
-		})
+		var commands []string
+		if len(task.GetSteps()) > 0 {
+			for _, step := range task.GetSteps() {
+				commands = append(commands, step.GetSentence())
+			}
+		}
+		t := taskProto.Task{
+			Uuid:          task.GetId().GetUuidString(),
+			Host:          task.GetHost().GetValue(),
+			Port:          task.GetPort().GetValue(),
+			Commands:      commands,
+			Mode:          string(task.GetCommunicationMode()),
+			Status:        string(task.GetStatus().Value()),
+			ExecutionMode: string(task.GetExecutionMode()),
+		}
+		tasksProtoArray = append(tasksProtoArray, &t)
 	}
 	return &taskProto.ListTasksResponse{Tasks: tasksProtoArray}, nil
 }

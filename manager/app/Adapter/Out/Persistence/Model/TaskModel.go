@@ -7,6 +7,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/ExecutionMode"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Host"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Port"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Status"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Step"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/ValueObject"
 	"github.com/google/uuid"
@@ -40,7 +41,7 @@ func (taskDb *TaskDb) FromDomainV2(selfEntity TaskDomain.Task) {
 		taskDb.Steps = append(taskDb.Steps, step)
 	}
 	taskDb.Mode = string(selfEntity.GetCommunicationMode())
-	taskDb.Status = string(selfEntity.GetStatus())
+	taskDb.Status = string(selfEntity.GetStatus().Value())
 	taskDb.ExecutionMode = string(selfEntity.GetExecutionMode())
 }
 
@@ -89,6 +90,10 @@ func (taskDb *TaskDb) ToDomainV2() (TaskDomain.Task, error) {
 	if err != nil {
 		return nil, err
 	}
+	status, err := Status.FromString(taskDb.Status)
+	if err != nil {
+		return nil, err
+	}
 	var stepVos []Step.Vo
 	for _, commandSentence := range taskDb.Steps {
 		stepVo, err := Step.NewVo(commandSentence.Sentence)
@@ -100,13 +105,17 @@ func (taskDb *TaskDb) ToDomainV2() (TaskDomain.Task, error) {
 	if err != nil {
 		return nil, err
 	}
-	task := TaskDomain.Load(
+	task, err := TaskDomain.Load(
 		TaskDomain.LoadId(taskDb.Uuid),
 		host,
 		port,
 		stepVos,
 		communicationMode,
 		executionMode,
+		status,
 	)
+	if err != nil {
+		return nil, err
+	}
 	return task, nil
 }

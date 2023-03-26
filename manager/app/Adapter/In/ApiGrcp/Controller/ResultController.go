@@ -4,148 +4,101 @@ import (
 	"context"
 	"fmt"
 	resultProto "github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/result"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ReadResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateBatchAndFill"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetBatchResults"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/StreamResults"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
-	"github.com/google/uuid"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Result"
 	"time"
 )
 
 type ResultController struct {
-	CreateResultUseCase  CreateResult.UseCase
-	ReadResultUseCase    ReadResult.UseCase
-	UpdateResultUseCase  UpdateResult.UseCase
-	DeleteResultUseCase  DeleteResult.UseCase
-	ListResultsUseCase   ListResults.UseCase
-	StreamResultsUseCase StreamResults.UseCase
+	ExecuteTaskManuallyUseCase CreateBatchAndFill.UseCase
+	GetBatchResultsUseCase     GetBatchResults.UseCase
+	StreamResultsUseCase       StreamResults.UseCase
 	resultProto.UnimplementedResultServiceServer
 }
 
-func (controller ResultController) CreateResult(ctx context.Context, request *resultProto.CreateResultRequest) (*resultProto.CreateResultResponse, error) {
-	protoResult := request.GetResultParams()
-	var command CreateResult.Command
-	command.Content = protoResult.GetContent()
-	command.BatchUuid = protoResult.GetBatchUuid()
-	result, err := controller.CreateResultUseCase.Create(command)
+func (controller ResultController) CreateBatchAndFill(
+	ctx context.Context,
+	request *resultProto.CreateBatchAndFillRequest,
+) (*resultProto.CreateBatchAndFillResponse, error) {
+	var command CreateBatchAndFill.Command
+	command.TaskUuid = request.GetTaskUuid()
+	batch, err := controller.ExecuteTaskManuallyUseCase.Execute(command)
 	if err != nil {
 		return nil, fmt.Errorf("error")
 	}
-	newResult := resultProto.Result{
-		Uuid:      result.Uuid.String(),
-		Content:   result.Content,
-		BatchUuid: result.BatchUuid.String(),
-	}
-	return &resultProto.CreateResultResponse{Result: &newResult}, nil
+	return &resultProto.CreateBatchAndFillResponse{
+		BatchUuid: batch.GetId().GetUuidString(),
+	}, nil
 }
 
-func (controller ResultController) ReadResult(ctx context.Context, request *resultProto.ReadResultRequest) (*resultProto.ReadResultResponse, error) {
-	var query = ReadResult.Query{Uuid: request.GetResultUuid()}
-	result, err := controller.ReadResultUseCase.Read(query)
+func (controller ResultController) GetBatchResults(
+	ctx context.Context,
+	request *resultProto.GetBatchResultsRequest,
+) (*resultProto.ListResultsResponse, error) {
+	batchId, err := Result.LoadBatchIdFromString(request.GetBatchUuid())
 	if err != nil {
-		return &resultProto.ReadResultResponse{}, status.Errorf(
-			codes.NotFound,
-			fmt.Sprintf("error"),
-		)
+		return nil, err
 	}
-	return &resultProto.ReadResultResponse{Result: &resultProto.Result{
-		Uuid:      result.Uuid.String(),
-		Content:   result.Content,
-		BatchUuid: result.BatchUuid.String(),
-	}}, nil
-}
-
-func (controller ResultController) UpdateResult(ctx context.Context, request *resultProto.UpdateResultRequest) (*resultProto.UpdateResultResponse, error) {
-	cmd := UpdateResult.Command{}
-	params := request.GetResultParams()
-	cmd.Uuid = request.GetResultUuid()
-	if params.GetContent() != nil {
-		cmd.Content.Change = true
-	}
-	if params.GetBatchUuid() != nil {
-		cmd.BatchUuid.Change = true
-	}
-	cmd.Content.Value = params.GetContent().GetValue()
-	cmd.BatchUuid.Value = params.GetBatchUuid().GetValue()
-	err := controller.UpdateResultUseCase.Update(cmd)
-	return &resultProto.UpdateResultResponse{}, err
-}
-
-func (controller ResultController) DeleteResult(ctx context.Context, request *resultProto.DeleteResultRequest) (*resultProto.DeleteResultResponse, error) {
-	var command = DeleteResult.Command{Uuid: request.GetResultUuid()}
-	err := controller.DeleteResultUseCase.Delete(command)
-	if err != nil {
-		return &resultProto.DeleteResultResponse{}, status.Errorf(
-			codes.NotFound,
-			fmt.Sprintf("error"),
-		)
-	}
-
-	return &resultProto.DeleteResultResponse{}, nil
-}
-
-func (controller ResultController) ListResult(ctx context.Context, request *resultProto.ListResultRequest) (*resultProto.ListResultResponse, error) {
-	query := ListResults.Query{}
-	if request.GetFilters().GetBatchUuid() != nil {
-		query.BatchUuid.Change = true
-	}
-	query.BatchUuid.Value = request.GetFilters().GetBatchUuid().GetValue()
-	results := controller.ListResultsUseCase.List(query)
-	if results == nil {
-		return &resultProto.ListResultResponse{}, status.Errorf(
-			codes.Internal,
-			fmt.Sprintf("error"),
-		)
-	}
-	resultProtoArray := []*resultProto.Result{}
+	results := controller.GetBatchResultsUseCase.List(GetBatchResults.Query{BatchId: batchId})
+	var resultProtoArray []*resultProto.Result
 	for _, result := range results {
 		resultProtoArray = append(resultProtoArray, &resultProto.Result{
-			Uuid:      result.Uuid.String(),
-			BatchUuid: result.BatchUuid.String(),
-			Content:   result.Content,
+			Uuid:      result.GetId().GetUuidString(),
+			BatchUuid: result.GetBatchId().GetUuidString(),
+			Content:   result.GetContent().GetValue(),
+			CreatedAt: result.GetCreateAt().Format(time.RFC3339),
 		})
 	}
-	return &resultProto.ListResultResponse{Results: resultProtoArray}, nil
+	return &resultProto.ListResultsResponse{Results: resultProtoArray}, nil
 }
 
-func (controller ResultController) StreamResults(request *resultProto.StreamResultsRequest, stream resultProto.ResultService_StreamResultsServer) error {
+func (controller ResultController) GetTaskBatches(
+	ctx context.Context,
+	request *resultProto.GetTaskBatchesRequest,
+) (*resultProto.ListBatchesResponse, error) {
+	return &resultProto.ListBatchesResponse{}, nil
+}
+
+func (controller ResultController) StreamResults(
+	request *resultProto.StreamResultsRequest,
+	stream resultProto.ResultService_StreamResultsServer,
+) error {
 	fmt.Printf("streaming results %v\n", request)
-	lastId := uint(0)
-	batchUuid, err := uuid.Parse(request.GetBatchUuid())
+	var lastId Result.Id
+	batchUuid, err := Result.LoadBatchIdFromString(request.GetBatchUuid())
 	if err != nil {
-		fmt.Printf("Error! - finish streaming results \n")
-		return nil
+		return err
 	}
 	for {
-		results, finish := controller.StreamResultsUseCase.Stream(StreamResults.Query{
+		results, err := controller.StreamResultsUseCase.Stream(StreamResults.Query{
 			BatchUuid: batchUuid,
 			LastId:    lastId,
 		})
-		if finish {
-			fmt.Printf("finish streaming results \n")
+		if err != nil {
+			fmt.Printf(err.Error())
+			return err
+		}
+		if results == nil {
+			fmt.Printf("Task Done")
 			return nil
 		}
 		if len(results) > 0 {
-			resultProtoArray := []*resultProto.Result{}
+			var resultProtoArray []*resultProto.Result
 			for _, result := range results {
 				resultProtoArray = append(resultProtoArray, &resultProto.Result{
-					Uuid:      result.Uuid.String(),
-					BatchUuid: result.BatchUuid.String(),
-					Content:   result.Content,
-					CreatedAt: result.CreatedAt.Format(time.RFC3339),
-					UpdatedAt: result.UpdatedAt.Format(time.RFC3339),
+					Uuid:      result.GetId().GetUuidString(),
+					BatchUuid: result.GetBatchId().GetUuidString(),
+					Content:   result.GetContent().GetValue(),
+					CreatedAt: result.GetCreateAt().Format(time.RFC3339),
 				})
 			}
-			response := &resultProto.StreamResultsResponse{Results: resultProtoArray}
-			err := stream.Send(response)
+			err := stream.Send(&resultProto.StreamResultsResponse{Results: resultProtoArray})
 			if err != nil {
-				return nil
+				return err
 			}
-			lastId = results[len(results)-1].ID
+			lastId = results[len(results)-1].GetId()
 		}
 		time.Sleep(100 * time.Millisecond)
 	}

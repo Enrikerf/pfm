@@ -24,7 +24,7 @@ type EncoderModel struct {
 	encoderPinA Pin.EncoderPin
 	encoderPinB Pin.EncoderPin
 	lastState   state
-	position    int16
+	position    int64
 	forward     bool
 	risingEdges []*risingEdgeDetected
 	lock        *sync.Mutex
@@ -46,7 +46,7 @@ func NewEncoder(
 	return &e
 }
 
-func (encoder *EncoderModel) GetPosition() int16 {
+func (encoder *EncoderModel) GetPosition() int64 {
 	return encoder.position
 }
 

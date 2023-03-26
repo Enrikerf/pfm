@@ -3,32 +3,20 @@ package Config
 import (
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/LoopManager"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/InOut/EventDispatcherAdapter"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Grcp/Call"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Adapters"
-	AdaptersV2 "github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Adapters/Task"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/CreateBatch"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/DeleteBatch"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ListBatches"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ReadBatch"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/UpdateBatch"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Loop"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Call/Manual"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ReadResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Adapters/ResultAdapter"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Adapters/TaskAdapter"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateBatchAndFill"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/FillBatchEventHandler"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetBatchResults"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetTaskBatches"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/StreamResults"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/CreateStep"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/DeleteStep"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/ListSteps"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/ReadStep"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/UpdateStep"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ReadTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/TaskEventHandler"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/UpdateTask"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -44,7 +32,6 @@ type App struct {
 func (server *App) Run() {
 	server.loadDotEnv()
 	db := server.loadDb()
-	//server.loadLoop(db)
 	server.loadApiGrpc(db)
 }
 
@@ -78,96 +65,41 @@ func (server *App) loadDb() *gorm.DB {
 	return db
 }
 
-func (server *App) loadLoop(db *gorm.DB) {
-	taskAdapter := Adapters.TaskAdapter{Orm: db}
-	resultAdapter := Adapters.ResultAdapter{Orm: db}
-	batchAdapter := Adapters.BatchAdapter{Orm: db}
-	//TODO: inject grcp and proto? to test this adapter later
-	callAdapter := Call.Adapter{}
-	loopService := Loop.New(
-		callAdapter,
-		taskAdapter,
-		taskAdapter,
-		batchAdapter,
-		resultAdapter,
-	)
-	loopManager := LoopManager.LoopManager{
-		Loop: loopService,
-	}
-	go loopManager.Execute()
-}
-
 func (server *App) loadApiGrpc(db *gorm.DB) {
-	var taskAdapter = Adapters.TaskAdapter{Orm: db}
-	var newTaskAdapter = AdaptersV2.TaskAdapter{Orm: db}
-	var commandAdapter = Adapters.StepAdapter{Orm: db}
-	var batchAdapter = Adapters.BatchAdapter{Orm: db}
-	var resultAdapter = Adapters.ResultAdapter{Orm: db}
-	var callAdapter = Call.ManualAdapter{}
 
-	//TaskController
-	var createTaskService = CreateTask.New(taskAdapter)
-	var readTaskService = ReadTask.Service{FindTaskPort: taskAdapter}
-	var updateTaskService = UpdateTask.Service{
-		FindTaskPort:   taskAdapter,
-		UpdateTaskPort: taskAdapter,
-	}
-	var deleteTaskService = DeleteTask.New(newTaskAdapter, newTaskAdapter)
-	var listTasksService = ListTasks.Service{FindTasksByPort: taskAdapter}
+	var findTaskAdapter = TaskAdapter.FindAdapter{Orm: db}
+	var deleteAdapter = TaskAdapter.DeleteAdapter{Orm: db}
+	var saveTaskAdapter = TaskAdapter.PersistAdapter{Orm: db}
+	var findTasksByAdapter = TaskAdapter.FindByAdapter{Orm: db}
+	var findBatchAdapter = ResultAdapter.FindBatchAdapter{Orm: db}
+	var saveBatchAdapter = ResultAdapter.PersistBatchAdapter{Orm: db}
+	var saveResultAdapter = ResultAdapter.PersistAdapter{Orm: db}
+	var findBatchResultsAdapter = ResultAdapter.FindBatchResultsAdapter{Orm: db}
+	var findTaskBatchesAdapter = ResultAdapter.FindTaskBatchesAdapter{Orm: db}
+	var findBatchResultsAfterResultAdapter = ResultAdapter.FindBatchResultsAfterResultAdapter{Orm: db}
+	var callAdapter = Call.New()
 
-	// CommandController
-	var createStepService = CreateStep.Service{
-		FindTaskPort: taskAdapter,
-		SaveStepPort: commandAdapter,
-	}
-	var readStepService = ReadStep.Service{FindStepPort: commandAdapter}
-	var updateStepService = UpdateStep.Service{
-		FindStepPort:   commandAdapter,
-		FindTaskPort:   taskAdapter,
-		UpdateStepPort: commandAdapter,
-	}
-	var deleteStepService = DeleteStep.Service{DeleteStepPort: commandAdapter}
-	var listStepsService = ListSteps.Service{FindStepByPort: commandAdapter}
-
-	// BatchController
-	var createBatchService = CreateBatch.Service{
-		FindTaskPort:  taskAdapter,
-		SaveBatchPort: batchAdapter,
-	}
-	var readBatchService = ReadBatch.Service{FindBatchPort: batchAdapter}
-	var updateBatchService = UpdateBatch.Service{
-		FindBatchPort:   batchAdapter,
-		FindTaskPort:    taskAdapter,
-		UpdateBatchPort: batchAdapter,
-	}
-	var deleteBatchService = DeleteBatch.Service{DeleteBatchPort: batchAdapter}
-	var listBatchesService = ListBatches.Service{FindBatchesByPort: batchAdapter}
-
-	//ResultController
-	var createResultService = CreateResult.Service{
-		FindBatchPort:  batchAdapter,
-		SaveResultPort: resultAdapter,
-	}
-	var readResultService = ReadResult.Service{FindResultPort: resultAdapter}
-	var updateResultService = UpdateResult.Service{
-		FindResultPort:   resultAdapter,
-		FindBatchPort:    batchAdapter,
-		UpdateResultPort: resultAdapter,
-	}
-	var deleteResultService = DeleteResult.Service{DeleteResultPort: resultAdapter}
-	var listResultsService = ListResults.Service{FindResultsByPort: resultAdapter}
-	var manualCallUseCase = Manual.Service{
-		CallBidiPort:   &callAdapter,
-		FindTaskPort:   taskAdapter,
-		SaveResultPort: resultAdapter,
-	}
-	var streamResultsService = StreamResults.Service{
-		FindBatchPort:         batchAdapter,
-		FindTaskPort:          taskAdapter,
-		UpdateTaskPort:        taskAdapter,
-		FindResultsStreamPort: resultAdapter,
-		ManualCallUseCase:     &manualCallUseCase,
-	}
+	//Task UseCases
+	var taskEventHandler = TaskEventHandler.New(findTaskAdapter)
+	var fillBatchEventHandler = FillBatchEventHandler.New(callAdapter, findBatchAdapter, findTaskAdapter, saveResultAdapter)
+	//EventDispatcher
+	var eventDispatcherAdapter = EventDispatcherAdapter.New(taskEventHandler, fillBatchEventHandler)
+	//--------------
+	var createTaskService = CreateTask.New(saveTaskAdapter, eventDispatcherAdapter)
+	var readTaskService = ReadTask.New(findTaskAdapter)
+	var updateTaskService = UpdateTask.New(findTaskAdapter, saveTaskAdapter, eventDispatcherAdapter)
+	var deleteTaskService = DeleteTask.New(findTaskAdapter, deleteAdapter)
+	var listTasksService = ListTasks.New(findTasksByAdapter)
+	//Result UseCase
+	var executeTaskManually = CreateBatchAndFill.New(
+		eventDispatcherAdapter,
+		findTaskAdapter,
+		saveTaskAdapter,
+		saveBatchAdapter,
+	)
+	var listResultsService = GetBatchResults.New(findBatchResultsAdapter)
+	var getTaskBatches = GetTaskBatches.New(findTaskBatchesAdapter)
+	var streamResults = StreamResults.New(findBatchAdapter, findTaskAdapter, findBatchResultsAfterResultAdapter)
 
 	server.ApiGrpc = ApiGrcp.ApiGrpc{}
 	server.ApiGrpc.Initialize(
@@ -176,22 +108,10 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 		updateTaskService,
 		deleteTaskService,
 		listTasksService,
-		createResultService,
-		readResultService,
-		updateResultService,
-		deleteResultService,
+		executeTaskManually,
 		listResultsService,
-		&streamResultsService,
-		createBatchService,
-		readBatchService,
-		updateBatchService,
-		deleteBatchService,
-		listBatchesService,
-		createStepService,
-		readStepService,
-		updateStepService,
-		deleteStepService,
-		listStepsService,
+		streamResults,
+		getTaskBatches,
 		os.Getenv("SERVER_HOST"),
 		os.Getenv("SERVER_PORT"),
 	)

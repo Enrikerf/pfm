@@ -24,7 +24,7 @@ export default function BatchesList() {
             listTaskRequest.setFilters(filters)
         }
         let metadata = {};
-        let taskService = new BatchServiceClient("http://localhost:8080", null, null)
+        let taskService = new BatchServiceClient("http://2ab0-77-225-241-204.ngrok.io", null, null)
         taskService.listBatches(listTaskRequest, metadata, function (err, response) {
             if (err) {
                 console.log(err);

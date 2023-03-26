@@ -5,19 +5,29 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/call"
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/ValueObject"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Result/Content"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Step"
 	"google.golang.org/grpc"
 	"io"
-	"time"
 )
 
-type ManualAdapter struct {
+type ManualAdapter interface {
+	Setup(host, port string) error
+	Write(step Step.Step) error
+	Read() (Content.Content, error)
+	Close()
+}
+
+func New() ManualAdapter {
+	return &manualAdapter{}
+}
+
+type manualAdapter struct {
 	connection *grpc.ClientConn
 	client     call.CallService_CallBidirectionalClient
 }
 
-func (manualAdapter *ManualAdapter) Setup(host, port string) error {
+func (manualAdapter *manualAdapter) Setup(host, port string) error {
 	options := grpc.WithInsecure()
 	var err error
 	manualAdapter.connection, err = grpc.Dial(host+":"+port, options)
@@ -33,9 +43,9 @@ func (manualAdapter *ManualAdapter) Setup(host, port string) error {
 	}
 	return nil
 }
-func (manualAdapter *ManualAdapter) Write(step Entity.Step) error {
+func (manualAdapter *manualAdapter) Write(step Step.Step) error {
 	callRequest := call.CallRequest{
-		Step: step.Sentence,
+		Step: step.GetSentence(),
 	}
 	err := manualAdapter.client.Send(&callRequest)
 	if err != nil {
@@ -43,22 +53,17 @@ func (manualAdapter *ManualAdapter) Write(step Entity.Step) error {
 	}
 	return nil
 }
-func (manualAdapter *ManualAdapter) Read() (ValueObject.ResultVo, error) {
+func (manualAdapter *manualAdapter) Read() (Content.Content, error) {
 	response, err := manualAdapter.client.Recv()
 	if err == io.EOF {
-		return ValueObject.ResultVo{}, err
+		return nil, err
 	}
 	if err != nil {
-		return ValueObject.ResultVo{}, err
+		return nil, err
 	}
-	return ValueObject.ResultVo{
-		Content:   response.Result,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-	}, nil
+	return Content.NewContent(response.Result)
 }
-
-func (manualAdapter *ManualAdapter) Close() {
+func (manualAdapter *manualAdapter) Close() {
 	err := manualAdapter.connection.Close()
 	if err != nil {
 		return

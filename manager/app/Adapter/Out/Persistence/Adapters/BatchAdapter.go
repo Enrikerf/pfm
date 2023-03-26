@@ -12,7 +12,7 @@ type BatchAdapter struct {
 }
 
 func (adapter BatchAdapter) Find(uuid string) (ResultDomain.Batch, error) {
-	var batchMysql = Model.Batch{}
+	var batchMysql = Model.BatchDb{}
 	err := adapter.Orm.First(&batchMysql, "uuid = ?", uuid).Error
 	if err != nil {
 		return ResultDomain.Batch{}, err
@@ -23,7 +23,7 @@ func (adapter BatchAdapter) Find(uuid string) (ResultDomain.Batch, error) {
 
 func (adapter BatchAdapter) Save(batch ResultDomain.Batch) error {
 	var taskMysql Model.TaskDb
-	var batchMysql Model.Batch
+	var batchMysql Model.BatchDb
 	response := adapter.Orm.First(&taskMysql, "uuid = ?", batch.TaskUuid)
 	if response.Error != nil {
 		fmt.Printf("tasks %v.\n", response.Error)
@@ -40,7 +40,7 @@ func (adapter BatchAdapter) Save(batch ResultDomain.Batch) error {
 
 func (adapter BatchAdapter) FindAll() ([]ResultDomain.Batch, error) {
 
-	var results []Model.Batch
+	var results []Model.BatchDb
 	var domainBatch []ResultDomain.Batch
 	response := adapter.Orm.Find(&results)
 	if response.Error != nil {
@@ -55,8 +55,8 @@ func (adapter BatchAdapter) FindAll() ([]ResultDomain.Batch, error) {
 
 func (adapter BatchAdapter) Update(batch ResultDomain.Batch) error {
 	var taskMysql Model.TaskDb
-	var currentBatchMysql Model.Batch
-	var batchValuesToUpdate = Model.Batch{}
+	var currentBatchMysql Model.BatchDb
+	var batchValuesToUpdate = Model.BatchDb{}
 	err := adapter.Orm.First(&taskMysql, "uuid = ?", batch.TaskUuid).Error
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func (adapter BatchAdapter) Update(batch ResultDomain.Batch) error {
 
 func (adapter BatchAdapter) FindBy(conditions interface{}) []ResultDomain.Batch {
 
-	var batches []Model.Batch
+	var batches []Model.BatchDb
 	domainBatches := []ResultDomain.Batch{}
 	err := adapter.Orm.
 		Table("batches").

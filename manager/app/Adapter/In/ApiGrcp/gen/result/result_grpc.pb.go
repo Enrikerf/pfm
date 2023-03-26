@@ -22,11 +22,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ResultServiceClient interface {
-	CreateResult(ctx context.Context, in *CreateResultRequest, opts ...grpc.CallOption) (*CreateResultResponse, error)
-	ReadResult(ctx context.Context, in *ReadResultRequest, opts ...grpc.CallOption) (*ReadResultResponse, error)
-	UpdateResult(ctx context.Context, in *UpdateResultRequest, opts ...grpc.CallOption) (*UpdateResultResponse, error)
-	DeleteResult(ctx context.Context, in *DeleteResultRequest, opts ...grpc.CallOption) (*DeleteResultResponse, error)
-	ListResult(ctx context.Context, in *ListResultRequest, opts ...grpc.CallOption) (*ListResultResponse, error)
+	CreateBatchAndFill(ctx context.Context, in *CreateBatchAndFillRequest, opts ...grpc.CallOption) (*CreateBatchAndFillResponse, error)
+	GetBatchResults(ctx context.Context, in *GetBatchResultsRequest, opts ...grpc.CallOption) (*ListResultsResponse, error)
+	GetTaskBatches(ctx context.Context, in *GetTaskBatchesRequest, opts ...grpc.CallOption) (*ListBatchesResponse, error)
 	StreamResults(ctx context.Context, in *StreamResultsRequest, opts ...grpc.CallOption) (ResultService_StreamResultsClient, error)
 }
 
@@ -38,45 +36,27 @@ func NewResultServiceClient(cc grpc.ClientConnInterface) ResultServiceClient {
 	return &resultServiceClient{cc}
 }
 
-func (c *resultServiceClient) CreateResult(ctx context.Context, in *CreateResultRequest, opts ...grpc.CallOption) (*CreateResultResponse, error) {
-	out := new(CreateResultResponse)
-	err := c.cc.Invoke(ctx, "/result.ResultService/CreateResult", in, out, opts...)
+func (c *resultServiceClient) CreateBatchAndFill(ctx context.Context, in *CreateBatchAndFillRequest, opts ...grpc.CallOption) (*CreateBatchAndFillResponse, error) {
+	out := new(CreateBatchAndFillResponse)
+	err := c.cc.Invoke(ctx, "/result.ResultService/CreateBatchAndFill", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *resultServiceClient) ReadResult(ctx context.Context, in *ReadResultRequest, opts ...grpc.CallOption) (*ReadResultResponse, error) {
-	out := new(ReadResultResponse)
-	err := c.cc.Invoke(ctx, "/result.ResultService/ReadResult", in, out, opts...)
+func (c *resultServiceClient) GetBatchResults(ctx context.Context, in *GetBatchResultsRequest, opts ...grpc.CallOption) (*ListResultsResponse, error) {
+	out := new(ListResultsResponse)
+	err := c.cc.Invoke(ctx, "/result.ResultService/GetBatchResults", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *resultServiceClient) UpdateResult(ctx context.Context, in *UpdateResultRequest, opts ...grpc.CallOption) (*UpdateResultResponse, error) {
-	out := new(UpdateResultResponse)
-	err := c.cc.Invoke(ctx, "/result.ResultService/UpdateResult", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *resultServiceClient) DeleteResult(ctx context.Context, in *DeleteResultRequest, opts ...grpc.CallOption) (*DeleteResultResponse, error) {
-	out := new(DeleteResultResponse)
-	err := c.cc.Invoke(ctx, "/result.ResultService/DeleteResult", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *resultServiceClient) ListResult(ctx context.Context, in *ListResultRequest, opts ...grpc.CallOption) (*ListResultResponse, error) {
-	out := new(ListResultResponse)
-	err := c.cc.Invoke(ctx, "/result.ResultService/ListResult", in, out, opts...)
+func (c *resultServiceClient) GetTaskBatches(ctx context.Context, in *GetTaskBatchesRequest, opts ...grpc.CallOption) (*ListBatchesResponse, error) {
+	out := new(ListBatchesResponse)
+	err := c.cc.Invoke(ctx, "/result.ResultService/GetTaskBatches", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -119,11 +99,9 @@ func (x *resultServiceStreamResultsClient) Recv() (*StreamResultsResponse, error
 // All implementations must embed UnimplementedResultServiceServer
 // for forward compatibility
 type ResultServiceServer interface {
-	CreateResult(context.Context, *CreateResultRequest) (*CreateResultResponse, error)
-	ReadResult(context.Context, *ReadResultRequest) (*ReadResultResponse, error)
-	UpdateResult(context.Context, *UpdateResultRequest) (*UpdateResultResponse, error)
-	DeleteResult(context.Context, *DeleteResultRequest) (*DeleteResultResponse, error)
-	ListResult(context.Context, *ListResultRequest) (*ListResultResponse, error)
+	CreateBatchAndFill(context.Context, *CreateBatchAndFillRequest) (*CreateBatchAndFillResponse, error)
+	GetBatchResults(context.Context, *GetBatchResultsRequest) (*ListResultsResponse, error)
+	GetTaskBatches(context.Context, *GetTaskBatchesRequest) (*ListBatchesResponse, error)
 	StreamResults(*StreamResultsRequest, ResultService_StreamResultsServer) error
 	mustEmbedUnimplementedResultServiceServer()
 }
@@ -132,20 +110,14 @@ type ResultServiceServer interface {
 type UnimplementedResultServiceServer struct {
 }
 
-func (UnimplementedResultServiceServer) CreateResult(context.Context, *CreateResultRequest) (*CreateResultResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateResult not implemented")
+func (UnimplementedResultServiceServer) CreateBatchAndFill(context.Context, *CreateBatchAndFillRequest) (*CreateBatchAndFillResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBatchAndFill not implemented")
 }
-func (UnimplementedResultServiceServer) ReadResult(context.Context, *ReadResultRequest) (*ReadResultResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReadResult not implemented")
+func (UnimplementedResultServiceServer) GetBatchResults(context.Context, *GetBatchResultsRequest) (*ListResultsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBatchResults not implemented")
 }
-func (UnimplementedResultServiceServer) UpdateResult(context.Context, *UpdateResultRequest) (*UpdateResultResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateResult not implemented")
-}
-func (UnimplementedResultServiceServer) DeleteResult(context.Context, *DeleteResultRequest) (*DeleteResultResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteResult not implemented")
-}
-func (UnimplementedResultServiceServer) ListResult(context.Context, *ListResultRequest) (*ListResultResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListResult not implemented")
+func (UnimplementedResultServiceServer) GetTaskBatches(context.Context, *GetTaskBatchesRequest) (*ListBatchesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTaskBatches not implemented")
 }
 func (UnimplementedResultServiceServer) StreamResults(*StreamResultsRequest, ResultService_StreamResultsServer) error {
 	return status.Errorf(codes.Unimplemented, "method StreamResults not implemented")
@@ -163,92 +135,56 @@ func RegisterResultServiceServer(s grpc.ServiceRegistrar, srv ResultServiceServe
 	s.RegisterService(&ResultService_ServiceDesc, srv)
 }
 
-func _ResultService_CreateResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateResultRequest)
+func _ResultService_CreateBatchAndFill_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateBatchAndFillRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ResultServiceServer).CreateResult(ctx, in)
+		return srv.(ResultServiceServer).CreateBatchAndFill(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/result.ResultService/CreateResult",
+		FullMethod: "/result.ResultService/CreateBatchAndFill",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResultServiceServer).CreateResult(ctx, req.(*CreateResultRequest))
+		return srv.(ResultServiceServer).CreateBatchAndFill(ctx, req.(*CreateBatchAndFillRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ResultService_ReadResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ReadResultRequest)
+func _ResultService_GetBatchResults_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBatchResultsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ResultServiceServer).ReadResult(ctx, in)
+		return srv.(ResultServiceServer).GetBatchResults(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/result.ResultService/ReadResult",
+		FullMethod: "/result.ResultService/GetBatchResults",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResultServiceServer).ReadResult(ctx, req.(*ReadResultRequest))
+		return srv.(ResultServiceServer).GetBatchResults(ctx, req.(*GetBatchResultsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ResultService_UpdateResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateResultRequest)
+func _ResultService_GetTaskBatches_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTaskBatchesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ResultServiceServer).UpdateResult(ctx, in)
+		return srv.(ResultServiceServer).GetTaskBatches(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/result.ResultService/UpdateResult",
+		FullMethod: "/result.ResultService/GetTaskBatches",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResultServiceServer).UpdateResult(ctx, req.(*UpdateResultRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ResultService_DeleteResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteResultRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ResultServiceServer).DeleteResult(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/result.ResultService/DeleteResult",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResultServiceServer).DeleteResult(ctx, req.(*DeleteResultRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ResultService_ListResult_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListResultRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ResultServiceServer).ListResult(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/result.ResultService/ListResult",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResultServiceServer).ListResult(ctx, req.(*ListResultRequest))
+		return srv.(ResultServiceServer).GetTaskBatches(ctx, req.(*GetTaskBatchesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -282,24 +218,16 @@ var ResultService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ResultServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateResult",
-			Handler:    _ResultService_CreateResult_Handler,
+			MethodName: "CreateBatchAndFill",
+			Handler:    _ResultService_CreateBatchAndFill_Handler,
 		},
 		{
-			MethodName: "ReadResult",
-			Handler:    _ResultService_ReadResult_Handler,
+			MethodName: "GetBatchResults",
+			Handler:    _ResultService_GetBatchResults_Handler,
 		},
 		{
-			MethodName: "UpdateResult",
-			Handler:    _ResultService_UpdateResult_Handler,
-		},
-		{
-			MethodName: "DeleteResult",
-			Handler:    _ResultService_DeleteResult_Handler,
-		},
-		{
-			MethodName: "ListResult",
-			Handler:    _ResultService_ListResult_Handler,
+			MethodName: "GetTaskBatches",
+			Handler:    _ResultService_GetTaskBatches_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

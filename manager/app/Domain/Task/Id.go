@@ -2,6 +2,7 @@ package Task
 
 import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Core"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Core/Error"
 	"github.com/google/uuid"
 )
 
@@ -23,6 +24,14 @@ func LoadId(uuid uuid.UUID) Id {
 	id := &id{}
 	id.uuid = uuid
 	return id
+}
+
+func LoadIdFromString(uuidString string) (Id, error) {
+	parse, err := uuid.Parse(uuidString)
+	if err != nil {
+		return nil, Error.NewInvalidUuidError()
+	}
+	return LoadId(parse), nil
 }
 
 func (id id) GetUuid() uuid.UUID {

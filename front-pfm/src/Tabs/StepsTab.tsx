@@ -15,7 +15,7 @@ export default function StepsTab() {
         const messages = require('../protobuf/generated/step_pb');
         let listStepsRequest = new messages.ListStepsRequest()
         let metadata = {};
-        let stepService = new StepServiceClient("http://localhost:8080", null, null)
+        let stepService = new StepServiceClient("http://2ab0-77-225-241-204.ngrok.io", null, null)
         stepService.listSteps(listStepsRequest, metadata, function (err, response) {
             if (err) {
                 console.log(err);

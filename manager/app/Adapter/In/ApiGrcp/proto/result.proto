@@ -4,66 +4,45 @@ option go_package = "./result";
 import "google/protobuf/wrappers.proto";
 
 service ResultService{
-  rpc CreateResult (CreateResultRequest) returns (CreateResultResponse);
-  rpc ReadResult(ReadResultRequest) returns (ReadResultResponse);
-  rpc UpdateResult(UpdateResultRequest) returns (UpdateResultResponse);
-  rpc DeleteResult(DeleteResultRequest) returns (DeleteResultResponse);
-  rpc ListResult(ListResultRequest) returns (ListResultResponse);
+  rpc CreateBatchAndFill (CreateBatchAndFillRequest) returns (CreateBatchAndFillResponse);
+  rpc GetBatchResults(GetBatchResultsRequest) returns (ListResultsResponse);
+  rpc GetTaskBatches(GetTaskBatchesRequest) returns (ListBatchesResponse);
   rpc StreamResults(StreamResultsRequest) returns (stream StreamResultsResponse);
+}
+
+message Batch{
+  string uuid = 1;
+  string task_uuid = 2;
+  string created_at = 3;
+  string updated_at = 4;
+}
+message CreateBatchAndFillRequest{
+  string task_uuid = 1;
+}
+message CreateBatchAndFillResponse{
+  string batch_uuid = 1;
+}
+message GetTaskBatchesRequest{
+  google.protobuf.StringValue task_uuid = 1;
+}
+message ListBatchesResponse{
+  repeated Batch batches = 1;
 }
 message Result{
   string uuid = 1;
   string batch_uuid = 2;
   string content = 3;
   string created_at = 5;
-  string updated_at = 6;
-}
-message CreateResultParams{
-  string batch_uuid = 1;
-  string content = 2;
-}
-message EditableResultParams{
-  google.protobuf.StringValue batch_uuid = 1;
-  google.protobuf.StringValue content = 2;
 }
 message Filters{
   google.protobuf.StringValue batch_uuid = 1;
 }
-
-
-message CreateResultRequest{
-  CreateResultParams resultParams = 1;
+message GetBatchResultsRequest{
+  string batch_uuid = 1;
 }
-message CreateResultResponse{
-  Result result = 1;
-}
-
-message ReadResultRequest{
-  string result_uuid = 1;
-}
-message ReadResultResponse{
-  Result result = 1;
-}
-
-message UpdateResultRequest{
-  string resultUuid = 1;
-  EditableResultParams resultParams = 2;
-}
-message UpdateResultResponse{}
-
-message DeleteResultRequest{
-  string result_uuid = 1;
-}
-message DeleteResultResponse{
-}
-
-message ListResultRequest{
- Filters filters = 1;
-}
-message ListResultResponse{
+message ListResultsResponse{
   repeated Result results = 1;
 }
-
 message StreamResultsRequest{
   string batch_uuid = 1;
 }

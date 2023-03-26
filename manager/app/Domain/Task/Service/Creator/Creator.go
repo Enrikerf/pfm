@@ -1,9 +1,10 @@
 package Creator
 
 import (
-	"fmt"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Event"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/CommunicationMode"
+	TaskEvent "github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Event"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/ExecutionMode"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Host"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Port"
@@ -13,6 +14,7 @@ import (
 
 type Creator struct {
 	SaveRepository Repository.Save
+	Dispatcher     Event.Dispatcher
 }
 
 func (creator *Creator) Create(
@@ -21,20 +23,20 @@ func (creator *Creator) Create(
 	stepVos []Step.Vo,
 	communicationMode CommunicationMode.Mode,
 	executionMode ExecutionMode.Mode,
-) Task.Task {
+) (Task.Task, error) {
 
-	var task = Task.New(
+	var task, err = Task.New(
 		host,
 		port,
 		stepVos,
 		communicationMode,
 		executionMode,
 	)
-	creator.SaveRepository.Persist(task)
-
-	if task.GetExecutionMode() == ExecutionMode.Automatic {
-		fmt.Println("TaskCreatedEvent: activate loop pending")
+	if err != nil {
+		return nil, err
 	}
+	creator.SaveRepository.Persist(task)
+	creator.Dispatcher.Dispatch(TaskEvent.NewTaskCreated(task.GetId().GetUuidString()))
 
-	return task
+	return task, nil
 }

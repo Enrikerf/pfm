@@ -24,8 +24,7 @@ message CreateTaskParams{
   string port = 2;
   repeated string commands = 3;
   Mode mode = 4;
-  Status status = 5;
-  ExecutionMode executionMode = 6;
+  ExecutionMode executionMode = 5;
 }
 message EditableTaskParams{
   google.protobuf.StringValue host = 1;

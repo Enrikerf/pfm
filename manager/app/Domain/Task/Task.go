@@ -2,6 +2,7 @@ package Task
 
 import (
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/CommunicationMode"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Error"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/ExecutionMode"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Host"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Port"
@@ -17,6 +18,9 @@ type Task interface {
 	GetCommunicationMode() CommunicationMode.Mode
 	GetExecutionMode() ExecutionMode.Mode
 	GetStatus() Status.Status
+	SetHost(host Host.Vo)
+	SetPort(port Port.Vo)
+	SetStatus(status Status.Status)
 }
 
 type task struct {
@@ -35,7 +39,10 @@ func New(
 	stepVos []Step.Vo,
 	communicationMode CommunicationMode.Mode,
 	executionMode ExecutionMode.Mode,
-) Task {
+) (Task, error) {
+	if executionMode == ExecutionMode.Manual && len(stepVos) > 2 {
+		return nil, Error.NewManualTaskOnlyCanHave2StepsError()
+	}
 	task := &task{}
 	task.id = NewId()
 	for _, stepVo := range stepVos {
@@ -46,8 +53,8 @@ func New(
 	task.port = port
 	task.executionMode = executionMode
 	task.communicationMode = communicationMode
-	task.status = Status.Pending
-	return task
+	task.status = Status.New(Status.Pending)
+	return task, nil
 }
 
 func Load(
@@ -57,7 +64,11 @@ func Load(
 	stepVos []Step.Vo,
 	communicationMode CommunicationMode.Mode,
 	executionMode ExecutionMode.Mode,
-) Task {
+	status Status.Status,
+) (Task, error) {
+	if executionMode == ExecutionMode.Manual && len(stepVos) > 2 {
+		return nil, Error.NewManualTaskOnlyCanHave2StepsError()
+	}
 	task := &task{}
 	task.id = id
 	for _, stepVo := range stepVos {
@@ -68,34 +79,46 @@ func Load(
 	task.port = port
 	task.executionMode = executionMode
 	task.communicationMode = communicationMode
-	task.status = Status.Pending
-	return task
+	task.status = status
+	return task, nil
 }
 
-func (t task) GetId() Id {
+func (t *task) GetId() Id {
 	return t.id
 }
 
-func (t task) GetHost() Host.Vo {
+func (t *task) GetHost() Host.Vo {
 	return t.host
 }
 
-func (t task) GetPort() Port.Vo {
+func (t *task) SetHost(host Host.Vo) {
+	t.host = host
+}
+
+func (t *task) GetPort() Port.Vo {
 	return t.port
 }
 
-func (t task) GetSteps() []Step.Step {
+func (t *task) SetPort(port Port.Vo) {
+	t.port = port
+}
+
+func (t *task) GetSteps() []Step.Step {
 	return t.steps
 }
 
-func (t task) GetCommunicationMode() CommunicationMode.Mode {
+func (t *task) GetCommunicationMode() CommunicationMode.Mode {
 	return t.communicationMode
 }
 
-func (t task) GetExecutionMode() ExecutionMode.Mode {
+func (t *task) GetExecutionMode() ExecutionMode.Mode {
 	return t.executionMode
 }
 
-func (t task) GetStatus() Status.Status {
+func (t *task) GetStatus() Status.Status {
 	return t.status
+}
+
+func (t *task) SetStatus(status Status.Status) {
+	t.status = status
 }

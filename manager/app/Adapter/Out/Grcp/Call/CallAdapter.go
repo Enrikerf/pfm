@@ -4,8 +4,10 @@ import (
 	"context"
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/call"
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/ValueObject"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Result"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Result/Content"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/CommunicationMode"
 	"google.golang.org/grpc"
 	"io"
 )
@@ -13,71 +15,74 @@ import (
 type Adapter struct {
 }
 
-func (adapter Adapter) Request(task Entity.Task) Entity.Batch {
+func (adapter Adapter) Request(task Task.Task) Result.Batch {
 	options := grpc.WithInsecure()
-	connection, err := grpc.Dial(task.Host+":"+task.Port, options)
-	results := []Entity.Result{}
+	connection, err := grpc.Dial(task.GetHost().GetValue()+":"+task.GetPort().GetValue(), options)
+	var results []Content.Content
 	if err != nil {
-		fmt.Printf("error: %v\n", err)
-		result, _ := Entity.NewResult(task.Uuid, err.Error())
+		fmt.Printf(err.Error())
+		result, _ := Content.NewContent(err.Error())
 		results = append(results, result)
 	} else {
-		defer connection.Close()
+		defer func(connection *grpc.ClientConn) {
+			err := connection.Close()
+			if err != nil {
+
+			}
+		}(connection)
 		client := call.NewCallServiceClient(connection)
-		switch task.Mode {
-		case ValueObject.Unary:
+		switch task.GetCommunicationMode() {
+		case CommunicationMode.Unary:
 			results = adapter.doUnaryCall(task, client)
-		case ValueObject.ServerStream:
+		case CommunicationMode.ServerStream:
 			results = adapter.doServerStream(task, client)
-		case ValueObject.ClientStream:
+		case CommunicationMode.ClientStream:
 			results = adapter.doClientStream(task, client)
-		case ValueObject.Bidirectional:
+		case CommunicationMode.Bidirectional:
 			results = adapter.doBidirectional(task, client)
-		default:
-			results = adapter.notImplementedMethod(task)
 		}
 	}
-
-	return Entity.NewBatch(task.Uuid, results)
+	batch := Result.NewBatch(task.GetId())
+	batch.SetResultsFromContent(results)
+	return batch
 }
 
-func (adapter Adapter) doServerStream(task Entity.Task, client call.CallServiceClient) []Entity.Result {
-	results := []Entity.Result{}
+func (adapter Adapter) doServerStream(task Task.Task, client call.CallServiceClient) []Content.Content {
+	var results []Content.Content
 	request := &call.CallRequest{
-		Step: task.Steps[0].Sentence,
+		Step: task.GetSteps()[0].GetSentence(),
 	}
 	responseStream, err := client.CallServerStream(context.Background(), request)
 
 	if err != nil {
-		result, _ := Entity.NewResult(task.Uuid, err.Error())
+		result, _ := Content.NewContent(err.Error())
 		results = append(results, result)
 	} else {
 		for {
 			msg, err := responseStream.Recv()
 			if err == io.EOF {
-				result, _ := Entity.NewResult(task.Uuid, err.Error())
+				result, _ := Content.NewContent(err.Error())
 				results = append(results, result)
 				break
 			}
 			if err != nil {
-				result, _ := Entity.NewResult(task.Uuid, err.Error())
+				result, _ := Content.NewContent(err.Error())
 				results = append(results, result)
 				break
 			}
-			result, _ := Entity.NewResult(task.Uuid, msg.GetResult())
+			result, _ := Content.NewContent(msg.GetResult())
 			results = append(results, result)
 		}
 	}
 	return results
 }
 
-func (adapter Adapter) doBidirectional(task Entity.Task, client call.CallServiceClient) []Entity.Result {
-	results := []Entity.Result{}
+func (adapter Adapter) doBidirectional(task Task.Task, client call.CallServiceClient) []Content.Content {
+	var results []Content.Content
 	fmt.Println("find maximum")
 	stream, err := client.CallBidirectional(context.Background())
 	if err != nil {
-		result, _ := Entity.NewResult(task.Uuid, "")
-		result.Content = err.Error()
+		result, _ := Content.NewContent(err.Error())
 		results = append(results, result)
 	} else {
 		// we send a bunch of messages to de client go routine
@@ -86,15 +91,13 @@ func (adapter Adapter) doBidirectional(task Entity.Task, client call.CallService
 		// we receive a bunch of messages form the client go routine
 		resultsChannel2 := make(chan string)
 		go receiveServerStream(stream, resultsChannel2)
-		//TODO: missig wait channels
+		//TODO: missing wait channels
 		for i := range resultsChannel1 {
-			result, _ := Entity.NewResult(task.Uuid, "")
-			result.Content = i
+			result, _ := Content.NewContent(i)
 			results = append(results, result)
 		}
 		for i := range resultsChannel2 {
-			result, _ := Entity.NewResult(task.Uuid, "")
-			result.Content = i
+			result, _ := Content.NewContent(i)
 			results = append(results, result)
 		}
 	}
@@ -119,11 +122,11 @@ func receiveServerStream(stream call.CallService_CallBidirectionalClient, result
 	close(resultsChannel)
 }
 
-func sendInStream(task Entity.Task, stream call.CallService_CallBidirectionalClient, resultsChannel chan string) {
-	for _, step := range task.Steps {
+func sendInStream(task Task.Task, stream call.CallService_CallBidirectionalClient, resultsChannel chan string) {
+	for _, step := range task.GetSteps() {
 		fmt.Printf("sending message %v\n", step)
 		callRequest := call.CallRequest{
-			Step: step.Sentence,
+			Step: step.GetSentence(),
 		}
 		err := stream.Send(&callRequest)
 		if err != nil {
@@ -137,54 +140,45 @@ func sendInStream(task Entity.Task, stream call.CallService_CallBidirectionalCli
 	close(resultsChannel)
 }
 
-func (adapter Adapter) doClientStream(task Entity.Task, client call.CallServiceClient) []Entity.Result {
-	results := []Entity.Result{}
-	result, _ := Entity.NewResult(task.Uuid, "")
+func (adapter Adapter) doClientStream(task Task.Task, client call.CallServiceClient) []Content.Content {
+	var results []Content.Content
 	stream, err := client.CallClientStream(context.Background())
 	if err != nil {
-		result.Content = err.Error()
+		result, _ := Content.NewContent(err.Error())
+		results = append(results, result)
 	} else {
-		for _, step := range task.Steps {
-			fmt.Printf("sending: %v\n", step.Sentence)
-			callRequest := call.CallRequest{
-				Step: step.Sentence,
-			}
-			err := stream.Send(&callRequest)
+		for _, step := range task.GetSteps() {
+			fmt.Printf("sending: %v\n", step.GetSentence())
+			err := stream.Send(&call.CallRequest{
+				Step: step.GetSentence(),
+			})
 			if err != nil {
-				result.Content = err.Error()
+				result, _ := Content.NewContent(err.Error())
 				results = append(results, result)
 			}
 		}
 		response, err := stream.CloseAndRecv()
 		if err != nil {
-			result.Content = err.Error()
+			result, _ := Content.NewContent(err.Error())
 			results = append(results, result)
 		}
-		result, _ := Entity.NewResult(task.Uuid, response.GetResult())
+		result, _ := Content.NewContent(response.GetResult())
 		results = append(results, result)
 	}
 	return results
 }
 
-func (adapter Adapter) doUnaryCall(task Entity.Task, client call.CallServiceClient) []Entity.Result {
-	results := []Entity.Result{}
+func (adapter Adapter) doUnaryCall(task Task.Task, client call.CallServiceClient) []Content.Content {
+	var results []Content.Content
+	var result Content.Content
 	callRequest := call.CallRequest{
-		Step: task.Steps[0].Sentence,
+		Step: task.GetSteps()[0].GetSentence(),
 	}
 	callResponse, err := client.CallUnary(context.Background(), &callRequest)
-	result, _ := Entity.NewResult(task.Uuid, "")
 	if err != nil {
-		result.Content = err.Error()
+		result, _ = Content.NewContent(err.Error())
 	} else {
-		result.Content = callResponse.GetResult()
+		result, _ = Content.NewContent(callResponse.GetResult())
 	}
-	results = append(results, result)
-	return results
-}
-
-func (adapter Adapter) notImplementedMethod(task Entity.Task) []Entity.Result {
-	results := []Entity.Result{}
-	result, _ := Entity.NewResult(task.Uuid, "not implemented")
-	results = append(results, result)
-	return results
+	return append(results, result)
 }

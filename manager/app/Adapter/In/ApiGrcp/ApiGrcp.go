@@ -4,26 +4,12 @@ import (
 	"context"
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/Controller"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/batch"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/result"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/step"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/CreateBatch"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/DeleteBatch"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ListBatches"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/ReadBatch"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Batch/UpdateBatch"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateResult"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/DeleteResult"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ListResults"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/ReadResult"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateBatchAndFill"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetBatchResults"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetTaskBatches"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/StreamResults"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/UpdateResult"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/CreateStep"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/DeleteStep"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/ListSteps"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/ReadStep"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Step/UpdateStep"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/DeleteTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ListTasks"
@@ -38,35 +24,19 @@ import (
 )
 
 type ApiGrpc struct {
-	createTaskUseCase CreateTask.UseCase
-	listTasksUseCase  ListTasks.UseCase
-	readTaskUseCase   ReadTask.UseCase
-	deleteTaskUseCase DeleteTask.UseCase
-	updateTaskUseCase UpdateTask.UseCase
-
-	createResultUseCase  CreateResult.UseCase
-	readResultUseCase    ReadResult.UseCase
-	updateResultUseCase  UpdateResult.UseCase
-	deleteResultUseCase  DeleteResult.UseCase
-	listResultsUseCase   ListResults.UseCase
-	streamResultsUseCase StreamResults.UseCase
-
-	createBatchUseCase CreateBatch.UseCase
-	readBatchUseCase   ReadBatch.UseCase
-	updateBatchUseCase UpdateBatch.UseCase
-	deleteBatchUseCase DeleteBatch.UseCase
-	listBatchesUseCase ListBatches.UseCase
-
-	createStepUseCase CreateStep.UseCase
-	readStepUseCase   ReadStep.UseCase
-	updateStepUseCase UpdateStep.UseCase
-	deleteStepUseCase DeleteStep.UseCase
-	listStepsUseCase  ListSteps.UseCase
-
-	serverHost string
-	serverPort string
-	grpcServer *grpc.Server
-	listener   net.Listener
+	createTaskUseCase      CreateTask.UseCase
+	listTasksUseCase       ListTasks.UseCase
+	readTaskUseCase        ReadTask.UseCase
+	deleteTaskUseCase      DeleteTask.UseCase
+	updateTaskUseCase      UpdateTask.UseCase
+	executeTaskManually    CreateBatchAndFill.UseCase
+	getBatchResultsUseCase GetBatchResults.UseCase
+	streamResultsUseCase   StreamResults.UseCase
+	getTaskBatches         GetTaskBatches.UseCase
+	serverHost             string
+	serverPort             string
+	grpcServer             *grpc.Server
+	listener               net.Listener
 }
 
 func (api *ApiGrpc) Initialize(
@@ -75,26 +45,10 @@ func (api *ApiGrpc) Initialize(
 	updateTaskUseCase UpdateTask.UseCase,
 	deleteTaskUseCase DeleteTask.UseCase,
 	listTasksUseCase ListTasks.UseCase,
-
-	createResultUseCase CreateResult.UseCase,
-	readResultUseCase ReadResult.UseCase,
-	updateResultUseCase UpdateResult.UseCase,
-	deleteResultUseCase DeleteResult.UseCase,
-	listResultsUseCase ListResults.UseCase,
+	executeTaskManuallyUseCase CreateBatchAndFill.UseCase,
+	getBatchResultsUseCase GetBatchResults.UseCase,
 	streamResultsUseCase StreamResults.UseCase,
-
-	createBatchUseCase CreateBatch.UseCase,
-	readBatchUseCase ReadBatch.UseCase,
-	updateBatchUseCase UpdateBatch.UseCase,
-	deleteBatchUseCase DeleteBatch.UseCase,
-	listBatchesUseCase ListBatches.UseCase,
-
-	createStepUseCase CreateStep.UseCase,
-	readStepUseCase ReadStep.UseCase,
-	updateStepUseCase UpdateStep.UseCase,
-	deleteStepUseCase DeleteStep.UseCase,
-	listStepsUseCase ListSteps.UseCase,
-
+	getBatchesUseCase GetTaskBatches.UseCase,
 	host string,
 	port string,
 ) {
@@ -106,25 +60,10 @@ func (api *ApiGrpc) Initialize(
 	api.deleteTaskUseCase = deleteTaskUseCase
 	api.updateTaskUseCase = updateTaskUseCase
 
-	api.listResultsUseCase = listResultsUseCase
-	api.createResultUseCase = createResultUseCase
-	api.readResultUseCase = readResultUseCase
-	api.updateResultUseCase = updateResultUseCase
-	api.deleteResultUseCase = deleteResultUseCase
-	api.listResultsUseCase = listResultsUseCase
+	api.executeTaskManually = executeTaskManuallyUseCase
+	api.getBatchResultsUseCase = getBatchResultsUseCase
 	api.streamResultsUseCase = streamResultsUseCase
-
-	api.createBatchUseCase = createBatchUseCase
-	api.readBatchUseCase = readBatchUseCase
-	api.updateBatchUseCase = updateBatchUseCase
-	api.deleteBatchUseCase = deleteBatchUseCase
-	api.listBatchesUseCase = listBatchesUseCase
-
-	api.createStepUseCase = createStepUseCase
-	api.readStepUseCase = readStepUseCase
-	api.updateStepUseCase = updateStepUseCase
-	api.deleteStepUseCase = deleteStepUseCase
-	api.listStepsUseCase = listStepsUseCase
+	api.getTaskBatches = getBatchesUseCase
 
 	api.serverHost = host
 	api.serverPort = port
@@ -169,32 +108,12 @@ func (api *ApiGrpc) configControllers() {
 	task.RegisterTaskServiceServer(api.grpcServer, taskController)
 
 	var resultController = Controller.ResultController{
-		CreateResultUseCase:  api.createResultUseCase,
-		ReadResultUseCase:    api.readResultUseCase,
-		UpdateResultUseCase:  api.updateResultUseCase,
-		DeleteResultUseCase:  api.deleteResultUseCase,
-		ListResultsUseCase:   api.listResultsUseCase,
-		StreamResultsUseCase: api.streamResultsUseCase,
+		ExecuteTaskManuallyUseCase:       api.executeTaskManually,
+		GetBatchResultsUseCase:           api.getBatchResultsUseCase,
+		StreamResultsUseCase:             api.streamResultsUseCase,
+		UnimplementedResultServiceServer: result.UnimplementedResultServiceServer{},
 	}
 	result.RegisterResultServiceServer(api.grpcServer, resultController)
-
-	var batchController = Controller.BatchController{
-		CreateBatchUseCase: api.createBatchUseCase,
-		ReadBatchUseCase:   api.readBatchUseCase,
-		UpdateBatchUseCase: api.updateBatchUseCase,
-		DeleteBatchUseCase: api.deleteBatchUseCase,
-		ListBatchesUseCase: api.listBatchesUseCase,
-	}
-	batch.RegisterBatchServiceServer(api.grpcServer, batchController)
-
-	var commandController = Controller.StepController{
-		CreateStepUseCase: api.createStepUseCase,
-		ReadStepUseCase:   api.readStepUseCase,
-		UpdateStepUseCase: api.updateStepUseCase,
-		DeleteStepUseCase: api.deleteStepUseCase,
-		ListStepsUseCase:  api.listStepsUseCase,
-	}
-	step.RegisterStepServiceServer(api.grpcServer, commandController)
 }
 
 func (api *ApiGrpc) loadServer() {

@@ -16,7 +16,7 @@ export default function TasksTab() {
         const messages = require('../../protobuf/generated/task_pb');
         let listTaskRequest = new messages.ListTasksRequest()
         let metadata = {};
-        let taskService = new TaskServiceClient("http://localhost:8080", null, null)
+        let taskService = new TaskServiceClient("http://2ab0-77-225-241-204.ngrok.io", null, null)
         taskService.listTasks(listTaskRequest, metadata, function (err, response) {
             if (err) {
                 console.log(err);

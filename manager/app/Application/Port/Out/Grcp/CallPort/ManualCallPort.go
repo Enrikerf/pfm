@@ -1,13 +1,13 @@
 package CallPort
 
 import (
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/Entity"
-	"github.com/Enrikerf/pfm/commandManager/app/Domain/ValueObject"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Result/Content"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Step"
 )
 
 type Bidirectional interface {
 	Setup(host, port string) error
-	Write(step Entity.Step) error
-	Read() (ValueObject.ResultVo, error)
+	Write(step Step.Step) error
+	Read() (Content.Content, error)
 	Close()
 }

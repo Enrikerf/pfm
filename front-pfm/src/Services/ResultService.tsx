@@ -9,7 +9,7 @@ export class ResultService {
     newUuid: string
 
     constructor() {
-        this.client = new ResultServiceClient("http://localhost:8080", null, null)
+        this.client = new ResultServiceClient("http://2ab0-77-225-241-204.ngrok.io", null, null)
         this.messages = resultMessages
         this.newUuid = ""
     }

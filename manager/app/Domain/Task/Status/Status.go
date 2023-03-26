@@ -1,27 +1,43 @@
 package Status
 
-type Status string
+type Status interface {
+	Value() Enum
+}
 
-const (
-	Pending    Status = "PENDING"
-	Running    Status = "RUNNING"
-	Done       Status = "DONE"
-	Successful Status = "SUCCESSFUL"
-	failed     Status = "FAILED"
-)
+func New(enum Enum) Status {
+	return &status{enum}
+}
 
 func FromString(mode string) (Status, error) {
 	switch mode {
 	case "PENDING":
-		return Pending, nil
+		return New(Pending), nil
 	case "RUNNING":
-		return Running, nil
+		return New(Running), nil
 	case "DONE":
-		return Done, nil
+		return New(Done), nil
 	case "SUCCESSFUL":
-		return Successful, nil
+		return New(Successful), nil
 	case "FAILED":
-		return failed, nil
+		return New(Failed), nil
 	}
-	return "", NewUnknownError()
+	return nil, NewUnknownError()
 }
+
+type status struct {
+	value Enum
+}
+
+func (s *status) Value() Enum {
+	return s.value
+}
+
+type Enum string
+
+const (
+	Pending    Enum = "PENDING"
+	Running    Enum = "RUNNING"
+	Done       Enum = "DONE"
+	Successful Enum = "SUCCESSFUL"
+	Failed     Enum = "FAILED"
+)

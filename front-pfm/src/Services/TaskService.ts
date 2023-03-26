@@ -9,9 +9,10 @@ export class TaskService {
 
 
     constructor() {
-        this.client = new TaskServiceClient("http://localhost:8080", null, null)
+        this.client = new TaskServiceClient("http://2ab0-77-225-241-204.ngrok.io", null, null)
         this.messages = taskMessages
     }
+
 
     stop(uuid: string) {
         if (regexExp.test(uuid)) {

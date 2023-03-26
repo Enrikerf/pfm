@@ -22,7 +22,7 @@ type Engine interface {
 	UnBrake()
 	Forward()
 	Backward()
-	GetPosition() int16
+	GetPosition() int64
 	GetCurrentAngularSpeed() float64
 	TearDown()
 	InitialState()
@@ -212,7 +212,7 @@ func (e *engine) Backward() {
 	e.dirPin.Up()
 }
 
-func (e *engine) GetPosition() int16 {
+func (e *engine) GetPosition() int64 {
 	return e.encoder.GetPosition()
 }
 
