@@ -24,7 +24,7 @@ func (eraser *Eraser) Erase(id Task.Id) error {
 	}
 	err = eraser.DeleteRepository.Delete(id)
 	if err != nil {
-		return CoreError.NewRepositoryError()
+		return CoreError.NewRepositoryError(err.Error())
 	}
 
 	return nil

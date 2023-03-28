@@ -6,6 +6,6 @@ type RepositoryError interface {
 	error
 }
 
-func NewRepositoryError() RepositoryError {
-	return errors.New("repository not handled exception")
+func NewRepositoryError(msg string) RepositoryError {
+	return errors.New(msg)
 }

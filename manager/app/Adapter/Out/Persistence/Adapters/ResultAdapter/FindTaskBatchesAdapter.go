@@ -19,7 +19,7 @@ func (adapter FindTaskBatchesAdapter) Find(id Task.Id) ([]Result.Batch, error) {
 	var batches = []Result.Batch{}
 	err := adapter.Orm.First(&taskDb, "uuid = ?", id.GetUuidString()).Error
 	if err != nil {
-		return nil, Error.NewRepositoryError()
+		return nil, Error.NewRepositoryError(err.Error())
 	}
 	err = adapter.Orm.
 		Table("batches").
@@ -33,7 +33,7 @@ func (adapter FindTaskBatchesAdapter) Find(id Task.Id) ([]Result.Batch, error) {
 	for _, batchDb := range batchesDb {
 		batch, err := batchDb.ToDomainV2()
 		if err != nil {
-			return nil, Error.NewRepositoryError()
+			return nil, Error.NewRepositoryError(err.Error())
 		}
 		batches = append(batches, batch)
 	}

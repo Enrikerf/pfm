@@ -1,0 +1,84 @@
+@startuml
+namespace Event {
+    interface BatchCreatedToBeFilled  {
+        + GetName() string
+        + GetEntityId() string
+
+    }
+    class batchCreatedToBeFilled << (S,Aquamarine) >> {
+        - name string
+        - entityId string
+
+        + GetName() string
+        + GetEntityId() string
+
+    }
+}
+
+"Event.BatchCreatedToBeFilled" <|-- "implements""Event.batchCreatedToBeFilled"
+
+
+namespace Looper {
+    interface Looper  {
+        + IsEnabled() bool
+        + Enable() 
+
+    }
+    class looper << (S,Aquamarine) >> {
+        - communicateRepository Repository.Communicate
+        - findTasksByRepository Repository.FindBy
+        - saveTaskRepository Repository.Save
+        - saveBatchRepository Repository.SaveBatch
+        - saveResultRepository Repository.Save
+        - isLoopEnabled <font color=blue>chan</font> bool
+
+        - loop() 
+        - executeTask(wg *sync.WaitGroup, task Task.Task) 
+        - stopLoop() 
+        - printTask(index int, task Task.Task) 
+
+        + IsEnabled() bool
+        + Enable() 
+
+    }
+}
+
+"Looper.Looper" <|-- "implements""Looper.looper"
+
+
+namespace ManualTaskCommunicator {
+    interface Communicate  {
+        + Communicate(taskId Task.Id) (Result.Batch, error)
+
+    }
+    class executor << (S,Aquamarine) >> {
+        - dispatcher Event.Dispatcher
+        - taskFinder Finder.Finder
+        - saveTaskRepository Repository.Save
+        - saveBatchRepository Repository.SaveBatch
+
+        + Communicate(taskId Task.Id) (Result.Batch, error)
+
+    }
+}
+
+"ManualTaskCommunicator.Communicate" <|-- "implements""ManualTaskCommunicator.executor"
+
+
+namespace Repository {
+    interface Bidirectional  {
+        + Setup(host string, port string) error
+        + Write(step Step.Step) error
+        + Read() (Content.Content, error)
+        + Close() 
+
+    }
+    interface Communicate  {
+        + Communicate(task Task.Task) Result.Batch
+
+    }
+}
+
+
+
+@enduml

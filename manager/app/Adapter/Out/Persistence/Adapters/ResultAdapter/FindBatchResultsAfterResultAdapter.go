@@ -18,11 +18,11 @@ func (adapter FindBatchResultsAfterResultAdapter) Find(id Result.BatchId, result
 	var results []Result.Result
 	err := adapter.Orm.First(&resultDb, "uuid = ?", resultId.GetUuidString()).Error
 	if err != nil {
-		return nil, Error.NewRepositoryError()
+		return nil, Error.NewRepositoryError(err.Error())
 	}
 	err = adapter.Orm.First(&batchDb, "uuid = ?", id.GetUuidString()).Error
 	if err != nil {
-		return nil, Error.NewRepositoryError()
+		return nil, Error.NewRepositoryError(err.Error())
 	}
 	err = adapter.Orm.
 		Table("results").
@@ -30,13 +30,13 @@ func (adapter FindBatchResultsAfterResultAdapter) Find(id Result.BatchId, result
 		Find(&resultsDb).
 		Error
 	if err != nil {
-		return nil, Error.NewRepositoryError()
+		return nil, Error.NewRepositoryError(err.Error())
 	}
 
 	for _, resultDb := range resultsDb {
 		result, err := resultDb.ToDomainV2()
 		if err != nil {
-			return nil, Error.NewRepositoryError()
+			return nil, Error.NewRepositoryError(err.Error())
 		}
 		results = append(results, result)
 	}

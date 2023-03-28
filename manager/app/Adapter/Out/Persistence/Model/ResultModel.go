@@ -32,7 +32,7 @@ func (resultModel *ResultDb) FromDomainV2(result Result.Result) {
 func (resultModel *ResultDb) ToDomainV2() (Result.Result, error) {
 	content, err := Content.NewContent(resultModel.Content)
 	if err != nil {
-		return nil, Error.NewRepositoryError()
+		return nil, Error.NewRepositoryError(err.Error())
 	}
 	selfEntity := Result.Load(
 		Result.LoadId(resultModel.Uuid),

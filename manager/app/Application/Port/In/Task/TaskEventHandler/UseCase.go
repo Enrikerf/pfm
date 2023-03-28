@@ -2,6 +2,7 @@ package TaskEventHandler
 
 import (
 	"fmt"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Communication/Service/Looper"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Event"
 	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/ExecutionMode"
@@ -17,13 +18,13 @@ type UseCase interface {
 func New(findRepository Repository.Find) UseCase {
 	return &taskEventHandler{
 		Finder.Finder{FindRepository: findRepository},
-		NewLooper(),
+		Looper.NewLooper(),
 	}
 }
 
 type taskEventHandler struct {
 	finder Finder.Finder
-	looper Looper
+	looper Looper.Looper
 }
 
 func (useCase *taskEventHandler) Handle(taskChanged Event.TaskCreated) {

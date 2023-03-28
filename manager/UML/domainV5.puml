@@ -1,0 +1,567 @@
+@startuml
+namespace CommunicationMode {
+    class CommunicationMode.Mode << (T, #FF7700) >>  {
+    }
+    interface UnknownError  {
+    }
+}
+"__builtin__.error" *-- "extends""CommunicationMode.UnknownError"
+
+
+
+namespace Content {
+    interface Content  {
+        + GetValue() string
+
+    }
+    interface MaxLengthExceed  {
+    }
+    class content << (S,Aquamarine) >> {
+        - value string
+
+        + GetValue() string
+
+    }
+}
+"__builtin__.error" *-- "extends""Content.MaxLengthExceed"
+
+"Content.Content" <|-- "implements""Content.content"
+"Host.Vo" <|-- "implements""Content.content"
+"Port.Vo" <|-- "implements""Content.content"
+
+
+namespace Core {
+    interface Id  {
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+
+    }
+}
+
+
+
+namespace Creator {
+    class Creator << (S,Aquamarine) >> {
+        + SaveRepository Repository.Save
+        + Dispatcher Event.Dispatcher
+
+        + Create(host Host.Vo, port Port.Vo, stepVos []Step.Vo, communicationMode CommunicationMode.Mode, executionMode ExecutionMode.Mode) (Task.Task, error)
+
+    }
+}
+
+
+"Creator.Creator""uses" o-- "Event.Dispatcher"
+"Creator.Creator""uses" o-- "Repository.Save"
+
+namespace Eraser {
+    class Eraser << (S,Aquamarine) >> {
+        + FindRepository Repository.Find
+        + DeleteRepository Repository.Delete
+
+        + Erase(id Task.Id) error
+
+    }
+    interface RunningTaskCantBeDeleted  {
+    }
+}
+"__builtin__.error" *-- "extends""Eraser.RunningTaskCantBeDeleted"
+
+
+"Eraser.Eraser""uses" o-- "Repository.Delete"
+"Eraser.Eraser""uses" o-- "Repository.Find"
+
+namespace Error {
+    interface BatchNotFoundError  {
+    }
+    interface InvalidUuidError  {
+    }
+    interface ManualTaskOnlyCanHave2StepsError  {
+    }
+    interface RepositoryError  {
+    }
+    interface TaskNotFoundError  {
+    }
+    interface TaskNotManualCanNotBeExecutedManuallyError  {
+    }
+}
+"__builtin__.error" *-- "extends""Error.BatchNotFoundError"
+"__builtin__.error" *-- "extends""Error.InvalidUuidError"
+"__builtin__.error" *-- "extends""Error.ManualTaskOnlyCanHave2StepsError"
+"__builtin__.error" *-- "extends""Error.RepositoryError"
+"__builtin__.error" *-- "extends""Error.TaskNotFoundError"
+"__builtin__.error" *-- "extends""Error.TaskNotManualCanNotBeExecutedManuallyError"
+
+
+
+namespace Event {
+    interface BatchCreatedToBeFilled  {
+        + GetName() string
+        + GetEntityId() string
+
+    }
+    interface Dispatcher  {
+        + Dispatch(event Event) 
+
+    }
+    interface Event  {
+        + GetName() string
+        + GetEntityId() string
+
+    }
+    interface TaskCreated  {
+        + GetName() string
+        + GetEntityId() string
+
+    }
+    interface TaskUpdated  {
+        + GetName() string
+        + GetEntityId() string
+
+    }
+    class batchCreatedToBeFilled << (S,Aquamarine) >> {
+        - name string
+        - entityId string
+
+        + GetName() string
+        + GetEntityId() string
+
+    }
+    class taskCreated << (S,Aquamarine) >> {
+        - name string
+        - entityId string
+
+        + GetName() string
+        + GetEntityId() string
+
+    }
+    class taskUpdated << (S,Aquamarine) >> {
+        - name string
+        - entityId string
+
+        + GetName() string
+        + GetEntityId() string
+
+    }
+}
+
+"Event.BatchCreatedToBeFilled" <|-- "implements""Event.batchCreatedToBeFilled"
+"Event.Event" <|-- "implements""Event.batchCreatedToBeFilled"
+"Event.TaskCreated" <|-- "implements""Event.batchCreatedToBeFilled"
+"Event.TaskUpdated" <|-- "implements""Event.batchCreatedToBeFilled"
+"Event.BatchCreatedToBeFilled" <|-- "implements""Event.taskCreated"
+"Event.Event" <|-- "implements""Event.taskCreated"
+"Event.TaskCreated" <|-- "implements""Event.taskCreated"
+"Event.TaskUpdated" <|-- "implements""Event.taskCreated"
+"Event.BatchCreatedToBeFilled" <|-- "implements""Event.taskUpdated"
+"Event.Event" <|-- "implements""Event.taskUpdated"
+"Event.TaskCreated" <|-- "implements""Event.taskUpdated"
+"Event.TaskUpdated" <|-- "implements""Event.taskUpdated"
+
+
+namespace ExecutionMode {
+    class ExecutionMode.Mode << (T, #FF7700) >>  {
+    }
+    interface UnknownError  {
+    }
+}
+"__builtin__.error" *-- "extends""ExecutionMode.UnknownError"
+
+
+
+namespace Finder {
+    class Finder << (S,Aquamarine) >> {
+        + FindRepository Repository.Find
+
+        + Find(id Task.Id) (Task.Task, error)
+
+    }
+}
+
+"Repository.Find" <|-- "implements""Finder.Finder"
+
+"Finder.Finder""uses" o-- "Repository.Find"
+
+namespace Host {
+    interface InvalidHostError  {
+    }
+    interface Vo  {
+        + GetValue() string
+
+    }
+    class vo << (S,Aquamarine) >> {
+        - value string
+
+        + GetValue() string
+
+    }
+}
+"__builtin__.error" *-- "extends""Host.InvalidHostError"
+
+"Content.Content" <|-- "implements""Host.vo"
+"Host.Vo" <|-- "implements""Host.vo"
+"Port.Vo" <|-- "implements""Host.vo"
+
+
+namespace Looper {
+    interface Looper  {
+        + IsEnabled() bool
+        + Enable() 
+
+    }
+    class looper << (S,Aquamarine) >> {
+        - communicateRepository Repository.Communicate
+        - findTasksByRepository Repository.FindBy
+        - saveTaskRepository Repository.Save
+        - saveBatchRepository Repository.SaveBatch
+        - saveResultRepository Repository.Save
+        - isLoopEnabled <font color=blue>chan</font> bool
+
+        - loop() 
+        - executeTask(wg *sync.WaitGroup, task Task.Task) 
+        - stopLoop() 
+        - printTask(index int, task Task.Task) 
+
+        + IsEnabled() bool
+        + Enable() 
+
+    }
+}
+
+"Looper.Looper" <|-- "implements""Looper.looper"
+
+
+namespace ManualTaskCommunicator {
+    interface Communicate  {
+        + Communicate(taskId Task.Id) (Result.Batch, error)
+
+    }
+    class executor << (S,Aquamarine) >> {
+        - dispatcher Event.Dispatcher
+        - taskFinder Finder.Finder
+        - saveTaskRepository Repository.Save
+        - saveBatchRepository Repository.SaveBatch
+
+        + Communicate(taskId Task.Id) (Result.Batch, error)
+
+    }
+}
+
+"ManualTaskCommunicator.Communicate" <|-- "implements""ManualTaskCommunicator.executor"
+
+
+namespace Port {
+    interface InvalidPortError  {
+    }
+    interface Vo  {
+        + GetValue() string
+
+    }
+    class vo << (S,Aquamarine) >> {
+        - value string
+
+        + GetValue() string
+
+    }
+}
+"__builtin__.error" *-- "extends""Port.InvalidPortError"
+
+"Content.Content" <|-- "implements""Port.vo"
+"Host.Vo" <|-- "implements""Port.vo"
+"Port.Vo" <|-- "implements""Port.vo"
+
+
+namespace Repository {
+    interface Bidirectional  {
+        + Setup(host string, port string) error
+        + Write(step Step.Step) error
+        + Read() (Content.Content, error)
+        + Close() 
+
+    }
+    interface Communicate  {
+        + Communicate(task Task.Task) Result.Batch
+
+    }
+    interface Delete  {
+        + Delete(id Task.Id) error
+
+    }
+    interface Find  {
+        + Find(id Task.Id) (Task.Task, error)
+
+    }
+    interface FindBatch  {
+        + Find(id Result.BatchId) (Result.Batch, error)
+
+    }
+    interface FindBatchResults  {
+        + Find(id Result.BatchId) ([]Result.Result, error)
+
+    }
+    interface FindBatchResultsAfterResult  {
+        + Find(id Result.BatchId, resultId Result.Id) ([]Result.Result, error)
+
+    }
+    interface FindBy  {
+        + FindBy(conditions <font color=blue>interface</font>{}) ([]Task.Task, error)
+
+    }
+    interface FindTaskBatches  {
+        + Find(id Task.Id) ([]Result.Batch, error)
+
+    }
+    interface Save  {
+        + Persist(result Result.Result) 
+        + Persist(task Task.Task) 
+
+    }
+    interface SaveBatch  {
+        + Persist(result Result.Batch) 
+
+    }
+}
+
+
+
+namespace Result {
+    interface Batch  {
+        + GetId() BatchId
+        + GetTaskId() Task.Id
+        + GetResults() []Result
+        + GetCreatedAt() time.Time
+        + AddResult(result Result) 
+        + SetResultsFromContent(results []Content.Content) 
+
+    }
+    interface BatchId  {
+    }
+    interface Id  {
+    }
+    interface Result  {
+        + GetId() Id
+        + GetBatchId() BatchId
+        + GetContent() Content.Content
+        + GetCreateAt() time.Time
+
+    }
+    class batch << (S,Aquamarine) >> {
+        - id BatchId
+        - taskId Task.Id
+        - results []Result
+        - createdAt time.Time
+
+        + GetId() BatchId
+        + GetTaskId() Task.Id
+        + GetResults() []Result
+        + GetCreatedAt() time.Time
+        + AddResult(result Result) 
+        + SetResultsFromContent(contents []Content.Content) 
+
+    }
+    class batchId << (S,Aquamarine) >> {
+        - uuid uuid.UUID
+
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+
+    }
+    class id << (S,Aquamarine) >> {
+        - uuid uuid.UUID
+
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+
+    }
+    class result << (S,Aquamarine) >> {
+        - id Id
+        - batchId BatchId
+        - content Content.Content
+        - createdAt time.Time
+
+        + GetId() Id
+        + GetBatchId() BatchId
+        + GetContent() Content.Content
+        + GetCreateAt() time.Time
+
+    }
+}
+
+"Result.Batch" <|-- "implements""Result.batch"
+"Core.Id" <|-- "implements""Result.batchId"
+"Core.Id" <|-- "implements""Result.id"
+"Result.Result" <|-- "implements""Result.result"
+
+
+namespace Searcher {
+    class Searcher << (S,Aquamarine) >> {
+        + FindByRepository Repository.FindBy
+
+        + Search(conditions <font color=blue>interface</font>{}) ([]Task.Task, error)
+
+    }
+}
+
+
+"Searcher.Searcher""uses" o-- "Repository.FindBy"
+
+namespace Status {
+    interface Status  {
+        + Value() Enum
+
+    }
+    class Status.Enum << (T, #FF7700) >>  {
+    }
+    interface UnknownError  {
+    }
+    class status << (S,Aquamarine) >> {
+        - value Enum
+
+        + Value() Enum
+
+    }
+}
+"__builtin__.error" *-- "extends""Status.UnknownError"
+
+"Status.Status" <|-- "implements""Status.status"
+
+
+namespace Step {
+    interface Id  {
+    }
+    interface InvalidSentenceLengthError  {
+    }
+    interface Step  {
+        + GetId() Id
+        + GetSentence() string
+
+    }
+    interface Vo  {
+        + GetSentence() string
+
+    }
+    class id << (S,Aquamarine) >> {
+        - uuid uuid.UUID
+
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+
+    }
+    class step << (S,Aquamarine) >> {
+        - id Id
+        - sentence string
+
+        + GetId() Id
+        + GetSentence() string
+
+    }
+    class vo << (S,Aquamarine) >> {
+        - sentence string
+
+        + GetSentence() string
+
+    }
+}
+"__builtin__.error" *-- "extends""Step.InvalidSentenceLengthError"
+
+"Core.Id" <|-- "implements""Step.id"
+"Step.Step" <|-- "implements""Step.step"
+"Step.Vo" <|-- "implements""Step.step"
+"Step.Vo" <|-- "implements""Step.vo"
+
+
+namespace Task {
+    interface Id  {
+    }
+    interface Task  {
+        + GetId() Id
+        + GetHost() Host.Vo
+        + GetPort() Port.Vo
+        + GetSteps() []Step.Step
+        + GetCommunicationMode() CommunicationMode.Mode
+        + GetExecutionMode() ExecutionMode.Mode
+        + GetStatus() Status.Status
+        + SetHost(host Host.Vo) 
+        + SetPort(port Port.Vo) 
+        + SetStatus(status Status.Status) 
+
+    }
+    class id << (S,Aquamarine) >> {
+        - uuid uuid.UUID
+
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+
+    }
+    class task << (S,Aquamarine) >> {
+        - id Id
+        - host Host.Vo
+        - port Port.Vo
+        - steps []Step.Step
+        - communicationMode CommunicationMode.Mode
+        - executionMode ExecutionMode.Mode
+        - status Status.Status
+
+        + GetId() Id
+        + GetHost() Host.Vo
+        + SetHost(host Host.Vo) 
+        + GetPort() Port.Vo
+        + SetPort(port Port.Vo) 
+        + GetSteps() []Step.Step
+        + GetCommunicationMode() CommunicationMode.Mode
+        + GetExecutionMode() ExecutionMode.Mode
+        + GetStatus() Status.Status
+        + SetStatus(status Status.Status) 
+
+    }
+}
+
+"Core.Id" <|-- "implements""Task.id"
+"Task.Task" <|-- "implements""Task.task"
+
+
+namespace Updater {
+    interface TaskNotFoundError  {
+    }
+    class Updater << (S,Aquamarine) >> {
+        + FindRepository Repository.Find
+        + SaveRepository Repository.Save
+        + Dispatcher Event.Dispatcher
+
+        + Update(id Task.Id, host Host.Vo, port Port.Vo, status Status.Status) error
+
+    }
+}
+"__builtin__.error" *-- "extends""Updater.TaskNotFoundError"
+
+
+"Updater.Updater""uses" o-- "Event.Dispatcher"
+"Updater.Updater""uses" o-- "Repository.Find"
+"Updater.Updater""uses" o-- "Repository.Save"
+
+namespace ValueObject {
+    interface NullableString  {
+        + IsNull() bool
+        + GetValue() string
+
+    }
+    class nullableString << (S,Aquamarine) >> {
+        - isNull bool
+        - value string
+
+        + IsNull() bool
+        + GetValue() string
+
+    }
+}
+
+"Content.Content" <|-- "implements""ValueObject.nullableString"
+"Host.Vo" <|-- "implements""ValueObject.nullableString"
+"Port.Vo" <|-- "implements""ValueObject.nullableString"
+"ValueObject.NullableString" <|-- "implements""ValueObject.nullableString"
+
+
+"__builtin__.string" #.. "alias of""CommunicationMode.Mode"
+"__builtin__.string" #.. "alias of""ExecutionMode.Mode"
+"__builtin__.string" #.. "alias of""Status.Enum"
+@enduml

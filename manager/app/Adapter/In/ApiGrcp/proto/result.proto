@@ -4,7 +4,7 @@ option go_package = "./result";
 import "google/protobuf/wrappers.proto";
 
 service ResultService{
-  rpc CreateBatchAndFill (CreateBatchAndFillRequest) returns (CreateBatchAndFillResponse);
+  rpc CommunicateTaskManually (CommunicateTaskManuallyRequest) returns (CommunicateTaskManuallyResponse);
   rpc GetBatchResults(GetBatchResultsRequest) returns (ListResultsResponse);
   rpc GetTaskBatches(GetTaskBatchesRequest) returns (ListBatchesResponse);
   rpc StreamResults(StreamResultsRequest) returns (stream StreamResultsResponse);
@@ -15,10 +15,10 @@ message Batch{
   string task_uuid = 2;
   string created_at = 3;
 }
-message CreateBatchAndFillRequest{
+message CommunicateTaskManuallyRequest{
   string task_uuid = 1;
 }
-message CreateBatchAndFillResponse{
+message CommunicateTaskManuallyResponse{
   string batch_uuid = 1;
 }
 message GetTaskBatchesRequest{

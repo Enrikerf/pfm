@@ -24,13 +24,13 @@ func (adapter FindByAdapter) FindBy(conditions interface{}) ([]Task.Task, error)
 		Find(&tasks).
 		Error
 	if err != nil {
-		return nil, Error.NewRepositoryError()
+		return nil, Error.NewRepositoryError(err.Error())
 	}
 
 	for _, task := range tasks {
 		task, err := task.ToDomainV2()
 		if err != nil {
-			return nil, Error.NewRepositoryError()
+			return nil, Error.NewRepositoryError(err.Error())
 		}
 		domainTasks = append(domainTasks, task)
 	}

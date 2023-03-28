@@ -40,8 +40,16 @@ func New(
 	communicationMode CommunicationMode.Mode,
 	executionMode ExecutionMode.Mode,
 ) (Task, error) {
-	if executionMode == ExecutionMode.Manual && len(stepVos) > 2 {
-		return nil, Error.NewManualTaskOnlyCanHave2StepsError()
+	if len(stepVos) < 1 {
+		return nil, Error.NewTaskMustHaveAtLeastOneStepError()
+	}
+	if communicationMode == CommunicationMode.Unary && len(stepVos) > 1 {
+		return nil, Error.NewUnaryTaskCanOnlyHaveOneStepError()
+	}
+	if executionMode == ExecutionMode.Manual &&
+		len(stepVos) > 2 &&
+		communicationMode == CommunicationMode.Bidirectional {
+		return nil, Error.NewManualBidirectionalTaskOnlyCanHave2StepsError()
 	}
 	task := &task{}
 	task.id = NewId()
@@ -67,7 +75,7 @@ func Load(
 	status Status.Status,
 ) (Task, error) {
 	if executionMode == ExecutionMode.Manual && len(stepVos) > 2 {
-		return nil, Error.NewManualTaskOnlyCanHave2StepsError()
+		return nil, Error.NewManualBidirectionalTaskOnlyCanHave2StepsError()
 	}
 	task := &task{}
 	task.id = id

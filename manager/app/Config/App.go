@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/InOut/EventDispatcherAdapter"
-	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Grcp/Call"
+	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Grcp/Communication"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Adapters/ResultAdapter"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/Out/Persistence/Adapters/TaskAdapter"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateBatchAndFill"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/FillBatchEventHandler"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Communication/CommunicateTaskManually"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetBatchResults"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetTaskBatches"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/StreamResults"
@@ -18,6 +17,12 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/ReadTask"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/TaskEventHandler"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/UpdateTask"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Communication/Service/BidirectionalCommunicator"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Communication/Service/ClientStreamCommunicator"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Communication/Service/ManualTaskExecutor"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Communication/Service/ServerStreamCommunicator"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Communication/Service/UnaryCommunicator"
+	"github.com/Enrikerf/pfm/commandManager/app/Domain/Task/Service/Finder"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -67,6 +72,7 @@ func (server *App) loadDb() *gorm.DB {
 
 func (server *App) loadApiGrpc(db *gorm.DB) {
 
+	// Adapters
 	var findTaskAdapter = TaskAdapter.FindAdapter{Orm: db}
 	var deleteAdapter = TaskAdapter.DeleteAdapter{Orm: db}
 	var saveTaskAdapter = TaskAdapter.PersistAdapter{Orm: db}
@@ -77,26 +83,52 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 	var findBatchResultsAdapter = ResultAdapter.FindBatchResultsAdapter{Orm: db}
 	var findTaskBatchesAdapter = ResultAdapter.FindTaskBatchesAdapter{Orm: db}
 	var findBatchResultsAfterResultAdapter = ResultAdapter.FindBatchResultsAfterResultAdapter{Orm: db}
-	var callAdapter = Call.New()
+	var unaryAdapter = Communication.NewUnaryAdapter()
+	var bidirectionalAdapter = Communication.NewBidirectionalAdapter()
+	var serverStreamAdapter = Communication.NewServerStreamAdapter()
+	var clientStreamAdapter = Communication.NewClientStreamAdapter()
 
-	//Task UseCases
+	// Services
+	var bidirectionalCommunicator = BidirectionalCommunicator.New(
+		findTaskAdapter,
+		bidirectionalAdapter,
+		saveResultAdapter,
+	)
+	var unaryCommunicator = UnaryCommunicator.New(
+		unaryAdapter,
+		saveResultAdapter,
+	)
+	var serverStreamCommunicator = ServerStreamCommunicator.New(
+		serverStreamAdapter,
+		saveResultAdapter,
+	)
+	var clientStreamCommunicator = ClientStreamCommunicator.New(
+		clientStreamAdapter,
+		saveResultAdapter,
+	)
+	var manualTaskExecutor = ManualTaskExecutor.New(
+		Finder.Finder{FindRepository: findTaskAdapter},
+		saveTaskAdapter,
+		saveBatchAdapter,
+		bidirectionalCommunicator,
+		unaryCommunicator,
+		serverStreamCommunicator,
+		clientStreamCommunicator,
+	)
+	// UseCases
+	// Communication
+	var communicateTaskManuallyUseCase = CommunicateTaskManually.New(manualTaskExecutor)
+	//Task
 	var taskEventHandler = TaskEventHandler.New(findTaskAdapter)
-	var fillBatchEventHandler = FillBatchEventHandler.New(callAdapter, findBatchAdapter, findTaskAdapter, saveResultAdapter)
-	//EventDispatcher
-	var eventDispatcherAdapter = EventDispatcherAdapter.New(taskEventHandler, fillBatchEventHandler)
+	//-------------- EventDispatcher
+	var eventDispatcherAdapter = EventDispatcherAdapter.New(taskEventHandler)
 	//--------------
 	var createTaskService = CreateTask.New(saveTaskAdapter, eventDispatcherAdapter)
 	var readTaskService = ReadTask.New(findTaskAdapter)
 	var updateTaskService = UpdateTask.New(findTaskAdapter, saveTaskAdapter, eventDispatcherAdapter)
 	var deleteTaskService = DeleteTask.New(findTaskAdapter, deleteAdapter)
 	var listTasksService = ListTasks.New(findTasksByAdapter)
-	//Result UseCase
-	var executeTaskManually = CreateBatchAndFill.New(
-		eventDispatcherAdapter,
-		findTaskAdapter,
-		saveTaskAdapter,
-		saveBatchAdapter,
-	)
+	//Result
 	var listResultsService = GetBatchResults.New(findBatchResultsAdapter)
 	var getTaskBatches = GetTaskBatches.New(findTaskBatchesAdapter)
 	var streamResults = StreamResults.New(findBatchAdapter, findTaskAdapter, findBatchResultsAfterResultAdapter)
@@ -108,7 +140,7 @@ func (server *App) loadApiGrpc(db *gorm.DB) {
 		updateTaskService,
 		deleteTaskService,
 		listTasksService,
-		executeTaskManually,
+		communicateTaskManuallyUseCase,
 		listResultsService,
 		streamResults,
 		getTaskBatches,

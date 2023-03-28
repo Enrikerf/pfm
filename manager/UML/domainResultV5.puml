@@ -1,0 +1,128 @@
+@startuml
+namespace Content {
+    interface Content  {
+        + GetValue() string
+
+    }
+    interface MaxLengthExceed  {
+    }
+    class content << (S,Aquamarine) >> {
+        - value string
+
+        + GetValue() string
+
+    }
+}
+"__builtin__.error" *-- "extends""Content.MaxLengthExceed"
+
+"Content.Content" <|-- "implements""Content.content"
+
+
+namespace Error {
+    interface BatchNotFoundError  {
+    }
+    interface TaskNotManualCanNotBeExecutedManuallyError  {
+    }
+}
+"__builtin__.error" *-- "extends""Error.BatchNotFoundError"
+"__builtin__.error" *-- "extends""Error.TaskNotManualCanNotBeExecutedManuallyError"
+
+
+
+namespace Repository {
+    interface FindBatch  {
+        + Find(id Result.BatchId) (Result.Batch, error)
+
+    }
+    interface FindBatchResults  {
+        + Find(id Result.BatchId) ([]Result.Result, error)
+
+    }
+    interface FindBatchResultsAfterResult  {
+        + Find(id Result.BatchId, resultId Result.Id) ([]Result.Result, error)
+
+    }
+    interface FindTaskBatches  {
+        + Find(id Task.Id) ([]Result.Batch, error)
+
+    }
+    interface Save  {
+        + Persist(result Result.Result) 
+
+    }
+    interface SaveBatch  {
+        + Persist(result Result.Batch) 
+
+    }
+}
+
+
+
+namespace Result {
+    interface Batch  {
+        + GetId() BatchId
+        + GetTaskId() Task.Id
+        + GetResults() []Result
+        + GetCreatedAt() time.Time
+        + AddResult(result Result) 
+        + SetResultsFromContent(results []Content.Content) 
+
+    }
+    interface BatchId  {
+    }
+    interface Id  {
+    }
+    interface Result  {
+        + GetId() Id
+        + GetBatchId() BatchId
+        + GetContent() Content.Content
+        + GetCreateAt() time.Time
+
+    }
+    class batch << (S,Aquamarine) >> {
+        - id BatchId
+        - taskId Task.Id
+        - results []Result
+        - createdAt time.Time
+
+        + GetId() BatchId
+        + GetTaskId() Task.Id
+        + GetResults() []Result
+        + GetCreatedAt() time.Time
+        + AddResult(result Result) 
+        + SetResultsFromContent(contents []Content.Content) 
+
+    }
+    class batchId << (S,Aquamarine) >> {
+        - uuid uuid.UUID
+
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+
+    }
+    class id << (S,Aquamarine) >> {
+        - uuid uuid.UUID
+
+        + GetUuid() uuid.UUID
+        + GetUuidString() string
+
+    }
+    class result << (S,Aquamarine) >> {
+        - id Id
+        - batchId BatchId
+        - content Content.Content
+        - createdAt time.Time
+
+        + GetId() Id
+        + GetBatchId() BatchId
+        + GetContent() Content.Content
+        + GetCreateAt() time.Time
+
+    }
+}
+
+"Result.Batch" <|-- "implements""Result.batch"
+"Result.Result" <|-- "implements""Result.result"
+
+
+@enduml

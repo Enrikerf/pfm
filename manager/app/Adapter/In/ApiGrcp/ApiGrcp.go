@@ -6,7 +6,7 @@ import (
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/Controller"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/result"
 	"github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateBatchAndFill"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Communication/CommunicateTaskManually"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetBatchResults"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetTaskBatches"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/StreamResults"
@@ -29,7 +29,7 @@ type ApiGrpc struct {
 	readTaskUseCase        ReadTask.UseCase
 	deleteTaskUseCase      DeleteTask.UseCase
 	updateTaskUseCase      UpdateTask.UseCase
-	executeTaskManually    CreateBatchAndFill.UseCase
+	executeTaskManually    CommunicateTaskManually.UseCase
 	getBatchResultsUseCase GetBatchResults.UseCase
 	streamResultsUseCase   StreamResults.UseCase
 	getTaskBatches         GetTaskBatches.UseCase
@@ -45,7 +45,7 @@ func (api *ApiGrpc) Initialize(
 	updateTaskUseCase UpdateTask.UseCase,
 	deleteTaskUseCase DeleteTask.UseCase,
 	listTasksUseCase ListTasks.UseCase,
-	executeTaskManuallyUseCase CreateBatchAndFill.UseCase,
+	executeTaskManuallyUseCase CommunicateTaskManually.UseCase,
 	getBatchResultsUseCase GetBatchResults.UseCase,
 	streamResultsUseCase StreamResults.UseCase,
 	getBatchesUseCase GetTaskBatches.UseCase,

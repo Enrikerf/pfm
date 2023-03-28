@@ -15,11 +15,11 @@ func (adapter FindBatchAdapter) Find(id Result.BatchId) (Result.Batch, error) {
 	var batchDb = Model.BatchDb{}
 	err := adapter.Orm.First(&batchDb, "uuid = ?", id.GetUuidString()).Error
 	if err != nil {
-		return nil, Error.NewRepositoryError()
+		return nil, Error.NewRepositoryError(err.Error())
 	}
 	batch, err := batchDb.ToDomainV2()
 	if err != nil {
-		return nil, Error.NewRepositoryError()
+		return nil, Error.NewRepositoryError(err.Error())
 	}
 	return batch, nil
 

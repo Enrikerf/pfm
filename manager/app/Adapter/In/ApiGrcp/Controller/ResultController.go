@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	resultProto "github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/result"
-	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/CreateBatchAndFill"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Communication/CommunicateTaskManually"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetBatchResults"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/GetTaskBatches"
 	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Result/StreamResults"
@@ -14,24 +14,24 @@ import (
 )
 
 type ResultController struct {
-	CreateBatchAndFillUseCase CreateBatchAndFill.UseCase
+	CreateBatchAndFillUseCase CommunicateTaskManually.UseCase
 	GetTaskBatchesUseCase     GetTaskBatches.UseCase
 	GetBatchResultsUseCase    GetBatchResults.UseCase
 	StreamResultsUseCase      StreamResults.UseCase
 	resultProto.UnimplementedResultServiceServer
 }
 
-func (controller ResultController) CreateBatchAndFill(
+func (controller ResultController) CommunicateTaskManually(
 	ctx context.Context,
-	request *resultProto.CreateBatchAndFillRequest,
-) (*resultProto.CreateBatchAndFillResponse, error) {
-	var command CreateBatchAndFill.Command
+	request *resultProto.CommunicateTaskManuallyRequest,
+) (*resultProto.CommunicateTaskManuallyResponse, error) {
+	var command CommunicateTaskManually.Command
 	command.TaskUuid = request.GetTaskUuid()
-	batch, err := controller.CreateBatchAndFillUseCase.Execute(command)
+	batch, err := controller.CreateBatchAndFillUseCase.Communicate(command)
 	if err != nil {
 		return nil, fmt.Errorf("error")
 	}
-	return &resultProto.CreateBatchAndFillResponse{
+	return &resultProto.CommunicateTaskManuallyResponse{
 		BatchUuid: batch.GetId().GetUuidString(),
 	}, nil
 }

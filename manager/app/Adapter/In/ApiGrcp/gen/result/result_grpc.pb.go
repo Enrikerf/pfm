@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ResultServiceClient interface {
-	CreateBatchAndFill(ctx context.Context, in *CreateBatchAndFillRequest, opts ...grpc.CallOption) (*CreateBatchAndFillResponse, error)
+	CommunicateTaskManually(ctx context.Context, in *CommunicateTaskManuallyRequest, opts ...grpc.CallOption) (*CommunicateTaskManuallyResponse, error)
 	GetBatchResults(ctx context.Context, in *GetBatchResultsRequest, opts ...grpc.CallOption) (*ListResultsResponse, error)
 	GetTaskBatches(ctx context.Context, in *GetTaskBatchesRequest, opts ...grpc.CallOption) (*ListBatchesResponse, error)
 	StreamResults(ctx context.Context, in *StreamResultsRequest, opts ...grpc.CallOption) (ResultService_StreamResultsClient, error)
@@ -36,9 +36,9 @@ func NewResultServiceClient(cc grpc.ClientConnInterface) ResultServiceClient {
 	return &resultServiceClient{cc}
 }
 
-func (c *resultServiceClient) CreateBatchAndFill(ctx context.Context, in *CreateBatchAndFillRequest, opts ...grpc.CallOption) (*CreateBatchAndFillResponse, error) {
-	out := new(CreateBatchAndFillResponse)
-	err := c.cc.Invoke(ctx, "/result.ResultService/CreateBatchAndFill", in, out, opts...)
+func (c *resultServiceClient) CommunicateTaskManually(ctx context.Context, in *CommunicateTaskManuallyRequest, opts ...grpc.CallOption) (*CommunicateTaskManuallyResponse, error) {
+	out := new(CommunicateTaskManuallyResponse)
+	err := c.cc.Invoke(ctx, "/result.ResultService/CommunicateTaskManually", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (x *resultServiceStreamResultsClient) Recv() (*StreamResultsResponse, error
 // All implementations must embed UnimplementedResultServiceServer
 // for forward compatibility
 type ResultServiceServer interface {
-	CreateBatchAndFill(context.Context, *CreateBatchAndFillRequest) (*CreateBatchAndFillResponse, error)
+	CommunicateTaskManually(context.Context, *CommunicateTaskManuallyRequest) (*CommunicateTaskManuallyResponse, error)
 	GetBatchResults(context.Context, *GetBatchResultsRequest) (*ListResultsResponse, error)
 	GetTaskBatches(context.Context, *GetTaskBatchesRequest) (*ListBatchesResponse, error)
 	StreamResults(*StreamResultsRequest, ResultService_StreamResultsServer) error
@@ -110,8 +110,8 @@ type ResultServiceServer interface {
 type UnimplementedResultServiceServer struct {
 }
 
-func (UnimplementedResultServiceServer) CreateBatchAndFill(context.Context, *CreateBatchAndFillRequest) (*CreateBatchAndFillResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateBatchAndFill not implemented")
+func (UnimplementedResultServiceServer) CommunicateTaskManually(context.Context, *CommunicateTaskManuallyRequest) (*CommunicateTaskManuallyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CommunicateTaskManually not implemented")
 }
 func (UnimplementedResultServiceServer) GetBatchResults(context.Context, *GetBatchResultsRequest) (*ListResultsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBatchResults not implemented")
@@ -135,20 +135,20 @@ func RegisterResultServiceServer(s grpc.ServiceRegistrar, srv ResultServiceServe
 	s.RegisterService(&ResultService_ServiceDesc, srv)
 }
 
-func _ResultService_CreateBatchAndFill_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateBatchAndFillRequest)
+func _ResultService_CommunicateTaskManually_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CommunicateTaskManuallyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ResultServiceServer).CreateBatchAndFill(ctx, in)
+		return srv.(ResultServiceServer).CommunicateTaskManually(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/result.ResultService/CreateBatchAndFill",
+		FullMethod: "/result.ResultService/CommunicateTaskManually",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResultServiceServer).CreateBatchAndFill(ctx, req.(*CreateBatchAndFillRequest))
+		return srv.(ResultServiceServer).CommunicateTaskManually(ctx, req.(*CommunicateTaskManuallyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -218,8 +218,8 @@ var ResultService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ResultServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateBatchAndFill",
-			Handler:    _ResultService_CreateBatchAndFill_Handler,
+			MethodName: "CommunicateTaskManually",
+			Handler:    _ResultService_CommunicateTaskManually_Handler,
 		},
 		{
 			MethodName: "GetBatchResults",

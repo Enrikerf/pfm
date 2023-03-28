@@ -2,10 +2,10 @@ package Error
 
 import "errors"
 
-type ManualTaskOnlyCanHave2StepsError interface {
+type ManualBidirectionalTaskOnlyCanHave2StepsError interface {
 	error
 }
 
-func NewManualTaskOnlyCanHave2StepsError() ManualTaskOnlyCanHave2StepsError {
+func NewManualBidirectionalTaskOnlyCanHave2StepsError() ManualBidirectionalTaskOnlyCanHave2StepsError {
 	return errors.New("ManualTaskOnlyCanHave2Steps")
 }
