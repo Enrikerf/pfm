@@ -1,0 +1,53 @@
+@startuml
+
+start
+
+if (task uuid valid) then (yes)
+  :throw InvalidTaskIdError/
+  stop
+elseif (taskExists) then (no)
+  :throw TaskNotFoundError/
+  stop
+elseif (task.Status == PENDING) then (no)
+  :throw NotPendingTaskCantBeExecutedManuallyError/
+  stop
+else ()
+endif
+  :task.Status = RUNNING/
+  :updateTask/
+  :createBatch/
+  :saveBatch/
+switch (task.CommunicationMode)
+case ( UNARY )
+    label space
+    repeat
+        :sendStep/
+        :getResults/
+        :saveResults/
+    repeat while (more steps)
+case ( BIDIRECTIONAL )
+    label space
+        :sendFirstStep/
+        repeat
+            :getResults/
+            :saveResults/
+        repeat while (task.Status == DONE)
+        :sendSecondStep/
+case (  SERVER_STREAM )
+    label space
+    repeat
+        :sendStep/
+        repeat
+            :getResults/
+        repeat while (more results)
+    repeat while (more steps )
+case ( CLIENT_STREAM \n\n\n)
+    repeat
+        :sendStep/
+    repeat while (more steps)
+    :getResults/
+    :saveResults/
+endswitch
+
+end
+@enduml

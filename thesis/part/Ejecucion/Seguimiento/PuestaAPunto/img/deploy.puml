@@ -1,0 +1,24 @@
+@startuml
+
+left to right direction
+' Horizontal lines: -->, <--, <-->
+' Vertical lines: ->, <-, <->
+
+Actor "User" as User
+archimate #Technology "\nFrontend\n" as Frontend <<technology-device>>
+archimate #Technology "\nManager Server\n" as managerServer <<technology-device>>
+
+package "Client Machine"{
+    archimate #Technology "\n    Client Server \n              + \n control program" as clientServer <<technology-device>>
+}
+
+
+User -> Frontend
+Frontend -> managerServer : "CRUD         "
+Frontend <-- managerServer : "\nresponse"
+
+managerServer --> clientServer : "cmd"
+clientServer  --> managerServer : "response"
+
+
+@enduml

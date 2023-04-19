@@ -1,0 +1,16 @@
+@startuml
+
+@startuml
+
+User -> Manager: ExecuteTaskManually
+Manager --> User: Response1
+Manager --> User: ...
+Manager --> User: ResponseN
+User2 --> Manager: Task.Status=DONE
+Manager -> User: EndProcess
+
+@enduml
+
+
+
+@enduml

@@ -4,8 +4,20 @@
 \renewcommand{\listtablename}{Lista de Tablas}
 \renewcommand{\tablename}{Tabla}
 \input{./1-Portada/portada}
-\thispagestyle{empty}
-\afterpage{\blankpage}
+\newpage
+%\thispagestyle{empty}
+\begin{flushright}
+	\phantom{blank}
+	\vspace{25mm}
+
+	A mi madre, que me enseñó a soñar \\
+	A mi padre, que me enseñó a pensar  \\
+	A los que hice daño, por si sirve de algo  \\
+	A los que me lo hicieron a mi, porque me enseñó a seguir  \\
+	A mi hermanos, en especial a Cris  \\
+	Pero sobre todo, Carmina, a tí, que me faltas tanto...  \\
+\end{flushright}
+%\afterpage{\blankpage}
 \includepdf[pages=-]{./part/DeclaracionOriginalidad.pdf}
 \tableofcontents
 \newpage
@@ -16,4 +28,5 @@
 	\addcontentsline{lot}{chapter}{Lista de tablas} % para que aparezca en el indice de contenidos
 \listoftables % indice de tablas
 \thispagestyle{empty}
+
 \newpage	

@@ -1,9 +1,13 @@
+Control Algorithm:
+
+
+
 Dentro del Dominio del controlador tendremos Un modelo de lo que significa para nosotros un encoder. Podemos ver en la figura \ref{fig:EncoderInterface} que es una interfaz que actua como puerto de salida hacia la implementación, el adaptador que contemplará el uso de una librería en golang para raspberry que permita la interacción de los pines de lectura con los que está conectado el encoder y realice las operaciones pertinentes para obtener la posición. Todo esto no es responsabilidad del Dominio. No nos atañe el dispositivo en el que se va a ejecutar la lógica de control a partir de este encoder. Simplemente nos interesa que tenga una función de observación que llamaremos \textit{watchdog} de las lectura de dichos pines y una función a la que llamaremos para obtener la posición en el momento que deseemos saberlo \textit{getPosition} También atañe al dominio saber que hay que resetear los parámetros del encoder cuando interese y que hay que desactivar el hardware cuando se deje de utilizar para que no haya inconsistencias a la hora de volver a ejecutar el programa.
 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/Encoder/img/EncoderInterface}
+    \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/PidControl/img/EncoderInterface}
     \caption{Encoder.go}\label{fig:EncoderInterface}
 \end{figure}
 
@@ -17,6 +21,6 @@ Tal y como están diseñadas la gorutines, se van encolando y esperan su momento
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.95\textheight]{./part/Ejecucion/Seguimiento/Encoder/img/PFM - Encoder}
+    \includegraphics[height=0.95\textheight]{./part/Ejecucion/Seguimiento/PidControl/img/PFM - Encoder}
     \caption{EncoderAdapter.go}\label{fig:EncoderAdapter}
 \end{figure}

@@ -133,7 +133,7 @@ Con respecto al gestor de eventos vemos que tanto para la creación como para la
     \caption{Use Case: TaskEventHandler}\label{fig:Use Case-TaskEventHandler}
 \end{figure}
 
-\textbf{TaskLoop: ejecutar tareas automáticas}
+\textbf{TaskLoop: ejecutar tareas automáticas}\label{ref:X}
 
 Una vez que el TaskEventHandler ponga en marcha el TaskLoop este obtendrá de base de datos todas las tareas automáticas pendientes y iterando sobre ellas lanzará un hilo de ejecución para ejecutarlas. Una vez terminadas todas volverá a intentar obtener tareas pendientes ya que en el periodo que haya estado ejecutandolas pueden haberse introducido nuevas. Si no hay más tareas pendientes el loop se desactivará.
 

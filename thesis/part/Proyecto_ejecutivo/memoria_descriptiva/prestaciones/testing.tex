@@ -1,0 +1,83 @@
+proteger el sistema frente al error humano es esencial para garantizar la entrega de código con confianza y calidad. Para ello se emplearán herramientas de CI-CD~\ref{par:cicd} que se encargarán de realizar comprobaciones antes de permitir la llegada a servicio del nuevo código. Estos principalmente constan de los siguientes apartados:
+
+\begin{itemize}
+    \item ejecución de los tests
+    \item ejecución de una comprobación de los estándar de estilo de código, nomenclatura, smell codes
+    \item interactuar con la base de datos~\ref{par:mysql}
+\end{itemize}
+
+Los tests son un apartado importante en la garantía de entrega de código libre de errores. En este proyecto se va a centrar el control de calidad en el dominio. Es decir, va a existir una suite de test unitarios por cada elemento de dominio que exista. Los test unitarios de aplicación e infraestructura quedan como un elemento deseable a tener, pero dependerá de los tiempos. los test de integración quedan fuera de esta primera versión del sistema. Se entiende que al no disponer de experiencia suficiente en la infraestructura realizar una aproximación TDD en la investigación del mismo no tiene sentido.
+
+Partamos de las siguientes premisa:
+
+\begin{itemize}
+    \item si el código de pruebas no ahorra más esfuerzo de lo que cuesta desarrollarlo entonces se está perdiendo dinero.
+    sin código de pruebas.
+    \item No se puede entregar un producto que no tiene ningúna clase de garantía de su correcto funcionamiento o acotado su margen de error.
+\end{itemize}
+
+para poder expresar de una forma cuantitativa cómo definimos que unos tests están correctamente diseñados y desarrollados primero
+definamos ineficaz e ineficiente segun RAE
+
+\begin{itemize}
+    \item eficaz: Capacidad de lograr el efecto que se desea o se espera.
+    \item eficiente 2 accepcion Capacidad de lograr los resultados deseados con el mínimo posible de recursos
+\end{itemize}
+
+atendamos a la siguiente frase: si existiese un numero exacto de pruebas optimas, para cubrir todas la posibilidades con tests, si haces menos estas siendo ineficaz y si haces mas ineficiente.
+
+Viendo estas definiciones queda claro que cuando nos enfrentamos a la realidad el trabajo de ingeniería constará en tomar una solución de compromiso entre eficacia y eficiencia. No podemos no probar y no tendremos recursos para probar todo.
+
+pongamos un ejemplo muy sencillo: para un método que recibe la información de un formulario de 8 campos con 10 posibles valores diferentes cada uno se obtendría un conjunto de \[ 8^{10} = 1,073,741,824 \] casos de prueba. Esta táctica de pruebas siendo la más obvia la mayor parte de las veces será inasumible.
+
+
+El estado del arte y la técnica en diseño de test es amplia y variada. Vamos a centrarnos en los métodos que vamos a utilizar en este proyecto. Pruebas de caja negra y los metodos de
+
+\begin{itemize}
+    \item variables independientes
+    \item clases de equivalencia.
+    \item metodo de valores límite
+    \item variables dependientes
+    \item vector de pares
+\end{itemize}
+
+
+\textbf{Variables independientes o factores}
+
+
+\textbf{clases de equivalencia}
+
+
+\textbf{metodo de valores límite}
+
+
+\textbf{Variables dependientes}
+
+
+\textbf{vector de pares}
+
+El método de pairwise, también conocido como pruebas de combinaciones de pares, es una técnica de diseño de pruebas que permite reducir el número de casos de prueba necesarios para lograr una cobertura exhaustiva de las combinaciones posibles de parámetros en un sistema o aplicación. En lugar de probar todas las combinaciones posibles de los parámetros, el método de pairwise identifica las combinaciones de pares que tienen el potencial de causar problemas o errores y las incluye en los casos de prueba. Estas combinaciones de pares se seleccionan utilizando un algoritmo que busca minimizar el número de casos de prueba necesarios sin sacrificar la calidad de la cobertura de pruebas.
+
+El método de pairwise fue introducido por David C. Kuhn en un artículo titulado \cite{37051} "Practical Combinatorial Testing" publicado en 1997. Desde entonces, ha sido ampliamente utilizado en la industria de software y ha sido objeto de numerosos estudios y mejoras por parte de investigadores y practicantes.
+
+Entre los beneficios del método de pairwise se encuentra la reducción del número de casos de prueba necesarios para una cobertura exhaustiva, lo que puede ahorrar tiempo y recursos. Sin embargo, es importante tener en cuenta que el método de pairwise no es una técnica infalible y que puede no detectar ciertos tipos de errores o problemas en el sistema o aplicación bajo prueba.
+
+En conclusión, el método de pairwise es una técnica efectiva para la reducción del número de casos de prueba necesarios para lograr una cobertura exhaustiva de las combinaciones posibles de parámetros en un sistema o aplicación. Su aplicación puede mejorar la eficiencia y efectividad del proceso de pruebas, aunque debe ser utilizado en conjunto con otras técnicas de diseño de pruebas para lograr una cobertura completa.
+
+un ejemplo extraido de \cite{Bach04pairwisetesting} lo ejemplifica perfectamente. En un software con un menú que tenga doce botones para activar o desactivar tendremos 4096 casos diferentes que testear, para un software comercial, semejante coste de calidad es simplemente inasumible. y tal y como se menciona ¨Pairwise testing normally begins by selecting values for the system’s input variables. These
+individual values are often selected using domain partitioning. The values are then permuted to
+achieve coverage of all the pairings. This is very tedious to do by hand. Practical techniques
+used to create pairwise test sets include Orthogonal Arrays¨\cite{Bach04pairwisetesting} En este mismo paper reducen el caso tipico de menú de un programa de 12,288 a 10 casos con este método. Es una metodología para escoger los tests que más aportan valor de cara a la seguridad sin perder pragmatismo y economía.
+
+con estos métodos vamos a realizar pruebas que complan con las características de:
+
+\begin{itemize}
+    \item inocuas
+    \item no introducen nuevos errores, si para desarrollar el test tenemos que modificar el codigo no estamos siendo inocuos. para esto se requiere un diseño correcto y no es trivial. Un código se demuestra que es correcto cuando es fácil de testear
+    \item Automatizadas
+    \item autoverificables
+    \item repetibles
+    \item independientes
+    \item rápidas
+    \item vector de pares
+\end{itemize}

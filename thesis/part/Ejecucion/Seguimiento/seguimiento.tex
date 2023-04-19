@@ -1,8 +1,7 @@
-
-Disponiendo siempre del código como referencia, vamos a exponer la ejecución del proyecto haciendo foco en el código más relevante y el resto se expondrá de una forma más gráfica con diagramas que hagan comprensible la estructura y no tanto los detalles de implementación.
+Resulta imposible abarcar el seguimiento de todo el código desarrollado. En esta sección por tanto vamos a exponer la ejecución del proyecto haciendo foco en los casos de uso más representativos de toda la metodología que este trabajo ha desarrollado en su fase de diseño. El resto se expondrá de una forma más gráfica con diagramas que hagan comprensible la estructura y no tanto los detalles de implementación.
 
 Una de las primeras características que cabe resaltar de golang es que no tiene clases ni herencia. como estructura
-principal de datos tiene los structs. Si queremos garantizar la encapsulación, sobre todo en los elementos de dominio y aplicación. Garantizar que dichose elementos  se creen bajo una misma logica que no se pueda evitar, por ejemplo, declaración inicial de variables de dichos structs que representen las Entities, los Value Objects, etc.
+principal de datos tiene los structs. Si queremos garantizar la encapsulación, sobre todo en los elementos de dominio y aplicación. Garantizar que dichose elementos se creen bajo una misma logica que no se pueda evitar, por ejemplo, declaración inicial de variables de dichos structs que representen las Entities, los Value Objects, etc.
 
 De tal forma que debemos entender que olang sólo expone elementos, ya sea structs, funciones o demás tipos fuera de un módulo si están escritos en Mayuscula. Un módulo son todos los archivos dentro de un mismo directorio.
 
@@ -69,8 +68,6 @@ Vamos a dividir esta sección en:
 \begin{itemize}
     \item CreateTaskUseCase
     \item TaskEventHandler
-    \item TaskLooper
-    \item CallAdapter
 \end{itemize}
 
 Que son los puntos que han presentado mayor complejidad.
@@ -78,16 +75,12 @@ Que son los puntos que han presentado mayor complejidad.
 \subsubsection{CreateTaskUseCase}
     \input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase.tex}
 \subsubsection{TaskEventHandler}
-%    \input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase.tex}
-\subsubsection{TaskLooper}
-%    \input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase.tex}
-\subsubsection{CallAdapter}
-%    \input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase.tex}
-\subsubsection{Asincronía}\label{subsec:asincronia}
-    Vamos a pasar a exponer los puntos donde se ha hecho un uso más extenso de la asincronía y por lo tanto de las gorutines que nos ofrece Golang para gestionarla.
-    \paragraph{Encoder}
-        \input{part/Ejecucion/Seguimiento/Encoder/encoder.tex}
-    \paragraph{RPC Server streaming}
-    \paragraph{RPC Bidirectional}
+    \input{part/Ejecucion/Seguimiento/TaskEventHandler/TaskEventHandlerUseCase.tex}
+\subsubsection{PID Control}\label{subsubsec:pidControl}
+    \input{part/Ejecucion/Seguimiento/PidControl/pidControl.tex}
 \subsubsection{Testing}
+    \input{part/Ejecucion/Seguimiento/Testing/testing.tex}
 \subsubsection{Puesta a punto y resultados}
+    \input{part/Ejecucion/Seguimiento/PuestaAPunto/puestaAPunto.tex}
+
+

@@ -1,15 +1,38 @@
+El primer punto es que Golang me parece un lenguaje pensado en primer lugar para programas pequeños o scripting. Ahí es donde se puede lucir. Es sencillo y fácil de aprender lo básico necesario para sacarle todo el partido a la asincronía, la limpieza y la sencillez. Tiene paquetes base directamente disponibles sin necesidad de añadir dependencias de tercieros muy potentes que permiten abordar pequeñas tareas con muchas garantías y de forma sencilla. Pequeños endpoints, scripts de procesamiento, algoritmia, paralelismo. Lo cual lo vuelve un candidato muy viable para lo que se suele utilizar python que es el scripting.
+
+Sin embargo, casi todos los proyectos medianos y de grandes dimensiones empiezan siendo pequeños. Los programas que son utilizados y evolucionan, normalmente acaban añadiendo funcionalidades y termina necesitando estructura y diseño para soportar dicho crecimiento, que es lo que ha puesto a prueba principalmente este proyecto. Ahí si que puede sentir el desarrollador que venga de otros lenguaje más maduros que tiene sintaxis un poco enrevesada o que tiende a necesitarse sobreingeniería para montar una estructura lo suficientemente granulada. Una vez se acepta la idiosincrásia del entorno las estructuras que se necesitan para ello, el equivalente a la clase, las interfaces, es cierto que brillan por su sencillez y no dejan espacio para que tienda a enrevesarse.
+
 \textbf{Nomenclatura}
 
-Opinión a la guia de estilo
+Si bien es cierto que la guia de estílo tiene una filosofía muy bien enfocada y lo suficientemente amplia como para dar libertad, lo que se aprecia en la comunidad es que, precisamente por ese enfoque a scripting, se tiende a elegir variables muy cortas, poco explicativas. Tiene su argumentos para justificarlo siendo el enfoque a realizar diseños pequeños muy modulares
+
+Sin embargo, esto choca de lleno, en mi opinión con la tendencia de abusar a poner mucho código en un mismo fichero y evitar la división en diversos ficheros, lo cual obviamente, como todo tiene sus argumentos a favor juntado con el nombrado de variables que abusan de acrónimos, palabras incompletas y caracteres sueltos abren la puerta a un código dificil de leer, a perder de vista la cohesión, principios y el principio de abertura a funcionalidades y cerrados a cambios.
+
+Mi opinión es que puede tener unos argumentos favorables muy pareceidos a los comienzos de php, javascript o demás lenguajes de scripting. Es ampliamente conocido cómo acaban estas tendencias: ficheros de muchas lineas, variables imcomprensibles, código difícil de leer. Refactorizar un nombre largo y explicativo a uno corto siempre será mucho más sencillo que extraer el significado de una variable nombrada con una letra e intentar darle un nombre mejor. Siempre será más fácil juntar código en un mismo fichero que separarlo. Lo segundo nos obliga a pensar en su cohesión y sus dependencias.
+
+Por lo tanto en este proyecto, que además pretendía ser didáctico, ha abusado de nombres altamente explicativos, sin miedo a caer en la redundancia o el abuso y a dividir cada componente en su propio archivo, algo nada normativo en este lenguaje.
 
 \textbf{Interfaces}
 
-problema de la falta de la palabra clave implement
+Si bien la teoría apoya la decisión de eliminar la palabra reservada implement para indicar al compilador que una estructura va a implementar una interfaz, de cara al desarrollo lo veo una optimización innecesaria que provoca más problemas de los que puede solucionar. Es cierto que si la signatura de una función se repite debiera ser la misma interfaz y no escribir dos veces la misma interfaz, pero en una arquitectura de capas esto ocurre, ya sea por mal diseño o por que es inevitable en algunos casos, no poder elegir en la implementación de la interfaz con qué paquete está dicho acoplamiento provoca que pueda ser confuso. Además de que al escribir la palabra implement ya avisas a la IDE y al compilador de que quieres que contenga esas funciones y te advierte si no es así.
+
+El argumento a favor más potente que tiene golang es que evitas la necesidad de implementar wrappers de librerias de terceros a las que no quieres acoplarte. Diseñar una interfaz que cumpla esa librería que quieres utilizar ya te aisla de ella. Como es de terceros, si tuvieras que implementarla sólo podrías tocar la librería y poner explicitamente que la implementa, lo cual es absurdo, o tienes que crear una clase que implmentente tu interfaz y hacer una implementación de cada función de la interfaz donde simplemente haces uso de la funcion de la librería, lo cual añade verbosity y complicación.
+
+Mi opinión personal es que no le temo tanto al exceso de código burocrático como los wrappers como a la dificultad de lectura o falta de orden. no tener explicitamente declarada la interfaz creo que favorece dicho desorden.
 
 \textbf{Equivalente de clases vs standard de golang}
 
+Es un punto que al principio me empezó molestando y desconcertando y al que al final más aprecio le he cogido.
+
 Un poco verbose y según el standard de golang un poco antiparttern. Pero al final mi conclusión es que no utilizaría structs sueltos en casi ningún punto. A lo mejor muy encapsulados en una función que enfrente una algoritmia complicada y requiera estructurar datos de una forma rápida inline
 
-\textbf{Paquetes en golang}
+\textbf{Paquetes y división del código en golang}
 
 Comentar que no hay manera de ocultar ciertas cosas al exterior. El objeto de los Aggregate es ocultar al exterior los VO y las Entity que contienen.
+
+\textbf{Testing}
+
+Estandar del test unitario al lado de la clase hace que tengas imports raros en el dominio ademas de todo el codigo para mockear en medio de tu codigo de producción
+
+Puede venir bien para gestión de equipos que vengan de scripting porque sentirán mayor orden y estructura
+puede ser complicado para gente que venga de lenguajes con un orden más estándar como js,php puede costar adaptarse a la idiosincraisa del lenguaje y pasar por el aro
