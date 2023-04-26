@@ -6,7 +6,7 @@
 
 \subparagraph{Dominio}
 
-En el diagrama UML~\ref{fig:Diagrama UML de el dominio de manager} vemos que el dominio de Manager se compone de dos modulos: uno para las tareas y otro para los resultados. Vamos a ir explicando uno por uno:
+En el diagrama UML~\cref{fig:Diagrama UML de el dominio de manager} vemos que el dominio de Manager se compone de dos modulos: uno para las tareas y otro para los resultados. Vamos a ir explicando uno por uno:
 
 \begin{figure}[H]
     \centering
@@ -112,7 +112,7 @@ A diferencia del flujo de creación en este caso si ha parámetros opcionales. Y
 
 \textbf{Delete Task}
 
-En el flujo de eliminación de tareas, además de confirmar que la tarea que se desea eliminar existe, se añadirán más validaciones para garantizar al consistencia del sistema. No se permitirán eliminar tareas que estén en status \textit{RUNNING}\ref{taskStatus}
+En el flujo de eliminación de tareas, además de confirmar que la tarea que se desea eliminar existe, se añadirán más validaciones para garantizar al consistencia del sistema. No se permitirán eliminar tareas que estén en status \textit{RUNNING}~\cref{taskStatus}
 
 \begin{figure}[H]
     \centering
@@ -137,7 +137,7 @@ Con respecto al gestor de eventos vemos que tanto para la creación como para la
 
 Una vez que el TaskEventHandler ponga en marcha el TaskLoop este obtendrá de base de datos todas las tareas automáticas pendientes y iterando sobre ellas lanzará un hilo de ejecución para ejecutarlas. Una vez terminadas todas volverá a intentar obtener tareas pendientes ya que en el periodo que haya estado ejecutandolas pueden haberse introducido nuevas. Si no hay más tareas pendientes el loop se desactivará.
 
-Si hay que reseñar que este caso de uso es el core de la aplicación, donde se pondrá en juego la asincronía y todo el potencial del lenguaje. Es por tanto una primera versión del diseño. Igual que los otros casos de uso son lógica rutinaria que no debiera diferir mucho del diseño original, en este caso sí que podemos encontrarnos con lógicas que no estén previstas y por lo tanto haya que modificar. Todo quedará reflejado en la memoria explicativa de cambios \ref{subsec:memoria explicativa de cambios}
+Si hay que reseñar que este caso de uso es el core de la aplicación, donde se pondrá en juego la asincronía y todo el potencial del lenguaje. Es por tanto una primera versión del diseño. Igual que los otros casos de uso son lógica rutinaria que no debiera diferir mucho del diseño original, en este caso sí que podemos encontrarnos con lógicas que no estén previstas y por lo tanto haya que modificar. Todo quedará reflejado en la memoria explicativa de cambios~\cref{subsec:memoria explicativa de cambios}
 
 \begin{figure}[H]
     \centering
@@ -145,11 +145,11 @@ Si hay que reseñar que este caso de uso es el core de la aplicación, donde se 
     \caption{Use Case: TaskLoop}\label{fig:Use Case-TaskLoop}
 \end{figure}
 
-Atendiendo por tanto a esta posibilidad de cambio se hará uso de la arquitectura para desacoplarnos de dicha incertidumbre \textbf{TaskProcessor} que aparece en la figura \ref{fig:Use Case-TaskLoop} en color verde es el proceso asíncrono donde se hará uso del las gorutines que permiten la gestión de tareas asíncronas de forma sencilla. Lo definiremos como un puerto de salida e implementaremos un adaptador para encapsular esa incertidumbre.
+Atendiendo por tanto a esta posibilidad de cambio se hará uso de la arquitectura para desacoplarnos de dicha incertidumbre \textbf{TaskProcessor} que aparece en la figura~\cref{fig:Use Case-TaskLoop} en color verde es el proceso asíncrono donde se hará uso del las gorutines que permiten la gestión de tareas asíncronas de forma sencilla. Lo definiremos como un puerto de salida e implementaremos un adaptador para encapsular esa incertidumbre.
 
 Es de preveer que dentro de ese adaptador se implemente lógica que habrá de ser de negocio. Sin embargo, a no poder vislumbrarla con claridad, preferimos dejar pendiente de una refactorización. La refactorización posterior podrá ir introduciendo en dominio y limpiando dicho adaptador de el posible mal código resultado de la investigación mientras se construye, en vez de ensuciar el dominio y acoplar nuestro código base a esta incertidumbre.
 
-A pesar de dicho desconocimiento inicial que nos impide diseñar con exactitud el flujo, El objetivo de este proyecto ejecutivo es hacer siempre una primera iteración en la medida que se pueda. Por lo tanto una primera iteración se puede ver en la figura \ref{fig:Use Case-Task Processor}
+A pesar de dicho desconocimiento inicial que nos impide diseñar con exactitud el flujo, El objetivo de este proyecto ejecutivo es hacer siempre una primera iteración en la medida que se pueda. Por lo tanto una primera iteración se puede ver en la figura~\cref{fig:Use Case-Task Processor}
 
 \begin{figure}[H]
     \centering
@@ -157,7 +157,7 @@ A pesar de dicho desconocimiento inicial que nos impide diseñar con exactitud e
     \caption{Use Case: Task Processor}\label{fig:Use Case-Task Processor}
 \end{figure}
 
-Podemos ver que está muy acoplado a la interacción de los flujos de comunicación \textit{RPC}\ref{subsubsec:communications} de ahí nuestra incertidumbre al no haber trabajado todavía con dicha tecnología.
+Podemos ver que está muy acoplado a la interacción de los flujos de comunicación \textit{RPC}~\cref{subsubsec:communications} de ahí nuestra incertidumbre al no haber trabajado todavía con dicha tecnología.
 
 \textbf{Create Batch}
 
@@ -211,7 +211,7 @@ solo se puede ejecutar una tarea manual por vez, en este primer diseño. El moti
     \caption{Use Case: Execute Task Manually}\label{fig:Use Case-Execute Task Manually}
 \end{figure}
 
-El diagrama de secuencia para el caso de que una tarea sea de tipo BIDIRECTIONAL se puede apreciar en el diagrama \ref{fig:executeTaskManualInteraction}. Este es el caso que utilizaremos por ejemplo para el control en velocidad y posición del motor de corriente continua. Se enviará una consigna y se recibirán resultados hasta que el cliente envíe la orden de detener dicho control. Para otros tipos más simples, por ejemplo, ejecutar manualmente la tarea de configurar el PID, simplemente será de tipo UNARY, se enviará una request y se obtendrá una respuesta.
+El diagrama de secuencia para el caso de que una tarea sea de tipo BIDIRECTIONAL se puede apreciar en el diagrama~\cref{fig:executeTaskManualInteraction}. Este es el caso que utilizaremos por ejemplo para el control en velocidad y posición del motor de corriente continua. Se enviará una consigna y se recibirán resultados hasta que el cliente envíe la orden de detener dicho control. Para otros tipos más simples, por ejemplo, ejecutar manualmente la tarea de configurar el PID, simplemente será de tipo UNARY, se enviará una request y se obtendrá una respuesta.
 
 \begin{figure}[H]
     \centering

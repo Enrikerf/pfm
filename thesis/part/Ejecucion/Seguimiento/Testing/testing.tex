@@ -1,4 +1,4 @@
-Para el caso de uso de Create task siguiendo\ref{par:testing}
+Para el caso de uso de Create task siguiendo~\cref{par:testing}
 
 Primero tenemos que localizar los factores o variables independientes
 
@@ -120,7 +120,7 @@ y los pares son
     \caption{tab:table3}\label{tab:table3}
 \end{table}
 
-El tests quedaría entonces como sale en la figura \ref{tab:createTaskPairWiseTest}
+El tests quedaría entonces como sale en la figura~\cref{tab:createTaskPairWiseTest}
 
 \begin{table}[H]
     \small
@@ -154,7 +154,7 @@ luego las clases de equivalencia:
     \item ComMode: Server Stream,Client Stream, Bidirectional y Unary
 \end{itemize}
 
-tenemos entonces \[ 3*2*4 = 24 \] posibilidades pares obtenemos 27 al final queda reducidos a 13 casos. Vemos que la eficiencia en reducción de casos disminuye cuanto menos combinaciones hay. El diseño de los tests queda tal y como se ve en la tabla \ref{tab:taskTestPairwiseCases}
+tenemos entonces \[ 3*2*4 = 24 \] posibilidades pares obtenemos 27 al final queda reducidos a 13 casos. Vemos que la eficiencia en reducción de casos disminuye cuanto menos combinaciones hay. El diseño de los tests queda tal y como se ve en la tabla~\cref{tab:taskTestPairwiseCases}
 
 \begin{table}[H]
     \small
@@ -185,7 +185,7 @@ Ahora vamos a ver cómo la arquitectura protege la calidad del sistema de las im
     \caption{testing looper.go detail}\label{fig:testingLooper}
 \end{figure}
 
-el punto clave de la figura \ref{fig:testingLooper} señalado en el recuadro rojo es el adaptador de comunicación GRPC es un adaptador experimental que debido a la inexperiencia en su uso está desarrollado de forma ineficiente. Hemos extraido toda la lógica posible a este servicio que es la parte core:
+el punto clave de la figura~\cref{fig:testingLooper} señalado en el recuadro rojo es el adaptador de comunicación GRPC es un adaptador experimental que debido a la inexperiencia en su uso está desarrollado de forma ineficiente. Hemos extraido toda la lógica posible a este servicio que es la parte core:
 
 El adaptador puede tener múltiples errores inesperados, no conseguir comunicar con el servicio cliente, timeouts, malas implementaciones de la librería, pero se ha protegido al dominio de todo esto mediante una interfaz que garantiza que ante cualquier error se devuelve siempre un resultado. Lo único que quedaría por implementar y testear sería que el proceso no consiguiera terminar y se quedara la gorutine en un proceso infinito. para ello en el proceso de descubrimiento del lenguaje sabemos que hay un punto débil en el dominio. No hemos hehco uso de una herramienta de Golang que se conoce como context. que permite gestionar los timeouts de las gorutines evitando que que queden procesos hijos sin control.
 

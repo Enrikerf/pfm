@@ -1,7 +1,7 @@
 
 Docker es el sistema de gestión de contenedores más utilizado en la industria a día de hoy. Según la misma página oficial de Docker un contendor se define como: "A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another. A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings." \cite{docker}
 
-El sistema se basa en la definición de imágenes que no son más que las instrucciones para la construcción de esos contenedores mediante el sistema de Docker Engine. Difieren de las máquinas virtuales tal y como se muestra en la comparativa\ref{fig:Docker vs VM}.
+El sistema se basa en la definición de imágenes que no son más que las instrucciones para la construcción de esos contenedores mediante el sistema de Docker Engine. Difieren de las máquinas virtuales tal y como se muestra en la comparativa~\cref{fig:Docker vs VM}.
 
 Esto permite correr multiples aplicaciones con multiples requerimientos en cualquier máquina sin tener que instalar dichas dependencias de forma local, evitando incompatibilidades e interacciones no deseadas. Permite ofrecer entregables consistentes a los clientes de forma que el software y todo aquello que necesita para ejecutarse se entregan de forma conjunta, evitando problemas de instalación.
 
@@ -20,7 +20,7 @@ Las claves de Docker se basan en:
 
 Como este proyecto se basa en 3 softwares entregables: el servicio de manager, el servicio cliente(el cual puede ser requerido en multiples máquinas y habrá de ser desplegada dicha réplica) y el programa de control. Vamos a extraer toda la utilidad de Docker para que se entrege y despliege de forma consistente y sencilla dicho software.
 
-%Tal y como podemos ver en la \ref{lst:dockerfile} Tenemos 3 stages: dev, compile, prod.
+%Tal y como podemos ver en la~\cref{lst:dockerfile} Tenemos 3 stages: dev, compile, prod.
 
 %Los contenedores basados en esta imagen tendrán instalado un debian con las dependencias básicas actualizadas.
 %

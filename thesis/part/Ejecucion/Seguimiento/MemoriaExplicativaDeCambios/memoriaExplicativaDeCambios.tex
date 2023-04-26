@@ -3,13 +3,13 @@
 Se quiso hacer un frontal para goland. Aquí nos enfrentamos al problema del estado del arte en dos puntos.
 El primero es que para golang el realizar interfaces web de usuario habría supuesto mucha más investigación de la proyectada y lo segundo que se encuentra en un estado muy experimental
 
-La opción adoptada era el uso de typescript con un framework como react que nos facilitara la implementación de una interfaz de forma rápida y eficiente, pero teníamos el segundo problema del estado del arte, GRPC en web todavía no es compatible para todos los métodos de comunicación \ref{GRPCcompatibilidadConNavegadores}
+La opción adoptada era el uso de typescript con un framework como react que nos facilitara la implementación de una interfaz de forma rápida y eficiente, pero teníamos el segundo problema del estado del arte, GRPC en web todavía no es compatible para todos los métodos de comunicación~\cref{GRPCcompatibilidadConNavegadores}
 
 En la ejecución manual de tareas se definió el caso de uso para su uso en la interfaz de usuario. Ver en tiempo real la gráfica de los resultados obtenidos durante la ejecución de la tarea. En este punto se pensaba explotar la opción del stream bidireccional para poder enviar los steps a requerimiento del usuario y obtener la respuestas en paralelo.
 
 Al no poder hacer uso del stream bidireccional se ha tenido que diseñar un flujo alternativo.
 
-el flujo original\ref{ref:X} donde tenemos el TaskLoop\ref{fig:Use Case-TaskLoop} y el task Processor \ref{fig:Use Case-Task Processor} han tenido que ser modificados para poder hacer uso desde el frontend de este flujo. El looper se ha dejado igual pero se ha desarrollado un procesador para las tareas manuales particular.
+el flujo original~\cref{ref:X} donde tenemos el TaskLoop~\cref{fig:Use Case-TaskLoop} y el task Processor~\cref{fig:Use Case-Task Processor} han tenido que ser modificados para poder hacer uso desde el frontend de este flujo. El looper se ha dejado igual pero se ha desarrollado un procesador para las tareas manuales particular.
 
 Los efectos que ha tenido esto es:
 \begin{itemize}
@@ -17,7 +17,7 @@ Los efectos que ha tenido esto es:
     \item se ha requerido de que el flujo bidireccional conste de un proceso en el que se envía el primer step y se queda en un loop infinito a la escucha que sólo terminará cuando mediante una acción paralela alguien cambien manualmente, mediante la edición de la Task a través de la llamada correspondiente, el status a DONE.
 \end{itemize}
 
-y los nuevos flujos diseñados los podemos apreciar en \ref{fig:1-ExecuteTaskManuallyInteractionV2}\ref{fig:1-TaskProcessorV2}
+y los nuevos flujos diseñados los podemos apreciar en~\cref{fig:1-ExecuteTaskManuallyInteractionV2}~\cref{fig:1-TaskProcessorV2}
 
 \begin{figure}[H]
     \centering

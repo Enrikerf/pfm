@@ -1,17 +1,49 @@
-Desde un punto de vista técnico, se llevará a cabo el desarrollo de un sistema capaz de almacenar y administrar tareas para su ejecución en sistemas remotos. Para lograr esto, se requerirá la implementación de un servicio web API (application programming interface) y dos servicios clientes: uno para manejar la interfaz gráfica (frontend) y otro para ejecutar las tareas.
+El objetivo general de este trabajo será el estudio de Golang Go para su aplicación en el desarrollo de servicios web API orientados al control remoto. Se va a desarrollar un servicio API gestor de tareas que ejecutará acciones en dispositivos remotos. En particular nos centraremos en el control PID de un motor de corriente continua.
 
-Con el fin de utilizar la herramienta seleccionada de manera más eficiente y explorar su uso en nuestro campo, la tarea a ejecutar en remoto será el control PID en velocidad y posición de un motor de corriente continua.
+El enfoque particular del PFM será adaptar el diseño de un Proyecto Ejecutivo Industrial a un proyecto software. Usando dicho Proyecto Ejecutivo para luego realizar un documento, también adaptado, de Dirección de obra. Terminaremos con una presentación de resultados y pruebas para confirmar la adecuación del resultado al objetivo fijado.
 
-El sistema contará con la capacidad de añadir, editar, eliminar y obtener las tareas almacenadas, así como los resultados de su ejecución. Además, reaccionará de forma asíncrona a los eventos de creación, edición y eliminación, permitiendo llevar a cabo procesos como la ejecución o detención de las tareas.
+Los objetivos específicos:
+\begin{itemize}
+    \item Dominio de las sintaxis y características concretas del lenguaje para poder diseñar la arquitectura del software: gestión del protocolo HTTP, enrutamiento, inyección de dependencias, POO, gestión del SO para ejecución de comandos y desarrollo de los algoritmos de control.
+    \item Desarrollo del proyecto de ejecución: con el conocimiento adquirido se diseñará el sistema que estará recogido en un proyecto de ejecución donde vendrá especificado el contexto del trabajo, su alcance, la arquitectura diseñada, planos de relación entre componentes y de la base de datos necesaria y hardware seleccionado junto con su justificación de uso.
+    \begin{itemize}
+        \item Las especificaciones de la API
+        \begin{itemize}
+            \item CRUD de direciones IP o DNS de las máquinas contenedoras del código de control
+            \item CRUD de comandos a ejecutar en dichas máquinas
+            \item CRUD de los resultados de dicha ejecución
+            \item Diseño de los test unitarios
+            \item Diseño de la base de datos para la persistencia de datos
+        \end{itemize}
+        \item Las especificaciones del código cliente
+        \begin{itemize}
+            \item Recepción de comandos a través del protocolo HTTP
+            \item Ejecución de comandos en la máquina cliente
+            \item Envío de resultados a través de llamadas a la API
+            \item Diseño de los test unitarios
+        \end{itemize}
+        \item Especificaciones del programa de control
+        \begin{itemize}
+            \item Controlador PID en posición de un motor CC con encoder mediante PWM
+        \end{itemize}
+    \end{itemize}
+    \item Documento de dirección de obras que contenga el seguimiento, la memoria explicativa de cambios si fuera necesario y los planos definitivos.
+\end{itemize}
 
-Por su parte, el servicio cliente remoto tendrá la capacidad de recibir un comando, ejecutarlo y devolver el resultado correspondiente. El programa de control será capaz de administrar el control de un motor de corriente continua mediante un PID.
-
-En cuanto a la gestión del proyecto, se hará uso de herramientas profesionales para garantizar la calidad, estabilidad y progreso de la solución, evitando desconexiones entre el objetivo del cliente y su ejecución. Todo ello se llevará a cabo a través de un proyecto de ejecución, un documento de dirección de obra o ejecución.
-
-
-Aportacion de valor: estructurar un documento de proyecto de ingeniería con las metodología RUP se basa en una arquitectura de cuatro capas, cada una de las cuales representa una fase del proceso de desarrollo de software:
-
-Inicio: se enfoca en establecer los objetivos del proyecto, identificar los stakeholders y determinar la viabilidad del proyecto.
-Elaboración: se enfoca en la definición de los requisitos, la arquitectura y el plan de iteraciones del proyecto.
-Construcción: se enfoca en la implementación y pruebas del software.
-Transición: se enfoca en la preparación del software para su entrega al usuario final, incluyendo pruebas de aceptación, entrenamiento y documentación.
+%Desde un punto de vista técnico, se llevará a cabo el desarrollo de un sistema capaz de almacenar y administrar tareas para su ejecución en sistemas remotos. Para lograr esto, se requerirá la implementación de un servicio web API (application programming interface) y dos servicios clientes: uno para manejar la interfaz gráfica (frontend) y otro para ejecutar las tareas.
+%
+%Con el fin de utilizar la herramienta seleccionada de manera más eficiente y explorar su uso en nuestro campo, la tarea a ejecutar en remoto será el control PID en velocidad y posición de un motor de corriente continua.
+%
+%El sistema contará con la capacidad de añadir, editar, eliminar y obtener las tareas almacenadas, así como los resultados de su ejecución. Además, reaccionará de forma asíncrona a los eventos de creación, edición y eliminación, permitiendo llevar a cabo procesos como la ejecución o detención de las tareas.
+%
+%Por su parte, el servicio cliente remoto tendrá la capacidad de recibir un comando, ejecutarlo y devolver el resultado correspondiente. El programa de control será capaz de administrar el control de un motor de corriente continua mediante un PID.
+%
+%En cuanto a la gestión del proyecto, se hará uso de herramientas profesionales para garantizar la calidad, estabilidad y progreso de la solución, evitando desconexiones entre el objetivo del cliente y su ejecución. Todo ello se llevará a cabo a través de un proyecto de ejecución, un documento de dirección de obra o ejecución.
+%
+%
+%Aportacion de valor: estructurar un documento de proyecto de ingeniería con las metodología RUP se basa en una arquitectura de cuatro capas, cada una de las cuales representa una fase del proceso de desarrollo de software:
+%
+%Inicio: se enfoca en establecer los objetivos del proyecto, identificar los stakeholders y determinar la viabilidad del proyecto.
+%Elaboración: se enfoca en la definición de los requisitos, la arquitectura y el plan de iteraciones del proyecto.
+%Construcción: se enfoca en la implementación y pruebas del software.
+%Transición: se enfoca en la preparación del software para su entrega al usuario final, incluyendo pruebas de aceptación, entrenamiento y documentación.

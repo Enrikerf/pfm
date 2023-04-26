@@ -1,9 +1,9 @@
-proteger el sistema frente al error humano es esencial para garantizar la entrega de código con confianza y calidad. Para ello se emplearán herramientas de CI-CD~\ref{par:cicd} que se encargarán de realizar comprobaciones antes de permitir la llegada a servicio del nuevo código. Estos principalmente constan de los siguientes apartados:
+proteger el sistema frente al error humano es esencial para garantizar la entrega de código con confianza y calidad. Para ello se emplearán herramientas de CI-CD~\cref{par:cicd} que se encargarán de realizar comprobaciones antes de permitir la llegada a servicio del nuevo código. Estos principalmente constan de los siguientes apartados:
 
 \begin{itemize}
     \item ejecución de los tests
     \item ejecución de una comprobación de los estándar de estilo de código, nomenclatura, smell codes
-    \item interactuar con la base de datos~\ref{par:mysql}
+    \item interactuar con la base de datos~\cref{par:mysql}
 \end{itemize}
 
 Los tests son un apartado importante en la garantía de entrega de código libre de errores. En este proyecto se va a centrar el control de calidad en el dominio. Es decir, va a existir una suite de test unitarios por cada elemento de dominio que exista. Los test unitarios de aplicación e infraestructura quedan como un elemento deseable a tener, pero dependerá de los tiempos. los test de integración quedan fuera de esta primera versión del sistema. Se entiende que al no disponer de experiencia suficiente en la infraestructura realizar una aproximación TDD en la investigación del mismo no tiene sentido.
