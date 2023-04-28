@@ -3,10 +3,10 @@
     \DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
     \dirtree{%
         .1 Project .
-        .2 Domain.
-        .2 Application.
-        .2 Adapter.
-        .2 Bootstrap.
+            .2 Domain.
+            .2 Application.
+            .2 Adapter.
+            .2 Bootstrap.
     }
     \caption{Control: Estructura de carpetas de proyecto}\label{fig:Control- Estructura de carpetas de proyecto}
 \end{figure}
@@ -18,32 +18,32 @@
     \DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
     \dirtree{%
         .1 Domain.
-        .2 EnginePidController.
-        .3 EnginePidController.
-        .3 Service.
-        .4 Configurator.
-        .4 RPMControllerActivator.
-        .4 PositionControllerActivator.
-        .4 ControlDisabler.
-        .2 Engine.
-        .3 EngineVo.
-        .3 Repository.
-        .4 Find.
-        .2 Encoder.
-        .3 Encoder.
-        .2 Pin.
-        .3 EncoderPin.
-        .4 EncoderPinInterface: actuan como repositorios.
-        .3 OutPin.
-        .4 OutPinInterface: actuan como repositorios.
-        .3 PWMPin.
-        .4 PWMPinInterface: actuan como repositorios.
-        .2 Physic.
-        .3 Angle.
-        .3 LinearSpeed.
-        .3 AngularSpeed.
-        .3 Frequency.
-        .3 Duty.
+            .2 EnginePidController.
+                .3 \textcolor{blue}{EnginePidController.go}.
+                .3 Service.
+                    .4 \textcolor{blue}{Configurator.go}.
+                    .4 \textcolor{blue}{RPMControllerActivator.go}.
+                    .4 \textcolor{blue}{PositionControllerActivator.go}.
+                    .4 \textcolor{blue}{ControlDisabler.go}.
+            .2 Engine.
+                .3 \textcolor{blue}{EngineVo.go}.
+                .3 Repository.
+                    .3 \textcolor{blue}{Find.go}.
+            .2 Encoder.
+                .3 \textcolor{blue}{Encoder.go}.
+            .2 Pin.
+                .3 EncoderPin.
+                    .4 \textcolor{blue}{EncoderPinInterface.go}.
+                .3 OutPin.
+                    .4 \textcolor{blue}{OutPinInterface.go}.
+                .3 PWMPin.
+                    .4 \textcolor{blue}{PWMPinInterface.go}.
+            .2 Physic.
+                .3 \textcolor{blue}{Angle.go}.
+                .3 \textcolor{blue}{LinearSpeed.go}.
+                .3 \textcolor{blue}{AngularSpeed.go}.
+                .3 \textcolor{blue}{Frequency.go}.
+                .3 \textcolor{blue}{Duty.go}.
     }
     \caption{Control: Estructura de carpetas de Dominio}\label{fig:Control- Estructura de carpetas de Dominio}
 \end{figure}
@@ -55,15 +55,21 @@
     \DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
     \dirtree{%
         .1 Application.
-        .2 Port.
-        .3 in.
-        .4 EnginePidController.
-        .5 Configure.
-        .6 Command.
-        .6 UseCase.
-        .5 EnableRpmControl (Command).
-        .5 EnablePositionControl (Command).
-        .5 Disable (Command).
+            .2 Port.
+            .3 in.
+                .4 EnginePidController.
+                    .5 ConfigureCommand.
+                        .6 \textcolor{blue}{Command.go}.
+                        .6 \textcolor{blue}{UseCase.go}.
+                    .5 EnableRpmControlCommand.
+                        .6 \textcolor{blue}{Command.go}.
+                        .6 \textcolor{blue}{UseCase.go}.
+                    .5 EnablePositionControlCommand.
+                        .6 \textcolor{blue}{Command.go}.
+                        .6 \textcolor{blue}{UseCase.go}.
+                    .5 DisableCommand.
+                        .6 \textcolor{blue}{Command.go}.
+                        .6 \textcolor{blue}{UseCase.go}.
     }
     \caption{Control: Estructura de carpetas de Aplicación}\label{fig:Control-Estructura de carpetas de Aplicación}
 \end{figure}
@@ -75,14 +81,14 @@
     \DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
     \dirtree{%
         .1 Adapter.
-        .2 in.
-        .3 GRPC.
-        .4 Harán uso de los useCases de aplicación cuando llegue una request RPC.
-        .3 Console.
-        .4 Por ejemplo si quisieramos ejecutar los casos de uso mediante terminal.
-        .2 out.
-        .3 pin.
-        .4 implementación con librerías para actuar sobre los pines, Se buscará una librería que pueda ser configurada para actuar sobre pines de varias plataformas.
+            .2 in.
+                .3 GRPC.
+                    .4 Harán uso de los useCases de aplicación cuando llegue una request RPC.
+                .3 Console.
+                    .4 Por ejemplo si quisieramos ejecutar los casos de uso mediante terminal.
+            .2 out.
+                .3 pin.
+                    .4 implementación con librerías para actuar sobre los pines, Se buscará una librería que pueda ser configurada para actuar sobre pines de varias plataformas.
     }
     \caption{Control: Estructura de carpetas de Infraestructura}\label{fig:Control-Estructura de carpetas de Infraestructura}
 \end{figure}

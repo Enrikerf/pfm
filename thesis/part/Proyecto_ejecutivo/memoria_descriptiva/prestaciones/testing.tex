@@ -1,60 +1,94 @@
-proteger el sistema frente al error humano es esencial para garantizar la entrega de código con confianza y calidad. Para ello se emplearán herramientas de CI-CD~\cref{par:cicd} que se encargarán de realizar comprobaciones antes de permitir la llegada a servicio del nuevo código. Estos principalmente constan de los siguientes apartados:
+Proteger el sistema frente al error humano es esencial para garantizar la entrega de código con seguridad y calidad. Para ello se emplearán herramientas de \gls{CI/CD} que se encargarán de realizar comprobaciones antes de permitir la llegada a servicio del nuevo código y el despliegue automático de dicho código en el entorno final. Este proyecto se centra en los primeros, CI o Continuous integration, debido a que no disponemos de servidores sobre los que desplegar de forma final.
 
-\begin{itemize}
-    \item ejecución de los tests
-    \item ejecución de una comprobación de los estándar de estilo de código, nomenclatura, smell codes
-    \item interactuar con la base de datos~\cref{par:mysql}
-\end{itemize}
+En términos técnicos, CI/CD implica el uso de sistemas de control de versiones, servidores de automatización de compilación y pruebas, y herramientas de automatización de implementación y entrega. Estas herramientas permiten que los desarrolladores integren sus cambios de código en un repositorio central, donde se desencadenan automáticamente pruebas y compilaciones para detectar cualquier error y garantizar que el código se pueda implementar sin problemas.
 
-Los tests son un apartado importante en la garantía de entrega de código libre de errores. En este proyecto se va a centrar el control de calidad en el dominio. Es decir, va a existir una suite de test unitarios por cada elemento de dominio que exista. Los test unitarios de aplicación e infraestructura quedan como un elemento deseable a tener, pero dependerá de los tiempos. los test de integración quedan fuera de esta primera versión del sistema. Se entiende que al no disponer de experiencia suficiente en la infraestructura realizar una aproximación TDD en la investigación del mismo no tiene sentido.
+Una vez que el código ha pasado todas las pruebas y ha sido aprobado por los revisores, el proceso de entrega y/o implementación se activa automáticamente. Esto implica la creación de un paquete de implementación, la realización de pruebas de aceptación automatizadas y el despliegue en producción. Este proceso ayuda a mejorar la eficiencia del equipo de desarrollo y a reducir los errores y riesgos en el proceso de entrega de software, permitiendo una implementación más rápida y frecuente de nuevas características y mejoras en el software.
 
-Partamos de las siguientes premisa:
+Los tests son un apartado importante en la garantía de entrega de código libre de errores. En este proyecto se va a centrar el control de calidad en el dominio. Es decir, va a existir una suite de test unitarios por cada elemento de dominio que exista. Los test unitarios de aplicación e infraestructura quedan como un elemento deseable a tener, pero dependerá de los tiempos. los test de integración quedan fuera de esta primera versión del sistema. Las técnicas utilizadas para el desarrollo de los tests encuentran su origen en las siguentes condiciones de contorno:
 
 \begin{itemize}
     \item si el código de pruebas no ahorra más esfuerzo de lo que cuesta desarrollarlo entonces se está perdiendo dinero.
-    sin código de pruebas.
-    \item No se puede entregar un producto que no tiene ningúna clase de garantía de su correcto funcionamiento o acotado su margen de error.
+    \item no se puede entregar un producto que no tiene ningúna clase de garantía de su correcto funcionamiento o acotado su margen de error.
 \end{itemize}
 
-para poder expresar de una forma cuantitativa cómo definimos que unos tests están correctamente diseñados y desarrollados primero
-definamos ineficaz e ineficiente segun RAE
+Debemos trabajar dentro de esos dos límites: tener tests que garanticen y especifíquen el grado de calidad acotado al presupuesto que se dispone. Para poder expresar de una forma cuantitativa que los tests están correctamente diseñados y desarrollados primero definamos ineficaz e ineficiente. definición segun RAE:
 
 \begin{itemize}
     \item eficaz: Capacidad de lograr el efecto que se desea o se espera.
-    \item eficiente 2 accepcion Capacidad de lograr los resultados deseados con el mínimo posible de recursos
+    \item eficiente (2 accepción): Capacidad de lograr los resultados deseados con el mínimo posible de recursos
 \end{itemize}
 
-atendamos a la siguiente frase: si existiese un numero exacto de pruebas optimas, para cubrir todas la posibilidades con tests, si haces menos estas siendo ineficaz y si haces mas ineficiente.
+atendamos a la siguiente frase: si existiese un numero exacto de pruebas optimas, para cubrir todas la posibilidades con tests, si haces menos estas siendo ineficaz y si haces más ineficiente. Viendo estas definiciones queda claro que, cuando nos enfrentamos a la realidad, el trabajo de ingeniería constará en tomar una solución de compromiso entre eficacia y eficiencia. No podemos no probar y no tendremos recursos para probar todo.
 
-Viendo estas definiciones queda claro que cuando nos enfrentamos a la realidad el trabajo de ingeniería constará en tomar una solución de compromiso entre eficacia y eficiencia. No podemos no probar y no tendremos recursos para probar todo.
+En un ejemplo muy sencillo: para un método que recibe la información de un formulario de 8 campos con 10 posibles valores diferentes cada uno se obtendría un conjunto de \[ 8^{10} = 1,073,741,824 \] casos de prueba. Esta táctica de pruebas siendo la más obvia la mayor parte de las veces será inasumible.
 
-pongamos un ejemplo muy sencillo: para un método que recibe la información de un formulario de 8 campos con 10 posibles valores diferentes cada uno se obtendría un conjunto de \[ 8^{10} = 1,073,741,824 \] casos de prueba. Esta táctica de pruebas siendo la más obvia la mayor parte de las veces será inasumible.
-
-
-El estado del arte y la técnica en diseño de test es amplia y variada. Vamos a centrarnos en los métodos que vamos a utilizar en este proyecto. Pruebas de caja negra y los metodos de
+El estado del arte y la técnica en diseño de test es amplia y variada. Este proyecto utilizará pruebas de caja negra. Las pruebas de caja negra se basan en diseñar un test sin suponer cómo va a estar desarrollado el código. Se diseña el caso de uso al que va a tener que enfretarse y el resultado esperado. Para evitar la prueba exhaustiva existen las siguientes técnicas:
 
 \begin{itemize}
     \item variables independientes
-    \item clases de equivalencia.
-    \item metodo de valores límite
+    \subitem clases de equivalencia.
+    \subitem metodo de valores límite
     \item variables dependientes
-    \item vector de pares
+    \subitem vector de pares
 \end{itemize}
 
+\textbf{Variables independientes}
 
-\textbf{Variables independientes o factores}
+Su enfoque es reducir el conjunto de los valores posibles de cada entrada a un subconjunto representativo y reducido del conjunto original que asegure una cierta garantía de cobertura. Entonces la combinación de todos estos valores representativos de todas las entradas reducirá drásticamente el conjunto de casos de prueba final. Estas técnicas son Clases de Equivalencia y Análisis de Valores Límite; la segunda se aplica sobre la anterior.
 
+Las clases de equivalencia son un subconjunto de valores de la entrada que el sistema debería manejar de forma equivalente en el ejercicio del \gls{SUT}(System Under Test). Para cada entrada deben repartirse todos sus posibles valores en un número finito de clases de equivalencia que cumplan la siguiente propiedad: la prueba de un valor representativo de una clase de equivalencia permite suponer “razonablemente“ que el resultado obtenido será un proceso similar que el obtenido probando cualquier otro valor de esa clase de equivalencia.
 
-\textbf{clases de equivalencia}
+Es un proceso heurístico y se obtiene analizando:
+\begin{itemize}
+    \item la especificación (caja negra) que describe las características del proceso que debe cumplir la implementación.
+    \item las salidas del SUT, que pueden aportar criterios para la partición en clases de equivalencia.
+    \item las precondiciones del SUT, que aportan clases de equivalencia de error.
+\end{itemize}
 
+los pasos para diseñar el test son:
+\begin{itemize}
+    \item encontrar las Clases de Equivalencia de cada factor
+    \item escoger un valor cualquiera de cada clase de equivalencia de cada factor
+    \item si existen varios factores, generar todas las combinaciones de todos los valores anteriores de cada factor
+    \item eliminar aquella combinaciones que no son factibles por la combinación de los valores de entrada
+    \item añadir la salida correspondiente a cada combinación de valores de entrada
+\end{itemize}
 
-\textbf{metodo de valores límite}
+Para escoger dentro de una clase de equivalencia un valor se aplica la técnica de los valores límites. Esta técnica es aplicable a la partición de clases de equivalencia cuando sus valores tiene un orden total, o sea, que para toda pareja de valores distintos se puede comprobar si uno es mayor que otro o viceversa. Por ejemplo, enteros, reales, caracteres por su código, cadenas de caracteres por su orden lexicográfico, enumerados por su ordinal, fechas o horas. Son valores dentro de esa clase de equivalencia para el que cambia el comportamiento del SUT respecto del valor anterior.
 
+La justificación se basa en la evidencia experimental de que “los errores se esconden en los rincones y se aglomeran en los límites” [Beizer] y por tanto se aumenta el conjunto de casos de prueba para mejorar la eficacia de encontrar errores. Es decir, que dentro de una clase de equivalencia puede requerirse el testeo de varios valores.
+
+Vamos a exponer dos ejemplos que muestran la diferencia entre: parámetro de entrada y factor; y entre factor y clase de equivalencia.
+
+Supongamos una función que acepta como parámetro de entrada un texto.
+
+\begin{verbatim}
+    funcion de nextDay(string day){...}
+\end{verbatim}
+
+Como estamos diseñando el test, no podemos saber la implementación. La entrada es un texto cualquiera. pero si quisieramos testear todos los textos posibles que pueden introducirse las pruebas necesarias serían infinitas. Aquí entra el concepto de factor. El factor es que para esa entrada existen 3 posibilidades: que la entrada sea invalida, o que sea válida. Para esos dos factores el conjunto que define la clases de equivalencia son
+
+\begin{itemize}
+    \item invalido: cualquier texto invalido
+    \item válido: “lunes“,“martes“,“miércoles“,“jueves“,“viernes“,“sábado“ o “domingo“.
+\end{itemize}
+
+por lo tanto podríamos coger cualquier valor dentro de esas dos clases, por ejemplo:
+
+\begin{itemize}
+    \item invalido: “cualquierCadenaInvalida“ \rightarrow resultado esperado: ERROR
+    \item válido: “lunes“  \rightarrow resultado esperado: “martes“
+\end{itemize}
+
+Vemos como podemos siguiendo esta metodología podemos dar una garantía. Explicar metodológicamente porqué se han hecho los tests y los valores escogidos y que covertura se está ofreciendo. Ahora si aplicamos la técnica de los valores límites sabemos que el “domingo“ es el último día y se debe volver al “lunes“. Es decir, es el valor límite dentro de nuestra clase de equivalencia. Por lo tanto si queremos garantizar y elegir con critero dentro de los casos de nuestra clase de equivalencia los tests quedarían:
+
+\begin{itemize}
+    \item invalido: “cualquierCadenaInvalida“ \rightarrow resultado esperado: ERROR
+    \item válido limite inicial: “lunes“  \rightarrow resultado esperado: “martes“
+    \item válido limite final: “domingo“  \rightarrow resultado esperado: “lunes“
+\end{itemize}
 
 \textbf{Variables dependientes}
-
-
-\textbf{vector de pares}
 
 El método de pairwise, también conocido como pruebas de combinaciones de pares, es una técnica de diseño de pruebas que permite reducir el número de casos de prueba necesarios para lograr una cobertura exhaustiva de las combinaciones posibles de parámetros en un sistema o aplicación. En lugar de probar todas las combinaciones posibles de los parámetros, el método de pairwise identifica las combinaciones de pares que tienen el potencial de causar problemas o errores y las incluye en los casos de prueba. Estas combinaciones de pares se seleccionan utilizando un algoritmo que busca minimizar el número de casos de prueba necesarios sin sacrificar la calidad de la cobertura de pruebas.
 
@@ -64,16 +98,12 @@ Entre los beneficios del método de pairwise se encuentra la reducción del núm
 
 En conclusión, el método de pairwise es una técnica efectiva para la reducción del número de casos de prueba necesarios para lograr una cobertura exhaustiva de las combinaciones posibles de parámetros en un sistema o aplicación. Su aplicación puede mejorar la eficiencia y efectividad del proceso de pruebas, aunque debe ser utilizado en conjunto con otras técnicas de diseño de pruebas para lograr una cobertura completa.
 
-un ejemplo extraido de \cite{Bach04pairwisetesting} lo ejemplifica perfectamente. En un software con un menú que tenga doce botones para activar o desactivar tendremos 4096 casos diferentes que testear, para un software comercial, semejante coste de calidad es simplemente inasumible. y tal y como se menciona ¨Pairwise testing normally begins by selecting values for the system’s input variables. These
-individual values are often selected using domain partitioning. The values are then permuted to
-achieve coverage of all the pairings. This is very tedious to do by hand. Practical techniques
-used to create pairwise test sets include Orthogonal Arrays¨\cite{Bach04pairwisetesting} En este mismo paper reducen el caso tipico de menú de un programa de 12,288 a 10 casos con este método. Es una metodología para escoger los tests que más aportan valor de cara a la seguridad sin perder pragmatismo y economía.
+un ejemplo extraido de~\cite{Bach04pairwisetesting} lo ejemplifica perfectamente. En un software con un menú que tenga doce botones para activar o desactivar tendremos 4096 casos diferentes que testear, para un software comercial, semejante coste de calidad es simplemente inasumible. y tal y como se menciona ¨Pairwise testing normally begins by selecting values for the system’s input variables. These individual values are often selected using domain partitioning. The values are then permuted to achieve coverage of all the pairings. This is very tedious to do by hand. Practical techniques used to create pairwise test sets include Orthogonal Arrays¨\cite{Bach04pairwisetesting} En este mismo paper reducen el caso tipico de menú de un programa de 12,288 a 10 casos con este método. Es una metodología para escoger los tests que más aportan valor de cara a la seguridad sin perder pragmatismo y economía. Para el cálculo de los pares hay varios software disponible como páginas web que permiten el cálculo de forma rápida.
 
-con estos métodos vamos a realizar pruebas que complan con las características de:
+Con estos métodos vamos a realizar pruebas que cumplan con las características de:
 
 \begin{itemize}
     \item inocuas
-    \item no introducen nuevos errores, si para desarrollar el test tenemos que modificar el codigo no estamos siendo inocuos. para esto se requiere un diseño correcto y no es trivial. Un código se demuestra que es correcto cuando es fácil de testear
     \item Automatizadas
     \item autoverificables
     \item repetibles
@@ -81,3 +111,5 @@ con estos métodos vamos a realizar pruebas que complan con las características
     \item rápidas
     \item vector de pares
 \end{itemize}
+
+Con respecto al punto de inocuas significa que no introducen nuevos errores: para desarrollar el test tenemos que modificar el código no estamos siendo inocuos. Se requiere un diseño correcto y no es trivial. Un código se demuestra que es correcto cuando es fácil de testear de ahí que el enfoque TDD sea diseñar primero el test y luego el código, para conseguir esto se requiere de muchísima experiencia. En el desarrollo de software las veces que se puede hacer un TDD puro son escasas y por lo tanto por lo menos tenemos que tener claro que si a la hora de diseñar un test se complica el aislar la característica a testear, definir los factores y las clases de equivalencia, o nos salen un número inabarcable de tests estamos ante un código mejorable.

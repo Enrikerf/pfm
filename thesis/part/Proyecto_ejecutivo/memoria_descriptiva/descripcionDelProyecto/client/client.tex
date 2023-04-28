@@ -1,3 +1,6 @@
+
+En la \cref{fig:Diagrama UML de despliegue del cliente} podemos ver el diagrama UML de despliegue en el servidor cliente. Contendrá a el programa Cliente que recepciona las llamadas del Manager y ejecutará en la misma máquina el comando recibido. Dicho comando deberá estar disponible en el sistema para ser ejecutado y devolver el resultado que el programa Cliente debe comunicar al Manager de vuelta.
+
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/clientServerConcept}
@@ -6,15 +9,13 @@
 
 \subparagraph{Dominio}
 
-Hay que tener en cuenta que en este programa será casi todo infrestructura. ya que una vez recepcionado el comando mediante el RPC
-solo habrá que ejecutarlo en el servidor cliente y será tarea del cliente configurar dicho servidor para que dicho comando exista. Será tarea del programa a ejecutar interpretar dicho comando y trasnformar ese comando y esos argumentos en un dominio interno. Por ejemplo un programa típico de consola en un sistema UNIX
+Este programa será casi todo infrestructura. Esto es debido a que una vez recepcionado el comando mediante el RPC sólo será necesario ejecutarlo. Siendo tarea del programa ejecutado interpretar dicho comando y transformar esa cadena de caracteres que contiene el \textit{Step} a un dominio interno. Se ve más claro lo que se quiere expresar con un ejemplo. El típico comando de consola en un sistema UNIX
 
 \begin{verbatim}
     ./runMyComand --arg=arg1 --argN=argN
 \end{verbatim}
 
-
-Las posibilidades son tantas como comandos haya instalados en el servidor cliente. En nuestro caso podremos mandar a ejecutar todos los comandos que queramos que vengan previamente instalados en un sistema UNIX y además el programa de control donde podremos interactuar con el motor de corriente continua
+Será el string contenido en el \textit{Step} guardado en el Manager y recepcionado por el \textit{Client} que ejecutará en el mismo sistema operativo. Por lo tanto Las posibilidades son tantas como comandos haya instalados en el servidor cliente. En nuestro caso podremos mandar a ejecutar todos los comandos que queramos que vengan previamente instalados en un sistema UNIX y además el programa de control donde podremos interactuar con el motor de corriente continua. Algunos de los posibles comandos serán:
 
 \begin{verbatim}
     ./pidControl --velocity=30rpm
@@ -26,8 +27,7 @@ Las posibilidades son tantas como comandos haya instalados en el servidor client
     ./pidControl --enabled=false
 \end{verbatim}
 
-aquí podemos ver por ejemplo los comándos básicos de un control pid que podremos ejecutar. En la descripción del programa de control y su dominio lo veremos en más detalle
-
+El diagrama de Dominio de el \textit{Client} podemos verlo en la \cref{fig:Diagrama UML de el dominio de cliente}. Constando únicamente de dos Value Objects para los \textit{Steps} recibidos y para los \textit{Results} obtenidos.
 
 \begin{figure}[H]
     \centering
@@ -49,11 +49,12 @@ aquí podemos ver por ejemplo los comándos básicos de un control pid que podre
 \subparagraph{casos de uso}
 
 Vamos a describir los casos de uso que podrán ejecutarse en el programa client. En este caso no tendremos Entities porque no necesitamos identificadores.
-Tendremos los Value Objects para los steps que nos llegaran a modo de request y el necesario para responder. En este sistema no hay persistencia.
+Tendremos los \textit{Value Object}s para los steps que nos llegaran a modo de request y el necesario para responder. En este sistema no hay persistencia.
 
 \textbf{Execute Unary Step}
 
 Centrando en un caso de uso de este tipo de steps en nuestro programa de control sirve por ejemplo para establecer un parámetro de control del PID. Cualquiera de los siguientes.
+
 \begin{verbatim}
     ./pidControl --velocity=30rpm
 \end{verbatim}

@@ -1,4 +1,4 @@
-En el proyecto constará de 4 carpetas principales
+En el proyecto constará de 4 carpetas principales. Donde podemos ver las 3 capas y Bootstrap que será donde hagamos la composición de la aplicación, es decir la inyección de dependencias.
 
 \dirtree{%
     .1 Project .
@@ -8,14 +8,9 @@ En el proyecto constará de 4 carpetas principales
         .2 Bootstrap.
 }
 
-Bootstrap será donde hagamos la composición de la aplicación, es decir la inyección de dependencias.
-
-Vamos a desplegar la estructura capa por capa
-
-
 \textbf{Dominio}
 
-Podemos ver en la figura~\cref{fig:1-TaskDomainFolderStructure} por cada aggregate root tenemos una carpeta. En core tenemos la base de la cual extienden determinadas cosas que son comunes en toda a aplicación como los Errores o los eventos. La lógica común. Hay que mencionar que los errores no se han puesto por simplificar se encontrarán en el mismo contexto en el que se utilicen.
+Podemos ver en la figura~\cref{fig:ManagerEstructura de carpetas de Dominio} por cada \textit{Agreggate Root} tenemos una carpeta. En core tenemos la base de la cual extienden determinadas cosas que son comunes en toda a aplicación como los Errores o los eventos. La lógica común.
 
 \begin{figure}[H]
     \setlength{\DTbaselineskip}{10pt}
@@ -24,48 +19,60 @@ Podemos ver en la figura~\cref{fig:1-TaskDomainFolderStructure} por cada aggrega
 \dirtree{%
     .1 Domain.
         .2 Core.
-            .3 \textcolor{blue}{Id}.
-            .3 \textcolor{blue}{Event}.
-            .3 \textcolor{blue}{Error}.
+            .3 \textcolor{blue}{Id.go}.
+            .3 \textcolor{blue}{Event.go}.
+            .3 \textcolor{blue}{Error.go}.
         .2 Task.
             .3 \textcolor{blue}{Id.go}.
             .3 \textcolor{blue}{Task.go}.
             .3 Host.
-                .4 \textcolor{blue}{InvalidHostError}.
+                .4 \textcolor{blue}{InvalidHostError.go}.
                 .4 \textcolor{blue}{Host.go}.
             .3 Port.
                 .4 \textcolor{blue}{InvalidPortError.go}.
                 .4 \textcolor{blue}{Port.go}.
             .3 CommunicationMode.
-                .4 \textcolor{blue}{InvalidPortError.go}.
+                .4 \textcolor{blue}{InvalidCommunicationModeError.go}.
                 .4 \textcolor{blue}{Port.go}.
             .3 ExecutionMode.
+                .4 \textcolor{blue}{InvalidExecutionModeError.go}.
+                .4 \textcolor{blue}{ExecutionMode.go}.
             .3 Status.
+                .4 \textcolor{blue}{InvalidStatusError.go}.
+                .4 \textcolor{blue}{Status.go}.
             .3 Step.
-                .4 \textcolor{blue}{Id}.
-                .4 \textcolor{blue}{StepEntity}.
-                .4 \textcolor{blue}{StepVo}.
+                .4 \textcolor{blue}{Id.go}.
+                .4 \textcolor{blue}{StepEntity.go}.
+                .4 \textcolor{blue}{StepVo.go}.
                 .4 Repository.
-                    .5 "...".
+                    .5 \textcolor{blue}{Find.go}.
+                    .5 \textcolor{blue}{Save.go}.
+                    .5 \textcolor{blue}{Search.go}.
+                    .5 \textcolor{blue}{Delete.go}.
+                    .5 \textcolor{blue}{Update.go}.
                 .4 Service.
-                    .5 "...".
+                    .5 \textcolor{blue}{Finder.go}.
+                    .5 \textcolor{blue}{Creator.go}.
+                    .5 \textcolor{blue}{Updater.go}.
+                    .5 \textcolor{blue}{Eraser.go}.
+                    .5 \textcolor{blue}{Searcher.go}.
             .3 Repository.
-                .4 \textcolor{blue}{Find}.
-                .4 \textcolor{blue}{Save}.
-                .4 \textcolor{blue}{Search}.
-                .4 \textcolor{blue}{Delete}.
-                .4 \textcolor{blue}{Update}.
+                .4 \textcolor{blue}{Find.go}.
+                .4 \textcolor{blue}{Save.go}.
+                .4 \textcolor{blue}{Search.go}.
+                .4 \textcolor{blue}{Delete.go}.
+                .4 \textcolor{blue}{Update.go}.
             .3 Service.
-                .4 \textcolor{blue}{Finder}.
-                .4 \textcolor{blue}{Creator}.
-                .4 \textcolor{blue}{Updater}.
-                .4 \textcolor{blue}{Eraser}.
-                .4 \textcolor{blue}{Searcher}.
+                .4 \textcolor{blue}{Finder.go}.
+                .4 \textcolor{blue}{Creator.go}.
+                .4 \textcolor{blue}{Updater.go}.
+                .4 \textcolor{blue}{Eraser.go}.
+                .4 \textcolor{blue}{Searcher.go}.
         .2 Result.
-            .3 ResultId.
-            .3 BatchId.
-            .3 Result.
-            .3 Batch.
+            .3 \textcolor{blue}{ResultId.go}.
+            .3 \textcolor{blue}{BatchId.go}.
+            .3 \textcolor{blue}{Result.go}.
+            .3 \textcolor{blue}{Batch.go}.
             .3 Repository.
                 .4 "...".
             .3 Service.
@@ -84,26 +91,35 @@ Podemos ver en la figura~\cref{fig:1-TaskDomainFolderStructure} por cada aggrega
     .2 Port.
         .3 in.
             .4 Task.
-                .5 LoopExecutor.
-                    .6 Command.
-                    .6 UseCase
-                .5 ManuallyExecutor(Command).
-                .5 Create(Command).
-                .5 Update(Command).
-                .5 Delete(Command).
-                .5 Get.
-                    .6 Query.
-                    .6 UseCase.
-                .5 List(Query).
+                .5 LoopExecutorCommand.
+                    .6 \textcolor{blue}{Command.go}.
+                    .6 \textcolor{blue}{UseCase.go}.
+                .5 ManuallyExecutorCommand.
+                    .6 \textcolor{blue}{Command.go}.
+                    .6 \textcolor{blue}{UseCase.go}.
+                .5 CreateCommand.
+                    .6 \textcolor{blue}{Command.go}.
+                    .6 \textcolor{blue}{UseCase.go}.
+                .5 UpdateCommand.
+                    .6 \textcolor{blue}{Command.go}.
+                    .6 \textcolor{blue}{UseCase.go}.
+                .5 DeleteCommand.
+                    .6 \textcolor{blue}{Command.go}.
+                    .6 \textcolor{blue}{UseCase.go}.
+                .5 GetQuery.
+                    .6 \textcolor{blue}{Query.go}.
+                    .6 \textcolor{blue}{UseCase.go}.
+                .5 ListQuery.
+                    .6 \textcolor{blue}{Query.go}.
+                    .6 \textcolor{blue}{UseCase.go}.
                 .5 TaskEvent.
-                    .6 Event.
-                    .6 Handler.
+                    .6 \textcolor{blue}{Handler.go}.
             .4 Batch.
-                .5 Create(Command).
-                .5 Delete(Command).
-                .5 Get(Query).
-                .5 List(Query).
-                .5 ListResults(Query).
+                .5 CreateCommand.
+                .5 DeleteCommand.
+                .5 GetQuery.
+                .5 ListBatchesOfATaskQuery.
+                .5 ListResultsOfABatchQuery.
         .3 out.
             .4 GRPC.
                 .5 Unary .
@@ -117,21 +133,21 @@ Podemos ver en la figura~\cref{fig:1-TaskDomainFolderStructure} por cada aggrega
 
 \textbf{Adapters}
 
+En este punto tenemos el mayor grado de incertidumbre, no conocemos el contenido que vamos a tener que desarrollar, pero si podemos expresar la organización básica de lo que se va a requerir.
+
 \begin{figure}[H]
     \setlength{\DTbaselineskip}{10pt}
     \DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
 \dirtree{%
     .1 Adapter.
-    .2 in.
-    .3 GRPC.
-    .4 Harán uso de los useCases de aplicación cuando llegue una request RPC.
-    .3 Console.
-    .4 Por ejemplo si quisieramos ejecutar los casos de uso mediante terminal.
-    .2 out.
-    .3 Mysql.
-    .4 Implementación de los respository (*2).
-    .3 GRPC.
-    .4 implementación de los repository de llamada a los servidores clientes.
+        .2 in.
+            .3 GRPC.
+                .4 Harán uso de los useCases de aplicación cuando llegue una request RPC.
+        .2 out.
+            .3 Mysql.
+                .4 Implementación de los repository de cada entidad.
+            .3 GRPC.
+                .4 implementación de los repository de llamada a los servidores clientes.
 }
     \caption{Manager: Estructura de carpetas de Infraestructura}\label{fig:ManagerEstructura de carpetas de Infraestructura}
 \end{figure}

@@ -1,5 +1,3 @@
-En el proyecto constará de 4 carpetas principales
-
 \begin{figure}[H]
     \setlength{\DTbaselineskip}{10pt}
     \DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
@@ -15,21 +13,23 @@ En el proyecto constará de 4 carpetas principales
 
 \textbf{Dominio}
 
+En la~\cref{fig:Client-Estructura de carpetas de Dominio} podemos ver que el único repositorio que necesitaremos implementar en infrastructura será el acceso al sistema operativo para ejecutar el comando. Como servicios tendremos la ejecución de cada uno de los modos de comunicación que podemos recibir desde el Manager. Cada uno de ellos hará uso del Repository con su lógica correspondiente.
+
 \begin{figure}[H]
     \setlength{\DTbaselineskip}{10pt}
     \DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
     \dirtree{%
         .1 Domain.
-        .2 Step.
-        .3 StepVo.
-        .3 ResultVo.
-        .3 Repository.
-        .4 consoleWrite.
-        .3 Services.
-        .4 UnaryExecutor.
-        .4 ClientStreamExecutor.
-        .4 ServerStreamExecutor.
-        .4 BidirectionalExecutor.
+            .2 Step.
+                    .4 \textcolor{blue}{StepVo.go}.
+                    .4 \textcolor{blue}{ResultVo.go}.
+                .3 Repository.
+                    .4 \textcolor{blue}{Executor.go}.
+                .3 Services.
+                    .4 \textcolor{blue}{UnaryExecutor.go}.
+                    .4 \textcolor{blue}{ClientStreamExecutor.go}.
+                    .4 \textcolor{blue}{ServerStreamExecutor.go}.
+                    .4 \textcolor{blue}{BidirectionalExecutor.go}.
     }
     \caption{Client: Estructura de carpetas de Dominio}\label{fig:Client-Estructura de carpetas de Dominio}
 \end{figure}
@@ -41,15 +41,21 @@ En el proyecto constará de 4 carpetas principales
     \DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
     \dirtree{%
         .1 Application.
-        .2 Port.
-        .3 in.
-        .4 Step.
-        .5 ExecuteUnary.
-        .6 Command.
-        .6 UseCase.
-        .5 ExecuteServerStream (Command).
-        .5 ExecuteClientStream (Command).
-        .5 ExecuteBidi (Command).
+            .2 Port.
+                .3 in.
+                    .4 Step.
+                        .5 ExecuteUnaryCommand.
+                            .6 \textcolor{blue}{Command.go}.
+                            .6 \textcolor{blue}{UseCase.go}.
+                        .5 ExecuteServerStreamCommand.
+                            .6 \textcolor{blue}{Command.go}.
+                            .6 \textcolor{blue}{UseCase.go}.
+                        .5 ExecuteClientStreamCommand.
+                            .6 \textcolor{blue}{Command.go}.
+                            .6 \textcolor{blue}{UseCase.go}.
+                        .5 ExecuteBidiCommand.
+                            .6 \textcolor{blue}{Command.go}.
+                            .6 \textcolor{blue}{UseCase.go}.
     }
     \caption{Client: Estructura de carpetas de Aplicación}\label{fig:Client-Estructura de carpetas de Aplicación}
 \end{figure}
@@ -61,12 +67,12 @@ En el proyecto constará de 4 carpetas principales
     \DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
     \dirtree{%
         .1 Adapter.
-        .2 in.
-        .3 GRPC.
-        .4 Harán uso de los useCases de aplicación cuando llegue una request RPC.
-        .2 out.
-        .3 console.
-        .4 implementacion de consoleWrite para ejecutar los comandos en el sistema y obtener los resultados.
+            .2 in.
+                .3 GRPC.
+                    .4 Harán uso de los useCases de aplicación cuando llegue una request RPC.
+            .2 out.
+                .3 console.
+                    .4 implementacion de consoleWrite para ejecutar los comandos en el sistema y obtener los resultados.
     }
     \caption{Client: Estructura de carpetas de Infraestructura}\label{fig:Client-Estructura de carpetas de Infraestructura}
 \end{figure}

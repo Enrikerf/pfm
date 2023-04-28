@@ -1,41 +1,20 @@
 \paragraph{Utilización}
-    De cara al usuario cliente de este sistema dispondrá de:
-    \begin{itemize}
-        \item Un sistema para introducir y gestionar tareas para ejecutar en sistemas remotos de forma automática o manual
-        \item Un programa cliente para ofrecer al público. Cualquier servidor con este programa instalado podrá recibir tareas desde el manager que se ejecutarán en su servidor de forma automática.
-        \item Un programa de control pid para un microcontrolador para controlar un motor de corriente continua ejecutable desde consola. Por lo tanto cualquier cliente podrá instalarlo en su servidor y temporizar tareas sobre este programa.
-    \end{itemize}
 
-En un ejemplo básico de uso podríamos tener una puerta automática controlada por un microcontrolador y ejecutar la apertura desde el manager.
+El usuario el sistema tendrá la capacidad de:
+
+\begin{itemize}
+    \item Un programa gestor para introducir y gestionar tareas para ejecutar en sistemas remotos de forma automática o manual.
+    \item Un programa cliente para instalar en cualquier servidor con la capacidad de recibir tareas desde el manager que se ejecutarán de forma automática. Cualquier programa instalado en dicho servidor podrá ser ejecutado.
+    \item Un programa de control instalable en cualquiera de los servidores clientes para actuar sobre un pid que controle motor de corriente continua.
+\end{itemize}
 
 \paragraph{Seguridad y calidad}\label{par:testing}
-    \input{./part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/testing.tex}
+\input{./part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/testing.tex}
+
 \paragraph{Robustez ante nuevos desarrollo}
+\input{part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/docker/docker.tex}
 
-Uno de los puntos más relevantes de un proyecto de software es garantizar la viabilidad en la continuidad del desarrollo futuro; ya sea por mantenimiento o adición de nuevas características.
 
-Para esto hay que tener en cuenta que uno de los factores más limitantes es la acumulación de conocimiento acerca del sistema en los ténicos. Tener un sistema que evite tener que conocer todo el proyecto en profundidad para realizar cambios es crítico. Uno de estos puntos es la infraestructura. El hecho de instalar el sistema en su modo para el desarrollo es en sí un reto. Instalar dependencias y garantizar que todo está funcional.
-
-Por ello es importante, no sólo la documentación, si herramientas que levanten el sistema de forma automatizada y generalizada para cualquier dispositivo. A nuestra disposición tenemos Docker~\cref{par:Docker}, scripts y archivos Makefile.
-
-Dentro de esos contendores Docker dispondremos de todas las herramientas ya instaladas para manejar el sistema sin tener que instalarlas en nuestra propia máquina.
-
-Para este proyecto necesitaremos garantizar:
-
-\begin{itemize}
-    \item versión fija de golang para compilar los programas
-    \item versión fija de la las librerias
-    \item versión fija de la base de datos
-    \item configuración del protocolo de comunicación entre sistemas
-\end{itemize}
-
-tendremos un archivo Makefile en cada programa para:
-
-\begin{itemize}
-    \item interactuar con el sistema de contenedores docker~\cref{par:Docker}
-    \item interactuar con el protocolo GRPC~\cref{subsubsec:communications}
-    \item interactuar con la base de datos~\cref{par:mysql}
-\end{itemize}
 
 
 

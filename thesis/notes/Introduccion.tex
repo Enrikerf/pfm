@@ -24,10 +24,10 @@ Las principales herramientas a día de hoy que responden a los diferentes puntos
 \begin{itemize}
 	\item respecto a cómo se va entregando valor de forma iterativa: scrum, kanban, agile, extreme programing...
 	\item respecto a cómo se garantiza cumplir la expectativa del cliente con el producto: Testing (TDD,BDD...) diseño de casos de uso, diagramas UML, UX, UI
-	\item respecto a cómo se garantiza la posibilidad de cambio: arquitectura de capas o hexagonal, DDD... 
+	\item respecto a cómo se garantiza la posibilidad de cambio: arquitectura de capas o hexagonal,\textit{DDD}...
 \end{itemize} 
 
-De todas ellas, hemos escogido como relevantes para este trabajo las herramientas de diseño que garantizan la posibilidad de cambio en el futuro y el cumplimiento de las expectativas del cliente: arquitectura de capas, DDD y testing. frente a otras herramientas enumeradas.
+De todas ellas, hemos escogido como relevantes para este trabajo las herramientas de diseño que garantizan la posibilidad de cambio en el futuro y el cumplimiento de las expectativas del cliente: arquitectura de capas,\textit{DDD} y testing. frente a otras herramientas enumeradas.
 
 Con respecto a la arquitectura de capas hago una reflexión: hablar en términos del negocio que se quiere controlar y separarlo de los detalles técnicos garantizan que lo que se construye es lo que se espera. Soy un firme defensor que la parte del código por la que realmente paga un cliente debería ser capaz de leerla él mismo, es decir, que sea legible por gente ajena al mundo del desarrollo de software. Para ello se debe hacer un esfuerzo en entender qué forma parte de la solución que se está ofreciendo y qué es una simple herramienta o detalle para conseguirlo. Pongo un pequeño ejemplo, pero profundizaremos más en esta reflexión a lo largo del proyecto: El funcionamiento de un semáforo, en su forma más simple, es que cada x segundos se enciende una luz y se apaga la otra, alternativamente. que haya un cableado por dentro, un microcontrolador o un señor apretando unos botones mirando un cronómetro no es lo relevante. Por lo que paga realmente el cliente es por la programación del comportamiento, y este debe ser legible para el mismo para poder evaluar si responde a sus expectativas. Los detalles técnicos, como no puede ser de otra forma,tienen su importancia, pero componen a mi parecer una segunda derivada.
 

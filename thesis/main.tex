@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[12pt,a4paper,spanish]{article}
 \usepackage[margin=2.54cm,]{geometry}
 \usepackage[pdftex]{graphicx}
 \usepackage{pdfpages}
@@ -7,7 +7,7 @@
 \usepackage{listings}
 \usepackage{dirtree}
 \usepackage{float}
-\usepackage[]{hyperref}
+\usepackage{hyperref}
 \usepackage{ulem}
 \usepackage{xcolor}
 \usepackage{listingsutf8}
@@ -39,10 +39,12 @@
 \newglossaryentry{ApplicationLayer}{ name={Aplication layer},description={(Capa de aplicación) Capa que contiene los casos de uso específicos del negocio. Proporciona una interfaz para interactuar con el dominio}}
 \newglossaryentry{UseCase} {name={Use Case},description={(Caso de uso) Escenario específico de uso de la aplicación que involucra múltiples operaciones y procesos. Los casos de uso se utilizan para representar la funcionalidad de la aplicación desde la perspectiva del usuario}}
 \newglossaryentry{Command}{name={UseCase},description={(Comando) Operación que realiza un cambio en el estado del sistema}}
+\newglossaryentry{SUT}{name={S.U.T.},description={System Under Test (Sistema bajo testeo)}}
+\newglossaryentry{DOC}{name={D.O.C.},description={Depended On Component (Dependiente del componente)}}
 \newglossaryentry{DTO}{name={D.T.O.},description={Data Transfer Object (Objeto de transferencia de datos) Objeto inmutable que sólo sirve para transportar información de una capa a otra}}
-\newglossaryentry{UL}{name={U.L.},description={(Ubiquitous Language) Lenguaje común en un diseño guiado por DDD para describir los componentes del problema}}
+\newglossaryentry{UL}{name={U.L.},description={(Ubiquitous Language) Lenguaje común en un diseño guiado por\textit{DDD} para describir los componentes del problema}}
 \newglossaryentry{Query} {name={Command},description={(Consulta) Operación que recupera información del sistema sin modificar su estado}}
-\newglossaryentry{CI/CD} {name={PID},description={(Continuous delivery/Continuous integration. Entrega Continua/Integración Continua) Prácticas y herramientas para automatizar el proceso de desarrollo de software desde la creación del código hasta su despliege en producción}}
+\newglossaryentry{CI/CD} {name={CI/CD},description={Continuous delivery/Continuous integration (Entrega Continua/Integración Continua) Prácticas y herramientas para automatizar el proceso de garantizar el correcto desarrollo de software desde la creación del código hasta su despliege en producción}}
 
 \begin{document}
     \input{./packagesConfig}

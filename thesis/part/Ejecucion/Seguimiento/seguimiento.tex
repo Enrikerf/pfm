@@ -1,7 +1,7 @@
 Resulta imposible abarcar el seguimiento de todo el código desarrollado. En esta sección por tanto vamos a exponer la ejecución del proyecto haciendo foco en los casos de uso más representativos de toda la metodología que este trabajo ha desarrollado en su fase de diseño. El resto se expondrá de una forma más gráfica con diagramas que hagan comprensible la estructura y no tanto los detalles de implementación.
 
 Una de las primeras características que cabe resaltar de golang es que no tiene clases ni herencia. como estructura
-principal de datos tiene los structs. Si queremos garantizar la encapsulación, sobre todo en los elementos de dominio y aplicación. Garantizar que dichose elementos se creen bajo una misma logica que no se pueda evitar, por ejemplo, declaración inicial de variables de dichos structs que representen las Entities, los Value Objects, etc.
+principal de datos tiene los structs. Si queremos garantizar la encapsulación, sobre todo en los elementos de dominio y aplicación. Garantizar que dichose elementos se creen bajo una misma logica que no se pueda evitar, por ejemplo, declaración inicial de variables de dichos structs que representen las Entities, los \textit{Value Object}s, etc.
 
 De tal forma que debemos entender que olang sólo expone elementos, ya sea structs, funciones o demás tipos fuera de un módulo si están escritos en Mayuscula. Un módulo son todos los archivos dentro de un mismo directorio.
 
@@ -56,7 +56,7 @@ por qué es importante concebir esta estructura:
 
 \begin{itemize}
     \item Evitamos la instanciación no consistente, lo cual solo se garantiza a traves del método si exportado NewClass
-    \item evitamos accesos no deseados al seteo de variables. Si las pusieramos publicas seria posible. esto es de vital importancia a la hora de establecer el concepto de inmutabilidad en la que se basan los value objects.
+    \item evitamos accesos no deseados al seteo de variables. Si las pusieramos publicas seria posible. esto es de vital importancia a la hora de establecer el concepto de inmutabilidad en la que se basan los \textit{Value Object}s.
     \item otro punto de limpieza que aporta, es a la hora de gestionar errores en golang. Si en cualquier punto queremos devolver como resultado de una función un objeto o el error, característica de golang que permite devolver varios elementos como resultado, Nos veríamos obligados a instanciar el objeto con contenido vacío y el error, creando un elemento inconsistente sólo por exigencias del lenguaje. De esta forma, podemos poner como parámetro de retorno dicha interfaz que sí puede ser null.
 \end{itemize}
 

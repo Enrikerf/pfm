@@ -1,8 +1,8 @@
-Casos de uso todas las funciones del engine y diseñarlo para que la infra sea a través de consola de comandos (preparando para que luego debido a la comunicación rpc devolver los datos sea muy complicado si lo dividimos en otro comando y decidimos absorver este dominio)
+En la~\cref{fig:Control-Diagrama UML de despliegue} podemos ver que el programa de control tiene acceso directo al hardware. Ejecutará los comandos recibidos por el programa cliente y actuará en consecuencia sobre el motor de corriente continua.
 
-El sistema está pensado para que el programa a ejecutar sea de libre decisión del cliente. pero vamos a aprovechar la oportunidad para crear un programa de control y profundizar tanto en el uso del lenguaje como en los conocimientos relacionados con este master. En concreto el control automático. Uno do los programas que podrá ejecutar será un control PID.
-
-
+%Casos de uso todas las funciones del engine y diseñarlo para que la infra sea a través de consola de comandos (preparando para que luego debido a la comunicación rpc devolver los datos sea muy complicado si lo dividimos en otro comando y decidimos absorver este dominio)
+%
+%El sistema está pensado para que el programa a ejecutar sea de libre decisión del cliente. pero vamos a aprovechar la oportunidad para crear un programa de control y profundizar tanto en el uso del lenguaje como en los conocimientos relacionados con este master. En concreto el control automático. Uno do los programas que podrá ejecutar será un control PID.
 
 \begin{figure}[H]
     \centering
@@ -14,7 +14,7 @@ El sistema está pensado para que el programa a ejecutar sea de libre decisión 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.45\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/controlDomain}
+    \includegraphics[height=0.5\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/controlDomain}
     \caption{Control: Diagrama UML de el dominio}\label{fig:Control-Diagrama UML de el dominio}
 \end{figure}
 
@@ -45,17 +45,21 @@ El primer paso a ejecutar antes de habilitar el control PID será sintonizarlo.
     \caption{Use Case: Configure PID}\label{fig:Use Case-Configure PID}
 \end{figure}
 
+\newpage
 \textbf{Enable RPM control}
 
-Cuando se habilita el control rpm se genera una goRutine, es decir una nuevo proceso que se quedará ejecutando hasta que se ejecute el caso de uso Disable Control
+Cuando se habilita el control rpm se genera una goRutine, es decir, si el hardware no devuelve error se responde OK pero un nuevo proceso que se quedará ejecutando hasta que se ejecute el caso de uso Disable Control. Este nuevo proceso ejecutará el control PID para mantener la consigna en el valor indicado. En este caso la consigna será la velocidad angular requerida.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.5\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enableRPMControl}
+    \includegraphics[height=0.6\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enableRPMControl}
     \caption{Use Case: Enable RPM control}\label{fig:Use Case- Enable RPM control}
 \end{figure}
 
+\newpage
 \textbf{Enable Position control}
+
+Para el control en posición se actuará análogamente al control de velocidad pero la consigna será el ángulo requerido.
 
 \begin{figure}[H]
     \centering
@@ -71,6 +75,7 @@ Cuando se habilita el control rpm se genera una goRutine, es decir una nuevo pro
     \caption{Use Case: Disable control}\label{fig:Use Case- Disable control}
 \end{figure}
 
+\newpage
 \subparagraph{estructura de carpetas}
 
 \input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/control_estructure_control.tex}

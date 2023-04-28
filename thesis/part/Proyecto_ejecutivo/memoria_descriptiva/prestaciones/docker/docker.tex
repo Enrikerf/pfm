@@ -1,0 +1,44 @@
+
+Uno de los puntos más relevantes de un proyecto de software es garantizar la viabilidad en la continuidad del desarrollo futuro; ya sea por mantenimiento o adición de nuevas características. A lo largo de la vida de un proyecto los técnicos que trabajan en él van cambiando; la acumulación de conocimiento acerca del sistema es un factor crítico. Debemos diseñar un sistema modular que evite tener que conocer todo el proyecto en profundidad para realizar cambios.
+
+La infraestructura es un punto problemático al afectar a todo el sistema. Necesitamos desplegar una réplica del sistema en una máquina para probar y desarrollar las nuevas características, es decir, levantar una réplica en modo desarrollo. Instalar dependencias, garantizar que todo está funcional y que estamos probando un sistema exactamente igual al que están utilzando los clientes para evitar diferencias a la hora de desplegar los cambios en el entorno final.
+
+Las herramientas que desplieguen el sistema de forma automatizada en cualquier dispositivo permitiendo trabajar en un punto concreto de la aplicación sin necesidad de conocerla en todo su extensión son: Docker, scripts y Makefiles.
+
+Dentro de esos contendores Docker dispondremos de todas las herramientas ya instaladas para manejar el sistema sin tener que instalarlas en nuestra propia máquina, evitando problemas de versiones e incompatibilidades. Para este proyecto necesitaremos garantizar:
+
+\begin{itemize}
+    \item versión fija de golang para compilar los programas
+    \item versión fija de la las librerias
+    \item versión fija de la base de datos
+    \item configuración del protocolo de comunicación entre sistemas
+\end{itemize}
+
+Docker es el sistema de gestión de contenedores más utilizado en la industria a día de hoy. Según la misma página oficial de Docker un contendor se define como: "A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another. A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings."~\cite{docker}
+
+El sistema se basa en la definición de imágenes que no son más que las instrucciones para la construcción de esos contenedores mediante el sistema de Docker Engine. Difieren de las máquinas virtuales tal y como se muestra en la comparativa~\cref{fig:Docker vs VM}.
+
+Esto permite correr multiples aplicaciones con multiples requerimientos en cualquier máquina sin tener que instalar dichas dependencias de forma local, evitando incompatibilidades e interacciones no deseadas. Permite ofrecer entregables consistentes a los clientes de forma que el software y todo aquello que necesita para ejecutarse se entregan de forma conjunta, evitando problemas de instalación.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/docker/img/dockerVsVM}
+    \caption{Docker vs VM.\cite{docker}}\label{fig:Docker vs VM}
+\end{figure}
+
+Las claves de Docker se basan en:
+\begin{itemize}
+    \item permite trabajar en el desarrollo de distintos proyectos con distintos requerimientos en una misma máquina sin la complejidad de mantener las dependencias de cada proyecto. O trasladarse a otra máquina y seguir trabajando de forma rápida al no tener que ponerse a instalar dichas dependencias de nuevo
+    \item permite trabajar en equipo ya que cada cambio en las dependencias queda expresado en los cambios que se realizan de las imagenes de los contenedores que están disponibles para todo el equipo
+    \item permite configurar el sistema para desarrollar o para producción de forma consistente con sus distintas diferencias en las dependencias necesarias, evitando problemas en el cambio de entorno de desarrollo y producción
+\end{itemize}
+
+Como este proyecto se basa en 3 softwares entregables: el servicio de manager, el servicio cliente(el cual puede ser requerido en multiples máquinas y habrá de ser desplegada dicha réplica) y el programa de control. Vamos a extraer toda la utilidad de Docker para que se entrege y despliege de forma consistente y sencilla dicho software.
+
+Los archivos Makefile son un conjunto de acciones expresadas en un archivo que nos permiten ejecutarlos desde consola. Con ellos podemos avisar al desarrollador de qué acciones básicas dispone, el simple conocimiento de su existencia ya supondría adquirir un conocimiento y de esta forma queda documentado a modo de ejecutable. Y queda descrito lo que realizan sin necesidad de conocer qué es lo que se ejecuta, simplemente su utilidad. En cada programa dispondremos de las siguientes acciones básicas:
+
+\begin{itemize}
+    \item interactuar con el sistema de contenedores docker: levantarlo, pararlo, resetearlo. Sin necesidad de conocer Docker.
+    \item interactuar con el protocolo gRPC: recrear, generar y eliminar los archivos proto que definen el protocolo de comunicación. Sin necesidad de conocer gRPC
+    \item interactuar con la base de datos: crear la base de datos, resetearla, indr
+\end{itemize}
