@@ -1,3 +1,4 @@
+
 Proteger el sistema frente al error humano es esencial para garantizar la entrega de código con seguridad y calidad. Para ello se emplearán herramientas de \gls{CI/CD} que se encargarán de realizar comprobaciones antes de permitir la llegada a servicio del nuevo código y el despliegue automático de dicho código en el entorno final. Este proyecto se centra en los primeros, CI o Continuous integration, debido a que no disponemos de servidores sobre los que desplegar de forma final.
 
 En términos técnicos, CI/CD implica el uso de sistemas de control de versiones, servidores de automatización de compilación y pruebas, y herramientas de automatización de implementación y entrega. Estas herramientas permiten que los desarrolladores integren sus cambios de código en un repositorio central, donde se desencadenan automáticamente pruebas y compilaciones para detectar cualquier error y garantizar que el código se pueda implementar sin problemas.
@@ -76,23 +77,23 @@ Como estamos diseñando el test, no podemos saber la implementación. La entrada
 por lo tanto podríamos coger cualquier valor dentro de esas dos clases, por ejemplo:
 
 \begin{itemize}
-    \item invalido: “cualquierCadenaInvalida“ \rightarrow resultado esperado: ERROR
-    \item válido: “lunes“  \rightarrow resultado esperado: “martes“
+    \item invalido: “cualquierCadenaInvalida“ \(\longrightarrow\) resultado esperado: ERROR
+    \item válido: “lunes“ \(\longrightarrow\) resultado esperado: “martes“
 \end{itemize}
 
 Vemos como podemos siguiendo esta metodología podemos dar una garantía. Explicar metodológicamente porqué se han hecho los tests y los valores escogidos y que covertura se está ofreciendo. Ahora si aplicamos la técnica de los valores límites sabemos que el “domingo“ es el último día y se debe volver al “lunes“. Es decir, es el valor límite dentro de nuestra clase de equivalencia. Por lo tanto si queremos garantizar y elegir con critero dentro de los casos de nuestra clase de equivalencia los tests quedarían:
 
 \begin{itemize}
-    \item invalido: “cualquierCadenaInvalida“ \rightarrow resultado esperado: ERROR
-    \item válido limite inicial: “lunes“  \rightarrow resultado esperado: “martes“
-    \item válido limite final: “domingo“  \rightarrow resultado esperado: “lunes“
+    \item invalido: “cualquierCadenaInvalida“ \(\longrightarrow\) resultado esperado: ERROR
+    \item válido limite inicial: “lunes“ \(\longrightarrow\) resultado esperado: “martes“
+    \item válido limite final: “domingo“ \(\longrightarrow\) resultado esperado: “lunes“
 \end{itemize}
 
 \textbf{Variables dependientes}
 
 El método de pairwise, también conocido como pruebas de combinaciones de pares, es una técnica de diseño de pruebas que permite reducir el número de casos de prueba necesarios para lograr una cobertura exhaustiva de las combinaciones posibles de parámetros en un sistema o aplicación. En lugar de probar todas las combinaciones posibles de los parámetros, el método de pairwise identifica las combinaciones de pares que tienen el potencial de causar problemas o errores y las incluye en los casos de prueba. Estas combinaciones de pares se seleccionan utilizando un algoritmo que busca minimizar el número de casos de prueba necesarios sin sacrificar la calidad de la cobertura de pruebas.
 
-El método de pairwise fue introducido por David C. Kuhn en un artículo titulado \cite{37051} "Practical Combinatorial Testing" publicado en 1997. Desde entonces, ha sido ampliamente utilizado en la industria de software y ha sido objeto de numerosos estudios y mejoras por parte de investigadores y practicantes.
+El método de pairwise fue introducido por David C. Kuhn en un artículo titulado~\cite{37051} “Practical Combinatorial Testing“ publicado en 1997. Desde entonces, ha sido ampliamente utilizado en la industria de software y ha sido objeto de numerosos estudios y mejoras por parte de investigadores y practicantes.
 
 Entre los beneficios del método de pairwise se encuentra la reducción del número de casos de prueba necesarios para una cobertura exhaustiva, lo que puede ahorrar tiempo y recursos. Sin embargo, es importante tener en cuenta que el método de pairwise no es una técnica infalible y que puede no detectar ciertos tipos de errores o problemas en el sistema o aplicación bajo prueba.
 
