@@ -1,15 +1,17 @@
-El objetivo general de este trabajo será el estudio de Golang Go para su aplicación en el desarrollo de servicios web API orientados al control remoto. Se va a desarrollar un servicio API gestor de tareas que ejecutará acciones en dispositivos remotos. En particular nos centraremos en el control PID de un motor de corriente continua.
 
-El enfoque particular del PFM será adaptar el diseño de un Proyecto Ejecutivo Industrial a un proyecto software. Usando dicho Proyecto Ejecutivo para luego realizar un documento, también adaptado, de Dirección de obra. Terminaremos con una presentación de resultados y pruebas para confirmar la adecuación del resultado al objetivo fijado.
+El Objetivo es
+El objetivo analizar el uso de Go para su aplicación en el desarrollo de servicios web API orientados al control remoto. Se va a desarrollar un servicio API gestor de tareas que ejecutará acciones en dispositivos remotos. Como caso de aplicación desarrollaremos un programa de control PID de un motor de corriente continua para su uso remoto a través de este sistema.
 
-Los objetivos específicos:
+El enfoque particular del trabajo será adaptar la estructura de un proyecto ejecutivo de carácter industrial a un proyecto de diseño de software. Abordaremos también la ejecución del proyecto y la documentación del proceso adaptando un documento de dirección de obra. Terminaremos con una presentación de resultados y pruebas para confirmar la adecuación del resultado al objetivo fijado.
+
+Para lograr estos objetivos generales, el proyecto abordará los siguientes objetivos específicos:
 \begin{itemize}
-    \item Dominio de las sintaxis y características concretas del lenguaje para poder diseñar la arquitectura del software: gestión del protocolo HTTP, enrutamiento, inyección de dependencias, POO, gestión del SO para ejecución de comandos y desarrollo de los algoritmos de control.
+    \item Dominio de las sintaxis y características concretas de Golang Go para poder diseñar la arquitectura del software: gestión del protocolo HTTP, enrutamiento, inyección de dependencias, POO, gestión del SO para ejecución de comandos y desarrollo de los algoritmos de control.
     \item Desarrollo del proyecto de ejecución: con el conocimiento adquirido se diseñará el sistema que estará recogido en un proyecto de ejecución donde vendrá especificado el contexto del trabajo, su alcance, la arquitectura diseñada, planos de relación entre componentes y de la base de datos necesaria y hardware seleccionado junto con su justificación de uso.
     \begin{itemize}
-        \item Las especificaciones de la API
+        \item Las especificaciones de la API:
         \begin{itemize}
-            \item CRUD de direciones IP o DNS de las máquinas contenedoras del código de control
+            \item \gls{CRUD} de direciones IP o DNS de las máquinas contenedoras del código de control
             \item CRUD de comandos a ejecutar en dichas máquinas
             \item CRUD de los resultados de dicha ejecución
             \item Diseño de los test unitarios
@@ -27,7 +29,7 @@ Los objetivos específicos:
             \item Controlador PID en posición de un motor CC con encoder mediante PWM
         \end{itemize}
     \end{itemize}
-    \item Documento de dirección de obras que contenga el seguimiento, la memoria explicativa de cambios si fuera necesario y los planos definitivos.
+    \item Documentación de la dirección de obras que contenga el seguimiento, la memoria explicativa de cambios si fuera necesario y los planos definitivos.
 \end{itemize}
 
 %Desde un punto de vista técnico, se llevará a cabo el desarrollo de un sistema capaz de almacenar y administrar tareas para su ejecución en sistemas remotos. Para lograr esto, se requerirá la implementación de un servicio web API (application programming interface) y dos servicios clientes: uno para manejar la interfaz gráfica (frontend) y otro para ejecutar las tareas.

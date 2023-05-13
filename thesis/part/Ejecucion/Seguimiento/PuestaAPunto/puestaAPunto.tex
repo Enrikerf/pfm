@@ -1,7 +1,7 @@
 
 \paragraph{Pipeline}\label{par:pipeline}
 
-En el proceso de Pull Request tal y como se diseño~\cref{par:testing} se ejecuta el pipeline diseñado para garantizar la entrega de software testeado y con el estandar de calidad requerido. Podemos ver en la figura~\cref{fig:githubActions} que los pasos son:
+En el proceso de Pull Request, tal y como se diseño~\nameref{par:testing}, se ejecuta el pipeline diseñado para garantizar la entrega de software testeado y con el estandar de calidad requerido. Podemos ver en la figura~\cref{fig:githubActions} que los pasos son:
 
 \begin{itemize}
     \item ejecutar los tests
@@ -14,7 +14,7 @@ faltarían el CD o continous delivery que ejecutaría los pasos de subir dicho e
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/PuestaAPunto/img/githubPipelines}
-    \caption{pipeline en Github}\label{fig:githubActions}
+    \caption{Pipeline en Github}\label{fig:githubActions}
 \end{figure}
 
 \paragraph{Montaje de prueba}\label{par:montaje}
@@ -24,31 +24,29 @@ Para la prueba conjunta del sistema se ha desplegado un montaje como se ve en la
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/PuestaAPunto/img/deploy}
-    \caption{diagrama de despliegue de prueba}\label{fig:despliegue de prueba}
+    \caption{Diagrama de despliegue de prueba}\label{fig:despliegue de prueba}
 \end{figure}
 
-Podemos ver en la imagen~\cref{fig:montaje en protoboard} el montaje físico de conexión entre el el servidor cliente, en este caso una Rashpberry con la protoboard donde tenemos la conexión con el puente H y el motor de corriente continua.
+La imagen~\cref{fig:montaje en protoboard} muestra el montaje físico de conexión entre el el servidor cliente. La Raspberry se conecta en una protoboard donde se realiza la conexión con el puente H y el motor de corriente continua.
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/PuestaAPunto/img/montajeProtoboard}
-    \caption{montaje en protoboard}\label{fig:montaje en protoboard}
+    \caption{Montaje en protoboard}\label{fig:montaje en protoboard}
 \end{figure}
 
 \paragraph{Interfaz gráfica}\label{par:interfaz}
 
-Para controlar el programa manager se ha desarrollado como añadido una interfaz gráfica. En la figura~\cref{fig:frontend} podemos ver el listado de las tareas creadas, el estado en el que se encuentran y un boton para ejecutar manualmente las que son manuales.
+Para controlar el programa manager se ha desarrollado como añadido una interfaz gráfica. En la figura~\cref{fig:frontend} podemos ver el listado de las tareas creadas, el estado en el que se encuentran y un boton para ejecutar manualmente las que son manuales. Para ejecutar manualmente una tarea disponimos de una gráfica para ver en tiempo real la evolución de la variable controlada tal y como podemos ver en el~\cref{fig:runner}
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/PuestaAPunto/img/frontend}
-    \caption{frontend: task list}\label{fig:frontend}
+    \caption{Frontend: task list}\label{fig:frontend}
 \end{figure}
-
-Para ejecutar manualmente una tarea disponimos de una gráfica para ver en tiempo real la evolución de la variable controlada.
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/PuestaAPunto/img/runner}
-    \caption{frontend: runner}\label{fig:runner}
+    \caption{Frontend: runner}\label{fig:runner}
 \end{figure}

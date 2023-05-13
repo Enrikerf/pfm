@@ -46,7 +46,7 @@ En el diagrama~\cref{fig:layers} podemos ver este concepto más simplificado. El
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/infoPreviaAntecedentes/img/PFM - Layer}
-    \caption{layered architecture}\label{fig:layers}
+    \caption{Arquitectura de capas}\label{fig:layers}
 \end{figure}
 
 Junto con el concepto de arquitectura hexagonal y el\textit{DDD} vamos a aplicar el paradigma de diseño conocido como \gls{CQRS} (Command Query Responsibility Segregation). Es una técnica de diseño de arquitectura de software que separa la lógica de escritura (comandos) de la lógica de lectura (consultas) en sistemas de información. La idea es que las operaciones de escritura (comandos) y las operaciones de lectura (consultas) se manejen por separado, ya que tienen necesidades y características distintas. Mientras que las operaciones de escritura son responsables de modificar el estado de la aplicación, las operaciones de lectura son responsables de devolver información sobre ese estado sin modificarlo. Al separar estas dos responsabilidades, se pueden optimizar las operaciones de lectura para que sean más rápidas y escalables. Además, se puede diseñar una arquitectura de software más flexible, permitiendo una mayor adaptabilidad y evolución del sistema a medida que cambian los requisitos de la aplicación.
@@ -90,7 +90,7 @@ En la estrategia de No Mapping podemos ver en la figura~\cref{fig:nomapping} que
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.1\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/twowaymapping}
-    \caption{two way mapping strategy~\cite{TomHombergs2019GYHD}}\label{fig:twowaymapping}
+    \caption{Two way mapping strategy~\cite{TomHombergs2019GYHD}}\label{fig:twowaymapping}
 \end{figure}
 
 En la estrategia de Two-Way Mapping Strategy~\cref{fig:twowaymapping} nos deshacemos de este problema y creamos un modelo DTO que sirva para transportar la información de una capa a otra necesaria para conformar la Entidad. De esta forma puede evolucionar por separado. Seguimos contemplando ese posible problema problema entre la Aplicación, los casos de uso, y el Dominio. Además tenemos que escribir más código para crear las entidades a través de los DTO y viceversa.

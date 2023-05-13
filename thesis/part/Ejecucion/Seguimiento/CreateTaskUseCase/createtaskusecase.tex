@@ -1,7 +1,5 @@
 
-El codigo de colores utilizado en los diagramas de esta seccion se refieren al equivalente a clase en golang en azul y a las interfaces puras en turquesa  y a los structs en marron
-
-Tomando como referencia~\cref{fig:hexagonalDiagram} el diagrmaa tipico de una arquitectura hexagonal, en nuestro caso si intercambiamos ExternalSystemAdapter por nuestro Dispatcher de eventos e introducimos servicios de dominio entre el caso de uso y la Entidad tendremos nuestro esquema de alto nivel de nuestra arquitectura hexagonal. El esbozo de este diagrama lo podemos encontrar en la figura~\cref{fig:CreateTaskHexagonalDiagram} Como vemos no tiene tanto sentido el dibujo ya que hay puertos de salida que se convierten en puertos de entrada como es el dispatcher y cuando queremos quitar lógica de negocio del caso de uso mediante servicios de dominio que impidan el acceso directo a los repositorios de persistencia dicho diagrama se va quedando pequeño. Es perferible diagramas UML tal y comose muestra en~\cref{fig:createTaskUseCaseArchitecture}
+Si tomamos como referencia la~\cref{fig:hexagonalDiagram}, el diagrama más extendido de una arquitectura hexagonal, en nuestro caso si intercambiamos ExternalSystemAdapter por nuestro Dispatcher de eventos e introducimos servicios de dominio entre el caso de uso y la Entidad tendremos nuestro esquema de alto nivel de nuestra arquitectura hexagonal en la~\cref{fig:CreateTaskHexagonalDiagram}. Como vemos no logra ser explicativo, ya que hay puertos de salida que se convierten en puertos de entrada como es el caso del Dispatcher, y cuando queremos quitar lógica de negocio del caso de uso mediante servicios de dominio que impidan el acceso directo a los repositorios de persistencia dicho diagrama se va quedando pequeño. Es perferible diagramas UML tal y comose muestra en~\cref{fig:createTaskUseCaseArchitecture}
 
 \begin{figure}[H]
     \centering
@@ -15,7 +13,7 @@ Tomando como referencia~\cref{fig:hexagonalDiagram} el diagrmaa tipico de una ar
     \caption{CreateTaskUseCase hexagonal architecture diagram}\label{fig:createTaskUseCaseArchitecture}
 \end{figure}
 
-Acercandonos más al código podemos ver en el diagrama~\cref{fig:createTaskUseCaseArchitectureFolderStructure} cómo es el uso entre los componentes que exísten en la estructrura de carpetas.
+En el diagrama~\cref{fig:createTaskUseCaseArchitectureFolderStructure} podemos apreciar la interacción de componentes atendiendo a su distribución en nuestro diseño organizativo del código en ficheros.
 
 \begin{figure}[H]
     \centering
@@ -23,15 +21,10 @@ Acercandonos más al código podemos ver en el diagrama~\cref{fig:createTaskUseC
     \caption{CreateTaskUseCase folder Structure}\label{fig:createTaskUseCaseArchitectureFolderStructure}
 \end{figure}
 
-Con respecto a la estrategia de mapping Golang nos permite hacer un full strategy casi por defecto porque al necesitar la implementaci'on de clase para garantizar la cohesión ya estamos utilizando interfaces para todas las clases. Así que en este caso utilizamos un fullMapping adaptado. lo cierto es que las versiones intermedias son todas las combinaciones posibles.
+Con respecto a la estrategia de mapping Golang casi obliga al uso general de interfaces entre todos los elementos. Al necesitar el equivalente de la implementación de clase para garantizar la cohesión ya estamos utilizando interfaces para todas las clases. Así que en este caso utilizamos un fullMapping adaptado. De cara a decidir extraemos la recomendacion de~\cite{TomHombergs2019GYHD}:“
+we might start with a simple strategy that allows us to quickly evolve the code and later move to a more complex one that helps us to better decouple the layers. In order to decide which strategy to use when, we need to agree upon a set of guidelines within the team. These guidelines should answer the question which mapping strategy should be the first choice in which situation. They should also answer why they are first choice so that we’re able to evaluate if those reasons still apply after some time.“
 
-De cara a decidir extraemos la recomendacion de  \cite{TomHombergs2019GYHD}:"
-we might start with a simple strategy that allows us to quickly evolve the code and later move to a more complex one that helps us to better decouple the layers.
-In order to decide which strategy to use when, we need to agree upon a set of guidelines within the team. These guidelines should answer the question which mapping strategy should be the first choice in which situation. They should also answer why they are first choice so that we’re able to evaluate if those reasons still apply after some time."
-
-Al final se trata de tomar una decisión en equipo, documentar las razones y ser consistentes. Reevaluar las razones ante un reto que las ponga a prueba y tomar o no la decisión de cambiar la estrategia.
-
-En nuestra opinión dentro de la estrategia fullmapping se debe implementar un modelo tanto de entrada, como ya se contempla, como de salída. Es decir, la respuesta que hay entre cada capa también debe ser mappeada, podemos ver el patrón readptado en la figura~\cref{fig:GetHandMapping}
+Al final se trata de tomar una decisión en equipo, documentar las razones y ser consistentes. Reevaluar las razones ante un reto que las ponga a prueba y tomar o no la decisión de cambiar la estrategia. Dentro de la estrategia fullmapping se debe implementar un modelo tanto de entrada, como ya se contempla, como de salída. Es decir, la respuesta que hay entre cada capa también debe ser mappeada, podemos ver el patrón readaptado en la figura~\cref{fig:GetHandMapping}
 
 \begin{figure}[H]
     \centering
@@ -39,9 +32,7 @@ En nuestra opinión dentro de la estrategia fullmapping se debe implementar un m
     \caption{CreateTaskUseCase folder Structure\cite{TomHombergs2019GYHD}}\label{fig:GetHandMapping}
 \end{figure}
 
-Claramente esto aumenta la burocracia y finalmente la opción que hemos tomado se puede ver en la figura~\cref{fig:CreateTaskUseCaseMapping}
-
-En rojo se han marcado los atajos que se han tomado, es decir, el mapeo que no se ha implementado. El objetivo es aislarse bien de los puertos de entrada, es decir el GRPC, y no tanto de los puertos de salida. ya que la persistencia está bien aislada mediante las interfaces. Dentro de los adaptadores se hará el trabajo de mapeo entre las entidades de dominio y los modelos de persistencia y se traducirá de nuevo a dominio para responder.
+Claramente esto aumenta la burocracia y finalmente la opción que hemos tomado se puede ver en la figura~\cref{fig:CreateTaskUseCaseMapping} En rojo se han marcado los atajos que se han tomado, es decir, el mapeo que no se ha implementado. El objetivo es aislarse bien de los puertos de entrada, es decir el GRPC, y no tanto de los puertos de salida. ya que la persistencia está bien aislada mediante las interfaces. Dentro de los adaptadores se hará el trabajo de mapeo entre las entidades de dominio y los modelos de persistencia y se traducirá de nuevo a dominio para responder.
 
 \begin{figure}[H]
     \centering
@@ -75,7 +66,7 @@ En el caso de uso que podemos ver en~\cref{fig:CreateTaskUseCaseCode} se resalta
     \caption{CreateTaskUseCaseCode.go}\label{fig:CreateTaskUseCaseCode}
 \end{figure}
 
-El servicio de Dominio Creator se encarga de encapsular y atomizar los procesos que tienen que ocurrir en bloque siempre que se desee crear una Task. Entre los cuales está instanciar la tarea con los ValueObjects que recibe como parámetros. Persistir la misma en la base de datos a través del puerto de salida, interfaz que implementará un adaptador. y emitir el evento de creación a través del otro puerto de salida, el Dispatcher interfaz que implementará otro adaptador. Volvemos a señalar los imports, para que podamos apreciar que, efectivamente, no se importan elementos de infraestructura ni de aplicación y que nos encontramos contenidos dentro de nuestro Dominio. Aislados del exterior.
+El servicio de Dominio Creator se encarga de encapsular y atomizar los procesos que tienen que ocurrir en bloque siempre que se desee crear una Task. Entre los cuales está instanciar la tarea con los ValueObjects que recibe como parámetros. Persistir la misma en la base de datos a través del puerto de salida, interfaz que implementará un adaptador. y emitir el evento de creación a través del otro puerto de salida, el Dispatcher interfaz que implementará otro adaptador. En la sección de \textit{imports} se aprecia que no hay elementos de infraestructura o aplicación. Se limita al uso de Dominio. Aislados del exterior.
 
 \begin{figure}[H]
     \centering
@@ -91,7 +82,7 @@ El servicio de Dominio Creator se encarga de encapsular y atomizar los procesos 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - SaveAdapter}
+    \includegraphics[height=0.25\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - SaveAdapter}
     \caption{SaveAdapter.go}\label{fig:SaveAdapter}
 \end{figure}
 
