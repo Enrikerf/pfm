@@ -14,25 +14,6 @@ Dentro de esos contendores Docker dispondremos de todas las herramientas ya inst
     \item configuración del protocolo de comunicación entre sistemas
 \end{itemize}
 
-Docker es el sistema de gestión de contenedores más utilizado en la industria a día de hoy. Según la misma página oficial de Docker un contendor se define como: "A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another. A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings."~\cite{docker}
-
-El sistema se basa en la definición de imágenes que no son más que las instrucciones para la construcción de esos contenedores mediante el sistema de Docker Engine. Difieren de las máquinas virtuales tal y como se muestra en la comparativa~\cref{fig:Docker vs VM}.
-
-Esto permite correr multiples aplicaciones con multiples requerimientos en cualquier máquina sin tener que instalar dichas dependencias de forma local, evitando incompatibilidades e interacciones no deseadas. Permite ofrecer entregables consistentes a los clientes de forma que el software y todo aquello que necesita para ejecutarse se entregan de forma conjunta, evitando problemas de instalación.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/docker/img/dockerVsVM}
-    \caption{Docker vs VM.\cite{docker}}\label{fig:Docker vs VM}
-\end{figure}
-
-Las claves de Docker se basan en:
-\begin{itemize}
-    \item permite trabajar en el desarrollo de distintos proyectos con distintos requerimientos en una misma máquina sin la complejidad de mantener las dependencias de cada proyecto. O trasladarse a otra máquina y seguir trabajando de forma rápida al no tener que ponerse a instalar dichas dependencias de nuevo
-    \item permite trabajar en equipo ya que cada cambio en las dependencias queda expresado en los cambios que se realizan de las imagenes de los contenedores que están disponibles para todo el equipo
-    \item permite configurar el sistema para desarrollar o para producción de forma consistente con sus distintas diferencias en las dependencias necesarias, evitando problemas en el cambio de entorno de desarrollo y producción
-\end{itemize}
-
 Como este proyecto se basa en 3 softwares entregables: el servicio de manager, el servicio cliente(el cual puede ser requerido en multiples máquinas y habrá de ser desplegada dicha réplica) y el programa de control. Vamos a extraer toda la utilidad de Docker para que se entrege y despliege de forma consistente y sencilla dicho software.
 
 Los archivos Makefile son un conjunto de acciones expresadas en un archivo que nos permiten ejecutarlos desde consola. Con ellos podemos avisar al desarrollador de qué acciones básicas dispone, el simple conocimiento de su existencia ya supondría adquirir un conocimiento y de esta forma queda documentado a modo de ejecutable. Y queda descrito lo que realizan sin necesidad de conocer qué es lo que se ejecuta, simplemente su utilidad. En cada programa dispondremos de las siguientes acciones básicas:
