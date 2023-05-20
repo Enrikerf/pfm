@@ -1,11 +1,18 @@
 
-Uno de los puntos más relevantes de un proyecto de software es garantizar la viabilidad en la continuidad del desarrollo futuro; ya sea por mantenimiento o adición de nuevas características. A lo largo de la vida de un proyecto los técnicos que trabajan en él van cambiando; la acumulación de conocimiento acerca del sistema es un factor crítico. Debemos diseñar un sistema modular que evite tener que conocer todo el proyecto en profundidad para realizar cambios.
+Uno de los puntos más relevantes de un proyecto de software es garantizar la viabilidad en la continuidad del desarrollo futuro;
+ya sea por mantenimiento o adición de nuevas características.
+A lo largo de la vida de un proyecto los técnicos que trabajan en él van cambiando;
+la acumulación de conocimiento acerca del sistema es un factor crítico.
+Debemos diseñar un sistema modular que evite tener que conocer todo el proyecto en profundidad para realizar cambios.
 
-La infraestructura es un punto problemático al afectar a todo el sistema. Necesitamos desplegar una réplica del sistema en una máquina para probar y desarrollar las nuevas características, es decir, levantar una réplica en modo desarrollo. Instalar dependencias, garantizar que todo está funcional y que estamos probando un sistema exactamente igual al que están utilzando los clientes para evitar diferencias a la hora de desplegar los cambios en el entorno final.
+La infraestructura es un punto problemático al afectar a todo el sistema.
+Necesitamos desplegar una réplica del sistema en una máquina para probar y desarrollar las nuevas características, es decir, levantar una réplica en modo desarrollo.
+Instalar dependencias, garantizar que todo está funcional y que estamos probando un sistema exactamente igual al que están utilizando los clientes para evitar diferencias a la hora de desplegar los cambios en el entorno final.
 
 Las herramientas que desplieguen el sistema de forma automatizada en cualquier dispositivo permitiendo trabajar en un punto concreto de la aplicación sin necesidad de conocerla en todo su extensión son: Docker, scripts y Makefiles.
 
-Dentro de esos contendores Docker dispondremos de todas las herramientas ya instaladas para manejar el sistema sin tener que instalarlas en nuestra propia máquina, evitando problemas de versiones e incompatibilidades. Para este proyecto necesitaremos garantizar:
+Dentro de esos contenedores Docker dispondremos de todas las herramientas ya instaladas para manejar el sistema sin tener que instalarlas en nuestra propia máquina, evitando problemas de versiones e incompatibilidades.
+Para este proyecto necesitaremos garantizar:
 
 \begin{itemize}
     \item versión fija de golang para compilar los programas

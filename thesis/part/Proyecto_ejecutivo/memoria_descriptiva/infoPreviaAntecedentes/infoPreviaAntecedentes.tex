@@ -1,5 +1,33 @@
 
+\paragraph{Hexagonal Architecture}
+
+Dentro de las arquitecturas de capas vamos a utilizar un diseño de puerto y adaptadores o más conocido como \gls{HexagonalArchitecture}. El diagrama básico más utilizado en la teoría para representarlo se muestra en la figura~\cref{fig:hexagonalDiagram}. Como apreciación personal no le encuentro una utilidad real a este tipo de diagramas. El pretendido enfoque didáctico se pierde ya que el hexágono es una simple licencia estética. En el caso de existir más puertos de salida y entrada que los representados, el hexágono pierde todo el sentido. Cuando se enfrenta por primera vez este diagrama se tiende a intentar descifrar el sentído oculto detrás de la elección de la forma poligonal, no existe.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.3\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/HexagonalDiagram}
+    \caption{Hexagonal architecture diagram\cite{TomHombergs2019GYHD}}\label{fig:hexagonalDiagram}
+\end{figure}
+
+En este diagrama, el dominio está representado por una única entidad, o Entity, que se encuentra aislada de todo y no depende de ningún elemento.
+La aplicación está respresentada por los casos de uso, o UseCase, y utiliza el dominio dependiendo de él.
+La aplicación se aisla del exterior, la infraestructura, obligando a utilizar sus interfaces a los elementos que acceden, esto está representado por la flecha con cabeza hueca o de color blanco.
+y utilizando interfaces que será responsabilidad de la infraestructura implementar, desconociendo la aplicación su implementación particular.
+
+En el diagrama~\cref{fig:layers} podemos ver este concepto más simplificado.
+El objetivo es expresar que la dependencia de las capas, expresada por las flechas, sea siempre de fuera hacia adentro.
+Queremos preservar del cambio el interior y exponer al cambio el exterior.
+Separar lo propenso al cambio de lo que no.
+Separar el UL de los detalles de implementación, que tienen su propio lenguaje.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/infoPreviaAntecedentes/img/PFM - Layer}
+    \caption{Arquitectura de capas}\label{fig:layers}
+\end{figure}
+
 \paragraph{Domain Driven Design}
+
 Se va a proceder a una exposición del vocabulario utilizado en el diseño del software propio de este marco teórico. Las referencias básicas utilizadas para esta exposición de \gls{DDD} son:
 
 \begin{itemize}
@@ -8,7 +36,14 @@ Se va a proceder a una exposición del vocabulario utilizado en el diseño del s
     \item Get Your Hands Dirty on Clean Architecture\cite{TomHombergs2019GYHD}
 \end{itemize}
 
-\textit{DDD} es una metodología de diseño enfocada a desarrollar un lenguaje común para todos los partícipes en un problema y su solución por ejemplo: clientes, vendedores, técnicos y financieros en un programa de gestión de venta de productos. Para desarrollar ese lenguaje se divide el problema en contextos delimitados. En un ejemplo rápido: afiliado en un club deportivo significa facturas, números de identificación fiscal para los financieros y para la gente de operaciones significa reserva de pistas y cancelaciones. Para los de ventas significan descuentos, promociones, los demás actores tendrán otro significado para el mismo concepto. pero cuando hablan de afiliados deben entenderse. Si en un departamento lo llaman clientes y en otro afiliados surgen problemas de comunicación. Tener un lenguaje común donde todos puedan expresarse y hablar de la misma solución es el reto de este proceso. Es lo que se define como \gls{UL} Intentar expresar en un mismo contexto todos esos significados termina en lo que se conoce como "Big Ball of Mud" o Gran bola de barro.
+\textit{DDD} es una metodología de diseño enfocada a desarrollar un lenguaje común para todos los partícipes en un problema y su solución por ejemplo: clientes, vendedores, técnicos y financieros en un programa de gestión de venta de productos.
+Para desarrollar ese lenguaje se divide el problema en contextos delimitados.
+En un ejemplo rápido: afiliado en un club deportivo significa facturas, números de identificación fiscal para los financieros y para la gente de operaciones significa reserva de pistas y cancelaciones.
+Para los de ventas significan descuentos, promociones, los demás actores tendrán otro significado para el mismo concepto.
+pero cuando hablan de afiliados deben entenderse.
+Si en un departamento lo llaman clientes y en otro afiliados surgen problemas de comunicación.
+Tener un lenguaje común donde todos puedan expresarse y hablar de la misma solución es el reto de este proceso.
+Es lo que se define como \gls{UL} Intentar expresar en un mismo contexto todos esos significados termina en lo que se conoce como "Big Ball of Mud" o Gran bola de barro.
 
 
 Los componentes y las relaciones de este UL se pueden apreciar en la figura~\cref{fig:DomainDrivenDesignReference}.
@@ -32,35 +67,25 @@ De todo este diagrama los conceptos en los que nos vamos a centrar son en los qu
 
 Esta paradigma de diseño compone el elemento central en el paradigma de la arquitectura de capas o \gls{LayerArchitecture}. Se aisla esos contextos que definen nuestro dominio de implementaciones concretas ya sea para acceder al mismo o a las que accede el dominio. Por ejemplo, aislarlo de que se ejecute un servicio mediante una consola de comandos o desde una llamada http y que se guarde en una base de datos la información o se guarde en un archivo.
 
-\paragraph{Hexagonal Architecture}
-
-Dentro de las arquitecturas de capas vamos a utilizar un diseño de puerto y adaptadores o más conocido como \gls{HexagonalArchitecture}. El diagrama básico más utilizado en la teoría para representarlo se muestra en la figura~\cref{fig:hexagonalDiagram}. Como apreciación personal no le encuentro una utilidad real a este tipo de diagramas. El pretendido enfoque didáctico se pierde ya que el hexágono es una simple licencia estética. En el caso de existir más puertos de salida y entrada que los representados, el hexágono pierde todo el sentido. Cuando se enfrenta por primera vez este diagrama se tiende a intentar descifrar el sentído oculto detrás de la elección de la forma poligonal, no existe.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.3\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/HexagonalDiagram}
-    \caption{Hexagonal architecture diagram\cite{TomHombergs2019GYHD}}\label{fig:hexagonalDiagram}
-\end{figure}
-
-En este diagrama, el dominio está representado por una única entidad, o Entity, que se encuentra aislada de todo y no depende de ningún elemento. La aplicación está respresentada por los casos de uso, o UseCase, y utiliza el dominio dependiendo de él. La aplicación se aisla del exterior, la infraestructura, obligando a utilizar sus interfaces a los elementos que acceden, esto está representado por la flecha con cabeza hueca o de color blanco. y utilizando interfaces que será responsabilidad de la infraestructura implementar, desconociendo la aplicación su implementación particular.
-
-En el diagrama~\cref{fig:layers} podemos ver este concepto más simplificado. El objetivo es expresar que la dependencia de las capas, expresada por las flechas, sea siempre de fuera hacia adentro. Queremos preservar del cambio el interior y exponer al cambio el exterior. Separar lo propenso al cambio de lo que no. Separar el UL de los detalles de implementación, que tienen su propio lenguaje.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/infoPreviaAntecedentes/img/PFM - Layer}
-    \caption{Arquitectura de capas}\label{fig:layers}
-\end{figure}
-
 \paragraph{CQRS}
 
-Junto con el concepto de arquitectura hexagonal y el\textit{DDD} vamos a aplicar el paradigma de diseño conocido como \gls{CQRS} (Command Query Responsibility Segregation). Es una técnica de diseño de arquitectura de software que separa la lógica de escritura (comandos) de la lógica de lectura (consultas) en sistemas de información. La idea es que las operaciones de escritura (comandos) y las operaciones de lectura (consultas) se manejen por separado, ya que tienen necesidades y características distintas. Mientras que las operaciones de escritura son responsables de modificar el estado de la aplicación, las operaciones de lectura son responsables de devolver información sobre ese estado sin modificarlo. Al separar estas dos responsabilidades, se pueden optimizar las operaciones de lectura para que sean más rápidas y escalables. Además, se puede diseñar una arquitectura de software más flexible, permitiendo una mayor adaptabilidad y evolución del sistema a medida que cambian los requisitos de la aplicación.
+Junto con el concepto de arquitectura hexagonal y el \textit{DDD} vamos a aplicar el paradigma de diseño conocido como \gls{CQRS} (Command Query Responsibility Segregation).
+Es una técnica de diseño de arquitectura de software que separa la lógica de escritura (comandos) de la lógica de lectura (consultas) en sistemas de información.
+La idea es que las operaciones de escritura (comandos) y las operaciones de lectura (consultas) se manejen por separado, ya que tienen necesidades y características distintas.
+Mientras que las operaciones de escritura son responsables de modificar el estado de la aplicación, las operaciones de lectura son responsables de devolver información sobre ese estado sin modificarlo.
+Al separar estas dos responsabilidades, se pueden optimizar las operaciones de lectura para que sean más rápidas y escalables.
+Además, se puede diseñar una arquitectura de software más flexible, permitiendo una mayor adaptabilidad y evolución del sistema a medida que cambian los requisitos de la aplicación.
 
-El resumen hasta ahora es que el diseño sigue una arquitectura hexagonal, con un enfoque\textit{DDD} en el dominio y un enfoque CQRS en los casos de uso. Es decir se diseñará un dominio rico y con un UL y se accederá a su funcionalidad a través de casos de uso que sigan el criterio de ser comandos y consultas.
+El resumen hasta ahora es que el diseño sigue una arquitectura hexagonal, con un enfoque \textit{DDD} en el dominio y un enfoque CQRS en los casos de uso.
+Es decir se diseñará un dominio rico y con un UL y se accederá a su funcionalidad a través de casos de uso que sigan el criterio de ser comandos y consultas.
 
 \paragraph{Mapping}
 
-El último detalle a explicar es cómo garantizar la separación efectiva de las capas en su uso de los elementos básicos con los que interactuan. Si un elemento de Infraestructura utiliza directamente una Entity de Dominio estaría saltando la capa de aplicación en su diagrama de dependencia. Bien es cierto que se mantendría la dependencia de fuera hacia adentro, pero se ha de tomar una decisión de hasta qué punto se quiere desacoplar una capa de otra. A esta decisión de diseño se le conoce como Estrategia de Mapping entre capas. Estrictamente cada capa requiere sus objetos de trabajo para estar desacoplada de las demás, pero como en todo aspecto de diseño está sometido a discusión acerca de seguir la teoría al pié de la letra y el pragmatismo de no verse envuelto en redundancias y sobredimensionar las soluciones.
+El último detalle a explicar es cómo garantizar la separación efectiva de las capas en su uso de los elementos básicos con los que interactúan.
+Si un elemento de Infraestructura utiliza directamente una Entity de Dominio estaría saltando la capa de aplicación en su diagrama de dependencia.
+Bien es cierto que se mantendría la dependencia de fuera hacia adentro, pero se ha de tomar una decisión de hasta qué punto se quiere desacoplar una capa de otra.
+A esta decisión de diseño se le conoce como Estrategia de Mapping entre capas.
+Estrictamente cada capa requiere sus objetos de trabajo para estar desacoplada de las demás, pero como en todo aspecto de diseño está sometido a discusión acerca de seguir la teoría al pié de la letra y el pragmatismo de no verse envuelto en redundancias y sobredimensionar las soluciones.
 
 En un extracto del libro Get Your Hands Dirty on Clean Architecture\cite{TomHombergs2019GYHD} podemos leer un extracto que es interesante rescatar ya que representa una conversación demasiado habitual entre compañeros de trabajo:
 
@@ -127,11 +152,15 @@ Se puede ver el primer ejemplo en el un proyecto de ejecución que intentara res
 
 \paragraph{Docker}
 
-Docker es el sistema de gestión de contenedores más utilizado en la industria a día de hoy. Según la misma página oficial de Docker un contendor se define como: "A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another. A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings."~\cite{docker}
+Docker es el sistema de gestión de contenedores más utilizado en la industria a día de hoy.
+Según la misma página oficial de Docker un contenedor se define como: ´A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another.
+A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings.´~\cite{docker}
 
-El sistema se basa en la definición de imágenes que no son más que las instrucciones para la construcción de esos contenedores mediante el sistema de Docker Engine. Difieren de las máquinas virtuales tal y como se muestra en la comparativa~\cref{fig:Docker vs VM}.
+El sistema se basa en la definición de imágenes que no son más que las instrucciones para la construcción de esos contenedores mediante el sistema de Docker Engine.
+Difieren de las máquinas virtuales tal y como se muestra en la comparativa~\cref{fig:Docker vs VM}.
 
-Esto permite correr multiples aplicaciones con multiples requerimientos en cualquier máquina sin tener que instalar dichas dependencias de forma local, evitando incompatibilidades e interacciones no deseadas. Permite ofrecer entregables consistentes a los clientes de forma que el software y todo aquello que necesita para ejecutarse se entregan de forma conjunta, evitando problemas de instalación.
+Esto permite correr multiples aplicaciones con multiples requerimientos en cualquier máquina sin tener que instalar dichas dependencias de forma local, evitando incompatibilidades e interacciones no deseadas.
+Permite ofrecer entregables consistentes a los clientes de forma que el software y todo aquello que necesita para ejecutarse se entregan de forma conjunta, evitando problemas de instalación.
 
 \begin{figure}[H]
     \centering

@@ -1,51 +1,113 @@
+Se ha diseñado y desarrollado un sistema capaz de gestionar y ejecutar tareas en sistemas remotos siguiendo un proceso que garantiza un grado de calidad y una estructura capaz de enfrentar el cambio.
+Cumpliendo con el objetivo principal se ha obtenido un ejemplo práctico de aplicación de una metodología que abarca el proceso de desarrollo de software, desde su diseño hasta su entrega.
+Se ha seguido un diseño estructurado en capas realizando un esfuerzo en crear un lenguaje expresivo en todos los componentes del software que transmitan el problema resuelto.
+Dicho lenguaje facilita la comunicación efectiva en todos los participantes del proyecto.
 
-Golang es un lenguaje enfocado en programas con una envergadura muy acotada o scripting. Es sencillo y con una curva de aprendizaje aceptable para los objetivos básicos que abarcan este tipo de programas. Permitiendo extraer todo el partido a la asincronía, la limpieza y la sencillez. Tiene paquetes base muy potentes que permiten abordar pequeñas tareas con muchas garantías sin necesidad de añadir dependencias de terceros. Pequeños endpoints, scripts de procesamiento, algoritmia, paralelismo. Lo cual lo vuelve un candidato muy viable para lo que se suele utilizar python.
+Durante la ejecución se ha podido comprobar que la evolución del diseño hasta su resultado final ha sido posible de forma efectiva, con orden y sin afectar a las bases iniciales.
+Por ejemplo la integración del programa de control en el programa cliente o encapsular partes de la tecnología recién aprendida, y por tanto desarrollada con deficiencias, de tal forma que no afecte a la resolución del problema de fondo.
 
-Sin embargo, casi todos los proyectos grandes empiezan siendo pequeños. Los programas que son utilizados evolucionan. Se van añadiendo funcionalidades y terminan necesitando estructura y diseño para soportar dicho crecimiento, que es lo que ha puesto a prueba principalmente este proyecto. Si bien se puede argumentar que esto no debiera ocurrir, que es un error de diseño no modularizar y permitir crecer un proyecto hasta ese punto, la realidad es que estos errores ocurren. Introducir este tipo de arquitecturas protege ante esta tipología de errores y permite dividir el proyecto de forma sencilla cuando se hace evidente que se requiere. No siempre es tan evidente hasta que puede llegar a ser demasiado tarde.
+Uno de los puntos que evidencian la utilidad de estos paradigmas es que facilitan una forma estructurada de enfrentarte a la construcción de un software en un lenguaje desconocido.
+Te enfoca a aprender lo necesario para implementar los patrones que el diseño te demanda.
+Convirtiendo el aprendizaje en un proceso ordenado de búsqueda de conceptos necesarios y transversales en todos los lenguajes.
 
-En estos casos, el desarrollador que provenga de otros lenguaje más maduros y con sintaxis más amplias, puede llegar a sentir que Golang tiende a necesitar sobreingeniería al abordar una estructura lo suficientemente granulada. Se necesita de estructuras más elaboradas: el equivalente a la clase, el manejo de errores, la no existencia de excepciones y el enfoque de las interfaces, por ejemplo. Es cierto que brillan por su sencillez y no dejan tanto espacio a la inventiva; que si bien puede dar lugar a verdaderos ingenios en buenas manos, suele terminar en el desorden y complejidad. Un ejemplo muy claro es la inexistencia de la herencia, foco de tantos problemas en otros lenguajes.
+El presente trabajo permite evaluar cómo encaja Golang ante este tipo de proyectos y metodologías.
+Se han puesto a prueba los puntos clave que el lenguaje promueve: asincronía y gestión de concurrencia y simplicidad.
 
-\textbf{Nomenclatura}
+La arquitectura y el diseño que se han empleado busca que el propio código sea la documentación.
+En el desarrollo de software comercial el mantenimiento de la documentación es costoso.
+Se ha visto el encaje de adaptar un proyecto de tipo industrial, un estándar definido y bien depurado, para la documentación mínima imprescindible.
+Ofrecer un documento con una estructura conocida como forma de introducirse al problema, mantenerse informado del dominio, comprender el lenguaje propio y entender los casos de uso disponibles para interactuar con el sistema.
 
-Es cierto que la guia de estilo tiene una filosofía muy bien enfocada y lo suficientemente amplia como para dar libertad. Sin embargo, lo que se aprecia en la comunidad es que, precisamente por ese enfoque a scripting, se tiende a elegir variables muy cortas, poco explicativas. Tienen sus argumentos para justificarlo: realizar diseños pequeños, muy modulares, donde la distancia entre la declaración de la variable y su uso no sobrepase una distancia suficiente como para necesitar nombres elaborados. Esto choca de lleno, con la tendencia de abusar a poner mucho código en un mismo fichero y evitar la división. Si sumamos el nombrado de variables que abusan de acrónimos, palabras incompletas y caracteres sueltos, a abundante código en un mismo fichero se abre la puerta a un código dificil de leer. Se pierde de vista la cohesión.
+La conclusión general es que lo más importante en la gestión de proyectos es estandarizar procesos, tanto de diseño como de documentación.
+De esta forma, cuando los profesionales entran y salen del proyecto sólo requieren aprender el dominio del problema concreto, no todo el marco del sistema.
+Tal es la motivación y origen de las normas existentes en la industria y la construcción.
 
-A pesar de los argumentos favorables a la nomenclatura que proponen, no deja de recordar a los comienzos de php, javascript o demás lenguajes de scripting. Es ampliamente conocido cómo acaban estas tendencias: ficheros de muchas lineas, variables imcomprensibles y código difícil de leer. Refactorizar un nombre largo y explicativo a uno corto siempre será mucho más sencillo que extraer el significado de una variable nombrada con una letra e intentar darle un nombre mejor. Siempre será más fácil juntar código en un mismo fichero que separarlo. Lo segundo obliga a pensar en su cohesión y sus dependencias.
+\textbf{Evaluación cualitativa del Golang}
 
-Por lo tanto en este proyecto, que además pretendía ser didáctico, se ha optado por el uso de nombres altamente explicativos. Sin temor a caer en la redundancia, el abuso. También se a optado por dividir cada componente en su propio archivo, algo nada normativo en este lenguaje.
+Golang nace como un lenguaje enfocado en programas con una envergadura contenida, scripting o microservicios.
+Posee una curva de aprendizaje aceptable para los objetivos que abarcan esta tipología de problemas.
+Permite extraer todo el partido a la asincronía, la limpieza y la sencillez.
+Tiene paquetes base potentes para abordar un amplio rango de tareas con garantías sin necesitar dependencias externas.
 
-\textbf{Interfaces}
+Un programa va creciendo conforme se utiliza al añadir nuevas funcionalidades.
+No siempre está claro para los diseñadores el punto en el que conviene separar en diferentes proyectos esas nuevas funcionalidades.
+Se puede cometer el error de permitir crecer el programa más allá de lo funcional.
+Introducir arquitecturas más complejas protege ante esta tipología de errores y permite dividir el proyecto de forma sencilla cuando se hace evidente que se requiere.
 
-La teoría apoya la decisión de eliminar la palabra reservada \textit{implement} indicando al compilador que una estructura va a implementar una interfaz. El argumento a favor más potente que tiene Golang es evitar la necesidad de implementar \textit{wrappers} de librerias de terceros a las que no quieres acoplarte. Diseñar una interfaz que cumpla esa librería que quieres utilizar ya te aisla de ella. De no ser así, al ser de terceros, habría de modificar la librería e implementarla explicitamente; lo cual es absurdo. Por lo que se desarrolla una clase que implemententa nuestra interfaz y hace uso de cada función de la librería; es decir un \textit{wrapper}. Lo cual aumenta la cantidad de código y la complejidad.
-
-También cierto que si la signatura de una función se repite debiera ser la misma interfaz y no escribir dos veces la misma. Sin embargo, en una arquitectura de capas esto ocurre; ya sea por mal diseño o por que es inevitable en algunos casos. No poder elegir en la implementación de la interfaz con qué paquete está dicho acoplamiento provoca que pueda ser confuso. las interfaces de desarrolo, IDEs, suelen ayudarte y advertirte de qué funciones debe implementar. Además de que si buscas cuántas funciones implementan tu interfaz aparecerán muchas que no tienen, en el fondo, ninguna relación. Son perdidas en la limpieza y capacidad de lectura.
-
-No suele provocar tanto tempor el exceso de código burocrático, como son los wrappers, como a la dificultad de lectura o falta de orden. No disponer de la declaración explícita de la interfaz favorece el desorden. No siendo un punto crítico, es sin embargo la característica que menos amigable de Golang con respecto a la sintáxis.
-
-\textbf{Equivalente de clases}
-
-Es un punto que incomoda y desconcierta al principio. Que se quiera evitar la herencia no parece justificar de la palabra reservada para crear una clase. Tener que crear más código a través de la creación de una interfaz que oculte la estructura implementada se antoja innecesario. Una vez aceptado es cierto que es quizá lo más cómodo de Golang. Poder devolver \textit{nil} como resultado y no una estructura vacía, lo cual puede ser peligroso, casa muy bien con su forma de manejar errores. Además de que obligar a firmar un contrato de cómo actua la clase ayuda a modularizar por defecto. Se puede considerar sobreingeniería, pero no añade demasiados inconvenientes a cambio. Mi conclusión es que no utilizaría structs sueltos en casi ningún punto. A lo mejor muy encapsulados en una función que enfrente una algoritmia complicada y requiera estructurar datos de una forma rápida de una forma totalmente aislada del exterior.
-
-\textbf{Paquetes y división del código en golang}
-
-En la comunidad se tiende a crear paquetes con muchos archivos, ya que crear directorios para ordenar el código en Golang implica modularizar. Se echa en falta alguna herramienta para ordenar el código a nivel estructura de carpetas sin afectar al desarrollo; poder escoger y acotar la visibilidad de los elementos públicos dentro de un submodulo. Cuando se aborda una arquitectura DDD se puede llegar a complicar al no tener la libertad de paquetizar según entidades lógicas acotadas. Obligando a tener en cuenta la visibilidad y ciclicidad de dependencias. El contrapunto es que Golang está pensado para ello, te obliga a seguir el orden establecido.
-
-\textbf{Testing}
-
-El estandar es disponer de los test unitarios al lado de la clase relacionada. Esto provoca imports ajenos en el dominio. El codigo para crear los dobles en medio de tu codigo de producción. Dificulta la navegación por la estructura de carpetas al tener demasiados archivos ajenos a la estructura del programa. La limpieza y el naming también se aplican a los archivos y organización de ficheros, este estándar lo dificulta. Puede venir bien para gestión de equipos que vengan de scripting porque sentirán mayor orden, pero me aventuro a asegurar que es un punto difícil de aceptar para casi todos los profesionales que vengan de otros lenguajes.
-
-\textbf{Gestión del proyecto}
-
-La arquitectura y el diseño que se han empleado busca que el propio código sea la documentación. Un entregable es requisito imprecintible para un tfm, pero en la profesión, el mantenimiento de esta documentación se vuelve muchas veces algo extremadamente costoso de mantener. Sin embargo, existe un un minimo de documentación imprescindible para los profesionales no técnicos que intervienen en el proyecto, ahí es donde se ha visto el encaje de adaptar un proyecto de tipo industrial. Ofrecer una forma de introducirse y mantenerse informado del UL y entender los casos de uso disponibles para interactuar con el sistema.
-
-Hay mucha teoría al respecto de la gestión de proyectos y documentación del software, pero se ha querido explorar la opción de partir de un estándar ya definido y bien depurado como es la presentacion de proyectos de carácter industrial. La conclusión es que lo más importante en la gestión es estandarizar procesos. De esta forma, cuando los profesionales entran y salgen de proyectos sólo requieren aprender el proyecto en sí, no todo el sistema de gestión. Determinar una estructura estándar de documentación y entrega es el motivo de las normas existentes en la industria y la construcción. Son fruto y razón por la que se ha llegado hasta dónde se encuentran el día de hoy. Un proceso de aprendizaje de cientos de años para la construcción y la industria. El desarrollo de software, ya sea con las mismas normas o distintas habrá de llegar a ese punto.
-
+En estos casos, el desarrollador proveniente de otros lenguajes más maduros puede llegar a sentir que Golang tiende a necesitar sobre-ingeniería al abordar una estructura lo suficientemente granulada.
+Se necesita de estructuras más elaboradas: el equivalente a la clase, el manejo de errores, la no existencia de excepciones y el enfoque de las interfaces, por ejemplo.
+Es cierto que brillan por su sencillez y no dejan tanto espacio a la inventiva;
+que si bien puede dar lugar a verdaderos ingenios en buenas manos, suele terminar en el desorden y complejidad.
+Un ejemplo muy claro es la inexistencia de la herencia, foco de tantos problemas en otros lenguajes.
 
 \begin{itemize}
-    \item crear un sistema para que las tareas automaticas se puedan ejecutar en un tiempo requerido y configurado. Esto es una tarea básica, pero crear un sistema de temporización parecido al CRONTAB de linux se escapaba del ámbito del proyecto. Además el sistema de ejecución automática asíncrona y gestión por eventos deja muy localizada y de fácil acceso esta iteración.
-    \item la ejecución manual de las tareas de forma bidireccional cuando los navegadores lo permitan o investigar alternativas
-    \item separación del programa cliente del programa de control
-    \item creación de programas de control variados que pongan a prueba el sistema
-    \item test de flujo de carga
-    \item mejora del hardware, evitar el motaje provisional en protoboard
-    \item implementar el concepto de context nativo de golang para el control de timeouts de las gorutines.
+    \item \textbf{Nomenclatura}: la guía de estilo es clara y amplia para dar libertad, pero en Golang se tiende a elegir nombre de variables cortos y poco explicativas.
+    Los argumentos se basan en el enfoque a diseños pequeños, modulares, donde la distancia entre la declaración de la variable y su uso no sobrepase una distancia suficiente como para requerir nombres elaborados.
+    Está extendido el uso de acrónimos, palabras incompletas y caracteres sueltos.
+    Hay otra tendencia a poner más código en un mismo fichero y más ficheros en un mismo directorio que en otros lenguajes.
+    Sumando las variables poco explicativas al abundante código en un mismo punto se abre la puerta a un código difícil de leer.
+    Poniendo en peligro la cohesión y la limpieza.
+
+    El código que se encuentra en los repositorios de opensource recuerda a los comienzos de php, javascript o demás lenguajes de scripting.
+    Ficheros de muchas lineas, variables incomprensibles, código difícil de leer y muchos ficheros con nombres poco claros en un mismo directorio.
+    Renombrar una variable explicativa de más a un nombre corto es simple;
+    extraer el significado de una variable nombrada con una letra e intentar darle un nombre mejor no.
+    Juntar código en un mismo fichero es más sencillo que separarlo.
+    Lo segundo obliga a pensar en su cohesión y sus dependencias.
+    Por lo tanto en este proyecto, que además posee un enfoque didáctico, se ha optado por el uso de nombres altamente explicativos.
+    Prefiriendo la posibilidad de caer en la redundancia a caer en la falta de claridad.
+    También se a optado por dividir cada componente en su propio archivo, algo no normativo en este lenguaje.
+
+    \item \textbf{Interfaces}: en Golang se elimina la palabra reservada \textit{implement} para indicar al compilador que una estructura va a implementar una interfaz.
+    El argumento a favor es potente: evitar la necesidad de implementar \textit{wrappers} de librerías de terceros a las que no quieres acoplarte.
+    Diseñar una interfaz que cumpla esa librería que quieres utilizar ya te aísla de ella.
+    Haciendo uso de la declaración explícita se obliga a desarrollar una clase que implementa nuestra interfaz y hace uso de cada función de la librería;
+    es decir un \textit{wrapper}.
+    Aumentando la cantidad de código y la complejidad.
+    Se opta por evitar el exceso de código burocrático a cambio de ocultar información en la lectura.
+
+    Si la signatura de una función se repite el uso de una misma interfaz es lo más recomendable.
+    Sin embargo, en una arquitectura de capas esto ocurre.
+    No poder elegir en la implementación de la interfaz con qué paquete quieres acoplarte aumenta la confusión.
+
+    Donde más se nota esta perdida de claridad es en las interfaces de desarrollo, IDEs.
+    Las IDEs advierten de qué funciones debe implementar una implementación explícita y facilitan la búsqueda de todas las implementaciones.
+    Sin la declaración explicita aparecerán muchas que no tienen, en el fondo, ninguna relación.
+    Son perdidas en la limpieza y capacidad de lectura.
+
+    \item \textbf{Equivalente de clases}: Evitar la herencia no parece justificar la eliminación de la declaración de clase.
+    Obliga a crear una estructura más compleja: una interfaz que oculte una estructura que implementa las funciones.
+    Por otro lado permite devolver \textit{nil} como resultado y no una estructura vacía, lo cual puede dar lugar a inconsistencias.
+    Además, Obliga a firmar un contrato de cómo actúa la clase eliminando dependencias por defecto.
+    Se puede considerar sobre-ingeniería, pero no añade demasiados inconvenientes a cambio.
+    Al final el uso de structs de forma directa da pocas ventajas, Llevando a esta estructura a ser el elemento básico de trabajo en casi cualquier punto.
+
+    \item \textbf{Paquetes y división del código en golang}: En la comunidad se tiende a crear paquetes con muchos archivos, ya que crear directorios para ordenar el código en Golang implica modularizar.
+    Cuando se aborda una arquitectura DDD se puede llegar a complicar al no tener la libertad de crear paquetes según entidades lógicas acotadas.
+    Obligando a tener en cuenta la visibilidad y ciclicidad de dependencias.
+    El contrapunto es que Golang está pensado para ello, te obliga a seguir un orden estricto.
+
+    \item \textbf{Testing}: El estándar es disponer de los test unitarios al lado de la clase relacionada.
+    Esto provoca imports ajenos junto a los ficheros que definen el dominio.
+    El código para crear los dobles en medio de tu código de producción.
+    Dificulta la navegación por la estructura de carpetas al tener demasiados archivos ajenos a la estructura del programa.
+    La limpieza y la nomenclatura también se aplican a los archivos y organización de ficheros, este estándar lo dificulta.
+    Es un punto difícil de aceptar si se procede de otros lenguajes.
+\end{itemize}
+
+\textbf{Lineas futuras}
+
+\begin{itemize}
+    \item Crear un sistema para que las tareas automáticas se puedan ejecutar en un tiempo requerido y configurado.
+    Esto es una tarea básica, pero crear un sistema de temporización parecido al CRONTAB de linux se escapaba del ámbito del proyecto.
+    Además el sistema de ejecución automática asíncrona y gestión por eventos deja muy localizada y de fácil acceso esta iteración.
+    \item Separación del programa cliente del programa de control.
+    Este punto no ha sido logrado por el requerimiento de tiempo.
+    Separar el programa cliente del programa a ejecutar facilita la creación de los programas de control sin afectar a las funcionalidades comunes.
+    \item Creación de programas de control variados que pongan a prueba el sistema.
+    Investigar su aplicación para el sector del internet de las cosas.
+    Gestión de el automatizado de actuadores en un hogar y su monitorización.
+    \item Mejora del hardware, evitar el montaje provisional en proto-board.
+    Crear una plataforma hardware para el control de motores de corriente continua en posición y velocidad.
+    \item La ejecución manual de las tareas de forma bidireccional cuando los navegadores lo permitan o investigar alternativas.
 \end{itemize}

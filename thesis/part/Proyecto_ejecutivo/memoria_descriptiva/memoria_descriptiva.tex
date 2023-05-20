@@ -1,15 +1,61 @@
+El desarrollo de software es un proceso iterativo, no es un producto con un inicio de fabricación y un fin; evoluciona.
+El final de un proyecto de software es cuando se deja de utilizar o mantener.
+La tecnología evoluciona y el software ha de evolucionar con ella o comienza un proceso de degradación de el producto, que si bien puede considerarse como la amortización de cualquier maquinaria, en el software ocurre a mayor velocidad.
+Por lo tanto el mismo diseño del software debe estar enfocado para soportar cambios y garantizar que la estructura del código no obstaculice dicho proceso iterativo.
 
-El desarrollo de software es un proceso iterativo, no es un producto con un inicio de fabricación y un fin; evoluciona. El final de un proyecto de software es cuando se deja de utilizar o mantener. La tecnología evoluciona y el software ha de evolucionar con ella o comienza un proceso de degradación de el producto, que si bien puede considerarse como la amortización de cualquier maquinaria, en el software ocurre a mayor velocidad. Por lo tanto el mismo diseño del software debe estar enfocado para soportar cambios y garantizar que la estructura del código no obstaculice dicho proceso iterativo.
+El primer paso en un proyecto es la toma de requisitos del cliente y la propuesta inicial para la toma de decisiones a la hora de invertir recursos.
+Se va a hacer el ejercicio de utilizar el formato de un proyecto de tipo industrial para la entrega de dicha propuesta inicial.
+El proceso iterativo de toma de requisitos mínimos y presentación de propuesta hasta la aceptación por parte del cliente es un punto vital.
+Añade garantías a la seguridad de los responsables de la ejecución de su éxito a la hora de satisfacer las demandas de forma rentable.
+Dando garantías al cliente de que se han entendido sus requerimientos antes de dedicar recursos al proyecto.
+Una mínima base de acuerdo y documentación antes de abarcar un trabajo evita malos entendidos y frustraciones económicas.
+Todo esfuerzo gastado en diseño supone un ahorro sustancial en la ejecución.
 
-Las definiciones más puras de los procesos de creación de software según Agile van enfocados a cero documentación y cero diseño. Sin embargo, es inevitable una primera toma de requisitos del cliente y la propuesta inicial para la toma de decisiones a la hora de invertir recursos. Este diseño inicial es planteado ya directamente como un producto minimo viable MVP y que el mismo software actue como dicha presentación. Sin embargo, tanto por el formato del trabajo como por opinión profesional de caracter personal, se va a hacer el ejercicio de utilizar el formato de un proyecto de tipo industrial para la entrega de dicha presentacion. El proceso iterativo de toma de requisitos mínimos y aceptación por parte del cliente es un punto vital. No sólo puede llegar a ser inevitable, si no que creo inconveniente eludir. Añade garantías a la seguridad de los responsables de la ejecución, de su exito comercial. El cliente muchas veces también quiere garantías de que se ha entendido sus requerimientos antes de dedicar recursos al proyecto. Una mínima base de acuerdo y comprensión documentada antes de abarcar un trabajo evita malos entendidos y frustraciones económicas. Todo euro gastando en diseño supone un ahorro sustancial en la ejecución.
+Vamos a analizar la conveniencia de la combinación de dicha documentación inicial y usar una metodología ágil para evitar la parálisis por análisis.
+En el software conviene no centrarse en detalles técnicos que deben investigarse, analizarse o ponerse a prueba con su propia implementación.
 
-Vamos a analizar la conveniencia de la combinación de dicha documentación inicial y usar una metodología ágil para evitar la parálisis por análisis. En el software conviene no centrarse en detalles técnicos que deben investigarse, analizarse o ponerse a prueba con su propia implementación. El proyecto ejecutivo inicial se entregará como un documento explicativo del diseño, con un equilibrio entre el detalle para eliminar incertidumbre y la pragmatismo de no crear una documentación excesiva condenada a quedar desactualizada en cuanto se ponga en marcha el proceso de desarrollo.
+Este proyecto ejecutivo inicial es un documento explicativo del diseño, con un equilibrio entre el detalle para eliminar incertidumbre y la pragmatismo de no crear una documentación excesiva condenada a quedar desactualizada en cuanto se ponga en marcha el proceso de desarrollo.
+Se van a concretar los aspectos que se sean núcleo mismo del problema que se quiere resolver y señalar los puntos de incertidumbre, pero no será la documentación de una solución cerrada.
 
-Se van a concretar los aspectos que se sean núcleo mismo del problema que se quiere resolver y señalar los puntos de incertidumbre, pero no será la documentación de una solución cerrada. En un proyecto real el presupuesto indicará hasta dónde se puede resolver dicha incertidumbre. Aunque el presupuesto se agotara, el programa debe entregarse, ser válido y funcional a nivel de lógica de negocio; únicamente pendiente de resolver la parte afectada para no malgastar recursos. En el lenguaje que vamos a desarrollar se definiría como: dejar el dominio definido, los casos de uso de la capa de aplicación desarrollados y, si no se consigue despejar la incertidumbre tecnológica, dejar únicamente pendiente de resolver los adaptadores que cumplan la funcionalidad afectada. De esta forma queda a discreción del cliente si seguir con el proyecto o no, pero obtiene un código estable que soluciona con exactitud el problema que quiere resolver. En un lenguaje más industrial sería el equivalente a montar una instalación pendiente sólo de instalar algunos actuadores, pero las conexiones y todo el diseño debe quedar terminado, pendiente de comprar dicha maquinaria.
+\sout{En un proyecto real el presupuesto indicará hasta dónde se puede resolver dicha incertidumbre.
+Aunque el presupuesto se agotara, el programa debe entregarse, ser válido y funcional a nivel de lógica de negocio;
+únicamente pendiente de resolver la parte afectada para no malgastar recursos.
+En el lenguaje que vamos a desarrollar se definiría como: dejar el dominio definido, los casos de uso de la capa de aplicación desarrollados y, si no se consigue despejar la incertidumbre tecnológica, dejar únicamente pendiente de resolver los adaptadores que cumplan la funcionalidad afectada.
+De esta forma queda a discreción del cliente si seguir con el proyecto o no, pero obtiene un código estable que soluciona con exactitud el problema que quiere resolver.
+En un lenguaje más industrial sería el equivalente a montar una instalación pendiente sólo de instalar algunos actuadores, pero las conexiones y todo el diseño debe quedar terminado, pendiente de comprar dicha maquinaria.}
 
 \subsubsection{Información previa: antecedentes y condiciones de partida}
-    \input{./part/Proyecto_ejecutivo/memoria_descriptiva/infoPreviaAntecedentes/infoPreviaAntecedentes.tex}
+
+Este apartado aborda las definiciones teóricas que definen los paradigmas de diseño que se van a utilizar.
+
+\begin{itemize}
+    \item \gls{HexagonalArchitecture}: Dentro de las arquitecturas de capas es uno de los diseños más extendidos.
+    Divide el software en tres conceptos: la infraestructura, la aplicación y el dominio.
+    Separando la tecnología, infraestructura;
+    de los casos de uso que definen cómo se interactúa con el sistema, aplicación;
+    y la definición intrínseca del mismo sistema que se está modelando, el dominio.
+    \item \gls{DDD} (Domain Driven Design): Diseño dirigido por el dominio.
+    Es un paradigma de diseño que se enfoca en definir el marco bajo el cual se debe construir el dominio.
+    Esa capa más interna que modela el sistema y debe describir de forma ubicua.
+    El lenguaje ha de ser común para todos los participantes del sistema.
+    \item \gls{CQRS} (Command Query Responsibility Segregation): Segregación de responsabilidades de comandos y consultas.
+    Es una técnica de diseño de arquitectura de software que separa la lógica de escritura (comandos) de la lógica de lectura (consultas) en sistemas de información.
+    De esta forma se diferencia entre las acciones que van enfocadas a alterar el estado del sistema de las acciones inocuas.
+    \item Mapping o Mapeo:
+    Son las técnicas para separar las capas entre sí.
+    Evitan que las dependencias entre las capas vayan en un sentido que violen la arquitectura de capas.
+    \item Testing o testeo:
+    Paradigmas de diseño de pruebas automatizadas del software de tal forma que se pueda acotar la incertidumbre de la posibilidad de fallo.
+    Sirven para garantizar el grado de calidad del sistema de una forma cuantitativa.
+    \item Docker:
+    Es una tecnología de virtualización de entornos de ejecución de software.
+    Es una unidad estándar de software que encapsula el código y todas sus dependencias para que se ejecute de forma ligera e independiente en cualquier entorno de computación.
+\end{itemize}
+
+\input{./part/Proyecto_ejecutivo/memoria_descriptiva/infoPreviaAntecedentes/infoPreviaAntecedentes.tex}
+
 \subsubsection{Descripción del proyecto}
-    \input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/descripcionDelProyecto.tex}
+\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/descripcionDelProyecto.tex}
+
 \subsubsection{Prestaciones}
-    \input{./part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/prestaciones.tex}
+\input{./part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/prestaciones.tex}

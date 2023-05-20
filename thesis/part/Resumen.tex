@@ -1,0 +1,30 @@
+
+Se ha diseñado y desarrollado un sistema capaz de gestionar y ejecutar tareas en sistemas remotos.
+Como ejemplo de aplicación remota, el sistema consta también de un programa de control PID para un motor de corriente continua.
+Respondiendo al objetivo principal se ha obtenido un ejemplo práctico de aplicación de una metodología que abarca el proceso de desarrollo de software, desde su diseño hasta su entrega.
+La metodología se basa en un diseño estructurado en capas, separando la solución tecnológica concreta de la lógica que resuelve el problema, facilitando la evolución iterativa del software.
+Se ha realizado un esfuerzo de diseño para utilizar un lenguaje expresivo que transmite el problema resuelto.
+Dicho lenguaje facilita la comunicación efectiva en todos los participantes del proyecto.
+El sistema resultante consta de tres programas independientes:
+
+\begin{itemize}
+    \item Un programa que gestiona la interacción entre los distintos sistemas y los usuarios.
+    \item Un programa cliente que responde a las ordenes de ejecución de las tareas definidas en el gestor. Ejecutable en paralelo en tantas máquinas como se requiera.
+    \item Un programa de control PID para ser ejecutado por el cliente.
+\end{itemize}
+
+El diseño está enfocado en manejar de forma efectiva el principal problema de desarrollo del software: la evolución.
+La evolución y el cambio del software requiere de la interacción entre personas con diferentes conocimientos: técnicos, gente de negocio, clientes y todo aquel afectado.
+Personas que comienzan a interactuar con el sistema sin conocimientos previos o gente que deja de interactuar con el mismo eliminando conocimiento del mismo.
+También intervienen cambios tecnológicos que no deberían afectar al problema que resuelve.
+Por ejemplo, un cambio en el sistema de comunicación, cambiar el uso del correo electrónico a mensajería instantanea no debe suponer un peligro o incertidumbre a la estabilidad de ejecución del sistema.
+
+El presente trabajo evalua cómo responde Golang ante este tipo de proyectos y metodologías.
+En particular enfocado a soluciones que requieren de la interacción con actuadores o hardware para el control automático.
+Se han puesto a prueba los conceptos clave que el lenguaje promueve: asincronía y gestión de concurrencia y simplicidad.
+
+Se ha realizado el ejercicio de adaptación de los documentos utilizados en un proyecto de ejecución de tipo industrial a un proyecto de software para evaluar su encaje.
+Se ha documentado el primer paso del proceso, el diseño, en un documento de proyecto ejecutivo.
+Para el segundo paso, el desarrollo, se adapta un documento de ejecución de obra.
+
+
