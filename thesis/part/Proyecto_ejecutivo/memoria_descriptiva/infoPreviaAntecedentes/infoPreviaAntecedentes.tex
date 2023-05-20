@@ -1,71 +1,75 @@
 
 \paragraph{Hexagonal Architecture}
 
-Dentro de las arquitecturas de capas vamos a utilizar un diseño de puerto y adaptadores o más conocido como \gls{HexagonalArchitecture}. El diagrama básico más utilizado en la teoría para representarlo se muestra en la figura~\cref{fig:hexagonalDiagram}. Como apreciación personal no le encuentro una utilidad real a este tipo de diagramas. El pretendido enfoque didáctico se pierde ya que el hexágono es una simple licencia estética. En el caso de existir más puertos de salida y entrada que los representados, el hexágono pierde todo el sentido. Cuando se enfrenta por primera vez este diagrama se tiende a intentar descifrar el sentído oculto detrás de la elección de la forma poligonal, no existe.
+Dentro de las arquitecturas de capas vamos a utilizar un diseño de puerto y adaptadores o más conocido como arquitectura hexagonal.
+El diagrama básico más utilizado en la teoría para representarlo se muestra en la ~\cref{fig:hexagonalDiagram}.
+Este diagrama tiene un enfoque didáctico ya que el hexágono es una simple licencia estética.
+En el caso de existir más puertos de salida o entrada que los representados, el hexágono pierde el sentido.
+Cuando se enfrenta por primera vez este diagrama se tiende a intentar descifrar el sentido oculto detrás de la elección de la forma poligonal, no existe.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.3\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/HexagonalDiagram}
-    \caption{Hexagonal architecture diagram\cite{TomHombergs2019GYHD}}\label{fig:hexagonalDiagram}
+    \includegraphics[height=0.22\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/HexagonalDiagram}
+    \caption{Ejemplo básico de un Diagrama de arquitectura hexagonal\cite{TomHombergs2019GYHD}}\label{fig:hexagonalDiagram}
 \end{figure}
 
-En este diagrama, el dominio está representado por una única entidad, o Entity, que se encuentra aislada de todo y no depende de ningún elemento.
-La aplicación está respresentada por los casos de uso, o UseCase, y utiliza el dominio dependiendo de él.
-La aplicación se aisla del exterior, la infraestructura, obligando a utilizar sus interfaces a los elementos que acceden, esto está representado por la flecha con cabeza hueca o de color blanco.
-y utilizando interfaces que será responsabilidad de la infraestructura implementar, desconociendo la aplicación su implementación particular.
+En este diagrama, el dominio está representado por una única entidad, o \textit{Entity}, que se encuentra aislada de todo y no depende de ningún elemento.
+La aplicación está representada por los casos de uso, o \textit{Use Case}, y utiliza el dominio dependiendo de él.
+La aplicación se aísla del exterior, la infraestructura, obligando a utilizar sus interfaces a los elementos que acceden a ella.
+Las interfaces son los elementos que bordean el hexágono nombrados como \textit{Input/Output Port}.
+Utilizando estas interfaces, nombradas puertos, tenemos los adaptadores o \textit{Adapters}.
+Podemos ver que los Adaptadores de entrada, a la izquierda, utilizan directamente las interfaces, mientras que los de salida los implementan.
+Representado por fechas con cabeza negra o blanca respectivamente.
 
-En el diagrama~\cref{fig:layers} podemos ver este concepto más simplificado.
+En el diagrama~\cref{fig:layers} podemos ver este concepto simplificado.
+La arquitectura hexagonal no es más que una arquitectura de capas que decide dividir el concepto de infraestructura en dos tipos: la que hace uso de la aplicación y la que la aplicación utiliza.
 El objetivo es expresar que la dependencia de las capas, expresada por las flechas, sea siempre de fuera hacia adentro.
 Queremos preservar del cambio el interior y exponer al cambio el exterior.
 Separar lo propenso al cambio de lo que no.
-Separar el UL de los detalles de implementación, que tienen su propio lenguaje.
+Separar el lenguaje propio del Dominio, \textit{Domain}, de los detalles de implementación, que tienen su propio lenguaje.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/infoPreviaAntecedentes/img/PFM - Layer}
-    \caption{Arquitectura de capas}\label{fig:layers}
+    \includegraphics[height=0.22\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/infoPreviaAntecedentes/img/PFM - Layer}
+    \caption{Ejemplo básico de un Diagrama de arquitectura de capas}\label{fig:layers}
 \end{figure}
 
 \paragraph{Domain Driven Design}
 
-Se va a proceder a una exposición del vocabulario utilizado en el diseño del software propio de este marco teórico. Las referencias básicas utilizadas para esta exposición de \gls{DDD} son:
-
-\begin{itemize}
-    \item Domain-Driven Design: Tackling Complexity in the Heart of Software.\cite{EricEvans2003DDTC}
-    \item Implementing Domain-Driven Design.\cite{VaughnVernon2013IDD}
-    \item Get Your Hands Dirty on Clean Architecture\cite{TomHombergs2019GYHD}
-\end{itemize}
-
-\textit{DDD} es una metodología de diseño enfocada a desarrollar un lenguaje común para todos los partícipes en un problema y su solución por ejemplo: clientes, vendedores, técnicos y financieros en un programa de gestión de venta de productos.
+\gls{DDD} (Domain-Driven Design o Diseño Dirigido por el Dominio) es una metodología de diseño enfocada a desarrollar un lenguaje común para todos los partícipes en un problema y su solución por ejemplo: clientes, vendedores, técnicos y financieros en un programa de gestión de venta de productos.
 Para desarrollar ese lenguaje se divide el problema en contextos delimitados.
-En un ejemplo rápido: afiliado en un club deportivo significa facturas, números de identificación fiscal para los financieros y para la gente de operaciones significa reserva de pistas y cancelaciones.
+En un ejemplo: afiliado en un club deportivo significa facturas, números de identificación fiscal para los financieros y para la gente de operaciones significa reserva de pistas y cancelaciones.
 Para los de ventas significan descuentos, promociones, los demás actores tendrán otro significado para el mismo concepto.
-pero cuando hablan de afiliados deben entenderse.
+Todos utilizan la misma palabra para definir conceptos que difieren, pero cuando hablan de afiliados deben entenderse.
 Si en un departamento lo llaman clientes y en otro afiliados surgen problemas de comunicación.
 Tener un lenguaje común donde todos puedan expresarse y hablar de la misma solución es el reto de este proceso.
-Es lo que se define como \gls{UL} Intentar expresar en un mismo contexto todos esos significados termina en lo que se conoce como "Big Ball of Mud" o Gran bola de barro.
-
-
+Es lo que se define como \gls{UL} (Ubiquitous Language o lenguaje ubicuo) Intentar expresar en un mismo contexto todos esos significados termina en lo que se conoce como `Big Ball of Mud` o Gran bola de barro.
 Los componentes y las relaciones de este UL se pueden apreciar en la figura~\cref{fig:DomainDrivenDesignReference}.
+
+De todo este diagrama los conceptos en los que nos vamos a centrar son en los que surgen del componente \textit{Model Driven Design} que son los elementos dentro de ese lenguaje que afectan al diseño del software a su nivel más elemental.
+
+\begin{itemize}
+    \item \textit{Entity}: Elemento que contiene atributos definido por un identificador
+    \item \textit{Value Object}: Elemento que tiene atributos pero no identificador
+    \item Domain Event: Elemento que define una suceso inducido por la interacción entre los componentes del dominio.
+    \item Aggregate: Cluster de elementos tratado como una unidad.
+    Las referencias o acciones externas sobre sus elementos siempre se hacen a través de un único elemento de este cluster conocido como \textit{Agreggate Root}.
+    Tiene reglas definidas de consistencia dentro de su delimitación.
+    \item Repository: Es un mecanismo de interaccion para encapsular el acceso a tecnologías, como el almacenamiento en base de datos, para interactuar con ellas.
+    La implementación no concierne al dominio.
+    \item Service: Es una funcionalidad de interacción entre elementos de dominio.
+    Encapsula lógica compleja que garantiza un comportamiento consistente.
+\end{itemize}
+
+Esta paradigma de diseño compone el elemento central en el paradigma de la arquitectura de capas o \gls{LayerArchitecture}.
+Se aísla esos contextos que definen nuestro dominio de implementaciones concretas ya sea para acceder al mismo o a las que accede el dominio.
+Por ejemplo, aislarlo de que se ejecute un servicio mediante una consola de comandos o desde una llamada http y que se guarde en una base de datos la información o se guarde en un archivo.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.5\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/infoPreviaAntecedentes/img/DomainDrivenDesignReference}
-    \caption{DomainDrivenDesignReference\cite{EricEvans2003DDTC}}\label{fig:DomainDrivenDesignReference}
+    \includegraphics[height=0.6\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/infoPreviaAntecedentes/img/DomainDrivenDesignReference}
+    \caption{Diagrama conceptual de los elementos que componen DDD\cite{EricEvans2003DDTC}}\label{fig:DomainDrivenDesignReference}
 \end{figure}
-
-De todo este diagrama los conceptos en los que nos vamos a centrar son en los que surgen del componente "Model Driven Design" que son los elementos dentro de ese lenguaje que afectan al diseño del software a su nivel más elemental.
-
-\begin{itemize}
-    \item Entity: Elemento que contiene atributos definido por un identificador
-    \item \textit{Value Object}: Elemento que tiene atributos pero no identificador
-    \item Domain Event: Elemento que define una suceso inducido por la interacción entre los componentes del dominio.
-    \item Aggregate: Cluster de elementos tratado como una unidad. Las referencias o acciones externas sobre sus elementos siempre se hacen a través de un único elemento de este cluster conocido como \textit{Agreggate Root}. Tiene reglas definidas de consistencia dentro de su delimitación.
-    \item Repository: Es un mecanismo de interaccion para encapsular el acceso a tecnologías, como el almacenamiento en base de datos, para interactuar con ellas. La implementación no concierne al dominio.
-    \item Service: Es una funcionalidad de interacción entre elementos de dominio. Encapsula lógica compleja que garantiza un comportamiento consistente.
-\end{itemize}
-
-Esta paradigma de diseño compone el elemento central en el paradigma de la arquitectura de capas o \gls{LayerArchitecture}. Se aisla esos contextos que definen nuestro dominio de implementaciones concretas ya sea para acceder al mismo o a las que accede el dominio. Por ejemplo, aislarlo de que se ejecute un servicio mediante una consola de comandos o desde una llamada http y que se guarde en una base de datos la información o se guarde en un archivo.
 
 \paragraph{CQRS}
 
@@ -79,37 +83,43 @@ Además, se puede diseñar una arquitectura de software más flexible, permitien
 El resumen hasta ahora es que el diseño sigue una arquitectura hexagonal, con un enfoque \textit{DDD} en el dominio y un enfoque CQRS en los casos de uso.
 Es decir se diseñará un dominio rico y con un UL y se accederá a su funcionalidad a través de casos de uso que sigan el criterio de ser comandos y consultas.
 
-\paragraph{Mapping}
+\paragraph{\textit{Mapping} o Mapeo}
 
-El último detalle a explicar es cómo garantizar la separación efectiva de las capas en su uso de los elementos básicos con los que interactúan.
-Si un elemento de Infraestructura utiliza directamente una Entity de Dominio estaría saltando la capa de aplicación en su diagrama de dependencia.
+Otro paradigma de diseño para garantizar la separación efectiva de las capas en su uso de los elementos básicos con los que interactúan es el mapeo o el \textit{Mapping}.
+Si un elemento de Infraestructura utiliza directamente una \textit{Entity} de Dominio estaría saltando la capa de aplicación en su diagrama de dependencia.
 Bien es cierto que se mantendría la dependencia de fuera hacia adentro, pero se ha de tomar una decisión de hasta qué punto se quiere desacoplar una capa de otra.
-A esta decisión de diseño se le conoce como Estrategia de Mapping entre capas.
+A esta decisión de diseño se le conoce como Estrategia de \textit{Mapping} entre capas.
 Estrictamente cada capa requiere sus objetos de trabajo para estar desacoplada de las demás, pero como en todo aspecto de diseño está sometido a discusión acerca de seguir la teoría al pié de la letra y el pragmatismo de no verse envuelto en redundancias y sobredimensionar las soluciones.
 
-En un extracto del libro Get Your Hands Dirty on Clean Architecture\cite{TomHombergs2019GYHD} podemos leer un extracto que es interesante rescatar ya que representa una conversación demasiado habitual entre compañeros de trabajo:
+%En un extracto del libro Get Your Hands Dirty on Clean Architecture\cite{TomHombergs2019GYHD} podemos leer un extracto que es interesante rescatar ya que representa una conversación demasiado habitual entre compañeros de trabajo:
+%
+%\textit{ The argument might have gone something like this:}
+%
+%\begin{itemize}
+%    \item \textit{Pro-Mapping Developer:}
+%    \subitem  \textit{ If we don’t map between layers, we have to use the same model in both layers which means that the layers will be tightly coupled!}
+%    \item \textit{Contra-Mapping Developer:}
+%    \subitem \textit{ But if we do map between layers, we produce a lot of boilerplate code which is overkill for many use cases, since they’re only doing CRUD and have the same model across layers anyways!}
+%\end{itemize}
+%\textit{As is often the case in discussions like this, there’s truth to both sides of the argument. Let’s discuss some mapping strategies with their pros and cons and see if we can help those developers make a decision.}
 
-\textit{ The argument might have gone something like this:}
+Hay tantas estrategias como atajos dentro de este paradigma se desee asumir.
+Todo diseñador técnico se debe enfrentar a la teoría y a los atajos que se pueden tomar.
+Evaluar los beneficios e inconvenientes y tomar una decisión con la que se ha de ser consecuente, y más importante en desarrollo, consistente.
+Esto quiere decir que una vez tomada una decisión debe ser una decisión en equipo que todos sigan.
+Es más eficiente un diseño imperfecto que sea consistente que un diseño perfecto en unos puntos e imperfecto en otros.
+Esto lleva al desorden a la hora de escribir código y complica la entrada de nuevos compañeros, el entendimiento del código existente con todas las consecuencias negativas que esto conlleva.
 
+Los tipos de mapping que se documentan en el libro\cite{TomHombergs2019GYHD} son:
 \begin{itemize}
-    \item \textit{Pro-Mapping Developer:}
-    \subitem  \textit{ If we don’t map between layers, we have to use the same model in both layers which means that the layers will be tightly coupled!}
-    \item \textit{Contra-Mapping Developer:}
-    \subitem \textit{ But if we do map between layers, we produce a lot of boilerplate code which is overkill for many use cases, since they’re only doing CRUD and have the same model across layers anyways!}
-\end{itemize}
-\textit{As is often the case in discussions like this, there’s truth to both sides of the argument. Let’s discuss some mapping strategies with their pros and cons and see if we can help those developers make a decision.}
-
-Hay tantas estrategias como atajos dentro de este paradigma queramos asumir. Todo buen diseñador técnico debe saber tanto la teoría como los atajos que se pueden tomar. Evaluar los beneficios e inconvenientes y tomar una decisión con la que se ha de ser consecuente, y más importante en desarrollo, consistente. Esto quiere decir que una vez tomada una decisión debe ser una decisión en equipo que todos sigan. Es más eficiente un diseño imperfecto que sea consistente que un diseño perfecto en unos puntos e imperfecto en otros. Esto lleva al desorden a la hora de escribir código y complica la entrada de nuevos compañeros, el entendimiento del código existente con todas las consecuencias negativas que esto conlleva.
-
-Los tipos de mapping que se documentan en este libro\cite{TomHombergs2019GYHD}:
-\begin{itemize}
-    \item The No Mapping Strategy~\cref{fig:nomapping}
-    \item The Two-Way Mapping Strategy~\cref{fig:twowaymapping}
-    \item The Full Mapping Strategy~\cref{fig:fullmapping}
-    \item The One-Way Mapping Strategy~\cref{fig:onWaymapping}
+    \item \textit{The No Mapping Strategy}, no hacer mapeo~\cref{fig:nomapping}
+    \item \textit{The Two-Way Mapping Strategy}, mapeo de doble dirección~\cref{fig:twowaymapping}
+    \item \textit{The Full Mapping Strategy}, mapeo completo~\cref{fig:fullmapping}
+    \item \textit{The One-Way Mapping Strategy}, mapeo de una dirección~\cref{fig:onWaymapping}
 \end{itemize}
 
-Vamos a tomar diagramas del libro para entender cada estrategia. En todos los casos vemos simplificado el dominio a una única entidad, Account, y vemos como separa dicho dominio del acceso al caso de uso que envía dinero a una cuenta y del acceso a la infraestructura que guarda la información del envío de ese dinero.
+Los diagramas del libro ayudan a entender cada una de las estratégias.
+En todos los casos vemos simplificado el dominio a una única entidad, \textit{Account}, y vemos como separa dicho dominio del acceso al caso de uso que envía dinero a una cuenta y del acceso a la infraestructura que guarda la información del envío de ese dinero.
 
 \begin{figure}[H]
     \centering
@@ -117,7 +127,9 @@ Vamos a tomar diagramas del libro para entender cada estrategia. En todos los ca
     \caption{No mapping strategy~\cite{TomHombergs2019GYHD}}\label{fig:nomapping}
 \end{figure}
 
-En la estrategia de No Mapping podemos ver en la figura~\cref{fig:nomapping} que tanto aplicación como Infraestructura dependen de Dominio. Esto evita todo código redundante, los \gls{DTO} (Data Transfer Object), pero resta flexibilidad. Si por detalles técnicos de una infraestructura concreta se requiere más o menos parámetros que los definidos en el Dominio o se deben guardar en otro formato que los definidos en Dominio enfrentaremos un problema.
+En la estrategia de \textit{No Mapping} podemos ver en la figura~\cref{fig:nomapping} que tanto aplicación como Infraestructura dependen de Dominio.
+Esto evita todo código redundante, los \gls{DTO} (Data Transfer Object), pero resta flexibilidad.
+Si por detalles técnicos de una infraestructura concreta se requiere más o menos parámetros que los definidos en el Dominio o se deben guardar en otro formato que los definidos en Dominio enfrentaremos un problema.
 
 \begin{figure}[H]
     \centering
@@ -125,7 +137,10 @@ En la estrategia de No Mapping podemos ver en la figura~\cref{fig:nomapping} que
     \caption{Two way mapping strategy~\cite{TomHombergs2019GYHD}}\label{fig:twowaymapping}
 \end{figure}
 
-En la estrategia de Two-Way Mapping Strategy~\cref{fig:twowaymapping} nos deshacemos de este problema y creamos un modelo DTO que sirva para transportar la información de una capa a otra necesaria para conformar la Entidad. De esta forma puede evolucionar por separado. Seguimos contemplando ese posible problema problema entre la Aplicación, los casos de uso, y el Dominio. Además tenemos que escribir más código para crear las entidades a través de los DTO y viceversa.
+En la estrategia de \textit{Two-Way Mapping Strategy}~\cref{fig:twowaymapping} nos deshacemos de este problema y creamos un modelo DTO que sirva para transportar la información de una capa a otra necesaria para conformar la Entidad.
+De esta forma puede evolucionar por separado.
+Seguimos contemplando ese posible problema problema entre la Aplicación, los casos de uso, y el Dominio.
+Además tenemos que escribir más código para crear las entidades a través de los DTO y viceversa.
 
 \begin{figure}[H]
     \centering
@@ -133,7 +148,8 @@ En la estrategia de Two-Way Mapping Strategy~\cref{fig:twowaymapping} nos deshac
     \caption{One way mapping strategy~\cite{TomHombergs2019GYHD}}\label{fig:onWaymapping}
 \end{figure}
 
-En la figura de The One-Way Mapping Strategy~\cref{fig:onWaymapping} vemos que creamos una interfaz para la Entidad y hacemos depender de nuevo todas las capas de dicha interfaz. Se encuentran las capas más separadas y preparadas para el caso en el que se enfrente la necesidad de tener que crear distintas implementaciones aunque no se creen en un primer momento.
+En la figura de \textit{The One-Way Mapping Strategy}~\cref{fig:onWaymapping} vemos que creamos una interfaz para la Entidad y hacemos depender de nuevo todas las capas de dicha interfaz.
+Se encuentran las capas más separadas y preparadas para el caso en el que se enfrente la necesidad de tener que crear distintas implementaciones aunque no se creen en un primer momento.
 
 \begin{figure}[H]
     \centering
@@ -141,26 +157,30 @@ En la figura de The One-Way Mapping Strategy~\cref{fig:onWaymapping} vemos que c
     \caption{Full mapping strategy~\cite{TomHombergs2019GYHD}}\label{fig:fullmapping}
 \end{figure}
 
-En la figura de The Full Mapping Strategy~\cref{fig:twowaymapping} se opta por crear DTOs entre todas las capas. Es la solución más pura, pero el tradeoff es evidente: la cantidad de código a realizar es considerable y tiene que estar justificada con una necesidad de aislar hasta este punto.
+En la figura de \textit{The Full Mapping Strategy}~\cref{fig:twowaymapping} se opta por crear DTOs entre todas las capas.
+Es la solución más pura, pero el coste es evidente: la cantidad de código a realizar es considerable y tiene que estar justificada con una necesidad de aislar hasta este punto.
 
-No hay una regla de oro para elegir una estratégia que valga para todos los casos. Se reitera que debe ser una decisión de equipo, seguir la decisión todos y reevaluar con cada inconveniente que enfrente la decisión si se tiene que cambiar la estrategia.
+No hay una regla de oro para elegir una estrategia que valga para todos los casos.
+Debe ser una decisión de equipo, seguir la decisión y re-evaluar con cada inconveniente que enfrente la decisión si se tiene que cambiar la estrategia.
 
-Se puede ver el primer ejemplo en el un proyecto de ejecución que intentara resolver todas las decisiones y describir al detalle la solución a desarrollar no aportaría valor. Tomar una decisión de este tipo y documentarla, carece de utilidad porque no disponemos de información suficiente para tomar la decisión. Cuando nos enfrentamos al código es cuando podemos ver qué estrategia encaja mejor en nuestro caso.
+Se puede ver el primer ejemplo en el un proyecto de ejecución que intentara resolver todas las decisiones y describir al detalle la solución a desarrollar no aportaría valor.
+Tomar una decisión de este tipo y documentarla, carece de utilidad porque no disponemos de información suficiente para tomar la decisión.
+Cuando nos enfrentamos al código es cuando podemos ver qué estrategia encaja mejor en nuestro caso.
 
-\paragraph{Testing}
+\paragraph{\textit{Testing} o Testeo}
     \input{./part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/testing.tex}
 
 \paragraph{Docker}
 
 Docker es el sistema de gestión de contenedores más utilizado en la industria a día de hoy.
-Según la misma página oficial de Docker un contenedor se define como: ´A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another.
-A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings.´~\cite{docker}
+Según la misma página oficial de Docker un contenedor se define como: \textit{´A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another.
+A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings.´}~\cite{docker}
 
 El sistema se basa en la definición de imágenes que no son más que las instrucciones para la construcción de esos contenedores mediante el sistema de Docker Engine.
 Difieren de las máquinas virtuales tal y como se muestra en la comparativa~\cref{fig:Docker vs VM}.
 
 Esto permite correr multiples aplicaciones con multiples requerimientos en cualquier máquina sin tener que instalar dichas dependencias de forma local, evitando incompatibilidades e interacciones no deseadas.
-Permite ofrecer entregables consistentes a los clientes de forma que el software y todo aquello que necesita para ejecutarse se entregan de forma conjunta, evitando problemas de instalación.
+Permite ofrecer un producto consistentes a los clientes de forma que el software y todo aquello que necesita para ejecutarse se entregan de forma conjunta, evitando problemas de instalación.
 
 \begin{figure}[H]
     \centering
@@ -170,7 +190,8 @@ Permite ofrecer entregables consistentes a los clientes de forma que el software
 
 Las claves de Docker se basan en:
 \begin{itemize}
-    \item permite trabajar en el desarrollo de distintos proyectos con distintos requerimientos en una misma máquina sin la complejidad de mantener las dependencias de cada proyecto. O trasladarse a otra máquina y seguir trabajando de forma rápida al no tener que ponerse a instalar dichas dependencias de nuevo
-    \item permite trabajar en equipo ya que cada cambio en las dependencias queda expresado en los cambios que se realizan de las imagenes de los contenedores que están disponibles para todo el equipo
-    \item permite configurar el sistema para desarrollar o para producción de forma consistente con sus distintas diferencias en las dependencias necesarias, evitando problemas en el cambio de entorno de desarrollo y producción
+    \item Permite trabajar en el desarrollo de distintos proyectos con distintos requerimientos en una misma máquina sin la complejidad de mantener las dependencias de cada proyecto.
+    O trasladarse a otra máquina y seguir trabajando de forma rápida al no tener que ponerse a instalar dichas dependencias de nuevo.
+    \item Permite trabajar en equipo ya que cada cambio en las dependencias queda expresado en los cambios que se realizan de las imágenes de los contenedores que están disponibles para todo el equipo.
+    \item Permite configurar el sistema para desarrollar o para producción de forma consistente con sus distintas diferencias en las dependencias necesarias, evitando problemas en el cambio de entorno de desarrollo y producción.
 \end{itemize}

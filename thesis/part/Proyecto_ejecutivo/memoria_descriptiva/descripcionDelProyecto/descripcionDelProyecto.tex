@@ -1,23 +1,25 @@
+
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/systemConcept}
     \caption{Diagrama UML de despliegue del sistema}\label{fig:Diagrama UML de despliegue del sistema}
 \end{figure}
 
-Se puede ver un diagrama conceptual del sistema en la~\cref{fig:Diagrama UML de despliegue del sistema}. Los actores en este sistema diseñado serán:
+Se puede ver un diagrama conceptual del sistema en la~\cref{fig:Diagrama UML de despliegue del sistema}.
+Los actores en este sistema diseñado serán:
 \begin{itemize}
-    \item el servidor que contenta el programa \gls{Manager} guardará las tareas, las ejecutará y guardará el resultado de dicha ejecución.
-    \item los servidores que contengan una copia del programa \gls{Client} recepcionarán las llamadas del manager con el comando y las ejecutará devolviendo los resultados al Manager.
-    \item los mismos servidores clientes contendrán una copia del programa a ejecutar, pudiendo ser tantos como se deseen, en nuestro caso implementaremos el programa de control PID par aun motor de corriente continua.
+    \item El servidor que contenta el programa \gls{Manager} guardará las tareas, las ejecutará y guardará el resultado de dicha ejecución.
+    \item Los servidores que contengan una copia del programa \gls{Client} atenderán las llamadas del manager con el comando y las ejecutará devolviendo los resultados.
+    \item Los mismos servidores clientes contendrán una copia del programa a ejecutar, pudiendo ser tantos como se deseen, en nuestro caso implementaremos el programa de control PID par aun motor de corriente continua.
 \end{itemize}
 
-La memoria descriptiva de cada uno de los componentes estará compuesta de los siguientes elementos:
+La memoria descriptiva de cada uno de los componentes está compuesta de los siguientes elementos:
 
 \begin{itemize}
-    \item diagrama de los despliegue: interacción entre componentes del subsistema
-    \item diagrama de objetos: diagrama de su diseño \textit{DDD}
-    \item casos de uso: descripción y diagrama de actividad
-    \item estructura de carpetas para la organización del código
+    \item Diagrama de los despliegue: interacción entre componentes del subsistema.
+    \item Diagrama de objetos: diagrama de su diseño \textit{DDD}.
+    \item Casos de uso: descripción y diagrama de actividad.
+    \item Estructura de carpetas para la organización del código.
 \end{itemize}
 
 \paragraph{Descripción constructiva del programa Manager}
