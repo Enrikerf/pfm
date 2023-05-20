@@ -8,11 +8,11 @@ left to right direction
 
 package ClientDomain{
 
-    object Step{
+    object StepVo{
         Sentence: string
     }
 
-    object Result{
+    object ResultVo{
         Content: string
     }
 

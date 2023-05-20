@@ -1,18 +1,25 @@
 @startuml
 
+skinparam linetype polyline
 left to right direction
 ' Horizontal lines: -->, <--, <-->
 ' Vertical lines: ->, <-, <->
 
-   archimate #Technology "      Client Program     " as clientServer <<technology-service>>
+
+
+rectangle "Client Server"  as SERVERX <<$archimate/technology-device>> #Technology {
+   archimate #Technology "      Client Program     " as clientProgram <<technology-service>>
    archimate #Technology "    Control Program    " as controlProgram <<technology-service>>
+}
+
+
    rectangle "Hardware"  as SERVER <<$archimate/physical-equipment>> #Technology {
        archimate #Technology "   Engine    " as engine <<physical-equipment>>
        archimate #Technology "   H-Bridge Driver    " as hbridgedriver <<driver>>
    }
 
-clientServer <-> controlProgram : "cmd\nresponses        "
-controlProgram <- engine : "\n\n\n\n\n         sensors"
-engine <- hbridgedriver : "signal        "
-controlProgram --> hbridgedriver : "\n\n\n\n\nsignal"
+controlProgram <-> clientProgram : "cmd\nresponses        "
+controlProgram <- engine : "\n\nsensors     \n\n\n"
+controlProgram -> hbridgedriver : "\n\n\n\n\n\nsignal"
+engine <-- hbridgedriver : "signal"
 @enduml

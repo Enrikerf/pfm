@@ -1,12 +1,11 @@
-En la~\cref{fig:Control-Diagrama UML de despliegue} podemos ver que el programa de control tiene acceso directo al hardware. Ejecutará los comandos recibidos por el programa cliente y actuará en consecuencia sobre el motor de corriente continua.
 
-%Casos de uso todas las funciones del engine y diseñarlo para que la infra sea a través de consola de comandos (preparando para que luego debido a la comunicación rpc devolver los datos sea muy complicado si lo dividimos en otro comando y decidimos absorver este dominio)
-%
-%El sistema está pensado para que el programa a ejecutar sea de libre decisión del cliente. pero vamos a aprovechar la oportunidad para crear un programa de control y profundizar tanto en el uso del lenguaje como en los conocimientos relacionados con este master. En concreto el control automático. Uno do los programas que podrá ejecutar será un control PID.
+La~\cref{fig:Control-Diagrama UML de despliegue} define el diagrama UML de despliegue para el programa de control.
+Este programa tiene acceso directo al hardware.
+Ejecutará los comandos recibidos por el programa cliente y actuará en consecuencia sobre el motor de corriente continua.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/controlConcept}
+    \includegraphics[height=0.35\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/controlConcept}
     \caption{Control: Diagrama UML de despliegue}\label{fig:Control-Diagrama UML de despliegue}
 \end{figure}
 
@@ -19,10 +18,12 @@ En la~\cref{fig:Control-Diagrama UML de despliegue} podemos ver que el programa 
 \end{figure}
 
 \begin{itemize}
-    \item PhysicModule: contendrá todas las variables físicas, son interfaces de int y floats que usaremos para garantizar la congruencia en las operaciones. Aunque los tipos sean float hay variables que no pueden operar entre sí sin atender a su realidad física, es decir sus unidades.
+    \item PhysicModule: contendrá todas las variables físicas, son interfaces de int y floats que usaremos para garantizar la congruencia en las operaciones.
+    Aunque los tipos sean float hay variables que no pueden operar entre sí sin atender a su realidad física, es decir sus unidades.
     \item PinModule: para abstraernos del sistema donde se ejecute el código crearemos la abstracción de el hardware necesario para atender a interfaz física de un motor:
     \begin{itemize}
-        \item EncoderPinModule: sabemos que vamos a necesitar un pin de entrada tipo pull de entrada y esperar a los flancos de subida que entrarán del encoder. Ya sea en los hardwares comerciales más conocidos como arduino o raspberry como cualquier otro.
+        \item EncoderPinModule: sabemos que vamos a necesitar un pin de entrada tipo pull de entrada y esperar a los flancos de subida que entrarán del encoder.
+        Ya sea en el hardware comercial más conocidos como arduino o raspberry como cualquier otro.
         \item OutPinModule: para activar o desactivar frenos y triggers de dirección necesitaremos pin de salida
         \item PWMPinModule: para tener un control PWM necesitaremos un pin que nos permita salida pero con una frecuencia y un ciclo de trabajo.
     \end{itemize}
@@ -48,7 +49,8 @@ El primer paso a ejecutar antes de habilitar el control PID será sintonizarlo.
 \newpage
 \textbf{Enable RPM control}
 
-Cuando se habilita el control rpm se genera una goRutine, es decir, si el hardware no devuelve error se responde OK pero un nuevo proceso que se quedará ejecutando hasta que se ejecute el caso de uso Disable Control. Este nuevo proceso ejecutará el control PID para mantener la consigna en el valor indicado. En este caso la consigna será la velocidad angular requerida.
+Cuando se habilita el control rpm se genera una goRutine, es decir, si el hardware no devuelve error se responde OK pero un nuevo proceso que se quedará ejecutando hasta que se ejecute el caso de uso Disable Control.
+Este nuevo proceso ejecutará el control PID para mantener la consigna en el valor indicado. En este caso la consigna será la velocidad angular requerida.
 
 \begin{figure}[H]
     \centering

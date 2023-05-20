@@ -1,11 +1,12 @@
 @startuml
 
 
+archimate #Technology "      Manager     " as manager <<technology-service>>
 
 rectangle "Client Server"  as SERVER <<$archimate/technology-device>> #Technology {
    archimate #Technology "      Client Program     " as clientServer <<technology-service>>
    archimate #Technology "      Control Program        " as controlProgram <<technology-service>>
 }
-
+manager <-> clientServer
 clientServer <--> controlProgram : "cmd,responses"
 @enduml

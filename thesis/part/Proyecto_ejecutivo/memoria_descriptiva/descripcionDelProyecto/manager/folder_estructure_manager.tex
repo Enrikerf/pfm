@@ -1,4 +1,6 @@
-En el proyecto constará de cuatro carpetas principales. Donde podemos ver las 3 capas y Bootstrap que será donde hagamos la composición de la aplicación, es decir la inyección de dependencias.
+En el proyecto constará de cuatro carpetas principales.
+Donde podemos ver las 3 capas y \textit{Bootstrap} o proceso de construcción de la aplicación.
+\textit{Bootstrap} es el proceso encargado composición de la aplicación, es decir la inyección de dependencias.
 
 \dirtree{%
     .1 Project .
@@ -10,7 +12,10 @@ En el proyecto constará de cuatro carpetas principales. Donde podemos ver las 3
 
 \textbf{Dominio}
 
-Cada \textit{Agreggate Root} tiene asociada una carpeta como podemos ver en la ~\cref{fig:ManagerEstructura de carpetas de Dominio}. En core tenemos la base de la cual extienden determinadas cosas que son comunes en toda a aplicación como los Errores o los eventos. La lógica común.
+Cada \textit{Aggregate Root} tiene asociada una carpeta.
+La estructura completa se define en la~\cref{fig:ManagerEstructura de carpetas de Dominio}.
+Los archivos se muestran en azul y los directorios en negro.
+En \textit{Core} tenemos la base de la cual extienden determinadas cosas que son comunes en toda a aplicación como los Errores o los eventos.
 
 \begin{figure}[H]
     \setlength{\DTbaselineskip}{10pt}
@@ -133,7 +138,9 @@ Cada \textit{Agreggate Root} tiene asociada una carpeta como podemos ver en la ~
 
 \textbf{Adapters}
 
-En este punto tenemos el mayor grado de incertidumbre, no conocemos el contenido que vamos a tener que desarrollar, pero si podemos expresar la organización básica de lo que se va a requerir.
+Esta capa contiene el mayor grado de incertidumbre.
+No se puede conocer a priori el contenido a desarrollar.
+La organización básica de la~\cref{fig:ManagerEstructura de carpetas de Infraestructura} permite apreciar cualitativamente los componentes a investigar.
 
 \begin{figure}[H]
     \setlength{\DTbaselineskip}{10pt}

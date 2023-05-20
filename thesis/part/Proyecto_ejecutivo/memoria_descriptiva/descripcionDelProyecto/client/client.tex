@@ -1,5 +1,8 @@
 
-En la \cref{fig:Diagrama UML de despliegue del cliente} podemos ver el diagrama UML de despliegue en el servidor cliente. Contendrá a el programa Cliente que recepciona las llamadas del Manager y ejecutará en la misma máquina el comando recibido. Dicho comando deberá estar disponible en el sistema para ser ejecutado y devolver el resultado que el programa Cliente debe comunicar al Manager de vuelta.
+En el diagrama UML de despliegue en el servidor cliente de la~\cref{fig:Diagrama UML de despliegue del cliente} se aprecian los componentes del programa cliente.
+El servidor que contenga una copia del programa Cliente atenderá las llamadas del Manager y ejecutará en la misma máquina el comando recibido.
+Dicho comando debe corresponder con un programa ejecutable disponible en el sistema.
+Una vez ejecutado devolver el resultado que el programa Cliente debe comunicar al Manager de vuelta.
 
 \begin{figure}[H]
     \centering
@@ -9,13 +12,19 @@ En la \cref{fig:Diagrama UML de despliegue del cliente} podemos ver el diagrama 
 
 \subparagraph{Dominio}
 
-Este programa será casi todo infrestructura. Esto es debido a que una vez recepcionado el comando mediante el RPC sólo será necesario ejecutarlo. Siendo tarea del programa ejecutado interpretar dicho comando y transformar esa cadena de caracteres que contiene el \textit{Step} a un dominio interno. Se ve más claro lo que se quiere expresar con un ejemplo. El típico comando de consola en un sistema UNIX
+Este programa está compuesto principalmente de infraestructura.
+Esto es debido a que una vez recibido el comando mediante el RPC sólo será necesario ejecutarlo.
+Siendo tarea del programa ejecutado interpretar dicho comando y transformar esa cadena de caracteres que contiene el \textit{Step} a un dominio interno.
+Por ejemplo, el programa cliente contenido en un sistema UNIX de LINUX podrá ejecutar cualquier comando de consola contenido por defecto:
 
 \begin{verbatim}
     ./runMyComand --arg=arg1 --argN=argN
 \end{verbatim}
 
-Será el string contenido en el \textit{Step} guardado en el Manager y recepcionado por el \textit{Client} que ejecutará en el mismo sistema operativo. Por lo tanto Las posibilidades son tantas como comandos haya instalados en el servidor cliente. En nuestro caso podremos mandar a ejecutar todos los comandos que queramos que vengan previamente instalados en un sistema UNIX y además el programa de control donde podremos interactuar con el motor de corriente continua. Algunos de los posibles comandos serán:
+Este ejemplo será la cadena de caracteres contenida en el \textit{Step} guardado en el Manager y recibido por el \textit{Client} que ejecutará en el mismo sistema operativo.
+Las posibilidades son tantas como comandos haya instalados en el servidor cliente.
+En el sistema será posible mandar a ejecutar todos los comandos que acepte el programa de control para interactuar con el motor de corriente continua.
+Algunos de los posibles comandos serán:
 
 \begin{verbatim}
     ./pidControl --velocity=30rpm
@@ -27,7 +36,8 @@ Será el string contenido en el \textit{Step} guardado en el Manager y recepcion
     ./pidControl --enabled=false
 \end{verbatim}
 
-El diagrama de Dominio de el \textit{Client} podemos verlo en la \cref{fig:Diagrama UML de el dominio de cliente}. Constando únicamente de dos Value Objects para los \textit{Steps} recibidos y para los \textit{Results} obtenidos.
+El diagrama de Dominio de el \textit{Client} de la \cref{fig:Diagrama UML de el dominio de cliente} muestra dos Value Objects para los \textit{Steps} recibidos y para los \textit{Results} obtenidos.
+No hay \textit{Entities} al no necesitar persistencia.
 
 \begin{figure}[H]
     \centering
@@ -35,105 +45,74 @@ El diagrama de Dominio de el \textit{Client} podemos verlo en la \cref{fig:Diagr
     \caption{Diagrama UML de el dominio de cliente}\label{fig:Diagrama UML de el dominio de cliente}
 \end{figure}
 
-\begin{itemize}
-    \item StepDomain
-    \begin{itemize}
-        \item StepVo
-    \end{itemize}
-    \item ResultDomain
-    \begin{itemize}
-        \item ResultVo
-    \end{itemize}
-\end{itemize}
-
 \subparagraph{Casos de uso}
 
-Vamos a describir los casos de uso que podrán ejecutarse en el programa client. En este caso no tendremos Entities porque no necesitamos identificadores.
-Tendremos los \textit{Value Object}s para los steps que nos llegaran a modo de request y el necesario para responder. En este sistema no hay persistencia.
+\begin{itemize}
+    \item \textbf{Execute Unary Step}: La descripción de este caso de uso se centra en un ejemplo de nuestro programa de control.
+    Servirá, por ejemplo, para establecer una consigna de control para el PID.
+    En la~\cref{fig:Use Case-Execute Unary Step} se aprecia el diagrama de flujo correspondiente.
 
-\textbf{Execute Unary Step}
-
-Centrando en un caso de uso de este tipo de steps en nuestro programa de control sirve por ejemplo para establecer un parámetro de control del PID. Cualquiera de los siguientes.
-
-\begin{verbatim}
+    \begin{verbatim}
     ./pidControl --velocity=30rpm
-\end{verbatim}
+    \end{verbatim}
 
-Podemos ver en~\cref{fig:Use Case-Execute Unary Step} el diagrama de flujo que responde a este caso de uso
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height=0.25\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeUnaryStep}
+        \caption{Use Case: Execute Unary Step}\label{fig:Use Case-Execute Unary Step}
+    \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeUnaryStep}
-    \caption{Use Case: Execute Unary Step}\label{fig:Use Case-Execute Unary Step}
-\end{figure}
+    \item \textbf{Execute ClientStream Step}
 
-\textbf{Execute ClientStream Step}
-
-Centrando en un caso de uso de este tipo de steps en nuestro programa de control sirve por ejemplo para establecer una configuración completa con una sola llamada para nuestro PID:
-\begin{verbatim}
+    Será de utilidad, por ejemplo, para establecer una configuración completa con una sola llamada para nuestro PID.
+    En la~\cref{fig:Use Case-Execute ClientStream Step} se aprecia el diagrama de flujo correspondiente.
+    \begin{verbatim}
     ./pidControl --velocity=30rpm
     ./pidControl --position=180deg
     ./pidControl --setP=1
     ./pidControl --setI=0
     ./pidControl --setD=0
-\end{verbatim}
+    \end{verbatim}
 
-Podemos ver en~\cref{fig:Use Case-Execute ClientStream Step} el diagrama de flujo que responde a este caso de uso
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height=0.25\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeClientStreamStep}
+        \caption{Use Case: Execute ClientStream Step}\label{fig:Use Case-Execute ClientStream Step}
+    \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeClientStreamStep}
-    \caption{Use Case: Execute ClientStream Step}\label{fig:Use Case-Execute ClientStream Step}
-\end{figure}
+    \item \textbf{Execute ServerStream Step}
 
-\textbf{Execute ServerStream Step}
+    Será utilizado para habilitar el control pid durante un determinado tiempo e ir devolviendo el estado la variable controlada en tiempo real.
 
-Centrando en un caso de uso de este tipo de steps en nuestro programa de control sirve por ejemplo para habilitar el control del pid durante un determinado tiempo e ir devolviendo el estado la variable de control
-\begin{verbatim}
+    \begin{verbatim}
     ./pidControl --enabled=true --time=10s
-\end{verbatim}
+    \end{verbatim}
 
-O dejar el control activado indefinidamente hasta que llege otra request de tipo Unary que lo detenga
+    O dejar el control activado indefinidamente hasta que llegue otra request de tipo Unary que lo detenga
 
-\begin{verbatim}
+    \begin{verbatim}
     ./pidControl --enabled=false
-\end{verbatim}
+    \end{verbatim}
 
-Podemos ver en~\cref{fig:Use Case-Execute ServerStream Step} el diagrama de flujo que responde a este caso de uso
+    En la~\cref{fig:Use Case-Execute ServerStream Step} se muestra el diagrama de flujo.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeServerStreamStep}
-    \caption{Use Case: Execute ServerStream Step}\label{fig:Use Case-Execute ServerStream Step}
-\end{figure}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height=0.25\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeServerStreamStep}
+        \caption{Use Case: Execute ServerStream Step}\label{fig:Use Case-Execute ServerStream Step}
+    \end{figure}
 
-\textbf{Execute Bidirectional Step}
+    \item \textbf{Execute Bidirectional Step}
 
-Usando el ejemplo anterior, si no queremos habilitar el control indefinidamente y deshabilitarlo mediante otra request podemos usar este caso de uso.
-
-\begin{verbatim}
-    ./pidControl --enabled=true --time=10s
-\end{verbatim}
-
-y posteriormente cuando el Cliente decida.
-
-\begin{verbatim}
-    ./pidControl --enabled=false
-\end{verbatim}
-
-Este caso de uso es el que utilizaremos para el control manual.
-
-Podemos ver en~\cref{fig:Use Case-Execute Bidirectional Step} el diagrama de flujo que responde a este caso de uso
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeBidiStep}
-    \caption{Use Case: Execute Bidirectional Step}\label{fig:Use Case-Execute Bidirectional Step}
-\end{figure}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height=0.25\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/executeBidiStep}
+        \caption{Use Case: Execute Bidirectional Step}\label{fig:Use Case-Execute Bidirectional Step}
+    \end{figure}
+\end{itemize}
 
 \subparagraph{Estructura de carpetas}
-
-\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/folder_estructure_client.tex}
+    \input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/folder_estructure_client.tex}
 
 
 

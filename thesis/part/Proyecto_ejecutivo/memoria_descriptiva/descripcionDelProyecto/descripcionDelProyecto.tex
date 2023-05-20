@@ -5,15 +5,16 @@
     \caption{Diagrama UML de despliegue del sistema}\label{fig:Diagrama UML de despliegue del sistema}
 \end{figure}
 
-Se puede ver un diagrama conceptual del sistema en la~\cref{fig:Diagrama UML de despliegue del sistema}.
-Los actores en este sistema diseñado serán:
+El diagrama de despliegue del sistema en la~\cref{fig:Diagrama UML de despliegue del sistema} muestra que los actores en este sistema diseñado serán:
 \begin{itemize}
-    \item El servidor que contenta el programa \gls{Manager} guardará las tareas, las ejecutará y guardará el resultado de dicha ejecución.
-    \item Los servidores que contengan una copia del programa \gls{Client} atenderán las llamadas del manager con el comando y las ejecutará devolviendo los resultados.
-    \item Los mismos servidores clientes contendrán una copia del programa a ejecutar, pudiendo ser tantos como se deseen, en nuestro caso implementaremos el programa de control PID par aun motor de corriente continua.
+    \item El servidor que contenga el programa \gls{Manager} permitirá la interacción de los usuarios con el sistema.
+    Definirá, almacenará las tareas, las ejecutará en los sistemas remotos definidos y persistirá el resultado de dichas ejecuciones.
+    \item Los servidores que contengan una copia del programa cliente \gls{Client} atenderán las llamadas del manager con el comando y lo ejecutará devolviendo los resultados.
+    \item Los mismos servidores clientes contendrán los programas a ejecutar, pudiendo ser tantos como se deseen.
+    En nuestro caso implementaremos el programa de control PID par aun motor de corriente continua.
 \end{itemize}
 
-La memoria descriptiva de cada uno de los componentes está compuesta de los siguientes elementos:
+La descripción de cada uno de los programas está compuesta de los siguientes puntos:
 
 \begin{itemize}
     \item Diagrama de los despliegue: interacción entre componentes del subsistema.
@@ -25,7 +26,7 @@ La memoria descriptiva de cada uno de los componentes está compuesta de los sig
 \paragraph{Descripción constructiva del programa Manager}
 \input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/manager.tex}
 
-\paragraph{Descripción constructiva del programa Client}
+\paragraph{Descripción constructiva del programa Cliente}
 \input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/client.tex}
 
 \paragraph{Descripción constructiva del programa de Control}
