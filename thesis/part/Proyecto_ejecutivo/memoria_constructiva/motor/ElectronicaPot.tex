@@ -1,5 +1,8 @@
 
-El componente utilizado para ampliar la señal enviada por el Arduino al motor, sirviendo de intermediario entre éste y los motores, es el módulo de control PWM de motores con un circuito integrado LMD18200T que soporta hasta tres Amperios. Es un puente H controlado por PWM. Satisface los requisitos necesarios en nuestra tarea: Precio, voltaje, amperaje y de implementación sencilla. Se aprecian en la~\cref{fig:Hbridge} las entradas y las salidas de las que dispone. De arriba abajo y de izquierda a derecha disponemos de:
+El componente utilizado para ampliar la señal enviada por el Arduino al motor, sirviendo de intermediario entre éste y los motores, es el módulo de control PWM de motores con un circuito integrado LMD18200T que soporta hasta tres Amperios.
+Es un puente H controlado por PWM. Satisface los requisitos necesarios en nuestra tarea: Precio, voltaje, amperaje y de implementación sencilla.
+Se aprecian en la~\cref{fig:Hbridge} las entradas y las salidas de las que dispone.
+De arriba abajo y de izquierda a derecha disponemos de:
 
 \begin{itemize}
 	\item \textbf{GND:} La tierra de la placa de control, en nuestro caso el Arduino.
@@ -8,7 +11,7 @@ El componente utilizado para ampliar la señal enviada por el Arduino al motor, 
 	\item \textbf{Brake:} Freno del motor
 	\item \textbf{V+:} Alimentación de 12 voltios.
 	\item \textbf{GND:} tierra.
-	\item \textbf{OUT1:} Salida de una mitad del puente H.
+	\item \textbf{OUT1:} Salida de una mitad del puente H\@.
 	\item \textbf{OUT2:} Salida de la otra mitad del puente H
 \end{itemize}
 

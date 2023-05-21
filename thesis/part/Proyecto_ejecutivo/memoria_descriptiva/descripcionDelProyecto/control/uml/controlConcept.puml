@@ -19,7 +19,7 @@ rectangle "Client Server"  as SERVERX <<$archimate/technology-device>> #Technolo
    }
 
 controlProgram <-> clientProgram : "cmd\nresponses        "
-controlProgram <- engine : "\n\nsensors     \n\n\n"
-controlProgram -> hbridgedriver : "\n\n\n\n\n\nsignal"
+controlProgram <- engine : "\n                  sensors     "
+controlProgram -> hbridgedriver : "\n\n\n\n\n\nsignal\n"
 engine <-- hbridgedriver : "signal"
 @enduml

@@ -4,13 +4,13 @@
     \caption{Diagrama UML de despliegue del programa Manager}\label{fig:diagrama_uml_de_despliegue_del_manager}
 \end{figure}
 
-Podemos apreciar en el diagrama UML de despliegue~\cref{fig:diagrama_uml_de_despliegue_del_manager} que el programa Manager será el programa con el que interactúe directamente el usuario.
+El diagrama UML de despliegue de la ~\cref{fig:diagrama_uml_de_despliegue_del_manager} muestra que el programa Manager será el programa con el que interactúe directamente el usuario.
 Podrá insertar los comandos a ejecutar en una dirección de servidor determinada que habrá de contener el programa cliente \textit{Client}.
 Dispondrá de una base de datos para almacenar de forma persistente la información.
 
 \subparagraph{Dominio}
 
-En el diagrama UML~\cref{fig:Diagrama UML de el dominio de manager} vemos que el dominio de Manager se compone de tres módulos: uno para las tareas, Task;
+El diagrama UML de la~\cref{fig:Diagrama UML de el dominio de manager} muestra que el dominio de Manager se compone de tres módulos: uno para las tareas, Task;
 otro para los resultados, Result;
 y otro Core, que contiene los elementos básicos del sistema que comparte todo el Dominio:
 
@@ -18,17 +18,17 @@ y otro Core, que contiene los elementos básicos del sistema que comparte todo e
     \item CoreDomain
     \begin{itemize}
         \item \textbf{Id}: todos los ids extienden de el, para no reescribir código.
-        contiene un \textit{UUID}, el paquete para generarlos habrá que seleccionarlo según los que nos ofrece el ecosistema.
-        Es la única dependencia externas que vamos a tener dentro del dominio por ello la encapsulamos en el paquete core para no dispersar a lo largo de todo el Domino dicha dependencia, por si hubiese que cambiarla.
+        contiene un \textit{UUID}, el paquete para generarlos habrá que seleccionarlo según los que ofrece el ecosistema.
+        Es la única dependencia externas existente dentro del dominio por ello se encapsula en el  paquete core para no dispersar a lo largo de todo el Domino dicha dependencia, por si hubiese que cambiarla.
         \item \textbf{Event} todos los eventos del sistema extenderán de él.
     \end{itemize}
     \item TaskDomain
     \begin{itemize}
         \item \textbf{Task}: es el \textit{Aggregate Root} que engloba todos los componentes que definen una tarea.
         \item \textbf{TaskId}: cada Entidad tiene su Id tipo, para evitar errores.
-        Si usáramos directamente el Id de core para todas podrían darse problemas.
+        Evitando el uso directo del Id de core.
         En la búsqueda de una Task mediante un Id que corresponde a un Result estaría correctamente tipado pero sería incorrecto.
-        No lo encontraríamos, pero no nos advertiría de nuestro error.
+        No se encontraría y el sistema no advertiría del error.
         \item \textbf{Host}: es un \textit{Value Object} compuesto por el valor del host, es un string pero el \textit{Value Object} garantiza que es un valor válido, si no devuelve un error
         \item \textbf{Port}: es un \textit{Value Object} compuesto por el valor del puerto, es un string pero el \textit{Value Object} garantiza que es un valor válido, si no devuelve un error
         \item \textbf{CommunicationMode}: es un Enum para expresar esa tarea de las formas de comunicación posibles que hay entre dos servidores cual sera la utilizada
@@ -51,7 +51,7 @@ y otro Core, que contiene los elementos básicos del sistema que comparte todo e
             \item FAILED
         \end{itemize}
         \item \textbf{Step}: cada tarea puede componerse en distintos pasos.
-        Por ejemplo queremos poder poner en marcha el motor durante 15 segundos y luego llevarlo a una posición de inicio.
+        Por ejemplo poner en marcha el motor durante 15 segundos y luego llevarlo a una posición de inicio.
         \begin{itemize}
             \item \textbf{StepId}
             \item \textbf{sentence}: string de contenido libre que el servidor que contiene el programa cliente ejecutará.
@@ -67,7 +67,7 @@ y otro Core, que contiene los elementos básicos del sistema que comparte todo e
         \item \textbf{BatchId}
         \item \textbf{Batch}: \textit{Aggregate Root} para referencial el conjunto de resultados correspondiente a la ejecución de una tarea.
         Una tarea no sólo se puede ejecutar varias veces, cada vez con distintos resultados, si no que además para una ejecución pueden obtenerse también varios resultados.
-        Para identificarlos y agruparlos necesitaremos este \textit{Aggregate Root}.
+        Para identificarlos y agruparlos se hará uso de este \textit{Aggregate Root}.
         \item \textbf{ResultId}
         \item \textbf{Result}: String con el resultado en plano.
         Cada tarea y proceso tendrá a su disposición este strings para crear su propio formato de respuesta.
@@ -83,11 +83,12 @@ y otro Core, que contiene los elementos básicos del sistema que comparte todo e
 
 \subparagraph{Casos de uso}
 
-En el Manager Tenemos dos \textit{Entities} y dos \textit{Aggregate Root}, la interacciones que se definan sobre ellos serán los casos de uso disponibles para el usuario.
-Vamos a hacer el \gls{CRUD} completo de \textit{Task}.
+En el Manager existirán dos \textit{Entities} y dos \textit{Aggregate Root}.
+Las interacciones que se definan sobre ellos serán los casos de uso disponibles para el usuario.
+Se dispondrá del \gls{CRUD} completo de \textit{Task}.
 Dentro de éste, se contempla la edición de los \textit{Steps} a través de Task ya que es su \textit{Aggregate Root}.
 Por definición no se debe poder acceder a sus componentes si no es a través del \textit{Aggregate Root}.
-De \textit{Batch} y \textit{Result} no vamos a permitir la actualización por lógica de dominio.
+De \textit{Batch} y \textit{Result} no estará permitida la actualización por lógica de dominio.
 Este caso de uso no debe existir, ya que sus variables son auto-generadas en el momento de creación.
 
 \begin{itemize}
@@ -114,7 +115,7 @@ Este caso de uso no debe existir, ya que sus variables son auto-generadas en el 
     \item \textbf{Read Tasks}: Uno de los puntos más amplios en una API CRUD es el filtrado de datos.
     No entra dentro del ámbito de este proyecto crear un sistema de filtrado que incluya la paginación.
     En este caso habría que crear una nomenclatura de filtros de cara al usuario y un sistema que los procese, devolviendo error ante un filtro erróneo o el listado de tareas que responda a dicho filtro.
-    En nuestro caso devolveremos todas las tareas.
+    En este sistema se devolverán todas las tareas existentes.
 
     \item \textbf{Update Task}: A diferencia del flujo de creación en este caso si ha parámetros opcionales.
     Ya que este flujo equivale a lo que en \gls{REST} se entiende como PATCH, es decir una actualización parcial, los parámetros que no se reciban en la petición quedarán intactos.
@@ -127,7 +128,7 @@ Este caso de uso no debe existir, ya que sus variables son auto-generadas en el 
     \end{figure}
 
     \item \textbf{Delete Task}: En el flujo de eliminación de tareas, además de confirmar que la tarea que se desea eliminar existe, se añadirán más validaciones para garantizar al consistencia del sistema.
-    No se permitirán eliminar tareas que estén en status RUNNING.
+    No se permitirán eliminar tareas que estén en status RUNNING\@.
 
     \begin{figure}[H]
         \centering
@@ -153,7 +154,7 @@ Este caso de uso no debe existir, ya que sus variables son auto-generadas en el 
 
     Este caso de uso es el core de la aplicación, donde se pondrá en juego la asincronía y todo el potencial del lenguaje.
     Es por tanto una primera versión del diseño.
-    Igual que los otros casos de uso son lógica rutinaria que no debiera diferir mucho del diseño original, en este caso sí que podemos encontrarnos con lógicas que no estén previstas y por lo tanto haya que modificar.
+    Igual que los otros casos de uso son lógica rutinaria que no debiera diferir mucho del diseño original, en este caso sí se pueden encontrar con lógicas que no estén previstas y por lo tanto haya que modificar.
     Todo quedará reflejado en la memoria explicativa de cambios~\cref{subsec:memoria explicativa de cambios}.
 
     \begin{figure}[H]
@@ -162,16 +163,16 @@ Este caso de uso no debe existir, ya que sus variables son auto-generadas en el 
         \caption{Use Case: TaskLoop}\label{fig:Use Case-TaskLoop}
     \end{figure}
 
-    Atendiendo por tanto a esta posibilidad de cambio se hará uso de la arquitectura para desacoplarnos de dicha incertidumbre \textbf{TaskProcessor} que aparece en la figura~\cref{fig:Use Case-TaskLoop} en color verde es el proceso asíncrono donde se hará uso del las gorutines que permiten la gestión de tareas asíncronas de forma sencilla.
-    Lo definiremos como un puerto de salida e implementaremos un adaptador para encapsular esa incertidumbre.
+    Atendiendo por tanto a esta posibilidad de cambio se hará uso de la arquitectura para desacoplar dicha incertidumbre \textbf{TaskProcessor} que aparece en la figura~\cref{fig:Use Case-TaskLoop} en color verde es el proceso asíncrono donde se hará uso del las gorutines que permiten la gestión de tareas asíncronas de forma sencilla.
+    Se definirá como puerto de salida y se implementará un adaptador para encapsular dicha incertidumbre.
 
     Es de preveer que dentro de ese adaptador se implemente lógica que habrá de ser de negocio.
-    Sin embargo, a no poder vislumbrarla con claridad, preferimos dejar pendiente de una refactorización.
+    Sin embargo, a no poder vislumbrarla con claridad, se deja pendiente de una refactorización.
     La refactorización posterior podrá ir introduciendo en dominio y limpiando dicho adaptador de el posible mal código resultado de la investigación mientras se construye, en vez de ensuciar el dominio y acoplar nuestro código base a esta incertidumbre.
 
-    A pesar de dicho desconocimiento inicial que nos impide diseñar con exactitud el flujo, El objetivo de este proyecto ejecutivo es hacer siempre una primera iteración en la medida que se pueda.
+    A pesar de dicho desconocimiento inicial que impide el diseño con exactitud del flujo, El objetivo de este proyecto ejecutivo es hacer siempre una primera iteración en la medida que se pueda.
     Por lo tanto una primera iteración se puede ver en la figura~\cref{fig:Use Case-Task Processor}.
-    Podemos ver que está muy acoplado a la interacción de los flujos de comunicación RPC de ahí nuestra incertidumbre al no haber trabajado todavía con dicha tecnología.
+    Se puede apreciar que está muy acoplado a la interacción de los flujos de comunicación RPC. Esto es el origen de la incertidumbre al no haber trabajado todavía con dicha tecnología.
 
     \begin{figure}[H]
         \centering
@@ -222,7 +223,7 @@ Este caso de uso no debe existir, ya que sus variables son auto-generadas en el 
     \item \textbf{Execute task manually}
 
     Solo se puede ejecutar una tarea manual por vez, en este primer diseño.
-    El motivo es que como se quiere graficar en tiempo real la respuesta, por ejemplo para monitorizar la velocidad del motor en tiempo real, no queremos meternos en la complejidad de graficar varios resultados a la vez.
+    Se quiere monitorizar en tiempo real la respuesta, por ejemplo para monitorizar la velocidad del motor en tiempo real, pero no se quiere exponer al sistema a la complejidad de monitorizar varios resultados a la vez.
 
     \begin{figure}[H]
         \centering
@@ -231,7 +232,7 @@ Este caso de uso no debe existir, ya que sus variables son auto-generadas en el 
     \end{figure}
 
     El diagrama de secuencia para el caso de que una tarea sea de tipo \textit{BIDIRECTIONAL} se puede apreciar en el diagrama~\cref{fig:executeTaskManualInteraction}.
-    Este es el caso que utilizaremos por ejemplo para el control en velocidad y posición del motor de corriente continua.
+    Se hará uso de esta lógica por ejemplo para el control en velocidad y posición del motor de corriente continua.
     Se enviará una consigna y se recibirán resultados hasta que el cliente envíe la orden de detener dicho control.
     Para otros tipos más simples, por ejemplo, ejecutar manualmente la tarea de configurar el PID, simplemente será de tipo \textit{UNARY}, se enviará una request y se obtendrá una respuesta.
 
@@ -249,7 +250,7 @@ La definición de una estructura de carpetas que refleje el diseño del software
 Del mismo modo, los nombres de los archivos deben expresar su contenido para facilitar la documentación y depuración del proyecto.
 Cada lenguaje, framework o comunidad tienen sus propios estándares.
 En concreto, este trabajo adopta la propuestas por~\cite{TomHombergs2019GYHD}, que permite un desarrollo flexible, extensible y adaptable del software.
-Este diseño expresa con claridad que estamos ante una arquitectura hexagonal, o de puertos y adaptadores y que el Dominio se encuentra estructurado mediante un diseño \textit{DDD} expresando el \textit{UL} en los propios nombres de los archivos.
+Este diseño expresa con claridad una arquitectura hexagonal, o de puertos y adaptadores y que el Dominio se encuentra estructurado mediante un diseño \textit{DDD} expresando el \textit{UL} en los propios nombres de los archivos.
 
-\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/folder_estructure_manager.tex}
+\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/folder_estructure_manager}
 

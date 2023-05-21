@@ -7,17 +7,6 @@ skinparam linetype polyline
 
 namespace EngineModule {
     interface Engine  {
-            + SetDuty(duty Duty)
-            + SetFrequency(frequency Frequency)
-            + Brake()
-            + Release()
-            + SetClockwise()
-            + SetCounterClockWise()
-            + GetPosition() Angle
-            + GetCurrentLinearSpeed() LinearSpeed
-            + GetCurrentAngularSpeed() AngularSpeed
-            + TearDown()
-            + ResetState()
         }
 
         class engine << (S,Aquamarine) >> {
@@ -38,10 +27,6 @@ namespace EngineModule {
 
 namespace EncoderDomain{
         interface Encoder  {
-            + Watchdog()
-            + ResetPosition()
-            + GetPosition() Angle
-            + TearDown()
         }
 }
 "EncoderDomain.Encoder""uses" o-- "PhysicModule"
@@ -50,29 +35,16 @@ namespace EncoderDomain{
 namespace PinModule {
     namespace EncoderPinModule{
         interface EncoderPin  {
-            + Read() bool
-            + WaitForEdge()
-            + TearDown()
         }
         "EncoderDomain.Encoder""uses" o-- "PinModule.EncoderPinModule.EncoderPin"
     }
     namespace OutPinModule{
         interface OutPin  {
-            + Up()
-            + Down()
-            + TearDown()
-
         }
         "EngineModule.engine""uses" o-- "PinModule.OutPinModule.OutPin"
     }
     namespace PWMPinModule{
         interface PWMPin  {
-            + GetMaxDuty() Duty
-            + GetMinDuty() Duty
-            + GetMaxFrequency() Frequency
-            + SetPWM(duty Duty, frequency Frequency)
-            + StopPWM()
-            + TearDown()
         }
         "EngineModule.engine""uses" o-- "PinModule.PWMPinModule.PWMPin"
 
@@ -104,17 +76,7 @@ namespace PhysicModule{
 
 namespace EnginePidControllerModule{
     interface EnginePIDController  {
-        + New(engine Engine)
-        + Configure(P,I,D,st float64)
-        + enableRpmControl(goal RPM)
-        + enablePositionControl(goal Angle)
-        + disableControl()
-        + SetP(p float64)
-        + SetI(i float64)
-        + SetD(d float64)
-        + SetSampleTime(st float64)
-        + Calculate(currentValue float64) float64
-        + Reset()
+
     }
 
     class enginePIDController << (S,Aquamarine) >> {
@@ -124,24 +86,10 @@ namespace EnginePidControllerModule{
         + currentValue float64
     }
     interface PIDAlgorithm  {
-        + SetGoal(goal float64)
-        + SetP(p float64)
-        + SetI(i float64)
-        + SetD(d float64)
-        + GetIntegralTerm() float64
-        + SetSampleTime(st float64)
-        + Calculate(currentValue float64) float64
-        + Reset()
+
     }
     class pidAlgorithm << (S,Aquamarine) >> {
-        + SetGoal(goal float64)
-        + SetP(p float64)
-        + SetI(i float64)
-        + SetD(d float64)
-        + GetIntegralTerm() float64
-        + SetSampleTime(st float64)
-        + Calculate(currentValue float64) float64
-        + Reset()
+
     }
 }
 

@@ -11,76 +11,78 @@ Ejecutará los comandos recibidos por el programa cliente y actuará en consecue
 
 \subparagraph{Dominio}
 
+\begin{itemize}
+    \item PhysicModule: definición de variables físicas.
+    Son interfaces de int y floats que garantizan la congruencia en las operaciones.
+    Aunque los tipos sean float hay variables que no pueden operar entre sí sin atender a su realidad física, es decir sus unidades.
+    \item PinModule: abstracción del sistema donde se ejecute el código.
+    Dependerá del hardware necesario para atender a interfaz física de un motor
+    \begin{itemize}
+        \item EncoderPinModule: pin de entrada tipo pull para esperar a los flancos de subida del encoder.
+        \item OutPinModule: pin de salida digital para activar o desactivar frenos y triggers de dirección.
+        \item PWMPinModule: pin de control PWM con frecuencia y un ciclo de trabajo.
+    \end{itemize}
+    \item EncoderModule: \textit{Aggregate Root } compuesto por dos pines de tipo Encoder para leer los pulsos y calcular dirección y posición.
+    \item EngineModule: interfaz del motor y la implementación.
+    \item EnginePIDControllerModule: algoritmo de control PId.
+    El controlador usará una instancia de Engine y una instancia de PIDAlgorithm
+\end{itemize}
+
+
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.5\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/controlDomain}
+    \includegraphics[height=0.6\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/controlDomain}
     \caption{Control: Diagrama UML de el dominio}\label{fig:Control-Diagrama UML de el dominio}
 \end{figure}
 
-\begin{itemize}
-    \item PhysicModule: contendrá todas las variables físicas, son interfaces de int y floats que usaremos para garantizar la congruencia en las operaciones.
-    Aunque los tipos sean float hay variables que no pueden operar entre sí sin atender a su realidad física, es decir sus unidades.
-    \item PinModule: para abstraernos del sistema donde se ejecute el código crearemos la abstracción de el hardware necesario para atender a interfaz física de un motor:
-    \begin{itemize}
-        \item EncoderPinModule: sabemos que vamos a necesitar un pin de entrada tipo pull de entrada y esperar a los flancos de subida que entrarán del encoder.
-        Ya sea en el hardware comercial más conocidos como arduino o raspberry como cualquier otro.
-        \item OutPinModule: para activar o desactivar frenos y triggers de dirección necesitaremos pin de salida
-        \item PWMPinModule: para tener un control PWM necesitaremos un pin que nos permita salida pero con una frecuencia y un ciclo de trabajo.
-    \end{itemize}
-    \item EncoderModule: estará compuesto por dos pines de tipo Encoder para leer los pulsos y calcular si está en una dirección
-    \item EngineModule: este modulo contendrá tanto la interfaz del motor como la implementación, donde haciendo uso de los pines calculará y contendrá las variables intrínsecas del motor.
-    \item EnginePIDControllerModule: contendrá todo lo relativo al controlador PId. El controlador usará una instancia de Engine y una instancia de PIDAlgorithm
-\end{itemize}
-
 \subparagraph{Casos de uso}
 
-Los casos de usos actuarán sobre El objeto de dominio EnginePIDController, que en este caso al no haber base de datos ni identificadores serán ValueObjects. Particularmente en nuestro programa solo instanciaremos uno. No implementaremos un patrón singleton sobre ellos debido a que podría desearse controlar varios motores a la vez si el hardware lo permitiera.
+Los casos de usos actuarán sobre el objeto de dominio \textit{EnginePIDController}.
+Al no existir persistencia, y por lo tanto no necesitar identificadores, serán ValueObjects.
+Particularmente el programa sólo instanciará uno.
+No se hará uso de un patrón singleton ya a que podría desearse controlar varios motores a la vez en el futuro, Si el hardware lo permitiera.
 
-\textbf{Configure PID}
+\begin{itemize}
+    \item \textbf{Configure PID}: El primer paso a ejecutar antes de habilitar el control PID será sintonizarlo.
 
-El primer paso a ejecutar antes de habilitar el control PID será sintonizarlo.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/configurePID}
+        \caption{Use Case: Configure PID}\label{fig:Use Case-Configure PID}
+    \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/configurePID}
-    \caption{Use Case: Configure PID}\label{fig:Use Case-Configure PID}
-\end{figure}
+    \item \textbf{Disable control}
 
-\newpage
-\textbf{Enable RPM control}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/disableControl}
+        \caption{Use Case: Disable control}\label{fig:Use Case- Disable control}
+    \end{figure}
 
-Cuando se habilita el control rpm se genera una goRutine, es decir, si el hardware no devuelve error se responde OK pero un nuevo proceso que se quedará ejecutando hasta que se ejecute el caso de uso Disable Control.
-Este nuevo proceso ejecutará el control PID para mantener la consigna en el valor indicado. En este caso la consigna será la velocidad angular requerida.
+    \item \textbf{Enable RPM control}: Cuando se habilita el control rpm se genera una goRutine, es decir, si el hardware no devuelve error se responde OK pero un nuevo proceso que se quedará ejecutando hasta que se ejecute el caso de uso Disable Control.
+    Este nuevo proceso ejecutará el control PID para mantener la consigna en el valor indicado.
+    En este caso la consigna será la velocidad angular requerida.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.6\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enableRPMControl}
-    \caption{Use Case: Enable RPM control}\label{fig:Use Case- Enable RPM control}
-\end{figure}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height=0.6\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enableRPMControl}
+        \caption{Use Case: Enable RPM control}\label{fig:Use Case- Enable RPM control}
+    \end{figure}
 
-\newpage
-\textbf{Enable Position control}
+    \item \textbf{Enable Position control}
 
-Para el control en posición se actuará análogamente al control de velocidad pero la consigna será el ángulo requerido.
+    Para el control en posición se actuará análogamente al control de velocidad pero la consigna será el ángulo requerido.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enablePositionControl}
-    \caption{Use Case: Enable Position control}\label{fig:Use Case- Enable Position control}
-\end{figure}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enablePositionControl}
+        \caption{Use Case: Enable Position control}\label{fig:Use Case- Enable Position control}
+    \end{figure}
+\end{itemize}
 
-\textbf{Disable control}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/disableControl}
-    \caption{Use Case: Disable control}\label{fig:Use Case- Disable control}
-\end{figure}
-
-\newpage
 \subparagraph{Estructura de carpetas}
 
-\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/control_estructure_control.tex}
+\input{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/control_estructure_control}
 
 
 

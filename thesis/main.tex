@@ -21,48 +21,48 @@
 \usepackage{caption}
 
 \makenoidxglossaries
-\newglossaryentry{API}{name={API},description={(Application Programming Interface) Conjunto de reglas y protocolos de programación que especifican cómo los componentes de software deben interactuar entre sí sin tener que conocer los detalles subyacentes de implementación}}
-\newglossaryentry{REST}{name={REST},description={(Representational State Transfer) es un estilo de arquitectura de software para sistemas distribuidos que se utiliza para diseñar servicios web que son fáciles de escalar, mantener y extender}}
-\newglossaryentry{RPC}{name={RPC},description={(Remote Procedure Call) Protocolo de comunicación utilizado en sistemas distribuidos que permite que un programa solicite servicios o funciones a través de la red a otro programa en una máquina remota.}}
-\newglossaryentry{CRUD}{name={CRUD},description={Acrónimo de las cuatro operaciones básicas en la gestión de datos: Crear (Create), Leer (Read), Actualizar (Update) y Eliminar (Delete)}}
-\newglossaryentry{Backend}{name={Backend},description={Conjunto de servidores, aplicaciones y servicios que se ejecutan en segundo plano y proporcionan una interfaz de programación de aplicaciones (API) para que los clientes (front-end) puedan interactuar con ellos}}
+\newglossaryentry{API}{name={API},description={{(Application Programming Interface) Conjunto de reglas y protocolos de programación que especifican cómo los componentes de software deben interactuar entre sí sin tener que conocer los detalles subyacentes de implementación}}}
+\newglossaryentry{REST}{name={REST},description={{(Representational State Transfer) es un estilo de arquitectura de software para sistemas distribuidos que se utiliza para diseñar servicios web que son fáciles de escalar, mantener y extender}}}
+\newglossaryentry{RPC}{name={RPC},description={{(Remote Procedure Call) Protocolo de comunicación utilizado en sistemas distribuidos que permite que un programa solicite servicios o funciones a través de la red a otro programa en una máquina remota.}}}
+\newglossaryentry{CRUD}{name={CRUD},description={{Acrónimo de las cuatro operaciones básicas en la gestión de datos: Crear (Create), Leer (Read), Actualizar (Update) y Eliminar (Delete)}}}
+\newglossaryentry{Backend}{name={Backend},description={{Conjunto de servidores, aplicaciones y servicios que se ejecutan en segundo plano y proporcionan una interfaz de programación de aplicaciones (API) para que los clientes (front-end) puedan interactuar con ellos}}}
 \newglossaryentry{Manager} {name={Manager},description={Servicio web o Backend diseñado en este TFM para la gestión de tareas}}
 \newglossaryentry{Client} {name={Client},description={Servicio web o Backend diseñado en este TFM para la ejecucion de tareas albergados en sistemas remotos}}
-\newglossaryentry{LayerArchitecture} {name={Layered Architecture},description={(Arquitectura de capas) es un enfoque de diseño de software en el que los componentes del sistema se dividen en capas lógicas y se comunican entre sí a través de interfaces definidas}}
-\newglossaryentry{HexagonalArchitecture} {name={Hexagonal Architecture},description={(Arquitectura hexagonal o arquitectura de puertos y adaptadores) Implementación concreta de la arquitectura de capas.
-Basada en el diseño de un núcleo del sistema (Dominio) independiente de su entorno con el que se comunican los agentes externos a través de puertos y adaptadores}}
+\newglossaryentry{LayerArchitecture} {name={Layered Architecture},description={{(Arquitectura de capas) es un enfoque de diseño de software en el que los componentes del sistema se dividen en capas lógicas y se comunican entre sí a través de interfaces definidas}}}
+\newglossaryentry{HexagonalArchitecture} {name={Hexagonal Architecture},description={{(Arquitectura hexagonal o arquitectura de puertos y adaptadores) Implementación concreta de la arquitectura de capas.
+Basada en el diseño de un núcleo del sistema (Dominio) independiente de su entorno con el que se comunican los agentes externos a través de puertos y adaptadores}}}
 \newglossaryentry{DDD} {name={DDD},description={(Domain-Driven Design o Diseño Dirigido por el Dominio) capa central en arquitectura de capas o hexagonal.
 Entidades, objetos, conceptos y relaciones que conforman el núcleo del negocio.
 Refleja y dar soporte al negocio que se está modelando.
 Define un lenguaje común (ubiquitous language) que se comparte entre los expertos del dominio de la aplicación y los desarrolladores de software}}
-\newglossaryentry{CQRS} {name={CQRS},description={(Command Query Responsibility Segregation) Segregación de responsabilidades de comandos y consultas.
-Es una técnica de diseño de arquitectura de software que separa la lógica de escritura (comandos) de la lógica de lectura (consultas) en sistemas de información}}
+\newglossaryentry{CQRS} {name={CQRS},description={{(Command Query Responsibility Segregation) Segregación de responsabilidades de comandos y consultas.
+Es una técnica de diseño de arquitectura de software que separa la lógica de escritura (comandos) de la lógica de lectura (consultas) en sistemas de información}}}
 \newglossaryentry{Entity} {name={Entity},description={(Entidad) Es un objeto de Dominio que tiene identidad única y representa un concepto del mundo real, del negocio.
 Pueden ser almacenados, recuperados y modificados en la base de datos}}
 \newglossaryentry{Value Object} {name={ValueObject},description={(Objeto de valor) Representa la descripción de un objeto, pero no tiene identidad propia.
 Son inmutables.
 Se utilizan para representar datos que no necesitan ser almacenados individualmente en base de datos}}
-\newglossaryentry{Service} {name={Service},description={(Servicio) Componente software que proporciona funcionalidades y operaciones que no están directamente relacionadas con ninguna entidad o valor específico.
-Los servicios encapsulan la lógica de negocio compleja y se utilizan para ejecutar operaciones que involucran múltiples entidades o valores}}
+\newglossaryentry{Service} {name={Service},description={{(Servicio) Componente software que proporciona funcionalidades y operaciones que no están directamente relacionadas con ninguna entidad o valor específico.
+Los servicios encapsulan la lógica de negocio compleja y se utilizan para ejecutar operaciones que involucran múltiples entidades o valores}}}
 \newglossaryentry{Repository} {name={Repository},description={(Repositorio) Es un objeto que proporciona una interfaz para interactuar con la base de datos y abstrae la lógica de almacenamiento de datos del resto de la aplicación.
 Los repositorios se utilizan para realizar operaciones de almacenamiento, recuperación, actualización y eliminación de entidades}}
 \newglossaryentry{InfrastructureLayer} {name={Infrastructure Layer},description={(Capa de infraestructura) Proporciona una interfaz para interactuar con componentes como bases de datos, sistemas de archivos o servicios web.
 Implementa detalles técnicos que dependen de una tecnología concreta y no deben afectar al modelado del negocio}}
-\newglossaryentry{Adapter} {name={Adapter},description={(Adaptador) Elemento de software que implementa una interfaz para conectar la capa de aplicación o dominio con los componentes de infraestructura}}
-\newglossaryentry{ApplicationLayer}{ name={Application layer},description={(Capa de aplicación) Capa que contiene los casos de uso específicos del negocio.
-Proporciona una interfaz para interactuar con el dominio}}
-\newglossaryentry{UseCase} {name={Use Case},description={(Caso de uso) Escenario específico de uso de la aplicación que involucra múltiples operaciones y procesos.
-Los casos de uso se utilizan para representar la funcionalidad de la aplicación desde la perspectiva del usuario}}
-\newglossaryentry{Command}{name={Comando},description={(Comando) Operación que realiza un cambio en el estado del sistema}}
-\newglossaryentry{SUT}{name={SUT},description={System Under Test (Sistema bajo testeo)}}
-\newglossaryentry{DOC}{name={DOC},description={Depended On Component (Dependiente del componente)}}
-\newglossaryentry{DTO}{name={DTO},description={Data Transfer Object (Objeto de transferencia de datos) Objeto inmutable que sólo sirve para transportar información de una capa a otra}}
-\newglossaryentry{UL}{name={UL},description={(Ubiquitous Language) Lenguaje común en un diseño guiado por DDD para describir los componentes del problema}}
-\newglossaryentry{IDL}{name={IDL},description={(interface definition language)}}
-\newglossaryentry{Query} {name={Command},description={(Consulta) Operación que recupera información del sistema sin modificar su estado}}
-\newglossaryentry{E2E} {name={E2E},description={(End to End o extremo a extremo) Tipología de test que prueba todo el sistema}}
-\newglossaryentry{CI/CD} {name={CI/CD},description={(Continuous delivery/Continuous integration) Entrega Continua/Integración Continua.
-Prácticas y herramientas para automatizar el proceso de garantizar el correcto desarrollo de software desde la creación del código hasta su despliegue en producción}}
+\newglossaryentry{Adapter} {name={Adapter},description={{(Adaptador) Elemento de software que implementa una interfaz para conectar la capa de aplicación o dominio con los componentes de infraestructura}}}
+\newglossaryentry{ApplicationLayer}{ name={Application layer},description={{(Capa de aplicación) Capa que contiene los casos de uso específicos del negocio.
+Proporciona una interfaz para interactuar con el dominio}}}
+\newglossaryentry{UseCase} {name={Use Case},description={{(Caso de uso) Escenario específico de uso de la aplicación que involucra múltiples operaciones y procesos.
+Los casos de uso se utilizan para representar la funcionalidad de la aplicación desde la perspectiva del usuario}}}
+\newglossaryentry{Command}{name={Comando},description={{(Comando) Operación que realiza un cambio en el estado del sistema}}}
+\newglossaryentry{SUT}{name={SUT},description={{(System Under Test Sistema bajo testeo)}}}
+\newglossaryentry{DOC}{name={DOC},description={{Depended On Component Dependiente del componente}}}
+\newglossaryentry{DTO}{name={DTO},description={{(Data Transfer Object Objeto de transferencia de datos) Objeto inmutable que sólo sirve para transportar información de una capa a otra}}}
+\newglossaryentry{UL}{name={UL},description={{(Ubiquitous Language) Lenguaje común en un diseño guiado por DDD para describir los componentes del problema}}}
+\newglossaryentry{IDL}{name={IDL},description={{interface definition language}}}
+\newglossaryentry{Query} {name={Command},description={{(Consulta) Operación que recupera información del sistema sin modificar su estado}}}
+\newglossaryentry{E2E} {name={E2E},description={{(End to End o extremo a extremo) Tipología de test que prueba todo el sistema}}}
+\newglossaryentry{CI/CD} {name={CI/CD},description={{(Continuous delivery/Continuous integration) Entrega Continua/Integración Continua.
+Prácticas y herramientas para automatizar el proceso de garantizar el correcto desarrollo de software desde la creación del código hasta su despliegue en producción}}}
 
 \begin{document}
     \input{./packagesConfig}
@@ -80,15 +80,15 @@ Prácticas y herramientas para automatizar el proceso de garantizar el correcto 
 
     \newpage
     \section{Proyecto Ejecutivo}\label{sec:proyecto_ejecutivo}
-    \input{part/Proyecto_ejecutivo/Proyecto_ejecutivo.tex}
+    \input{./part/Proyecto_ejecutivo/Proyecto_ejecutivo}
 
     \newpage
     \section{Ejecución}\label{sec:ejecucion}
-    \input{part/Ejecucion/Ejecucion.tex}
+    \input{./part/Ejecucion/Ejecucion}
 
     \newpage
     \section{Conclusiones}\label{sec:conclusiones}
-    \input{./part/Conclusiones.tex}
+    \input{./part/Conclusiones}
 
     \newpage
     \section{References}\label{sec:references}

@@ -1,7 +1,7 @@
 
 Proteger el sistema frente al error humano es esencial para garantizar la entrega de código con seguridad y calidad.
 Para ello se emplearán herramientas de \gls{CI/CD} (\textit{Continuous delivery/Continuous integration} o Entrega Continua/Integración Continua) que se encargarán de realizar comprobaciones antes de permitir la llegada a servicio del nuevo código y el despliegue automático de dicho código en el entorno final.
-Este proyecto se centra en los primeros, CI \textit{Continuous integration}, debido a que no disponemos de servidores sobre los que desplegar de forma final.
+Este proyecto se centra en los primeros, CI \textit{Continuous integration}, debido a que no se dispondrá de servidores sobre los que desplegar de forma final.
 
 CI/CD implica el uso de sistemas de control de versiones, servidores de automatización de compilación y pruebas, y herramientas de automatización de implementación y entrega.
 Estas herramientas permiten que los desarrolladores integren sus cambios de código en un repositorio central, donde se desencadenan automáticamente pruebas y compilaciones para detectar cualquier error y garantizar que el código se pueda implementar sin problemas.
@@ -17,8 +17,8 @@ Las técnicas utilizadas para el desarrollo de los tests encuentran su origen en
     \item No se puede entregar un producto que no tiene ninguna clase de garantía de su correcto funcionamiento o acotado su margen de error.
 \end{itemize}
 
-Debemos trabajar dentro de esos dos límites: tener tests que garanticen y especifiquen el grado de calidad acotado al presupuesto que se dispone.
-Para poder expresar de una forma cuantitativa que los tests están correctamente diseñados y desarrollados primero definamos ineficaz e ineficiente.
+Se va a trabajar dentro de esos dos límites: deben existir tests que garanticen y especifiquen el grado de calidad acotado al presupuesto que se dispone.
+Para poder expresar de una forma cuantitativa que los tests están correctamente diseñados y desarrollados primero se define ineficaz e ineficiente.
 definición según RAE:
 
 \begin{itemize}
@@ -26,10 +26,10 @@ definición según RAE:
     \item Eficiente (segunda acepción): Capacidad de lograr los resultados deseados con el mínimo posible de recursos.
 \end{itemize}
 
-Si existiese un numero exacto de pruebas óptimas, para cubrir todas la posibilidades con tests, si haces menos estas siendo ineficaz y si haces más ineficiente.
-El trabajo de diseño de los tests constará en tomar una solución de compromiso entre eficacia y eficiencia.
-No podemos no probar y no tendremos recursos para probar todo.
-En un ejemplo muy sencillo: para un método que recibe la información de un formulario de ocho campos con diez posibles valores diferentes cada uno se obtendría un conjunto de $8^{10} = 1,073,741,824$ casos de prueba.
+De existir un numero exacto de pruebas óptimas, para cubrir todas la posibilidades, desarrollar menos es ineficaz y más es ineficiente.
+El trabajo de diseño de los tests consta en tomar una solución de compromiso entre eficacia y eficiencia.
+No se puede no probar y no existen recursos para probar todo.
+En un ejemplo: para un método que recibe la información de un formulario de ocho campos con diez posibles valores diferentes cada uno se obtendría un conjunto de $8^{10} = 1,073,741,824$ casos de prueba.
 Esta táctica de pruebas siendo la más obvia la mayor parte de las veces será inviable.
 
 Este proyecto utilizará pruebas de caja negra.
@@ -78,35 +78,38 @@ Son valores dentro de esa clase de equivalencia para el que cambia el comportami
 La justificación se basa en la evidencia experimental de que “los errores se esconden en los rincones y se aglomeran en los límites” [Beizer] y por tanto se aumenta el conjunto de casos de prueba para mejorar la eficacia de encontrar errores.
 Es decir, que dentro de una clase de equivalencia puede requerirse el testeo de varios valores.
 
-Vamos a exponer dos ejemplos que muestran la diferencia entre: parámetro de entrada, factor y clase de equivalencia.
+Se expone un ejemplo que muestran la diferencia entre: parámetro de entrada, factor y clase de equivalencia.
 
-Supongamos una función que acepta como parámetro de entrada un texto.
+Enfrentando una función que acepta como parámetro de entrada un texto.
 
 \begin{verbatim}
     funcion de nextDay(string day){...}
 \end{verbatim}
 
-Como estamos diseñando el test, no podemos asumir la implementación.
+En el diseño del test no se puede asumir la implementación.
 La entrada puede ser cualquier cadena de caracteres, es decir, infinitas posibilidades.
-El factor en este caso coincide con la entrada.
-Las clases de equivalencia para ese factor es una definición subjetiva que engloba todas las posibilidades, para este caso: que la entrada sea invalida o que sea válida.
+El factor es un elemento de definición subjetiva que en este caso se opta por elegir el concepto ´día de la semana´.
+Concepto distinto a la entrada: cadena de caracteres.
+Las clases de equivalencia para ese factor ha de englobar todas las posibilidades, para este caso: que la entrada sea invalida o que sea válida.
+
 \begin{itemize}
-    \item Invalido: cualquier texto invalido.
-    \item Válido: lunes, martes, miércoles, jueves, viernes, sábado o domingo.
+    \item Invalido: cualquier texto invalido, no es un día de la semana.
+    \item Válido: cualquier día de la semana.
+    Lunes, martes, miércoles, jueves, viernes, sábado o domingo.
 \end{itemize}
 
-por lo tanto podríamos coger cualquier valor dentro de esas dos clases, por ejemplo:
+En este punto se podría escoger cualquier valor dentro de esas dos clases, por ejemplo:
 
 \begin{itemize}
     \item Invalido: cualquier Cadena Invalida \(\longrightarrow\) resultado esperado: error.
     \item Válido: lunes \(\longrightarrow\) resultado esperado: martes.
 \end{itemize}
 
-Vemos como podemos siguiendo esta metodología podemos dar una garantía.
-Explicar metodológicamente porqué se han hecho los tests y los valores escogidos y que cobertura se está ofreciendo.
-Ahora si aplicamos la técnica de los valores límites sabemos que el domingo es el último día y se debe volver al lunes.
-Es decir, es el valor límite dentro de nuestra clase de equivalencia.
-Por lo tanto si queremos garantizar y elegir con critero dentro de los casos de nuestra clase de equivalencia los tests quedarían:
+Siguiendo esta metodología se obtiene una garantía: Explicar metodológicamente porqué se han hecho los tests y los valores escogidos y que cobertura se está ofreciendo.
+Aplicando la técnica de los valores límites se concibe el domingo como el último día, después se debe volver al lunes.
+Es decir, es el valor límite dentro de la clase de equivalencia.
+Garantizando elegir con criterio dentro de los casos de la clase de equivalencia.
+Los tests son:
 
 \begin{itemize}
     \item Invalido: cualquierCadenaInvalida \(\longrightarrow\) resultado esperado: error.
@@ -116,7 +119,7 @@ Por lo tanto si queremos garantizar y elegir con critero dentro de los casos de 
 
 \textbf{Variables dependientes}\label{variablesDependendientes}
 
-Dentro de los métodos de variables dependientes vamos a usar el método de \textit{Pairwise}, también conocido como pruebas de combinaciones de pares.
+Dentro de los métodos de variables dependientes se utilizará el método de \textit{Pairwise}, también conocido como pruebas de combinaciones de pares.
 Es una técnica de diseño de pruebas que permite reducir el número de casos necesarios para lograr una cobertura exhaustiva.
 En lugar de probar todas las combinaciones posibles de los parámetros, el método identifica las combinaciones de pares que tienen el potencial de causar errores.
 Estas combinaciones de pares se seleccionan utilizando un algoritmo que busca minimizar el número de casos de prueba necesarios sin sacrificar la calidad de la cobertura de pruebas.
@@ -127,13 +130,13 @@ Es importante tener en cuenta que el método de Pairwise no es una técnica infa
 Es una técnica efectiva para la reducción del número de casos de prueba necesarios para lograr una cobertura razonable.
 
 En un ejemplo extraído de~\cite{Bach04pairwisetesting} se analiza un software con un menú de botones.
-Para hacer un testeo exhaustivo debemos analizar 12,288 casos;
+Para hacer un testeo exhaustivo se han de analizar 12,288 casos;
 ese coste de calidad no es asumible para todos los proyectos.
 En este mismo paper reducen a 10 casos con este método.
 Es una metodología para escoger los tests que más aportan valor de cara a la seguridad sin perder pragmatismo y economía.
 Para el cálculo de los pares hay varios software disponible como páginas web que permiten el cálculo de forma rápida.
 
-Con estos métodos presentados vamos a realizar pruebas que cumplan con las características de ser:
+Con estos métodos presentados se garantizarán que pruebas cumplan con las características de ser:
 
 \begin{itemize}
     \item Inocuas
@@ -146,4 +149,4 @@ Con estos métodos presentados vamos a realizar pruebas que cumplan con las cara
 
 Un código se demuestra que es correcto cuando es fácil de testear.
 Como referencia, si el diseño un test se complica.
-No se consigue aislar las características a testear, definir los factores, las clases de equivalencia o nos salen un número inabarcable de tests estamos ante un código mejorable.
+No se consigue aislar las características a testear, definir los factores, las clases de equivalencia o se obtiene un número inabarcable de tests es síntoma de un código mejorable.

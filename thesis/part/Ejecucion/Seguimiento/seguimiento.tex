@@ -1,16 +1,31 @@
 
-En esta sección vamos a exponer la ejecución del diseño realizado. Haciendo foco en los casos de uso más representativos de toda la metodología que este trabajo ha desarrollado en su fase de diseño. Se expondrá de una forma gráfica con diagramas que hagan comprensible la estructura y no tanto los detalles de implementación. El repositorio con el código al completo lo podemos encontrar en \href{https://github.com/Enrikerf/pfm}{github}
+En esta sección vamos a exponer la ejecución del diseño realizado.
+Haciendo foco en los casos de uso más representativos de toda la metodología que este trabajo ha desarrollado en su fase de diseño.
+Se expondrá de una forma gráfica con diagramas que hagan comprensible la estructura y no tanto los detalles de implementación.
+El repositorio con el código al completo lo podemos encontrar en \href{https://github.com/Enrikerf/pfm}{github}
 
-Una de las primeras características que cabe resaltar de golang es que no tiene clases ni herencia. Como estructura principal de datos tiene los structs. Si queremos controlar la instanciación de los elementos de dominio, por ejemplo, la declaración inicial de variables de dichos structs, debemos implementar patrones más allá del elemento de datos en sí. Para poder garantizar que dichos elementos se creen bajo una misma lógica que no se pueda evitar manteniendo la consistencia. Otro punto importante a entender desde el inicio es que Golang sólo expone elementos, ya sea structs, funciones o demás tipos fuera de un módulo si están escritos en mayúscula. Por último, en Golang un módulo son todos los archivos dentro de un mismo directorio.
+Una de las primeras características que cabe resaltar de golang es que no tiene clases ni herencia.
+Como estructura principal de datos tiene los structs.
+Si queremos controlar la instanciación de los elementos de dominio, por ejemplo, la declaración inicial de variables de dichos structs, debemos implementar patrones más allá del elemento de datos en sí.
+Para poder garantizar que dichos elementos se creen bajo una misma lógica que no se pueda evitar manteniendo la consistencia.
+Otro punto importante a entender desde el inicio es que Golang sólo expone elementos, ya sea structs, funciones o demás tipos fuera de un módulo si están escritos en mayúscula.
+Por último, en Golang un módulo son todos los archivos dentro de un mismo directorio.
 
-Entendido estos tres puntos, una forma de crear una estructura equivalente a una clase es definir una interfaz pública y crear un struct privado que la implemente. Los struct pueden implementar metodos pasandose a si mismos por referencia en una funcion. Podemos ver una implementación a modo de ejemplo en la~\cref{fig:golang class equivalent}. En la interfaz \textbf{C}lassName la “C“ es mayúscula exponiendolo al exterior del módulo y \textbf{c}lassName struct en minuscula encapsulándolo. Podemos verlo más claramente en el diagrama UML~\cref{fig: uml Diagram Class Equivalent in Golang}
+Entendido estos tres puntos, una forma de crear una estructura equivalente a una clase es definir una interfaz pública y crear un struct privado que la implemente.
+Los struct pueden implementar metodos pasandose a si mismos por referencia en una funcion.
+Podemos ver una implementación a modo de ejemplo en la~\cref{fig:golang class equivalent}.
+En la interfaz \textbf{C}lassName la “C“ es mayúscula exponiendolo al exterior del módulo y \textbf{c}lassName struct en minuscula encapsulándolo.
+Podemos verlo más claramente en el diagrama UML~\cref{fig: uml Diagram Class Equivalent in Golang}
 
 Los motivos por los que es importante concebir esta estructura en lugar de utilizar structs directamente son:
 
 \begin{itemize}
     \item Evita la instanciación no consistente, lo cual sólo se garantiza a traves del método exportado NewClass.
-    \item Evita accesos no deseados a la modificación de variables. Siendo publicas seria posible. Garantiza la inmutabilidad en la que se basan los \textit{Value Objects}.
-    \item Limpieza en gestión errores en Go. Ante la respuesta múltiple, que contemple devolver un resultado o error, evitamos instanciar el objeto con contenido vacío creando un elemento inconsistente sólo por exigencias del lenguaje. De esta forma admite retornar null.
+    \item Evita accesos no deseados a la modificación de variables.
+    Siendo publicas seria posible.
+    Garantiza la inmutabilidad en la que se basan los \textit{Value Objects}.
+    \item Limpieza en gestión errores en Go. Ante la respuesta múltiple, que contemple devolver un resultado o error, evitamos instanciar el objeto con contenido vacío creando un elemento inconsistente sólo por exigencias del lenguaje.
+    De esta forma admite retornar null.
 \end{itemize}
 
 \begin{figure}[H]
@@ -25,17 +40,20 @@ Los motivos por los que es importante concebir esta estructura en lugar de utili
     \caption{UML diagram: Class equivalent in Golang}\label{fig: uml Diagram Class Equivalent in Golang}
 \end{figure}
 
-Como contrapartida tenemos que escribir más codigo. Poniendo como comparación una clase Java o C++ no podemos decir que en cantidad de lineas escritas se aumente o disminuya, aunque estéticamente pueda resultar incómodo. En cuestión de conceptos aprendidos en Golang sólamente trabaja con interfaces y structs contra el concepto de clase y herencia.
+Como contrapartida tenemos que escribir más codigo.
+Poniendo como comparación una clase Java o C++ no podemos decir que en cantidad de lineas escritas se aumente o disminuya, aunque estéticamente pueda resultar incómodo.
+En cuestión de conceptos aprendidos en Golang sólamente trabaja con interfaces y structs contra el concepto de clase y herencia.
 
-Una vez presentado estos conceptos pasamos a exponer el código. Los casos de uso más complejos y completos para ver todo el diseño aplicado son: CreateTaskUseCase y TaskEventHandler.
+Una vez presentado estos conceptos pasamos a exponer el código.
+Los casos de uso más complejos y completos para ver todo el diseño aplicado son: CreateTaskUseCase y TaskEventHandler.
 
 \subsubsection{CreateTaskUseCase}\label{subsubsec:CreateTaskUseCase}
-    \input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase.tex}
+    \input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase}
 \subsubsection{TaskEventHandler}
-    \input{part/Ejecucion/Seguimiento/TaskEventHandler/TaskEventHandlerUseCase.tex}
+    \input{part/Ejecucion/Seguimiento/TaskEventHandler/TaskEventHandlerUseCase}
 \subsubsection{PID Control}\label{subsubsec:pidControl}
-    \input{part/Ejecucion/Seguimiento/PidControl/pidControl.tex}
+    \input{part/Ejecucion/Seguimiento/PidControl/pidControl}
 \subsubsection{Testing}
-    \input{part/Ejecucion/Seguimiento/Testing/testing.tex}
+    \input{part/Ejecucion/Seguimiento/Testing/testing}
 
 

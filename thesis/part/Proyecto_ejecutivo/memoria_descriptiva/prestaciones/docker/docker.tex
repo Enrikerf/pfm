@@ -3,30 +3,36 @@ Uno de los puntos más relevantes de un proyecto de software es garantizar la vi
 ya sea por mantenimiento o adición de nuevas características.
 A lo largo de la vida de un proyecto los técnicos que trabajan en él van cambiando;
 la acumulación de conocimiento acerca del sistema es un factor crítico.
-Debemos diseñar un sistema modular que evite tener que conocer todo el proyecto en profundidad para realizar cambios.
+Se ha de diseñar un sistema modular que evite tener que conocer todo el proyecto en profundidad para realizar cambios.
 
 La infraestructura es un punto problemático al afectar a todo el sistema.
-Necesitamos desplegar una réplica del sistema en una máquina para probar y desarrollar las nuevas características, es decir, levantar una réplica en modo desarrollo.
-Instalar dependencias, garantizar que todo está funcional y que estamos probando un sistema exactamente igual al que están utilizando los clientes para evitar diferencias a la hora de desplegar los cambios en el entorno final.
+Es necesario un sistema para desplegar una réplica del sistema en una máquina para probar y desarrollar las nuevas características, es decir, levantar una réplica en modo desarrollo.
+Instalar dependencias, garantizar que todo está funcional y que se realizan las pruebas en un sistema exactamente igual al que están utilizando los clientes para evitar diferencias a la hora de desplegar los cambios en el entorno final.
 
 Las herramientas que desplieguen el sistema de forma automatizada en cualquier dispositivo permitiendo trabajar en un punto concreto de la aplicación sin necesidad de conocerla en todo su extensión son: Docker, scripts y Makefiles.
 
-Dentro de esos contenedores Docker dispondremos de todas las herramientas ya instaladas para manejar el sistema sin tener que instalarlas en nuestra propia máquina, evitando problemas de versiones e incompatibilidades.
-Para este proyecto necesitaremos garantizar:
+Dentro de esos contenedores Docker se encontrarán todas las herramientas ya instaladas para manejar el sistema sin tener que instalarlas en nuestra propia máquina, evitando problemas de versiones e incompatibilidades.
+Para este proyecto se ha de garantizar:
 
 \begin{itemize}
     \item versión fija de golang para compilar los programas
-    \item versión fija de la las librerias
+    \item versión fija de la las librerías
     \item versión fija de la base de datos
     \item configuración del protocolo de comunicación entre sistemas
 \end{itemize}
 
-Como este proyecto se basa en 3 softwares entregables: el servicio de manager, el servicio cliente(el cual puede ser requerido en multiples máquinas y habrá de ser desplegada dicha réplica) y el programa de control. Vamos a extraer toda la utilidad de Docker para que se entrege y despliege de forma consistente y sencilla dicho software.
+Como este proyecto se basa en 3 programas: el servicio de manager, el servicio cliente(el cual puede ser requerido en multiples máquinas y habrá de ser desplegada dicha réplica) y el programa de control.
+Se hará uso de Docker para que se entregue y despliegue de forma consistente y sencilla dicho software.
 
-Los archivos Makefile son un conjunto de acciones expresadas en un archivo que nos permiten ejecutarlos desde consola. Con ellos podemos avisar al desarrollador de qué acciones básicas dispone, el simple conocimiento de su existencia ya supondría adquirir un conocimiento y de esta forma queda documentado a modo de ejecutable. Y queda descrito lo que realizan sin necesidad de conocer qué es lo que se ejecuta, simplemente su utilidad. En cada programa dispondremos de las siguientes acciones básicas:
+Los archivos Makefile son un conjunto de acciones expresadas en un archivo que permiten ejecutarlos desde consola.
+Avisan al desarrollador de qué acciones básicas dispone, el simple conocimiento de su existencia ya supondría adquirir un conocimiento y de esta forma queda documentado a modo de ejecutable.
+Y queda descrito lo que realizan sin necesidad de conocer qué es lo que se ejecuta, simplemente su utilidad.
+En cada programa se dispondrá de las siguientes acciones básicas:
 
 \begin{itemize}
-    \item interactuar con el sistema de contenedores docker: levantarlo, pararlo, resetearlo. Sin necesidad de conocer Docker.
-    \item interactuar con el protocolo gRPC: recrear, generar y eliminar los archivos proto que definen el protocolo de comunicación. Sin necesidad de conocer gRPC
-    \item interactuar con la base de datos: crear la base de datos, resetearla, indr
+    \item interactuar con el sistema de contenedores docker: levantarlo, pararlo, resetearlo.
+    Sin necesidad de conocer Docker.
+    \item interactuar con el protocolo gRPC: recrear, generar y eliminar los archivos proto que definen el protocolo de comunicación.
+    Sin necesidad de conocer gRPC
+    \item interactuar con la base de datos: crear la base de datos o resetearla.
 \end{itemize}
