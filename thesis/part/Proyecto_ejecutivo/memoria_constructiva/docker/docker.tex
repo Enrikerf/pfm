@@ -10,7 +10,7 @@ Los stages diseñados son: base, dev, compile y prod.
 
 En la base se instalan los elementos comunes.
 Si se especifica dev entonces se instala Golang, el debugger Delve, un usuario para evitar el uso de sudo dentro dicho container y distintas utilidades generales como git, vim como editor de textos y fish como terminal.
-Si especficamos compile nos evitamos la instalación de los elementos de desarrollo y sólo instalamos golang para poder compilar el código.
+Si se construye mediante la etiqueta \textit{compile} se evita la instalación de los elementos de desarrollo y sólo instalamos golang para poder compilar el código.
 En prod se usa esa fase primero para compilar.
 Luego se parte de la base en limpio y se crea un contendor con el ejecutable en su interior.
 Ahorrando espacio en el contenedor.

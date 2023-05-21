@@ -10,11 +10,19 @@ El usuario el sistema tendrá la capacidad de:
 \end{itemize}
 
 \paragraph{Garantías de seguridad y calidad}\label{par:testing}
-    Conforme a los principios establecidos para el diseño de tests el alcance de la cobertura de este proyecto se centrará en hacer tests unitarios para el dominio y la aplicación, es decir los casos de uso.
-    No
+    Conforme a los principios teóricos establecidos para el diseño de tests la cobertura de este proyecto se centrará en hacer tests unitarios para el dominio.
+    En la~\cref{fig:piramidTest} se muestran las distribuciones de test que representan el ideal a la derecha y a el que tienen los sistemas a la izquierda.
+    Las pruebas unitarias sólo son posibles cuando hay un buen diseño del software.
+    En los proyectos que no disponen de un diseño que posibilite hacer test unitarios se ven abocados a hacer uso de tests que prueban demasiado código y características al mismo tiempo.
+    Esto provoca que sean tests que tienen a fallar rápidamente y deben cambiarse habitualmente ante cualquier pequeño cambio.
+    Las pruebas de más alto nivel incluyen incluso las interfaces de usuario.
+    Debieran estar destinadas a funcionalidades muy establecidas y cuya tendencia al cambio sea muy escasa.
 
-    PONER DIAGRAMA DE LA PIRAMIDE DE TESTS
-%    \input{./part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/testing.tex}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height=0.35\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/TestPiramid}
+        \caption{Piramides de distribución de pruegbas: patrón y antipatrón}\label{fig:piramidTest}
+    \end{figure}
 
 \paragraph{Garantías de robustez ante nuevos desarrollo}
 \input{part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/docker/docker}

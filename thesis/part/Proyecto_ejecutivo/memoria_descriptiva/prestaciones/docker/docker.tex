@@ -21,8 +21,10 @@ Para este proyecto se ha de garantizar:
     \item configuración del protocolo de comunicación entre sistemas
 \end{itemize}
 
-Como este proyecto se basa en 3 programas: el servicio de manager, el servicio cliente(el cual puede ser requerido en multiples máquinas y habrá de ser desplegada dicha réplica) y el programa de control.
+Como este proyecto se basa en 3 programas: el servicio de manager, el servicio cliente y el programa de control.
 Se hará uso de Docker para que se entregue y despliegue de forma consistente y sencilla dicho software.
+Será especialmente útil para el programa cliente y el de control.
+Estos programas deben estar preparados para desplegarse en múltiples plataformas y sistemas operativos de forma automática.
 
 Los archivos Makefile son un conjunto de acciones expresadas en un archivo que permiten ejecutarlos desde consola.
 Avisan al desarrollador de qué acciones básicas dispone, el simple conocimiento de su existencia ya supondría adquirir un conocimiento y de esta forma queda documentado a modo de ejecutable.
@@ -30,9 +32,9 @@ Y queda descrito lo que realizan sin necesidad de conocer qué es lo que se ejec
 En cada programa se dispondrá de las siguientes acciones básicas:
 
 \begin{itemize}
-    \item interactuar con el sistema de contenedores docker: levantarlo, pararlo, resetearlo.
+    \item interactuar con el sistema de contenedores docker: levantarlo, pararlo, restablecer los valores iniciales.
     Sin necesidad de conocer Docker.
     \item interactuar con el protocolo gRPC: recrear, generar y eliminar los archivos proto que definen el protocolo de comunicación.
     Sin necesidad de conocer gRPC
-    \item interactuar con la base de datos: crear la base de datos o resetearla.
+    \item interactuar con la base de datos: crear la base de datos o restablecer los valores iniciales.
 \end{itemize}

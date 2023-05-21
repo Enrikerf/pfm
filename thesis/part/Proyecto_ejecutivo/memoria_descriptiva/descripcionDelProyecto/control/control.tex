@@ -43,42 +43,43 @@ Particularmente el programa sólo instanciará uno.
 No se hará uso de un patrón singleton ya a que podría desearse controlar varios motores a la vez en el futuro, Si el hardware lo permitiera.
 
 \begin{itemize}
-    \item \textbf{Configure PID}: El primer paso a ejecutar antes de habilitar el control PID será sintonizarlo.
+    \item \textbf{Configure PID}: el primer paso a ejecutar antes de habilitar el control PID será sintonizarlo.
+    Se muestra el diagrama de flujo en la~\cref{fig:Use Case-Configure PID}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/configurePID}
-        \caption{Use Case: Configure PID}\label{fig:Use Case-Configure PID}
-    \end{figure}
-
-    \item \textbf{Disable control}
-
-    \begin{figure}[H]
-        \centering
-        \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/disableControl}
-        \caption{Use Case: Disable control}\label{fig:Use Case- Disable control}
-    \end{figure}
+    \item \textbf{Disable control}: para deshabilitar el control PID se muestra el diagrama de flujo en la~\cref{fig:Use Case- Disable control}
 
     \item \textbf{Enable RPM control}: Cuando se habilita el control rpm se genera una goRutine, es decir, si el hardware no devuelve error se responde OK pero un nuevo proceso que se quedará ejecutando hasta que se ejecute el caso de uso Disable Control.
     Este nuevo proceso ejecutará el control PID para mantener la consigna en el valor indicado.
     En este caso la consigna será la velocidad angular requerida.
+    Se ilustra el diagrama de flujo en la~\cref{fig:Use Case- Enable RPM control}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[height=0.6\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enableRPMControl}
-        \caption{Use Case: Enable RPM control}\label{fig:Use Case- Enable RPM control}
-    \end{figure}
-
-    \item \textbf{Enable Position control}
-
-    Para el control en posición se actuará análogamente al control de velocidad pero la consigna será el ángulo requerido.
-
-    \begin{figure}[H]
-        \centering
-        \includegraphics[height=0.4\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enablePositionControl}
-        \caption{Use Case: Enable Position control}\label{fig:Use Case- Enable Position control}
-    \end{figure}
+    \item \textbf{Enable Position control}: Para el control en posición se actuará análogamente al control de velocidad pero la consigna será el ángulo requerido.
+    Se aprecia el diagrama de flujo en la~\cref{fig:Use Case- Enable Position control}
 \end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/configurePID}
+    \caption{Use Case: Configure PID}\label{fig:Use Case-Configure PID}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/disableControl}
+    \caption{Use Case: Disable control}\label{fig:Use Case- Disable control}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.65\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enableRPMControl}
+    \caption{Use Case: Enable RPM control}\label{fig:Use Case- Enable RPM control}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.7\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/control/uml/enablePositionControl}
+    \caption{Use Case: Enable Position control}\label{fig:Use Case- Enable Position control}
+\end{figure}
 
 \subparagraph{Estructura de carpetas}
 

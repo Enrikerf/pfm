@@ -1,3 +1,4 @@
+
 \begin{figure}[H]
     \setlength{\DTbaselineskip}{10pt}
     \DTsetlength{0.2em}{1em}{0.2em}{0.4pt}{1.6pt}
@@ -12,6 +13,13 @@
 \end{figure}
 
 \textbf{Dominio}
+
+La estructura de organización para el dominio de este programa mostrado en la~\cref{fig:Control- Estructura de carpetas de Dominio} muestra que en este caso se utiliza otro lenguaje para nombrar a los repositorios.
+Siguiendo las guías de diseño de DDD y el UL se utiliza un lenguaje que exprese el problema que ocupa.
+En el Manager y el Cliente enfrentan un paradigma de servicio web API\@.
+Es por esto que nombrar repositorios a los servicios de infraestructura de salida tiene sentido.
+En este caso la infraestructura de salida se compone de actuadores físicos.
+Se usan por tanto los nombres que los definen como el Encoder y los pines.
 
 \begin{figure}[H]
     \setlength{\DTbaselineskip}{10pt}
@@ -49,6 +57,9 @@
 \end{figure}
 
 \textbf{Aplicación}
+
+Para los casos de uso definidos en la capa de aplicación se se siguen el paradigma CQRS de la misma forma que en todos los programas.
+La interacción con el entorno físico consta en este caso únicamente de comandos para actuar sobre el motor.
 
 \begin{figure}[H]
     \setlength{\DTbaselineskip}{10pt}
@@ -88,7 +99,7 @@
                     .4 Servirán para ejecutar los casos de uso mediante terminal.
             .2 out.
                 .3 pin.
-                    .4 implementación con librerías para actuar sobre los pines, Se buscará una librería que pueda ser configurada para actuar sobre pines de varias plataformas.
+                    .4 implementación con librerías para actuar sobre los pines, Se investigará para hacer uso de una librería que pueda ser configurada para actuar sobre pines de varias plataformas.
     }
     \caption{Control: Estructura de carpetas de Infraestructura}\label{fig:Control-Estructura de carpetas de Infraestructura}
 \end{figure}
