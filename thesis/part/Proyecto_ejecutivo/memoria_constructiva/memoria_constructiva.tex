@@ -28,9 +28,10 @@ El diseño de la base de datos y las herramientas de despliegue.
 \input{part/Proyecto_ejecutivo/memoria_constructiva/motor/ElectronicaPot}
 
 \paragraph{Mysql}\label{par:mysql}
-Para la base de datos escogeremos Mysql por ser también la solución más estandar.
-Al tener conocimiento previos de su uso evitamos añadir mayor esfuerzo de investigación.
-Podemos ver en la figura~\cref{fig:DBSchema} El digrama de relaciones entre los distingos elementos de la base de datos.
+
+La base de datos será Mysql.
+Es la solución más estándar y se dispone de conocimiento previo evitando añadir complejidad.
+En la~\cref{fig:DBSchema} se dispone del diagrama de relaciones de la base de datos.
 Esta base de datos permitirá persistir la información introducida por los usuarios en el sistema del programa Manager.\\
 
 \begin{figure}[H]
@@ -40,19 +41,52 @@ Esta base de datos permitirá persistir la información introducida por los usua
 \end{figure}
 
 \paragraph{CI/CD}\label{par:cicd}
-Para garantizar la correcta entrega del software cada vez que se añada código a la versión en produccion se ejecutarán scripts automáticos.
-El programa más extendido para el control de versiones de software es Git y el servicio de almacenamiento en la nube de control de versiones git más extendido es Github.
-Github pone a nuestra disposición el servicio de Github Actions.
-Es un servicio automatizado que lanza los scripts configurados a lo largo del flujo de vida del código en el control de versiones.
 
-Podemos ver en la ~\cref{fig:cicd} configurado que se ejecuten nuestros scripts en los Pull Request y en el proceso final de unión de código nuevo a producción.
+Para garantizar la correcta entrega del software en cada iteración se ejecutarán distintos scripts automáticos y se hará uso de un control de versiones.
+El programa más extendido para el control de versiones de software es \textit{Git} y el servicio de almacenamiento en la nube de control de versiones \textit{Git} más extendido es \textit{Github}.
+Github pone a disposición el servicio de \textit{Github Actions}.
+Es un servicio de automatización de CI/CD que lanza los scripts configurados a lo largo del flujo de vida del código en el control de versiones.
+
+En el~\cref{lst:githubActions} está la configuración de los \textit{Github Actions}.
+Se ejecutarán scripts de verificación en los Pull Request y en el proceso final de unión de código nuevo a producción.
 Los Pull Request son el proceso anterior a introducir código nuevo en producción.
 Se realiza una petición de revisión a los colaboradores del repositorio antes de introducir dicho código.
 En el mismo proceso de revisión antes de que los compañeros acepten dicha contribución pueden ver que se han ejecutado los scripts que garantizan que dicho código pasa todos los tests y siguen el estándar de estilo.
 En el proceso de unión final se volverán a ejecutar los mismos.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale = 0.7]{part/Proyecto_ejecutivo/memoria_constructiva/cicd}
-    \caption{Github actions}\label{fig:cicd}
-\end{figure}
+\phantom{blank}
+\vspace{10mm}
+\hrule
+
+\begin{lstlisting}[language=github,caption={Dockerfile.yml},breaklines=true,label={lst:githubActions}]
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: cd manager; go test -v ./...
+
+    - name: Quality
+      run: cd manager; ./sonarcloud
+\end{lstlisting}
+
+\hrule

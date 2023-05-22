@@ -35,9 +35,11 @@
     morestring=[b]"
 }
 
-\lstdefinelanguage{docker-compose}{
-    keywords={image, environment, ports, container_name, ports, volumes, links},
+\lstdefinelanguage{github}{
+    keywords={name, on, jobs, volumes,runs,uses,with,run,steps,branches},
     keywordstyle=\color{blue}\bfseries,
+    keywords=[2]{push,pull_request,build},
+    keywordstyle=[2]\color{teal}\bfseries,
     identifierstyle=\color{black},
     sensitive=false,
     comment=[l]{\#},
@@ -47,10 +49,10 @@
     morestring=[b]"
 }
 \lstdefinelanguage{docker-compose-2}{
-    keywords={version, volumes, services},
+    keywords={version, services, networks, volumes},
     keywordstyle=\color{blue}\bfseries,
-    keywords=[2]{image, environment, ports, container_name, ports, links, build},
-    keywordstyle=[2]\color{olive}\bfseries,
+    keywords=[2]{image, environment, ports, container_name, ports, links, build, volumes, security_opt, cap_add, default, tty, command, user},
+    keywordstyle=[2]\color{teal}\bfseries,
     identifierstyle=\color{black},
     sensitive=false,
     comment=[l]{\#},
@@ -67,10 +69,16 @@
     inputencoding=utf8,
     extendedchars=true
 }
-\captionsetup[table]{skip=10pt}
 \crefname{paragraph}{paragraph}{paragraphs}
+
+\renewcommand{\lstlistingname}{Código}
+\renewcommand{\lstlistlistingname}{Lista de códigos}
+\crefname{listing}{código}{códigos}
+
+\captionsetup[table]{skip=10pt}
 \crefname{table}{tabla}{tablas}
-\renewcommand{\figurename}{Figura}
 \renewcommand{\tablename}{Tabla}
-\renewcommand{\listfigurename}{Lista de figuras}
 \renewcommand{\listtablename}{Lista de tablas}
+
+\renewcommand{\figurename}{Figura}
+\renewcommand{\listfigurename}{Lista de figuras}

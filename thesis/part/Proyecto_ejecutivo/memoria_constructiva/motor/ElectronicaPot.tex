@@ -1,21 +1,20 @@
 
-El componente utilizado para ampliar la señal enviada por el Arduino al motor, sirviendo de intermediario entre éste y los motores, es el módulo de control PWM de motores con un circuito integrado LMD18200T que soporta hasta tres Amperios.
-Es un puente H controlado por PWM. Satisface los requisitos necesarios en nuestra tarea: Precio, voltaje, amperaje y de implementación sencilla.
-Se aprecian en la~\cref{fig:Hbridge} las entradas y las salidas de las que dispone.
-De arriba abajo y de izquierda a derecha disponemos de:
-
+Para ampliar la señal enviada por el Arduino al motor se hará uso de un puente H controlado por PWM con circuito integrado LMD18200T\@.
+Satisface los requisitos necesarios del proyecto en precio y en características.
+En la~\cref{fig:Hbridge} se muestran las entradas y las salidas de las que dispone.
+De arriba abajo y de izquierda a derecha:
 \begin{itemize}
-	\item \textbf{GND:} La tierra de la placa de control, en nuestro caso el Arduino.
+	\item \textbf{GND:} la tierra de la placa de control, en nuestro caso el Arduino.
 	\item \textbf{PWM(Pulse width modulation):} la señal del control por ancho de pulsos.
-	\item \textbf{Dir:} Señal con el sentido de giro que se desea.
-	\item \textbf{Brake:} Freno del motor
-	\item \textbf{V+:} Alimentación de 12 voltios.
+	\item \textbf{Dir:} señal con el sentido de giro que se desea.
+	\item \textbf{Brake:} freno del motor.
+	\item \textbf{V+:} alimentación de 12 voltios y hasta 3 Amperios.
 	\item \textbf{GND:} tierra.
-	\item \textbf{OUT1:} Salida de una mitad del puente H\@.
-	\item \textbf{OUT2:} Salida de la otra mitad del puente H
+	\item \textbf{OUT1:} salida de una mitad del puente H\@.
+	\item \textbf{OUT2:} salida de la otra mitad del puente H\@.
 \end{itemize}
 
-El esquema final de conexión entre raspberry, puente H y motor lo podemos contemplar en la~\cref{fig:conectionDiagram}\\
+El esquema final de conexión del hardware está representado en la~\cref{fig:conectionDiagram}\\
 
 \begin{figure}[H]
 		\centering
@@ -26,5 +25,5 @@ El esquema final de conexión entre raspberry, puente H y motor lo podemos conte
 \begin{figure}[H]
 		\centering
 		\includegraphics[scale = 0.15]{part/Proyecto_ejecutivo/memoria_constructiva/motor/img/connection diagram}
-		\caption{Esquema de conexión del módulo de potencia.\\Fuente: elaboración propia.}\label{fig:conectionDiagram}
+		\caption{Esquema de conexión hardware para el programa de control}\label{fig:conectionDiagram}
 \end{figure}

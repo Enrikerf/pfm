@@ -1,21 +1,27 @@
 
-El motor seleccionado será el~\cite{EMG30datasheet} Por el conocimiento que se dispone de su uso.
-En la figura~\cref{fig:EMG Motor} podemos apreciar su aspecto.
-Este motor cumple con los requerimientos de ser sencillo, barato y disponer de una calidad suficiente.
+El motor seleccionado es el~\cite{EMG30datasheet}.
+Se dispone de conocimiento previo de su uso y características facilitando el trabajo.
+En aspecto del motor se aprecia en la~\cref{fig:EMG Motor}.
+Cumple con los requerimientos de ser sencillo, barato y disponer de una calidad suficiente para ejercer el control PID.
+
+Los parámetros que definen sus características más relevantes se encuentran en la~\cref{tab:EMG30specifications}.
+El código de colores de las conexiones se extraen en la~\cref{fig:motor connection}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale = 0.4]{part/Proyecto_ejecutivo/memoria_constructiva/motor/img/MotorEMG30}
+    \includegraphics[scale = 0.35]{part/Proyecto_ejecutivo/memoria_constructiva/motor/img/MotorEMG30}
     \caption{Motor EMG30\cite{EMG30datasheet}}\label{fig:EMG Motor}
 \end{figure}
 
-Los parámetros que definen sus características más relevantes pueden apreciarse en la Tabla~\ref{tab:EMG30specifications}.
-El código de colores de las conexiones de las que dispone el motor podemos encontralo en las especificaciones ténicas del mismo.
-Se extraen en la~\cref{fig:motor connection}
-
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.5]{part/Proyecto_ejecutivo/memoria_constructiva/motor/img/motorConnection}
+    \caption{Motor EMG30 \\Fuente: Documento de especificaciones técnicas.\cite{EMG30datasheet}}\label{fig:motor connection}
+\end{figure}
 
 \begin{table}[H]
     \centering
+    \caption{Características EMG30 Fuente:\cite{EMG30datasheet}}\label{tab:EMG30specifications}
     \begin{tabular}{|l|l|}
         \hline
         Característica & Valor\\
@@ -34,20 +40,14 @@ Se extraen en la~\cref{fig:motor connection}
         \hline
         Intensidad máxima& 2.5 A\\
         \hline
-        Salidad nominal & 4.22 W\\
+        Salida nominal & 4.22 W\\
         \hline
         Pasos por vuelta del codificador& 360 \\
         \hline
         Razón de la reductora & 30:1\\
         \hline
     \end{tabular}
-    \caption{Características EMG30 Fuente:\cite{EMG30datasheet}}\label{tab:EMG30specifications}
 \end{table}
 
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale = 0.6]{part/Proyecto_ejecutivo/memoria_constructiva/motor/img/motorConnection}
-    \caption{Motor EMG30 \\Fuente: Documento de especificaciones técnicas.\cite{EMG30datasheet}}\label{fig:motor connection}
-\end{figure}
 
