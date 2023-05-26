@@ -1,21 +1,16 @@
 
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.4\textheight]{./part/Ejecucion/Seguimiento/TaskEventHandler/img/PFM - EventDispatcherAdapter}
-    \caption{EventDispatcherAdapter.go}\label{fig:EventDispatcherAdapter}
-\end{figure}
+El adaptador de salida \textit{Dispatcher}~\cref{lst:DispatcherAdapter} es a su vez un elemento que actuará como adaptador de entrada.
+Ejecutará el caso de uso \textit{TaskEventHandlerUseCase}~\cref{lst:TaskEventHandlerUseCase} cuando el evento lanzado sea de tipo .\textit{TaskCreated}
+Podemos ver en~\cref{lst:DispatcherAdapter} que el gestor de eventos está preparado para añadir más eventos y gestionar otros casos de uso en consecuencia.
 
+\textit{TaskEventHandlerUseCase}~\cref{lst:TaskEventHandlerUseCase} Habilitará el \textit{Looper}~\cref{lst:Looper} si la tarea creada es de tipo AUTOMATIC y el status es PENDING\@.
+El servicio de Dominio \textit{Looper} buscará todas las tareas automáticas pendientes y las ejecutará de forma asíncrona.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.4\textheight]{./part/Ejecucion/Seguimiento/TaskEventHandler/img/PFM - TaskEventHandlerUseCase}
-    \caption{TaskEventHandlerUseCase.go}\label{fig:TaskEventHandlerUseCase}
-\end{figure}
+En el servicio \textit{Looper}~\cref{lst:Looper}, señalado en rojo está el bloque de gestión de las operaciones asíncronas.
+Por cada tarea se crea un hilo de ejecución paralelo.
+Cuando todos los hilos terminan el comando \textit{wg.Wait()} desbloquea la ejecución del \textit{Looper}.
 
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.4\textheight]{./part/Ejecucion/Seguimiento/TaskEventHandler/img/PFM - Looper}
-    \caption{Looper.go}\label{fig:looper}
-\end{figure}
+\input{./part/Ejecucion/Seguimiento/TaskEventHandler/codes/EventDispatcherAdapter}
+\input{./part/Ejecucion/Seguimiento/TaskEventHandler/codes/TaskEventHandlerUseCase}
+\input{./part/Ejecucion/Seguimiento/TaskEventHandler/codes/Looper}

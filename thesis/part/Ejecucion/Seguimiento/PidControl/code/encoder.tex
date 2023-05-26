@@ -1,0 +1,15 @@
+
+\phantom{blank}
+\vspace{5mm}
+\hrule
+\begin{lstlisting}[language=Go,caption={Encoder.go},breaklines=true,label={lst:Encoder}]
+package Entity
+
+type Encoder interface {
+	Watchdog()
+	ResetPosition()
+	GetPosition() int64
+	TearDown()
+}
+\end{lstlisting}
+\hrule

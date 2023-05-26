@@ -1,6 +1,6 @@
-
-Análogamente al código, vamos a mostrar la aplicación de los principios descritos en el apartado~\nameref{par:testing} únicamente en los casos más didácticos y relevantes.
-En proceso de diseño de los tests para el caso de uso~\nameref{subsubsec:CreateTaskUseCase} primero identificamos los factores o variables independientes:
+Esta sección muestra la aplicación de los principios descritos en el apartado~\nameref{par:testing} en los casos más didácticos y relevantes.
+El primer caso relevante es el proceso de diseño de los tests para~\nameref{subsubsec:CreateTaskUseCase}.
+Primero se identifican los factores o variables independientes:
 
 \begin{itemize}
     \item Host
@@ -10,7 +10,7 @@ En proceso de diseño de los tests para el caso de uso~\nameref{subsubsec:Create
     \item Steps
 \end{itemize}
 
-luego extraemos las clases de equivalencia:
+luego se extraen las clases de equivalencia:
 
 \begin{itemize}
     \item Host: valid/invalid
@@ -22,18 +22,19 @@ luego extraemos las clases de equivalencia:
 
 En este caso no aplica el criterio de valores límite.
 Hay que prestar atención al trabajo de buscar las clases de equivalencia, no es trivial.
-Por ejemplo, en el caso de steps, que es un array podría haberse pensado que se necesita probar con varios elementos en el array, validos e invalidos, pero no tiene sentido porque la lógica debe contemplar únicamente el caso de uso.
+Por ejemplo, en el caso de steps, que es un array podría pensarse que se necesita probar varios elementos en el array, validos e inválidos, pero no tiene sentido porque la lógica debe contemplar únicamente el caso de uso.
 Es tarea de la clase Step verificar este tipo de lógicas.
 Otro ejemplo en el caso de Host o Port que tiene validaciones.
-podría pensarse que debería ponerse a prueba con varios casos que den invalido, al ser un string libre y que ponga a prueba dicha validación, pero estamos en el caso de uso, eso será responsabilidad del test unitario de Host y Port.
-para la lógica que nos atañe en este test lo único que importa es qué sucedera en el caso que sea válido o invalido.
+podría pensarse que debería ponerse a prueba con varios casos que sean inválidos, al ser un string libre, y que ponga a prueba dicha validación;
+eso será responsabilidad del test unitario de Host y Port.
+El diseño debe ceñirse a la lógica del caso de uso.
 En un ejemplo tan trivial puede llevar a subestimar el ejercicio de entender el alcance de la prueba y la correcta selección de las clases de equivalencia, pero es de suma importancia.
 
 Con estas clases de equivalencia las posibilidades son $2^5 = 32$.
-Aplicamos el metodo pairwise de~\nameref{variablesDependendientes} y se reducen a 6 los tests.
+Aplicando el método pairwise de~\nameref{variablesDependendientes} y se reducen a 6 los tests.
 Los pares posibles son 41.
-las combinaciones posibles se aprecian en el ~\cref{tab:pairsCreateTaskUseCase} y los pares en el ~\cref{tab:combCreateTaskUseCase}.
-Los test a implementar finalmente se pueden ver en el ~\cref{tab:createTaskPairWiseTest}
+las combinaciones posibles se aprecian en la~\cref{tab:pairsCreateTaskUseCase} y los pares en la~\cref{tab:combCreateTaskUseCase}.
+Los test a implementar finalmente se pueden ver en la~\cref{tab:createTaskPairWiseTest}
 
 \begin{table}[H]
     \caption{Pares en el diseño de tests para CreateTaskUseCase.}\label{tab:pairsCreateTaskUseCase}
@@ -112,47 +113,87 @@ Los test a implementar finalmente se pueden ver en el ~\cref{tab:createTaskPairW
     \caption{Combinaciones en el diseño de tests para CreateTaskUseCase}\label{tab:combCreateTaskUseCase}
     \small
     \begin{tabular}{llll}
-        \textbf{var1}          & \textbf{var2}     & \textbf{value1} & \textbf{value2} \\
-        host          & port              & valid           & valid           \\
-        host          & port              & valid           & notValid        \\
-        host          & port              & notValid        & valid           \\
-        host          & port              & notValid        & notValid        \\
-        host          & executionMode     & valid           & valid           \\
-        host          & executionMode     & valid           & notValid        \\
-        host          & executionMode     & notValid        & valid           \\
-        host          & executionMode     & notValid        & notValid        \\
-        host          & communicationMode & valid           & valid           \\
-        host          & communicationMode & valid           & notValid        \\
-        host          & communicationMode & notValid        & valid           \\
-        host          & communicationMode & notValid        & notValid        \\
-        host          & steps             & valid           & valid           \\
-        host          & steps             & valid           & notValid        \\
-        host          & steps             & notValid        & valid           \\
-        host          & steps             & notValid        & notValid        \\
-        port          & executionMode     & valid           & valid           \\
-        port          & executionMode     & valid           & notValid        \\
-        port          & executionMode     & notValid        & valid           \\
-        port          & executionMode     & notValid        & notValid        \\
-        port          & communicationMode & valid           & valid           \\
-        port          & communicationMode & valid           & notValid        \\
-        port          & communicationMode & notValid        & valid           \\
-        port          & communicationMode & notValid        & notValid        \\
-        port          & steps             & valid           & valid           \\
-        port          & steps             & valid           & notValid        \\
-        port          & steps             & notValid        & valid           \\
-        port          & steps             & notValid        & notValid        \\
-        executionMode & communicationMode & valid           & valid           \\
-        executionMode & communicationMode & valid           & notValid        \\
-        executionMode & communicationMode & notValid        & valid           \\
-        executionMode & communicationMode & notValid        & notValid        \\
-        executionMode          & steps             & valid           & valid           \\
-        executionMode          & steps             & valid           & notValid        \\
-        executionMode          & steps             & notValid        & valid           \\
-        executionMode          & steps             & notValid        & notValid        \\
-        communicationMode      & steps             & valid           & valid           \\
-        communicationMode      & steps             & valid           & notValid        \\
-        communicationMode      & steps             & notValid        & valid           \\
-        communicationMode      & steps             & notValid        & notValid
+        \textbf{var1}     & \textbf{var2}     & \textbf{value1} & \textbf{value2} \\
+        host              & port              & valid           & valid           \\
+        \hline
+        host              & port              & valid           & notValid        \\
+        \hline
+        host              & port              & notValid        & valid           \\
+        \hline
+        host              & port              & notValid        & notValid        \\
+        \hline
+        host              & executionMode     & valid           & valid           \\
+        \hline
+        host              & executionMode     & valid           & notValid        \\
+        \hline
+        host              & executionMode     & notValid        & valid           \\
+        \hline
+        host              & executionMode     & notValid        & notValid        \\
+        \hline
+        host              & communicationMode & valid           & valid           \\
+        \hline
+        host              & communicationMode & valid           & notValid        \\
+        \hline
+        host              & communicationMode & notValid        & valid           \\
+        \hline
+        host              & communicationMode & notValid        & notValid        \\
+        \hline
+        host              & steps             & valid           & valid           \\
+        \hline
+        host              & steps             & valid           & notValid        \\
+        \hline
+        host              & steps             & notValid        & valid           \\
+        \hline
+        host              & steps             & notValid        & notValid        \\
+        \hline
+        port              & executionMode     & valid           & valid           \\
+        \hline
+        port              & executionMode     & valid           & notValid        \\
+        \hline
+        port              & executionMode     & notValid        & valid           \\
+        \hline
+        port              & executionMode     & notValid        & notValid        \\
+        \hline
+        port              & communicationMode & valid           & valid           \\
+        \hline
+        port              & communicationMode & valid           & notValid        \\
+        \hline
+        port              & communicationMode & notValid        & valid           \\
+        \hline
+        port              & communicationMode & notValid        & notValid        \\
+        \hline
+        port              & steps             & valid           & valid           \\
+        \hline
+        port              & steps             & valid           & notValid        \\
+        \hline
+        port              & steps             & notValid        & valid           \\
+        \hline
+        port              & steps             & notValid        & notValid        \\
+        \hline
+        executionMode     & communicationMode & valid           & valid           \\
+        \hline
+        executionMode     & communicationMode & valid           & notValid        \\
+        \hline
+        executionMode     & communicationMode & notValid        & valid           \\
+        \hline
+        executionMode     & communicationMode & notValid        & notValid        \\
+        \hline
+        executionMode     & steps             & valid           & valid           \\
+        \hline
+        executionMode     & steps             & valid           & notValid        \\
+        \hline
+        executionMode     & steps             & notValid        & valid           \\
+        \hline
+        executionMode     & steps             & notValid        & notValid        \\
+        \hline
+        communicationMode & steps             & valid           & valid           \\
+        \hline
+        communicationMode & steps             & valid           & notValid        \\
+        \hline
+        communicationMode & steps             & notValid        & valid           \\
+        \hline
+        communicationMode & steps             & notValid        & notValid        \\
+        \hline
     \end{tabular}
 \end{table}
 
@@ -161,12 +202,19 @@ Los test a implementar finalmente se pueden ver en el ~\cref{tab:createTaskPairW
     \small
     \begin{tabular}{rllllll}
         case & host     & port     & ExeMode  & ComMode  & steps    & Expected Result        \\
+        \hline
         1    & valid    & valid    & valid    & valid    & valid    & OK                     \\
+        \hline
         2    & valid    & notValid & notValid & notValid & notValid & PortInvalidError       \\
+        \hline
         3    & notValid & valid    & notValid & valid    & notValid & HostInvalidError       \\
+        \hline
         4    & notValid & notValid & valid    & notValid & valid    & HostInvalidError       \\
+        \hline
         5    & ~valid   & valid    & valid    & notValid & notValid & CommunicationModeError \\
-        6    & ~valid   & notValid & notValid & valid    & valid    & PortError
+        \hline
+        6    & ~valid   & notValid & notValid & valid    & valid    & PortError              \\
+        \hline
     \end{tabular}
 \end{table}
 
@@ -186,54 +234,68 @@ Las clases de equivalencia:
     \item Communication Mode: Server Stream,Client Stream, Bidirectional y Unary
 \end{itemize}
 
-tenemos entonces  $3*2*4 = 24$ posibilidades.
-Pares obtenemos 27 que aplicando pairwise se reducen a 13 casos.
-Vemos que la eficiencia en reducción de casos disminuye cuanto menos combinaciones hay.
-El diseño de los tests queda tal y como se ve en el~\cref{tab:taskTestPairwiseCases}
+Por lo tanto existen  $3*2*4 = 24$ posibilidades.
+Pares existen 27 que, aplicando pairwise, se reducen a 13 casos.
+La eficiencia en reducción de casos disminuye cuanto menos combinaciones hay.
+El diseño de los tests queda tal y como se ve en la~\cref{tab:taskTestPairwiseCases}
 
 \begin{table}[H]
     \caption{Tests para la instanciación de Task}\label{tab:taskTestPairwiseCases}
     \small
     \begin{tabular}{ccccl}
         \textbf{}   & \textbf{NSteps} & \textbf{ExeMod} & \textbf{ComMode} & \multicolumn{1}{c}{\textbf{Expected Result}}  \\
+        \hline
         \textbf{1}  & 0               & automatic       & serverStream     & NewTaskMustHaveAtLeastOneStepError            \\
+        \hline
         \textbf{2}  & 1               & automatic       & clientStream     & OK                                            \\
+        \hline
         \textbf{3}  & 1               & manual          & bidirectional    & OK                                            \\
+        \hline
         \textbf{4}  & 1               & automatic       & unary            & OK                                            \\
+        \hline
         \textbf{5}  & 1               & manual          & serverStream     & OK                                            \\
+        \hline
         \textbf{6}  & \textgreater{}2 & manual          & unary            & CommunicationModeCanOnlyHaveOneStepError      \\
+        \hline
         \textbf{7}  & \textgreater{}2 & automatic       & serverStream     & CommunicationModeCanOnlyHaveOneStepError      \\
+        \hline
         \textbf{8}  & \textgreater{}2 & manual          & clientStream     & OK                                            \\
+        \hline
         \textbf{9}  & \textgreater{}2 & automatic       & bidirectional    & ManualBidirectionalTaskOnlyCanHave2StepsError \\
+        \hline
         \textbf{10} & 0               & automatic       & clientStream     & TaskMustHaveAtLeastOneStepError               \\
+        \hline
         \textbf{11} & 0               & manual          & bidirectional    & TaskMustHaveAtLeastOneStepError               \\
+        \hline
         \textbf{12} & 0               & automatic       & unary            & TaskMustHaveAtLeastOneStepError               \\
-        \textbf{13} & 0               & manual          & serverStream     & TaskMustHaveAtLeastOneStepError
+        \hline
+        \textbf{13} & 0               & manual          & serverStream     & TaskMustHaveAtLeastOneStepError               \\
+        \hline
     \end{tabular}
 \end{table}
 
-Ahora vamos a ver cómo la arquitectura protege la calidad del sistema de las implementaciones en proceso de investigación.
+Un caso de aplicación donde la arquitectura protege la calidad del sistema de las implementaciones en proceso de investigación ya quedó señalado en el diseño.
 El looper es el punto más complejo de la aplicación.
-Está muy ligado a la tecnología gRPC. Extraer la lógica perteneciente al Dominio de la interacción con la infraestructura es algo que no se puede diseñar sin conocimiento previo de la tecnología.
-En la figura~\cref{fig:testingLooper}, señalado en el segundo recuadro rojo, tenemos el adaptador de comunicación gRPC. Hemos extraido toda la lógica posible a este servicio de dominio, pero dentro de dicho adaptador hay código experimental que puede tener múltiples errores inesperados: no conseguir comunicar con el servicio cliente, timeouts, malas implementaciones de la librería, por ejemplo.
-Hemos protegido al dominio de todo esto mediante una interfaz que garantiza que ante cualquier error se devuelve siempre un resultado.
-De esta forma aunque no funcione correctamente la lógica de negocio es clara y concisa, dejando al proceso iterativo ir mejorando la infraestructura.
-Tengamos en cuenta que hemos extraido de toda la comunicación con el cliente una interfaz útil y única para comunicarnos, una lógica de negocio que entender en pocas lineas de código y explicar su funcionamiento
+Está muy ligado a la tecnología gRPC\@.
+Extraer la lógica perteneciente al Dominio de la interacción con la infraestructura es algo que no se puede diseñar sin conocimiento previo de la tecnología.
+En el \textit{Looper}~\cref{lst:Looper} se encuentra el adaptador de comunicación gRPC\@.
+Se ha extraído toda la lógica posible a este servicio de dominio, pero dentro de dicho adaptador hay código experimental que puede tener múltiples errores inesperados: no conseguir comunicar con el servicio cliente, timeouts, malas implementaciones de la librería, por ejemplo.
+Se ha protegido al Dominio de todo ello mediante una interfaz que garantiza que ante cualquier error se devuelve siempre un resultado.
+De esta forma, aunque no funcione correctamente, la lógica de negocio es clara y concisa, dejando al proceso iterativo de ir mejorando la infraestructura.
+Toda la comunicación con el cliente se encuentra abstraída mediante una interfaz útil y única para comunicarnos.
+Una lógica de negocio que comprende de pocas lineas de código y explican su funcionamiento
 
-Se ha de señalar que en el proceso de descubrimiento del lenguaje sabemos que hay un punto débil en el Dominio.
-Cada una de las gorutines lanzadas pudiera ocurrir que el proceso no consiguiera terminar y se quedara la gorutine en un proceso infinito.
-Para ello, Golang dispone de una herramienta llamada context que permite gestionar los timeouts de las gorutines evitando que que queden procesos hijos sin control.
+En el proceso de descubrimiento del lenguaje se detectó un punto débil en el Dominio.
+Cada una de las \textit{gorutines} lanzadas pudiera ocurrir que no consiguiera terminar y se quedara en un proceso infinito.
+Para ello, Golang dispone de una herramienta llamada \textit{context} que permite gestionar los timeouts de las \textit{gorutines} evitando que que queden procesos hijos sin control.
+No se ha hecho uso de ello porque el coste de cambio no hubiese sido asumible;
+quedando por lo tanto como linea futura
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[height=0.5\textheight]{./part/Ejecucion/Seguimiento/Testing/img/Looper}
-    \caption{testing looper.go detail}\label{fig:testingLooper}
-\end{figure}
-
-Si a esto le hubieramos sumado las lineas de codigo que hay detrás de la interfaz de comunicacion (178) sería ingestionable.
-Para cuantificar esto vamos a hacer una aproximación al diseño del test necesario para cubrir el adaptador de comunicacion.
+Las lineas de código que hay detrás de la interfaz de comunicación son 178, sumado a todos los problemas presentados el trabajo de diseño de un tests que cubra todo es una tarea ardua.
+Para cuantificarlo se realiza una aproximación al diseño del test necesario para cubrir el adaptador de comunicación.
 Se apreciará que en el mismo diseño de los tests queda patente de forma objetiva la debilidad del código.
-El código completo se encuentra en el repositorio github, en este ejercício didáctico hemos simplificando en pseudocódigo, sería el siguiente:
+El código completo se encuentra en el repositorio \href{https://github.com/Enrikerf/pfm}{github}.
+En este ejercicio didáctico se ha simplificando en pseudocódigo:
 
 \begin{verbatim}
 connection, err := grpc.Dial()
@@ -256,10 +318,10 @@ connection.Close()
 
 Hay mucha lógica en un mismo servicio, múltiples responsabilidades y por lo tanto no es un buen diseño.
 Como se demuestra mejor es intentando diseñar los tests.
-Para empezar extraer del código las clases de equivalencia y factores no ha sido sencillo.
+Para empezar, extraer del código las clases de equivalencia y factores es sencillo.
 Hay multiples gestiones de errores dispersos por toda su extensión.
-Esto ocurre en multitud de ocasiones, ya sea debido al tiempo, desconocimiento o mala praxis nos encontramos con códigos de esta magnitud.
-La arquitectura y todo este proceso lo que hace es protegernos de estas secciones sucias.
+Esto ocurre ya sea debido al tiempo, desconocimiento o mala praxis producen códigos de esta magnitud.
+La arquitectura nos protege de estas secciones sucias.
 Los factores serían:
 
 \begin{itemize}
@@ -277,10 +339,13 @@ Los factores serían:
     \item connection.Close(): err, nil
 \end{itemize}
 
-Si no entendieramos bien el concepto de clase de equivalencia podría llevarnos a un mal diseño de los tests y a hacerlo aún más complejo.
-Aunque hay factores que tiene tres respuestas posibles EOF y nil tienen que ir de la mano, significa que no ha habido error, primero obtienes un nil en el error y luego obtienes un error tipo EOF que significa que todo ha terminado correctamente.
-y luego tenemos cuando obtenmos un error distinto de EOF, si esto ocurre nos importa cuántas veces haya ocurrido el caso sin error, será error igualmente.
-Con lo cual las clases de equivalencia serían:
+El concepto de factor en estos casos es todavía más relevante.
+La mala aplicación podría llevar a un mal diseño de los tests y a hacerlo aún más complejo.
+Aunque hay factores que tienen tres respuestas posibles, EOF y nil tienen que ir de la mano.
+Ambas significan que no ha habido error: primero obtienes un nil como error y luego obtienes un error tipo EOF que significa que todo ha terminado correctamente.
+El otro caso es obtener un error distinto de EOF, si esto ocurre no importa cuántas veces haya ocurrido el caso sin error, será error igualmente.
+Se aprecia la diferencia entre entradas/salidas y factores/clases de equivalencia.
+Con lo cual las clases de equivalencia para los distintos factores son:
 
 \begin{itemize}
     \item grpc.Dial(): err, connection
@@ -297,6 +362,6 @@ Con lo cual las clases de equivalencia serían:
     \item connection.Close(): err, nil
 \end{itemize}
 
-para este caso tendríamos $ 2^{12} = 4096 $ combinaciones posibles que pairwise reduce a 59 tests.
-aquí se ve la potencia del método.
+Para este caso se obtienen $ 2^{12} = 4096 $ combinaciones posibles que pairwise reduce a 59 tests.
+Aquí se ve la potencia del método.
 Volviendo posible un testing con ciertas garantías incluso en un código mal diseñado como el que nos ocupa.
