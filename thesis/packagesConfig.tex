@@ -20,8 +20,9 @@
 \lstset{language=Go,
     basicstyle=\ttfamily\scriptsize,
     keywordstyle=\color{blue}\ttfamily,
-    stringstyle=\color{red}\ttfamily,
-    commentstyle=\color{green}\ttfamily}
+    stringstyle=\color{cyan}\ttfamily,
+    commentstyle=\color{green}\ttfamily,
+}
 
 \lstdefinelanguage{docker}{
     keywords={FROM, RUN, COPY, ADD, ENTRYPOINT, CMD,  ENV, ARG, WORKDIR, EXPOSE, LABEL, USER, VOLUME, STOPSIGNAL, ONBUILD, MAINTAINER},
@@ -82,3 +83,5 @@
 
 \renewcommand{\figurename}{Figura}
 \renewcommand{\listfigurename}{Lista de figuras}
+
+\lstset{escapeinside={<@}{@>}}

@@ -1,7 +1,40 @@
 
-Si tomamos como referencia la~\cref{fig:hexagonalDiagram}, el diagrama más extendido de una arquitectura hexagonal, en nuestro caso si intercambiamos ExternalSystemAdapter por nuestro Dispatcher de eventos e introducimos servicios de dominio entre el caso de uso y la Entidad tendremos nuestro esquema de alto nivel de nuestra arquitectura hexagonal en la~\cref{fig:CreateTaskHexagonalDiagram}.
-Como vemos no logra ser explicativo, ya que hay puertos de salida que se convierten en puertos de entrada como es el caso del Dispatcher, y cuando queremos quitar lógica de negocio del caso de uso mediante servicios de dominio que impidan el acceso directo a los repositorios de persistencia dicho diagrama se va quedando pequeño.
-Es perferible diagramas UML tal y comose muestra en~\cref{fig:createTaskUseCaseArchitecture}
+Se toma como referencia la~\cref{fig:hexagonalDiagram}, el diagrama más extendido de ejemplo para una arquitectura hexagonal, para una explicación de alto nivel para la funcionalidad de crear tareas \textit{CreateTaskUseCase} que se aprecia en la~\cref{fig:CreateTaskHexagonalDiagram}.
+Los componentes que intervienen son:
+\begin{itemize}
+    \item \textit{WebAdapter}: contiene la lógica relacionada con la recepción de llamadas RPC está ligada a la infraestructura necesaria para ello, es decir importa las librerías para ello.
+    A través de una interfaz se le ha de inyectar un puerto de entrada que le permita ejecutar la lógica del caso de uso.
+    \item UseCase: contiene la lógica necesaria para garantizar la correcta llamada a la lógica de Dominio para la creación de una Tarea.
+    Contiene las verificaciones, mediante la instanciación, entre los tipos primitivos y los objetos de Dominio.
+    \item \textit{Creator}: servicio de creación de tareas.
+    Contiene la lógica que obligatoriamente ha de ejecutarse de forma simultanea cuando se crea una tarea.
+    La persistencia en la base de datos a través de un puerto de salida; una interfaz que se le inyecta y le permite ejecutar dicha lógica sin conocerla.
+    También de emite un evento de Dominio comunicando la creación mediante el acceso a un puerto de salida.
+    \item \textit{PersistenceAdapter}: contiene la lógica relacionada con la persistencia de datos.
+    está ligado a la infraestructura de la base de datos y contiene por tanto las importaciones de las librerías necesarias.
+    \item \textit{DispatcherAdapter}: este puerto de salida contiene la lógica para gestionar los eventos emitidos por el dominio.
+    Para ello, necesita que le sean inyectados los casos de uso, eventHandler en este caso al no ser ejecutados directamente por un usuario.
+    De esta forma, a la vez que un puerto de salida se convierte en un Adaptador de entrada que ejecuta puertos de entrada de nuevo a la aplicación.
+    \item \textit{Looper}: Contiene la lógica necesaria para obtener de base de datos, a través de un puerto de salida, todas las tareas sobre las que hay que iterar para ejecutarlas.
+    \item \textit{Entity}: en este caso de uso serán las Tareas (\textit{Tasks})
+\end{itemize}
+
+Encontramos en la figura la numeración en orden de ejecución.
+\begin{enumerate}
+    \item se recibe una llamada RPC de tipo \textit{CreateTask} mediante el WebAdapter y es atendida
+    \item A través de puerto de entrada se ejecuta el caso de uso
+    \item El caso de uso instancia los elementos de Dominio necesarios y ejecuta el servicio \textit{Creator}
+    \item El servicio \textit{Creator} comunica la información a persistir a través del puerto de salida
+    \item La interfaz del el Adaptador de persistencia que ha de ser inyectada en el \textit{Creator}
+    \item El componente inyectado en el \textit{Creator} que cumple con la interfaz 5 persiste la información en base de datos
+    \item El servicio \textit{Creator} comunica el evento de creación a través del puerto de salida 7
+    \item El servicio \textit{Dispatcher} inyectado en el creator que cumple con la interfaz 7 ejecuta el caso de uso correspondiente a ese evento a través de la interfaz
+    \item La interfaz del caso de uso, en este caso \textit{eventHandler} de la creación de tareas
+    \item El caso de uso que gestiona los eventos de creación de tareas.
+    Cumple con la interfaz 9 y se encarga de comprobar que si el tipo de tarea creada requiere la activación del servicio de ejecución.
+    \item El servicio de ejecución de tareas automáticas o \textit{Looper}.
+    Se encarga de obtener a través de el puerto de salida 5, de la base de datos, y ejecutar todas las tareas definidas como automáticas.
+\end{enumerate}
 
 \begin{figure}[H]
     \centering
@@ -9,13 +42,63 @@ Es perferible diagramas UML tal y comose muestra en~\cref{fig:createTaskUseCaseA
     \caption{Hexagonal architecture diagram}\label{fig:CreateTaskHexagonalDiagram}
 \end{figure}
 
+Se puede apreciar que el UL ayuda a la comprensión de los pasos y las funcionalidades.
+El diseño ayuda a diferenciar la resolución del problema: representado por la creación de tareas y su ejecución.
+Separando el porqué y dónde se ejecuta: se activa la resolución del problema por una llamada RPC, en una Base de datos y en un sistema remoto.
+Si cualquiera de los elementos que acceden a el programa que resuelve el caso de uso quiere ser intercambiado, la única exigencia es implementar las interfaces requeridas por la aplicación.
+
+La implementación concreta para componer la aplicación correspondiente a este caso de uso la encontramos en el~\cref{lst:bootstrapingExample}.
+El orden de instanciación e inyección de cada uno de los componentes necesarios para el armado de la aplicación se vuelve un poco más confuso a la hora de llevarlo a la práctica, es por esto que los ejemplos gráficos son de gran ayuda.
+
+\phantom{blank}
+\vspace{10mm}
+\hrule
+\begin{lstlisting}[language=Go,caption={Ejemplo de \textit{Bootstraping} del sistema },breaklines=true,label={lst:bootstrapingExample}]
+
+package Bootstrap
+
+func Bootstrap() {
+    //infra
+    var persistenceAdapter := PersistenceAdapter.New(<infra dependencies>)
+    //Domain
+    var looper := Looper.New(persistenceAdapter)
+    var createdEventHandler := CreatedEventHandler(looper)
+    //Application
+    var dispatcherAdapter := DispatcherAdapter.New(createdEventHandler)
+    //Domain
+    var creator := creator.New(dispatcherAdapter)
+    //Application
+    var useCase := UseCase.New(creator)
+    //Infra
+    var webAdapter := WebAdapter.New(<infra dependencies>,useCase)
+}
+
+\end{lstlisting}
+\hrule
+
+Para una explicación conceptual de la arquitectura como técnica de diseño los diagramas hexagonales pueden tener un valor didáctico, sin embargo, para un caso de uso más completo como el que desarrolla esta sección pierde el sentido.
+No logra ser explicativo, ya que hay puertos de salida que se convierten en puertos de entrada como es el caso del Dispatcher, y al quitar lógica de negocio del caso de uso mediante servicios de dominio que impidan el acceso directo a los repositorios de persistencia dicho diagrama se va quedando pequeño.
+Es preferible diagramas UML completos como el desarrollado en la~\cref{fig:createTaskUseCaseArchitecture}.
+En el diagrama~\cref{fig:createTaskUseCaseArchitectureFolderStructure} se muestra interacción de componentes atendiendo a su distribución en nuestro diseño organizativo del código en ficheros.
+
+Como estrategia de mapeo entre capas o \textit{mapping} Go casi obliga al uso general de interfaces entre todos los elementos, incluidos las clases.
+Al necesitar el equivalente de la implementación de clase para garantizar la cohesión ya se hace uso de  interfaces para todos los elementos.
+En el desarrollo de la aplicación se ha optado por una estrategia \textit{Full Mapping} con adaptaciones.
+Dentro de la estrategia \textit{Full Mapping} se debe implementar un modelo tanto de entrada, como ya se contempla, como de salida.
+Es decir, la respuesta que hay entre cada capa también debe ser mapeada mediante un DTO, el patrón adaptado se muestra en la figura~\cref{fig:GetHandMapping}
+
+Esto aumenta la burocracia y finalmente la opción implementada ha sido una adaptación personalizada que se muestra en la figura~\cref{fig:CreateTaskUseCaseMapping}.
+En rojo se han marcado los atajos que se han tomado, es decir, el mapeo que no se ha implementado.
+El objetivo es aislar bien de los puertos de entrada, es decir el GRPC, y no tanto de los puertos de salida;
+ya que la persistencia está bien aislada mediante las interfaces y somos propietarios y consumidores internos de ellas.
+Al ser los únicos consumidores de los puertos de salida se dispone de más libertad de cambio sin afectar a terceros.
+Dentro de los adaptadores se hace el trabajo de mapeo entre las entidades de dominio y los modelos de persistencia; traduciendo de nuevo a dominio para responder.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[height=0.3\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/createTaskUseCaseArchitecture}
+    \includegraphics[angle=90,height=1\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/createTaskUseCaseArchitecture}
     \caption{CreateTaskUseCase hexagonal architecture diagram}\label{fig:createTaskUseCaseArchitecture}
 \end{figure}
-
-En el diagrama~\cref{fig:createTaskUseCaseArchitectureFolderStructure} podemos apreciar la interacción de componentes atendiendo a su distribución en nuestro diseño organizativo del código en ficheros.
 
 \begin{figure}[H]
     \centering
@@ -23,99 +106,57 @@ En el diagrama~\cref{fig:createTaskUseCaseArchitectureFolderStructure} podemos a
     \caption{CreateTaskUseCase folder Structure}\label{fig:createTaskUseCaseArchitectureFolderStructure}
 \end{figure}
 
-Con respecto a la estrategia de mapping Golang casi obliga al uso general de interfaces entre todos los elementos.
-Al necesitar el equivalente de la implementación de clase para garantizar la cohesión ya estamos utilizando interfaces para todas las clases.
-Así que en este caso utilizamos un fullMapping adaptado.
-De cara a decidir extraemos la recomendacion de~\cite{TomHombergs2019GYHD}:“
-we might start with a simple strategy that allows us to quickly evolve the code and later move to a more complex one that helps us to better decouple the layers.
-In order to decide which strategy to use when, we need to agree upon a set of guidelines within the team.
-These guidelines should answer the question which mapping strategy should be the first choice in which situation.
-They should also answer why they are first choice so that we’re able to evaluate if those reasons still apply after some time.“
-
-Al final se trata de tomar una decisión en equipo, documentar las razones y ser consistentes.
-Reevaluar las razones ante un reto que las ponga a prueba y tomar o no la decisión de cambiar la estrategia.
-Dentro de la estrategia fullmapping se debe implementar un modelo tanto de entrada, como ya se contempla, como de salída.
-Es decir, la respuesta que hay entre cada capa también debe ser mappeada, podemos ver el patrón readaptado en la figura~\cref{fig:GetHandMapping}
-
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - GetHandMapping}
-    \caption{CreateTaskUseCase folder Structure\cite{TomHombergs2019GYHD}}\label{fig:GetHandMapping}
+    \caption{\textit{Full Mapping} con DTO de salida y de entrada\cite{TomHombergs2019GYHD}}\label{fig:GetHandMapping}
 \end{figure}
-
-Claramente esto aumenta la burocracia y finalmente la opción que hemos tomado se puede ver en la figura~\cref{fig:CreateTaskUseCaseMapping} En rojo se han marcado los atajos que se han tomado, es decir, el mapeo que no se ha implementado.
-El objetivo es aislarse bien de los puertos de entrada, es decir el GRPC, y no tanto de los puertos de salida.
-ya que la persistencia está bien aislada mediante las interfaces.
-Dentro de los adaptadores se hará el trabajo de mapeo entre las entidades de dominio y los modelos de persistencia y se traducirá de nuevo a dominio para responder.
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - FinalMapping}
-    \caption{CreateTaskUseCase folder Structure}\label{fig:CreateTaskUseCaseMapping}
+    \caption{\textit{CreateTaskUseCase Mapping} o Mapeo}\label{fig:CreateTaskUseCaseMapping}
 \end{figure}
 
-Ahora vamos a exponer el código final de este caso de uso, vamos a hacer referencia a:
+El código concreto para este caso de uso más relevante se compone de:
 \begin{itemize}
-    \item TaskController~\cref{fig:TaskControler}
-    \item CreateTaskUseCase~\cref{fig:CreateTaskUseCaseCode}
-    \item Creator~\cref{fig:Creator}
-    \item SavePort~\cref{fig:SavePort}
-    \item PersistAdapter~\cref{fig:SaveAdapter}
-    \item DispatcherPort~\cref{fig:DispatcherPort}
+    \item TaskController~\cref{lst:TaskControler}
+    \item CreateTaskUseCase~\cref{lst:CreateTaskUseCaseCode}
+    \item Creator~\cref{lst:Creator}
+    \item SavePort~\cref{lst:SavePort}
+    \item PersistAdapter~\cref{lst:SaveAdapter}
+    \item DispatcherPort~\cref{lst:Dispatcher}
 \end{itemize}
 
-En el controller podemos ver como~\cref{fig:TaskControler} haciendo uso de la request entrante componemos el comando que corresponde y utilizando el usecase inyectado en el controller lo ejecutamos.
-El recuadro rojo de la imagen lo resalta.
-También es interesante resaltar que una vez ejecutado el caso de uso hacemos uso de la respuesta, que contiene el id de la nueva Task creada para devolverlo, pero tal y como vemos en el diagrama~\cref{fig:CreateTaskUseCaseMapping} no hacemos uso directo de esta respuesta si no que componemos una nueva para el protocolo de comunicación que está utilizando el cliente, en este caso RPC
+En el controller del~\cref{lst:TaskControler} se hace uso de la request entrante y se compone el comando que corresponde para el caso de uso.
+Mediante la interfaz inyectada en el controller en el \textit{bootstrapping} se ejecuta el caso de uso resaltado en rojo.
+También es interesante resaltar que una vez ejecutado el caso de uso se utiliza la respuesta, que contiene el id de la nueva Task creada para devolverlo.
+Sin embargo, debido la estrategia utilizada de \textit{mapping}, definida en el diagrama~\cref{fig:CreateTaskUseCaseMapping}, no hacemos uso directo de esta respuesta si no que componemos una nueva para el protocolo de comunicación que está utilizando el cliente, en este caso RPC.
+En los imports de este componente se aprecia que sólo hay dependencias de la infraestructura, gRPC en este caso, y de la capa de aplicación haciendo uso del comando y la interfaz del caso de uso.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.5\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - TaskController}
-    \caption{TaskController.go}\label{fig:TaskControler}
-\end{figure}
-
-En el caso de uso que podemos ver en~\cref{fig:CreateTaskUseCaseCode} se resalta los imports, que suele ser un check rápido de que la arquitectura y los boundaries se están respetando.
-en este caso vemos que todo corresponde a Dominio.
-Siendo el caso de uso correspondiente a aplicación las dependencias van hacia adentro.
-También vemos que no tiene imports de librerías de terceros, es decir, infraestructura.
-Vemos que la interface UseCase está en mayúsculas exponiendola hacia afuera, mientras que el struct useCase está en minuscula no pudiendo ser utilizado fuera del package.
-Vemos que en el caso de uso se realiza la creación de los ValueObjects necesarios para la creación de una Task.
+La implementación del caso de uso se muestra en el~\cref{lst:CreateTaskUseCaseCode}.
+Los imports son una forma rápida de comprobar la independencia de capas, de que la arquitectura, y de que los límites se están respetando.
+En este caso todos corresponden a Dominio, no tiene imports de librerías de terceros, es decir, infraestructura.
+La interfaz, utilizada en el controlador, \textit{UseCase} se encuentra escrita con la primera letra en mayúsculas, exponiéndola hacia afuera, mientras que el struct \textit{useCase} está en minúscula no pudiendo ser utilizado fuera del package.
+El caso de uso realiza la instanciación de los \textit{ValueObjects} necesarios para la creación de una \textit{Task}.
 Asegurando que no dan ningún error los datos de entrada y luego, haciendo uso del servicio se procede a crearla.
+Aparece marcado en rojo el uso del servicio \textit{Creator} de Dominio.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.5\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - CreateTaskUseCaseCode}
-    \caption{CreateTaskUseCaseCode.go}\label{fig:CreateTaskUseCaseCode}
-\end{figure}
+En este caso se junta en un mismo fichero la interfaz y la implementación, al pertenecer a la misma capa.
+No ocurre lo mismo dentro de \textit{Creator}~\cref{lst:Creator} Donde las interfaces de \textit{SaveRepository.Persist}~\cref{lst:SavePort} y \textit{Dispatcher.Dispatch}~\cref{lst:Dispatcher} se encuentra dentro del dominio, pero la implementación\textit{SaveAdapter}~\cref{lst:SaveAdapter} se encuentra en la capa de infraestructura.
 
 El servicio de Dominio Creator se encarga de encapsular y atomizar los procesos que tienen que ocurrir en bloque siempre que se desee crear una Task.
-Entre los cuales está instanciar la tarea con los ValueObjects que recibe como parámetros.
-Persistir la misma en la base de datos a través del puerto de salida, interfaz que implementará un adaptador.
+Entre los cuales está: instanciar la tarea con los ValueObjects que recibe como parámetros;
+Persistir la misma en la base de datos a través del puerto de salida, interfaz que implementará un adaptador;
 y emitir el evento de creación a través del otro puerto de salida, el Dispatcher interfaz que implementará otro adaptador.
 En la sección de \textit{imports} se aprecia que no hay elementos de infraestructura o aplicación.
 Se limita al uso de Dominio.
 Aislados del exterior.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.4\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - creator}
-    \caption{Creator.go}\label{fig:Creator}
-\end{figure}
+\input{./part/Ejecucion/Seguimiento/CreateTaskUseCase/codes/CreateTaskController}
+\input{./part/Ejecucion/Seguimiento/CreateTaskUseCase/codes/createTaskUseCaseCode}
+\input{./part/Ejecucion/Seguimiento/CreateTaskUseCase/codes/Creator}
+\input{./part/Ejecucion/Seguimiento/CreateTaskUseCase/codes/SavePort}
+\input{./part/Ejecucion/Seguimiento/CreateTaskUseCase/codes/Dispatcher}
+\input{./part/Ejecucion/Seguimiento/CreateTaskUseCase/codes/SaveAdapter}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - SavePort}
-    \caption{SavePort.go}\label{fig:SavePort}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.25\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - SaveAdapter}
-    \caption{SaveAdapter.go}\label{fig:SaveAdapter}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.15\textheight]{./part/Ejecucion/Seguimiento/CreateTaskUseCase/img/PFM - Dispatcher}
-    \caption{Dispatcher.go}\label{fig:DispatcherPort}
-\end{figure}

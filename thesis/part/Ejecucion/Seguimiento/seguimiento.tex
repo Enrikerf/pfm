@@ -1,38 +1,72 @@
-
-En esta sección vamos a exponer la ejecución del diseño realizado.
-Haciendo foco en los casos de uso más representativos de toda la metodología que este trabajo ha desarrollado en su fase de diseño.
-Se expondrá de una forma gráfica con diagramas que hagan comprensible la estructura y no tanto los detalles de implementación.
+Esta sección expone la ejecución del diseño realizado.
+Haciendo foco en los casos de uso más representativos de del diseño.
+La sección expondrá los detalles más relevantes del código.
 El repositorio con el código al completo lo podemos encontrar en \href{https://github.com/Enrikerf/pfm}{github}
 
-Una de las primeras características que cabe resaltar de golang es que no tiene clases ni herencia.
-Como estructura principal de datos tiene los structs.
-Si queremos controlar la instanciación de los elementos de dominio, por ejemplo, la declaración inicial de variables de dichos structs, debemos implementar patrones más allá del elemento de datos en sí.
-Para poder garantizar que dichos elementos se creen bajo una misma lógica que no se pueda evitar manteniendo la consistencia.
-Otro punto importante a entender desde el inicio es que Golang sólo expone elementos, ya sea structs, funciones o demás tipos fuera de un módulo si están escritos en mayúscula.
+Una de las primeras características que cabe resaltar de Go es que no tiene clases ni herencia.
+Como estructura principal de datos tiene los \textit{structs}.
+Para controlar la instanciación de los elementos de dominio, por ejemplo la declaración inicial de variables de dichos structs, se ha de implementar patrones más allá del elemento de datos en sí.
+El objetivo es garantizar que dichos elementos se creen bajo una misma lógica que no se pueda evitar, manteniendo la consistencia.
+Otro punto importante es que Golang sólo expone elementos, ya sea structs, funciones o demás tipos fuera de un módulo si están escritos con la primera letra en mayúscula.
 Por último, en Golang un módulo son todos los archivos dentro de un mismo directorio.
 
-Entendido estos tres puntos, una forma de crear una estructura equivalente a una clase es definir una interfaz pública y crear un struct privado que la implemente.
-Los struct pueden implementar metodos pasandose a si mismos por referencia en una funcion.
-Podemos ver una implementación a modo de ejemplo en la~\cref{fig:golang class equivalent}.
-En la interfaz \textbf{C}lassName la “C“ es mayúscula exponiendolo al exterior del módulo y \textbf{c}lassName struct en minuscula encapsulándolo.
+Expuestos estos puntos, una forma de crear una estructura equivalente a una clase es definir una interfaz pública y crear un struct privado que la implemente.
+Los struct pueden implementar métodos pasándose a si mismos por referencia en una función.
+Una ejemplo de implementación se puede ver en el~\cref{lst:golang class equivalent}.
+En la interfaz \textit{\textbf{C}lassName} la “C“ es mayúscula exponiéndolo al exterior del módulo y \textit{\textbf{c}lassName} struct en minúscula encapsulándolo.
 Podemos verlo más claramente en el diagrama UML~\cref{fig: uml Diagram Class Equivalent in Golang}
 
-Los motivos por los que es importante concebir esta estructura en lugar de utilizar structs directamente son:
+Los motivos principales por los que es importante concebir esta estructura en lugar de utilizar structs de forma directa on:
 
 \begin{itemize}
-    \item Evita la instanciación no consistente, lo cual sólo se garantiza a traves del método exportado NewClass.
+    \item Evita la instanciación no consistente, lo cual sólo se garantiza a través del método exportado \textit{NewClass}.
     \item Evita accesos no deseados a la modificación de variables.
     Siendo publicas seria posible.
     Garantiza la inmutabilidad en la que se basan los \textit{Value Objects}.
-    \item Limpieza en gestión errores en Go. Ante la respuesta múltiple, que contemple devolver un resultado o error, evitamos instanciar el objeto con contenido vacío creando un elemento inconsistente sólo por exigencias del lenguaje.
-    De esta forma admite retornar null.
+    \item Limpieza en gestión errores en Go. Go permite devolver como resultado de una función más de un resultado.
+    Ante la respuesta múltiple, que contemple devolver un resultado o un error, evitamos instanciar el objeto con contenido vacío creando un elemento inconsistente sólo por exigencias del lenguaje.
+    De esta forma admite retornar una interfaz vacía o \textit{nil}.
 \end{itemize}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=0.5\textheight]{./part/Ejecucion/Seguimiento/classExample}
-    \caption{Golang class equivalent}\label{fig:golang class equivalent}
-\end{figure}
+\newpage
+\hrule
+\begin{lstlisting}[language=Go,caption={UML diagram: Class equivalent in Golang},breaklines=true,label={lst:golang class equivalent}]
+
+package Example
+
+import "errors"
+
+type ClassName interface {
+	GetVariable() string
+	GetAnotherVariable() string
+	SetVariable(newValue string)
+}
+
+type className struct {
+	variable        string
+	anotherVariable string
+}
+
+func NewClassName(variable string) (ClassName, error) {
+	if variable == "invalid" {
+		return nil, errors.New("error")
+	}
+	return &className{variable, "DEFAULT"}, nil
+}
+
+func (c *className) GetVariable() string {
+	return c.variable
+}
+
+func (c *className) GetAnotherVariable() string {
+	return c.anotherVariable
+}
+
+func (c *className) SetVariable(newValue string) {
+	c.variable = newValue
+}
+\end{lstlisting}
+\hrule
 
 \begin{figure}[H]
     \centering
@@ -40,20 +74,25 @@ Los motivos por los que es importante concebir esta estructura en lugar de utili
     \caption{UML diagram: Class equivalent in Golang}\label{fig: uml Diagram Class Equivalent in Golang}
 \end{figure}
 
-Como contrapartida tenemos que escribir más codigo.
-Poniendo como comparación una clase Java o C++ no podemos decir que en cantidad de lineas escritas se aumente o disminuya, aunque estéticamente pueda resultar incómodo.
-En cuestión de conceptos aprendidos en Golang sólamente trabaja con interfaces y structs contra el concepto de clase y herencia.
+La contrapartida es la necesidad de escribir más código.
+Usando como comparación una clase Java, PHP o C++ no se puede decir que la cantidad de lineas escritas aumente o disminuya;
+aunque se pueda echar en falta lo que se conoce en la jerga como \textit{syntactic sugar}, es decir, palabras reservadas que nos eviten tener que escribir el código equivalente.
+En cuestión de conceptos aprendidos en Golang solamente trabaja con interfaces y structs contra el concepto de clase, herencia, polimorfismo y otros conceptos inherentes a la POO\@.
+Es más simple y como tal necesita más código para conseguir comportamientos complejos equivalentes.
 
-Una vez presentado estos conceptos pasamos a exponer el código.
-Los casos de uso más complejos y completos para ver todo el diseño aplicado son: CreateTaskUseCase y TaskEventHandler.
+Una vez presentados estos conceptos básicos se expone el código desarrollado.
+Los casos de uso más complejos y completos para ver todo el diseño aplicado son: CreateTaskUseCase, TaskEventHandler y el algoritmo del PID\@.
 
 \subsubsection{CreateTaskUseCase}\label{subsubsec:CreateTaskUseCase}
-    \input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase}
+\input{part/Ejecucion/Seguimiento/CreateTaskUseCase/createtaskusecase}
+
 \subsubsection{TaskEventHandler}
-    \input{part/Ejecucion/Seguimiento/TaskEventHandler/TaskEventHandlerUseCase}
+\input{part/Ejecucion/Seguimiento/TaskEventHandler/TaskEventHandlerUseCase}
+
 \subsubsection{PID Control}\label{subsubsec:pidControl}
-    \input{part/Ejecucion/Seguimiento/PidControl/pidControl}
+\input{part/Ejecucion/Seguimiento/PidControl/pidControl}
+
 \subsubsection{Testing}
-    \input{part/Ejecucion/Seguimiento/Testing/testing}
+\input{part/Ejecucion/Seguimiento/Testing/testing}
 
 

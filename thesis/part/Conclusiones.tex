@@ -1,17 +1,33 @@
 Se ha diseñado y desarrollado un sistema capaz de gestionar y ejecutar tareas en sistemas remotos siguiendo un proceso que garantiza un grado de calidad y una estructura capaz de enfrentar el cambio.
-Cumpliendo con el objetivo principal se ha obtenido un ejemplo práctico de aplicación de una metodología que abarca el proceso de desarrollo de software, desde su diseño hasta su entrega.
+Cumpliendo con el objetivo principal se ha ejecutado integralmente un ejemplo práctico de aplicación de una metodología que abarca el proceso de desarrollo de software desde su concepción hasta su entrega.
 Se ha seguido un diseño estructurado en capas realizando un esfuerzo en crear un lenguaje expresivo en todos los componentes del software que transmitan el problema resuelto.
-Dicho lenguaje facilita la comunicación efectiva en todos los participantes del proyecto.
+El lenguaje concebido facilita la comunicación efectiva del problema que enfrenta el proyecto.
 
-Durante la ejecución se ha podido comprobar que la evolución del diseño hasta su resultado final ha sido posible de forma efectiva, con orden y sin afectar a las bases iniciales.
-Por ejemplo la integración del programa de control en el programa cliente o encapsular partes de la tecnología recién aprendida, y por tanto desarrollada con deficiencias, de tal forma que no afecte a la resolución del problema de fondo.
+Durante la ejecución se ha podido comprobar que el uso de los paradigmas utilizados han permitido la evolución del diseño hasta su resultado final de forma efectiva, con orden y sin afectar a las bases iniciales.
+Se ha enfrentado diversos problemas ante el cambio de los requisitos iniciales.
+El ejemplo más claro ha sido la integración del programa de control en el programa cliente.
+También ha permitido encapsular partes de la tecnología recién aprendida, y por tanto desarrollada con deficiencias, de tal forma que no afecte a la resolución del problema de fondo.
 
-Uno de los puntos que evidencian la utilidad de estos paradigmas es que facilitan una forma estructurada de enfrentarte a la construcción de un software en un lenguaje desconocido.
-Te enfoca a aprender lo necesario para implementar los patrones que el diseño te demanda.
+Uno de los puntos que evidencian la utilidad de estos paradigmas es que facilitan una forma estructurada enfrentar la construcción de un software en un lenguaje desconocido.
+Enfoca los esfuerzos en aprender lo necesario para implementar los patrones que el diseño demanda.
 Convirtiendo el aprendizaje en un proceso ordenado de búsqueda de conceptos necesarios y transversales en todos los lenguajes.
 
-El presente trabajo permite evaluar cómo encaja Golang ante este tipo de proyectos y metodologías.
+El presente trabajo ha cumplido ampliamente con el objetivo de evaluar el lenguaje Go como herramienta para un proyecto que enfrente la problemática y metodologías utilizadas.
 Se han puesto a prueba los puntos clave que el lenguaje promueve: asincronía y gestión de concurrencia y simplicidad.
+La concurrencia ha sido un punto clave para el control automático de forma remota.
+Se ha hecho uso tanto en las comunicaciones entre sistemas como en el control efectivo del motor mediante el PID\@.
+La simplicidad con la que se consigue abordar el problema, sin requerir gestionar a bajo nivel la dificultad que enfrentan los sistemas en tiempo real ante la concurrencia, es sin duda una característica clave.
+Los puntos más reseñables son:
+
+\begin{itemize}
+    \item Gestión de los pulsos del encoder: se han hecho pruebas exhaustivas y se consigue no perder ningún pulso del receptor fotoeléctrico.
+    La saturación del sistema operativo puede afectar a la capacidad a la interacción del programa de control de con el programa cliente o a cada uno de ellos por separado.
+    Dicha saturación pone en riesgo el conteo de pulsos del encoder, punto crítico para el control.
+    Con la gestión de la asincronía de Go podemos garantizar que los pulsos son detectados y esperan su turno para ser contabilizados sin perder ninguno.
+    \item Comunicación entre todos los sistemas: el sistema desarrollado enfrenta tiempos de latencia naturales en la red y de los bloqueos temporales de cada uno de los sistemas operativos y programas ponen a prueba la gestión eficiente de la interacción.
+    El sistema enfrenta la gestión del Manager mandando las consignas, el cliente recibiendo información y devolviendo los resultados que ofrece el programa de control.
+    La ejecución de todos los componentes de forma asíncrona y garantizar un buen resultado en un lenguaje sobre el que no se tenía experiencia previa ha sido en buena medida gracias a Go.
+\end{itemize}
 
 La arquitectura y el diseño que se han empleado busca que el propio código sea la documentación.
 En el desarrollo de software comercial el mantenimiento de la documentación es costoso.
@@ -25,20 +41,21 @@ Tal es la motivación y origen de las normas existentes en la industria y la con
 \textbf{Evaluación cualitativa del Golang}
 
 Golang nace como un lenguaje enfocado en programas con una envergadura contenida, scripting o microservicios.
-Posee una curva de aprendizaje aceptable para los objetivos que abarcan esta tipología de problemas.
+Posee una curva de aprendizaje aceptable en relación coste-beneficio para los objetivos que abarcan esta tipología de problemas.
 Permite extraer todo el partido a la asincronía, la limpieza y la sencillez.
 Tiene paquetes base potentes para abordar un amplio rango de tareas con garantías sin necesitar dependencias externas.
 
-Un programa va creciendo conforme se utiliza al añadir nuevas funcionalidades.
-No siempre está claro para los diseñadores el punto en el que conviene separar en diferentes proyectos esas nuevas funcionalidades.
-Se puede cometer el error de permitir crecer el programa más allá de lo funcional.
-Introducir arquitecturas más complejas protege ante esta tipología de errores y permite dividir el proyecto de forma sencilla cuando se hace evidente que se requiere.
+El diseño es un factor importante a la hora de prever la hora de enfrentar el problema inherente al crecimiento de un programa, debido a la adición de funcionalidades.
+No siempre está claro para un diseñador el punto en el que conviene separar en diferentes proyectos esas nuevas funcionalidades.
+Se puede cometer el error de permitir crecer el programa más allá de lo funcional o el error inverso; separar el programa aumentando la complejidad innecesariamente.
+Introducir arquitecturas como la utilizada protege ante esta tipología de errores y permite dividir o reunir el proyecto de forma sencilla cuando se hace evidente que se requiere.
 
-En estos casos, el desarrollador proveniente de otros lenguajes más maduros puede llegar a sentir que Golang tiende a necesitar sobre-ingeniería al abordar una estructura lo suficientemente granulada.
+En el proceso de aprendizaje del lenguaje, proveniente de otros lenguajes más maduros, se ha llegado a interpretar como sobre-ingeniería la sintaxis a la que te obliga Go el abordar una estructura lo suficientemente granulada.
 Se necesita de estructuras más elaboradas: el equivalente a la clase, el manejo de errores, la no existencia de excepciones y el enfoque de las interfaces, por ejemplo.
 Es cierto que brillan por su sencillez y no dejan tanto espacio a la inventiva;
-que si bien puede dar lugar a verdaderos ingenios en buenas manos, suele terminar en el desorden y complejidad.
+que si bien puede dar lugar a verdaderos ingenios en buenas manos, suele terminar en el desorden y complejidad en el proceso de cambio de manos que sufre un software profesional.
 Un ejemplo muy claro es la inexistencia de la herencia, foco de tantos problemas en otros lenguajes.
+Los puntos más relevantes de los cuales se ha extraído una conclusión son:
 
 \begin{itemize}
     \item \textbf{Nomenclatura}: la guía de estilo es clara y amplia para dar libertad, pero en Golang se tiende a elegir nombre de variables cortos y poco explicativas.
@@ -48,9 +65,9 @@ Un ejemplo muy claro es la inexistencia de la herencia, foco de tantos problemas
     Sumando las variables poco explicativas al abundante código en un mismo punto se abre la puerta a un código difícil de leer.
     Poniendo en peligro la cohesión y la limpieza.
 
-    El código que se encuentra en los repositorios de opensource recuerda a los comienzos de php, javascript o demás lenguajes de scripting.
+    El código que se encuentra en los repositorios de \textit{opensource} más relevantes actualmente recuerda a los comienzos de PHP, Javascript u otros lenguajes de \textit{scripting}.
     Ficheros de muchas lineas, variables incomprensibles, código difícil de leer y muchos ficheros con nombres poco claros en un mismo directorio.
-    Renombrar una variable explicativa de más a un nombre corto es simple;
+    Es más sencillo renombrar una variable explicativa de más a un nombre corto;
     extraer el significado de una variable nombrada con una letra e intentar darle un nombre mejor no.
     Juntar código en un mismo fichero es más sencillo que separarlo.
     Lo segundo obliga a pensar en su cohesión y sus dependencias.
@@ -68,10 +85,10 @@ Un ejemplo muy claro es la inexistencia de la herencia, foco de tantos problemas
 
     Si la signatura de una función se repite el uso de una misma interfaz es lo más recomendable.
     Sin embargo, en una arquitectura de capas esto ocurre.
-    No poder elegir en la implementación de la interfaz con qué paquete quieres acoplarte aumenta la confusión.
+    No poder elegir en la implementación de la interfaz del paquete con el que quieres acoplarte aumenta la confusión.
 
-    Donde más se nota esta perdida de claridad es en las interfaces de desarrollo, IDEs.
-    Las IDEs advierten de qué funciones debe implementar una implementación explícita y facilitan la búsqueda de todas las implementaciones.
+    Donde más se nota esta perdida de claridad es en las interfaces de desarrollo (IDE).
+    Las IDEs advierten de qué funciones debe implementar cuando el lenguaje permite indicarlo de forma explícita y facilitan la búsqueda de todas las implementaciones.
     Sin la declaración explicita aparecerán muchas que no tienen, en el fondo, ninguna relación.
     Son perdidas en la limpieza y capacidad de lectura.
 
@@ -83,7 +100,7 @@ Un ejemplo muy claro es la inexistencia de la herencia, foco de tantos problemas
     Al final el uso de structs de forma directa da pocas ventajas, Llevando a esta estructura a ser el elemento básico de trabajo en casi cualquier punto.
 
     \item \textbf{Paquetes y división del código en golang}: En la comunidad se tiende a crear paquetes con muchos archivos, ya que crear directorios para ordenar el código en Golang implica modularizar.
-    Cuando se aborda una arquitectura DDD se puede llegar a complicar al no tener la libertad de crear paquetes según entidades lógicas acotadas.
+    Cuando se aborda una arquitectura DDD se ha sufrido la complicación de no tener la libertad de crear paquetes según entidades lógicas acotadas.
     Obligando a tener en cuenta la visibilidad y ciclicidad de dependencias.
     El contrapunto es que Golang está pensado para ello, te obliga a seguir un orden estricto.
 

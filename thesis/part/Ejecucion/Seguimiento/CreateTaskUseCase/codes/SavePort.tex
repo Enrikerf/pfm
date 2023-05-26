@@ -1,0 +1,16 @@
+
+\phantom{blank}
+\vspace{5mm}
+\hrule
+\begin{lstlisting}[language=Go,caption={SavePort.go},breaklines=true,label={lst:SavePort}]
+package Repository
+
+import "github.com/Enrikerf/pfm/commandManager/app/Domain/Task"
+
+type Save interface {
+	Persist(task Task.Task)
+}
+
+
+\end{lstlisting}
+\hrule

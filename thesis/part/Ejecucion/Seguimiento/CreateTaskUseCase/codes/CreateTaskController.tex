@@ -1,0 +1,56 @@
+
+\phantom{blank}
+\vspace{5mm}
+\hrule
+\begin{lstlisting}[language=Go,caption={TaskController.go},breaklines=true,label={lst:TaskControler}]
+
+package Controller
+
+import (
+	"context"
+	"fmt"
+	taskProto "github.com/Enrikerf/pfm/commandManager/app/Adapter/In/ApiGrcp/gen/task"
+	"github.com/Enrikerf/pfm/commandManager/app/Application/Port/In/Task/CreateTask"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+)
+
+type TaskController struct {
+	SaveTaskUseCase   CreateTask.UseCase
+}
+
+func (controller TaskController) CreateTask(
+	ctx context.Context,
+	request *taskProto.CreateTaskRequest,
+) (*taskProto.CreateTaskResponse, error) {
+	protoTask := request.GetTaskParams()
+	var command CreateTask.Command
+	command.Host = protoTask.GetHost()
+	command.Port = protoTask.GetPort()
+	command.CommandSentences = protoTask.GetCommands()
+	command.CommunicationMode = protoTask.GetMode().String()
+	command.ExecutionMode = protoTask.GetExecutionMode().String()
+
+    <@\textcolor{red}{task, err := controller.SaveTaskUseCase.Create(command)}@>
+
+	if err != nil {
+		return nil, fmt.Errorf("error")
+	}
+	var commandNames []string
+	for _, command := range task.GetSteps() {
+		commandNames = append(commandNames, command.GetSentence())
+	}
+	newTask := taskProto.Task{
+		Uuid:          task.GetId().GetUuidString(),
+		Host:          task.GetHost().GetValue(),
+		Port:          task.GetPort().GetValue(),
+		Commands:      commandNames,
+		Mode:          string(task.GetCommunicationMode()),
+		Status:        string(task.GetStatus().Value()),
+		ExecutionMode: string(task.GetExecutionMode()),
+	}
+	return &taskProto.CreateTaskResponse{Task: &newTask}, nil
+}
+
+\end{lstlisting}
+\hrule
