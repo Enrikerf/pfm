@@ -1,0 +1,17 @@
+@startuml
+
+@startuml
+
+User -> Manager: ExecuteTaskStep1
+Manager --> User: Response1
+Manager --> User: ...
+Manager --> User: ResponseN
+User -> Manager: ExecuteTaskStep2
+Manager --> User: ResponseN+1
+Manager --> User: ...
+Manager --> User: ResponseN+N
+Manager <- User: EndProcess
+
+@enduml
+
+@enduml

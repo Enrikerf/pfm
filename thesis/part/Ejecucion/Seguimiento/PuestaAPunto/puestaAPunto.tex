@@ -1,35 +1,37 @@
 
 \subsubsection{Pipeline}
 
-En el proceso de Pull Request, tal y como se diseño~\nameref{par:testing}, se ejecuta el pipeline diseñado para garantizar la entrega de software testeado y con el estandar de calidad requerido.
-Podemos ver en la figura~\cref{fig:githubActions} que los pasos son:
+En el proceso de integración del código de desarrollo a la versión de producción, \textit{Pull Request}, conforme al diseño realizado en la sección ~\nameref{par:testing}, se ejecuta el proceso denominado \textit{pipeline}.
+Este proceso garantiza la entrega de software testeado y con el estándar de calidad requerido.
+En la~\cref{fig:githubActions} se muestran los pasos:
 
 \begin{itemize}
-    \item ejecutar los tests
-    \item pasar el chequeo de estandar del código
-    \item compilar en modo producción
+    \item Ejecutar los tests.
+    \item Chequeo de estándar del código o \textit{Code Style}.
+    \item Compila la aplicación en modo producción.
 \end{itemize}
 
-faltarían el CD o continous delivery que ejecutaría los pasos de subir dicho ejecutable a un servidor, al menos para el programa manager.
+Los procesos correspondientes al CD o \textit{continuous delivery}, que ejecutarían los pasos para desplegar en un servidor utilizado por el cliente en producción, no forman parte de este proyecto.
+Serían parte posterior del \textit{pipeline}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/PuestaAPunto/img/githubPipelines}
-    \caption{Pipeline en Github}\label{fig:githubActions}
+    \caption{Ejemplo de ejecución del Pipeline en Github para el despliegue del proyecto}\label{fig:githubActions}
 \end{figure}
 
-\subsubsection{Montaje de prueba}
+\subsubsection{Montaje del hardware}
 
-Para la prueba conjunta del sistema se ha desplegado un montaje como se ve en la figura~\cref{fig:Control-Diagrama UML de despliegue}
+Para probar el sistema dispone de un montaje Hardware, cuyo diagrama conceptual se puede ver en  figura~\cref{fig:despliegue de prueba}.
+Cuyo aspecto real se puede ver en la~\cref{fig:montaje en protoboard}.
+Muestra el montaje físico de conexión entre el el servidor cliente y el dispositivo controlado.
+El servidor Raspberry se conecta mediante \textit{protoboard} realizando la conexión con el puente H y el motor de corriente continua.
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/PuestaAPunto/img/deploy}
     \caption{Diagrama de despliegue de prueba}\label{fig:despliegue de prueba}
 \end{figure}
-
-La imagen~\cref{fig:montaje en protoboard} muestra el montaje físico de conexión entre el el servidor cliente.
-La Raspberry se conecta en una protoboard donde se realiza la conexión con el puente H y el motor de corriente continua.
 
 \begin{figure}[H]
     \centering
@@ -40,8 +42,10 @@ La Raspberry se conecta en una protoboard donde se realiza la conexión con el p
 \subsubsection{Interfaz gráfica}
 
 Para controlar el programa manager se ha desarrollado como añadido una interfaz gráfica.
-En la figura~\cref{fig:frontend} podemos ver el listado de las tareas creadas, el estado en el que se encuentran y un boton para ejecutar manualmente las que son manuales.
-Para ejecutar manualmente una tarea disponimos de una gráfica para ver en tiempo real la evolución de la variable controlada tal y como podemos ver en el~\cref{fig:runner}
+No formaba parte de los objetivos del proyecto, pero se consideró que facilitaba el uso de la API disponible del programa Manager y la visualización de los resultados.
+En la~\cref{fig:frontend} se muestra el aspecto del listado de las tareas creadas en el sistema.
+Permite visualizar el estado en el que se encuentran y un botón para ejecutar manualmente las que disponen de dicha configuración.
+Al ejecutar una tarea manual se dispone de una gráfica para ver en tiempo real la evolución de la variable controlada~\cref{fig:runner}.
 
 \begin{figure}[H]
     \centering
@@ -53,4 +57,15 @@ Para ejecutar manualmente una tarea disponimos de una gráfica para ver en tiemp
     \centering
     \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/PuestaAPunto/img/runner}
     \caption{Frontend: runner}\label{fig:runner}
+\end{figure}
+
+\subsubsection{Resultados}
+
+Los resultados del control del Motor de corriente continua se muestran en la~\cref{fig:runner2}.
+Se aprecia que para una consigna de 120 rpm, dos vueltas por segundo, el PID se estabiliza en torno al valor designado.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=0.2\textheight]{./part/Ejecucion/Seguimiento/PuestaAPunto/img/runner}
+    \caption{Frontend: runner}\label{fig:runner2}
 \end{figure}
