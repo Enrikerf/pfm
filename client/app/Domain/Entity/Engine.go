@@ -154,21 +154,28 @@ func (e *engine) contrlLoop(goal float64) {
             case <-done:
                 return
             case t := <-ticker.C:
-                fmt.Println("Tick at", t)
-				fmt.Println("prevAngle", prevAngle)
+                
+				
 				angle := e.resolution * math.Abs(float64(e.encoder.GetPosition()))
-				fmt.Println("angle:", angle)
-				fmt.Println("sampleTime.Seconds():", sampleTime.Seconds())
+				
+				
 				degreesPerSecod := (angle - prevAngle) / sampleTime.Seconds()
-				fmt.Println("degreesPerSecod:", degreesPerSecod)
+				
 				radianPerSecod := degreesPerSecod * math.Pi / 180
-				fmt.Println("radianPerSecod:", radianPerSecod)
+				
 				e.currentAngularSpeed = radianPerSecod
 				pidOrig := e.controlAlgorithm.Calculate(radianPerSecod)
 				pidReescalated := e.reescalePid(pidOrig)
-				fmt.Println("-------------------------------")
+				
 				e.pwmPin.SetPWM(Pin.Duty(pidReescalated), e.pwmPin.GetMaxFrequency())
 				prevAngle = angle
+				fmt.Println("Tick at", t)
+				// fmt.Println("prevAngle", prevAngle)
+				// fmt.Println("angle:", angle)
+				// fmt.Println("sampleTime.Seconds():", sampleTime.Seconds())
+				// fmt.Println("degreesPerSecod:", degreesPerSecod)
+				// fmt.Println("radianPerSecod:", radianPerSecod)
+				// fmt.Println("-------------------------------")
 				if len(e.isControlRunning) == 0 {
 					e.pwmPin.SetPWM(Pin.Duty(0), e.pwmPin.GetMaxFrequency())
 					e.brakePin.Up()
