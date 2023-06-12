@@ -31,7 +31,7 @@ func (console *console) Run() {
 		case "1":
 			console.manageEngineUseCase.Turnaround()
 		case "2":
-			console.manageEngineUseCase.RpmControl(60.0 * 2)
+			console.manageEngineUseCase.RpmControl(120.0 * 2)
 		case "3":
 			console.manageEngineUseCase.StopRpmControl()
 		case "4":
@@ -82,19 +82,23 @@ func (console *console) setGas() {
 
 func (console *console) exitWatchdog(channel chan os.Signal) {
 	for range channel {
-		var i string
-		fmt.Println("\nDo you want to exit? (y/n)")
-		_, err := fmt.Scanf("%s", &i)
-		if err != nil {
-			fmt.Println(err)
-			console.manageEngineUseCase.TearDown()
-			panic(err)
-		}
-		if i == "y" {
-			fmt.Println("tearing down engine")
-			console.manageEngineUseCase.TearDown()
-			fmt.Println("exit succeed")
-			os.Exit(1)
-		}
+		fmt.Println("tearing down engine")
+		console.manageEngineUseCase.TearDown()
+		fmt.Println("exit succeed")
+		os.Exit(1)
+		// var i string
+		// fmt.Println("\nDo you want to exit? (y/n)")
+		// _, err := fmt.Scanf("%s", &i)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// 	console.manageEngineUseCase.TearDown()
+		// 	panic(err)
+		// }
+		// if i == "y" {
+		// 	fmt.Println("tearing down engine")
+		// 	console.manageEngineUseCase.TearDown()
+		// 	fmt.Println("exit succeed")
+		// 	os.Exit(1)
+		// }
 	}
 }

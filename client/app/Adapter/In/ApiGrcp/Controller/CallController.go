@@ -6,7 +6,6 @@ import (
 	"io"
 	"log"
 	"os/exec"
-	"strconv"
 	"strings"
 	"time"
 
@@ -71,7 +70,7 @@ func (s *CallController) CallBidirectional(server call.CallService_CallBidirecti
 			valueToSend = s.ManageEngineUseCase.GetCurrentAngularSpeed()
 		}
 		sendError := server.Send(&call.CallResponse{
-			Result: strconv.Itoa(int(valueToSend)),
+			Result: fmt.Sprintf("%f",valueToSend),
 		})
 		if sendError != nil {
 			fmt.Println("finished Bidirectional")

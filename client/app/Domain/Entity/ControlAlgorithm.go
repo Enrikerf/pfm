@@ -1,11 +1,13 @@
 package Entity
 
+
 type ControlAlgorithm interface {
 	SetGoal(goal float64)
 	SetP(p float64)
 	SetI(i float64)
 	SetD(d float64)
 	SetSampleTime(d float64)
+	GetSampleTime() float64
 	GetIntegralTerm() float64
 	Calculate(currentValue float64) float64
 }
@@ -50,13 +52,28 @@ func (ca *controlAlgorithm) SetSampleTime(st float64) {
 	ca.sampleTime = st
 }
 
+func (ca *controlAlgorithm) GetSampleTime() float64 {
+	return ca.sampleTime
+}
+
 func (ca *controlAlgorithm) Calculate(currentValue float64) float64 {
+
 	ca.currentValue = currentValue
 	ca.currentError = ca.goal - ca.currentValue
 	proportionalTerm := ca.P * ca.currentError
-	ca.integralTerm = ca.integralTerm + ca.currentError*ca.sampleTime
+	ca.integralTerm = ca.integralTerm + ca.I*ca.currentError*ca.sampleTime
 	derivativeTerm := ca.D * (ca.currentError - ca.pastError) / ca.sampleTime
 	ca.pastError = ca.currentError
-	return proportionalTerm + ca.I*ca.integralTerm + derivativeTerm
+	total := proportionalTerm + ca.integralTerm + derivativeTerm
+
+	// fmt.Println("\tsubfuc")
+	// fmt.Println("\t\tca.goalg:", ca.goal)
+	// fmt.Println("\t\tcurrentValue:", currentValue)
+	// fmt.Println("\t\tca.currentError:", ca.currentError)
+	// fmt.Println("\t\tproportionalTerm:", proportionalTerm)
+	// fmt.Println("\t\tintegralTerm:", ca.integralTerm)
+	// // fmt.Println("\t\tderivativeTerm:",derivativeTerm)
+	// fmt.Println("\t\ttotal:", total)
+	return total
 
 }
