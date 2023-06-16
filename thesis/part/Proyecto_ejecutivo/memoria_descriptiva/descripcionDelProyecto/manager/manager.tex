@@ -10,7 +10,7 @@ Dispondrá de una base de datos para almacenar de forma persistente la informaci
 
 \subparagraph{Dominio}
 
-El diagrama UML de la~\cref{fig:Diagrama UML de el dominio de manager} muestra que el dominio de Manager se compone de tres módulos: uno para las tareas, Task;
+El diagrama UML de la~\cref{fig:Diagrama UML de el Dominio de manager} muestra que el Dominio de Manager se compone de tres módulos: uno para las tareas, Task;
 otro para los resultados, Result;
 y otro Core, que contiene los elementos básicos del sistema que comparte todo el Dominio:
 
@@ -19,7 +19,7 @@ y otro Core, que contiene los elementos básicos del sistema que comparte todo e
     \begin{itemize}
         \item \textbf{Id}: todos los ids extienden de el, para no reescribir código.
         contiene un \textit{UUID}, el paquete para generarlos habrá que seleccionarlo según los que ofrece el ecosistema.
-        Es la única dependencia externas existente dentro del dominio por ello se encapsula en el  paquete core para no dispersar a lo largo de todo el Domino dicha dependencia, por si hubiese que cambiarla.
+        Es la única dependencia externas existente dentro del Dominio por ello se encapsula en el  paquete core para no dispersar a lo largo de todo el Domino dicha dependencia, por si hubiese que cambiarla.
         \item \textbf{Event} todos los eventos del sistema extenderán de él.
     \end{itemize}
     \item TaskDomain
@@ -78,7 +78,7 @@ y otro Core, que contiene los elementos básicos del sistema que comparte todo e
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.5\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/manager/uml/managerDomain}
-    \caption{Diagrama UML de el dominio del programa Manager}\label{fig:Diagrama UML de el dominio de manager}
+    \caption{Diagrama UML de el Dominio del programa Manager}\label{fig:Diagrama UML de el Dominio de manager}
 \end{figure}
 
 \subparagraph{Casos de uso}
@@ -88,7 +88,7 @@ Las interacciones que se definan sobre ellos serán los casos de uso disponibles
 Se dispondrá del \gls{CRUD} completo de \textit{Task}.
 Dentro de éste, se contempla la edición de los \textit{Steps} a través de Task ya que es su \textit{Aggregate Root}.
 Por definición no se debe poder acceder a sus componentes si no es a través del \textit{Aggregate Root}.
-De \textit{Batch} y \textit{Result} no estará permitida la actualización por lógica de dominio.
+De \textit{Batch} y \textit{Result} no estará permitida la actualización por lógica de Dominio.
 Este caso de uso no debe existir, ya que sus variables son auto-generadas en el momento de creación.
 
 \begin{itemize}
@@ -163,12 +163,12 @@ Este caso de uso no debe existir, ya que sus variables son auto-generadas en el 
         \caption{Use Case: TaskLoop}\label{fig:Use Case-TaskLoop}
     \end{figure}
 
-    Atendiendo por tanto a esta posibilidad de cambio se hará uso de la arquitectura para desacoplar dicha incertidumbre \textbf{TaskProcessor} que aparece en la figura~\cref{fig:Use Case-TaskLoop} en color verde es el proceso asíncrono donde se hará uso del las gorutines que permiten la gestión de tareas asíncronas de forma sencilla.
+    Atendiendo por tanto a esta posibilidad de cambio se hará uso de la arquitectura para desacoplar dicha incertidumbre \textbf{TaskProcessor} que aparece en la figura~\cref{fig:Use Case-TaskLoop} en color verde es el proceso asíncrono donde se hará uso del las Gorutines que permiten la gestión de tareas asíncronas de forma sencilla.
     Se definirá como puerto de salida y se implementará un adaptador para encapsular dicha incertidumbre.
 
     Es de preveer que dentro de ese adaptador se implemente lógica que habrá de ser de negocio.
     Sin embargo, a no poder vislumbrarla con claridad, se deja pendiente de una refactorización.
-    La refactorización posterior podrá ir introduciendo en dominio y limpiando dicho adaptador de el posible mal código resultado de la investigación mientras se construye, en vez de ensuciar el dominio y acoplar nuestro código base a esta incertidumbre.
+    La refactorización posterior podrá ir introduciendo en Dominio y limpiando dicho adaptador de el posible mal código resultado de la investigación mientras se construye, en vez de ensuciar el Dominio y acoplar nuestro código base a esta incertidumbre.
 
     A pesar de dicho desconocimiento inicial que impide el diseño con exactitud del flujo, El objetivo de este proyecto ejecutivo es hacer siempre una primera iteración en la medida que se pueda.
     Por lo tanto una primera iteración se puede ver en la figura~\cref{fig:Use Case-Task Processor}.

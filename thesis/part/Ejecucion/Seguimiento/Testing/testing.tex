@@ -277,17 +277,17 @@ El diseño de los tests queda tal y como se ve en la~\cref{tab:taskTestPairwiseC
 Un caso de aplicación donde la arquitectura protege la calidad del sistema de las implementaciones en proceso de investigación ya quedó señalado en el diseño.
 El looper es el punto más complejo de la aplicación.
 Está muy ligado a la tecnología gRPC\@.
-Extraer la lógica perteneciente al Dominio de la interacción con la infraestructura es algo que no se puede diseñar sin conocimiento previo de la tecnología.
+Extraer la lógica perteneciente al Dominio de la interacción con la Infraestructura es algo que no se puede diseñar sin conocimiento previo de la tecnología.
 En el \textit{Looper}~\cref{lst:Looper} se encuentra el adaptador de comunicación gRPC\@.
-Se ha extraído toda la lógica posible a este servicio de dominio, pero dentro de dicho adaptador hay código experimental que puede tener múltiples errores inesperados: no conseguir comunicar con el servicio cliente, timeouts, malas implementaciones de la librería, por ejemplo.
+Se ha extraído toda la lógica posible a este servicio de Dominio, pero dentro de dicho adaptador hay código experimental que puede tener múltiples errores inesperados: no conseguir comunicar con el servicio cliente, timeouts, malas implementaciones de la librería, por ejemplo.
 Se ha protegido al Dominio de todo ello mediante una interfaz que garantiza que ante cualquier error se devuelve siempre un resultado.
-De esta forma, aunque no funcione correctamente, la lógica de negocio es clara y concisa, dejando al proceso iterativo de ir mejorando la infraestructura.
+De esta forma, aunque no funcione correctamente, la lógica de negocio es clara y concisa, dejando al proceso iterativo de ir mejorando la Infraestructura.
 Toda la comunicación con el cliente se encuentra abstraída mediante una interfaz útil y única para comunicarnos.
 Una lógica de negocio que comprende de pocas lineas de código y explican su funcionamiento
 
 En el proceso de descubrimiento del lenguaje se detectó un punto débil en el Dominio.
-Cada una de las \textit{gorutines} lanzadas pudiera ocurrir que no consiguiera terminar y se quedara en un proceso infinito.
-Para ello, Golang dispone de una herramienta llamada \textit{context} que permite gestionar los timeouts de las \textit{gorutines} evitando que que queden procesos hijos sin control.
+Cada una de las \textit{Gorutines} lanzadas pudiera ocurrir que no consiguiera terminar y se quedara en un proceso infinito.
+Para ello, Golang dispone de una herramienta llamada \textit{context} que permite gestionar los timeouts de las \textit{Gorutines} evitando que que queden procesos hijos sin control.
 No se ha hecho uso de ello porque el coste de cambio no hubiese sido asumible;
 quedando por lo tanto como linea futura
 

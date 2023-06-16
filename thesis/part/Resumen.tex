@@ -5,17 +5,18 @@ Respondiendo al objetivo principal se ha obtenido un ejemplo práctico de aplica
 La metodología se basa en un diseño estructurado en capas, separando la solución tecnológica concreta de la lógica que resuelve el problema, facilitando la evolución iterativa del software.
 Se ha realizado un esfuerzo de diseño para utilizar un lenguaje expresivo que transmite el problema resuelto.
 Dicho lenguaje facilita la comunicación efectiva en todos los participantes del proyecto.
-El sistema resultante consta de tres programas independientes:
+El sistema resultante consta de tres programas independientes y una plataforma hardware sobre la que actúan:
 
 \begin{itemize}
     \item Un programa que gestiona la interacción entre los distintos sistemas y los usuarios.
     \item Un programa cliente que responde a las ordenes de ejecución de las tareas definidas en el gestor.
     Ejecutable en paralelo en tantas máquinas como se requiera.
     \item Un programa de control PID para ser ejecutado por el cliente.
+    \item Un montaje sobre una placa de pruebas que consta de un puente H y un motor de corriente continua para ser controlado por el control PID\@.
 \end{itemize}
 
 El diseño está enfocado en manejar de forma efectiva el principal problema de desarrollo del software: la evolución.
-La evolución y el cambio del software requiere de la interacción entre personas con diferentes conocimientos: técnicos, gente de negocio, clientes y todo aquel afectado.
+La evolución y el cambio del software requiere de la interacción entre personas con diferentes conocimientos: técnicos, comerciales, financieros, clientes y todo aquel afectado.
 Personas que comienzan a interactuar con el sistema sin conocimientos previos o gente que deja de interactuar con el mismo eliminando conocimiento del mismo.
 También intervienen cambios tecnológicos que no deberían afectar al problema que resuelve.
 Por ejemplo, un cambio en el sistema de comunicación, cambiar el uso del correo electrónico a mensajería instantánea no debe suponer un peligro o incertidumbre a la estabilidad de ejecución del sistema.

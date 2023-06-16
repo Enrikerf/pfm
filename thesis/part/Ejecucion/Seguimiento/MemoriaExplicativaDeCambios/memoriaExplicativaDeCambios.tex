@@ -148,14 +148,14 @@ Por lo tanto, se introdujo la lógica del programa de control dentro del program
 Esta decisión permite ver la utilidad de la arquitectura al no encontrar ninguna fricción en este proceso.
 Dos programas con el mismo diseño estructural y organización para unirse o separarse sólo requiere mover archivos y requiere desarrollo añadido.
 
-El dominio se une sin afectarse el uno al otro ya que son independientes todos los elementos.
-En la aplicación son casos de uso nuevos que tampoco interaccionan unos con otros.
-y la infraestructura es totalmente diferente para cada programa y tampoco se afectan entre sí.
+El Dominio se une sin afectarse el uno al otro ya que son independientes todos los elementos.
+En la Aplicación son casos de uso nuevos que tampoco interaccionan unos con otros.
+y la Infraestructura es totalmente diferente para cada programa y tampoco se afectan entre sí.
 Se muestra en la~\cref{fig:Client+Control-Estructura de carpetas de Dominio},
 ~\cref{fig:Client+Control-Estructura de carpetas de Aplicación}
 ~\cref{fig:Client+Control-Estructura de carpetas de Infraestructura}
 Que la estructura de carpetas es simplemente la suma de ambas estructuras.
 El único punto de integración es que en los casos de uso de \textit{Step} (\textit{ExecuteUnary}, \textit{ExecuteServerStream}, \textit{ExecuteClientStream},\textit{ExecuteBidirectional}) se hace uso directo de los casos de uso del \textit{Engine}.
-Es decir, que unos casos de uso de aplicación sirven como \textit{proxy} para los otros.
+Es decir, que unos casos de uso de Aplicación sirven como \textit{proxy} para los otros.
 
 \input{./part/Ejecucion/Seguimiento/MemoriaExplicativaDeCambios/folder_estructure_client}

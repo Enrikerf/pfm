@@ -7,8 +7,8 @@ CI/CD implica el uso de sistemas de control de versiones, servidores de automati
 Estas herramientas permiten que los desarrolladores integren sus cambios de código en un repositorio central, donde se desencadenan automáticamente pruebas y compilaciones para detectar cualquier error y garantizar que el código se pueda implementar sin problemas.
 
 Los tests son un apartado importante en la garantía de entrega de código libre de errores.
-En este proyecto se va a centrar el control de calidad en el dominio.
-Es decir, va a existir una suite de test unitarios por cada elemento de dominio.
+En este proyecto se va a centrar el control de calidad en el Dominio.
+Es decir, va a existir una suite de test unitarios por cada elemento de Dominio.
 los test de integración y de \gls{E2E} (\textit{End to End} o de extremo a extremo) quedan fuera de esta primera versión del sistema.
 Las técnicas utilizadas para el desarrollo de los tests encuentran su origen en las siguientes condiciones de contorno:
 
@@ -18,16 +18,15 @@ Las técnicas utilizadas para el desarrollo de los tests encuentran su origen en
 \end{itemize}
 
 Se va a trabajar dentro de esos dos límites: deben existir tests que garanticen y especifiquen el grado de calidad acotado al presupuesto que se dispone.
-Para poder expresar de una forma cuantitativa que los tests están correctamente diseñados y desarrollados primero se define ineficaz e ineficiente.
-definición según RAE:
+Para poder expresar de una forma cuantitativa que los tests están correctamente diseñados y desarrollados primero se necesita definir ineficaz e ineficiente:
 
 \begin{itemize}
     \item Eficaz: Capacidad de lograr el efecto que se desea o se espera.
-    \item Eficiente (segunda acepción): Capacidad de lograr los resultados deseados con el mínimo posible de recursos.
+    \item Eficiente: Capacidad de lograr los resultados deseados con el mínimo posible de recursos.
 \end{itemize}
 
 De existir un numero exacto de pruebas óptimas, para cubrir todas la posibilidades, desarrollar menos es ineficaz y más es ineficiente.
-El trabajo de diseño de los tests consta en tomar una solución de compromiso entre eficacia y eficiencia.
+El trabajo de diseño de los tests consta de escoger una solución de compromiso entre eficacia y eficiencia.
 No se puede no probar y no existen recursos para probar todo.
 En un ejemplo: para un método que recibe la información de un formulario de ocho campos con diez posibles valores diferentes cada uno se obtendría un conjunto de $8^{10} = 1,073,741,824$ casos de prueba.
 Esta táctica de pruebas siendo la más obvia la mayor parte de las veces será inviable.
@@ -38,11 +37,11 @@ Se diseña el caso de uso al que va a tener que enfrentarse y el resultado esper
 Para evitar la prueba exhaustiva existen las siguientes técnicas:
 
 \begin{itemize}
-    \item variables independientes
-    \subitem clases de equivalencia.
-    \subitem método de valores límite
-    \item variables dependientes
-    \subitem vector de pares
+    \item Variables independientes.
+    \subitem Clases de equivalencia.
+    \subitem Método de valores límite.
+    \item Variables dependientes.
+    \subitem Vector de pares.
 \end{itemize}
 
 \textbf{Variables independientes}
@@ -93,7 +92,7 @@ Concepto distinto a la entrada: cadena de caracteres.
 Las clases de equivalencia para ese factor ha de englobar todas las posibilidades, para este caso: que la entrada sea invalida o que sea válida.
 
 \begin{itemize}
-    \item Invalido: cualquier texto invalido, no es un día de la semana.
+    \item Inválido: cualquier cadena de caracteres inválida, no es un día de la semana.
     \item Válido: cualquier día de la semana.
     Lunes, martes, miércoles, jueves, viernes, sábado o domingo.
 \end{itemize}
@@ -101,20 +100,20 @@ Las clases de equivalencia para ese factor ha de englobar todas las posibilidade
 En este punto se podría escoger cualquier valor dentro de esas dos clases, por ejemplo:
 
 \begin{itemize}
-    \item Invalido: cualquier Cadena Invalida \(\longrightarrow\) resultado esperado: error.
+    \item Inválido: cualquier cadena de caracteres inválida \(\longrightarrow\) resultado esperado: error.
     \item Válido: lunes \(\longrightarrow\) resultado esperado: martes.
 \end{itemize}
 
-Siguiendo esta metodología se obtiene una garantía: Explicar metodológicamente porqué se han hecho los tests y los valores escogidos y que cobertura se está ofreciendo.
+Siguiendo esta metodología se obtiene una garantía: Explicar metodológicamente por qué se han hecho los tests y los valores escogidos y que cobertura se está ofreciendo.
 Aplicando la técnica de los valores límites se concibe el domingo como el último día, después se debe volver al lunes.
 Es decir, es el valor límite dentro de la clase de equivalencia.
 Garantizando elegir con criterio dentro de los casos de la clase de equivalencia.
 Los tests son:
 
 \begin{itemize}
-    \item Invalido: cualquierCadenaInvalida \(\longrightarrow\) resultado esperado: error.
-    \item Válido limite inicial: lunes \(\longrightarrow\) resultado esperado: martes.
-    \item Válido limite final: domingo \(\longrightarrow\) resultado esperado: lunes.
+    \item Inválido: cualquier cadena de caracteres inválida \(\longrightarrow\) resultado esperado: error.
+    \item Válido límite inicial: lunes \(\longrightarrow\) resultado esperado: martes.
+    \item Válido límite final: domingo \(\longrightarrow\) resultado esperado: lunes.
 \end{itemize}
 
 \textbf{Variables dependientes}\label{variablesDependendientes}
@@ -124,19 +123,20 @@ Es una técnica de diseño de pruebas que permite reducir el número de casos ne
 En lugar de probar todas las combinaciones posibles de los parámetros, el método identifica las combinaciones de pares que tienen el potencial de causar errores.
 Estas combinaciones de pares se seleccionan utilizando un algoritmo que busca minimizar el número de casos de prueba necesarios sin sacrificar la calidad de la cobertura de pruebas.
 
-El método de Pairwise fue introducido por David C. Kuhn en un artículo titulado~\cite{37051} “Practical Combinatorial Testing“ publicado en 1997.
-Desde entonces, ha sido ampliamente utilizado en la industria de software y ha sido objeto de numerosos estudios y mejoras por parte de investigadores y practicantes.
+El método de Pairwise fue introducido por David C. Kuhn en un artículo~\cite{37051} publicado en 1997.
+Desde entonces, ha sido utilizado en la industria de software y ha sido objeto de numerosos estudios y mejoras por parte de investigadores y practicantes.
 Es importante tener en cuenta que el método de Pairwise no es una técnica infalible, ya que no cubre todas las posibilidades.
 Es una técnica efectiva para la reducción del número de casos de prueba necesarios para lograr una cobertura razonable.
 
 En un ejemplo extraído de~\cite{Bach04pairwisetesting} se analiza un software con un menú de botones.
 Para hacer un testeo exhaustivo se han de analizar 12,288 casos;
 ese coste de calidad no es asumible para todos los proyectos.
-En este mismo paper reducen a 10 casos con este método.
+En este mismo estudio se reducen a 10 casos con este método.
 Es una metodología para escoger los tests que más aportan valor de cara a la seguridad sin perder pragmatismo y economía.
 Para el cálculo de los pares hay varios software disponible como páginas web que permiten el cálculo de forma rápida.
 
-Con estos métodos presentados se garantizarán que pruebas cumplan con las características de ser:
+Con estos métodos presentados: clases de equivalencia, método de valores límite, vector de pares.
+Se garantizarán que pruebas cumplan con las características de ser:
 
 \begin{itemize}
     \item Inocuas
@@ -148,5 +148,4 @@ Con estos métodos presentados se garantizarán que pruebas cumplan con las cara
 \end{itemize}
 
 Un código se demuestra que es correcto cuando es fácil de testear.
-Como referencia, si el diseño un test se complica.
-No se consigue aislar las características a testear, definir los factores, las clases de equivalencia o se obtiene un número inabarcable de tests es síntoma de un código mejorable.
+Como referencia, si el diseño un test se complica, no se consigue aislar las características a testear, definir los factores, las clases de equivalencia o se obtiene un número inabarcable de tests es síntoma de un código mejorable.

@@ -1,26 +1,29 @@
-Se ha diseñado y desarrollado un sistema capaz de gestionar y ejecutar tareas en sistemas remotos siguiendo un proceso que garantiza un grado de calidad y una estructura capaz de enfrentar el cambio.
-Cumpliendo con el objetivo principal se ha ejecutado integralmente un ejemplo práctico de aplicación de una metodología que abarca el proceso de desarrollo de software desde su concepción hasta su entrega.
-Se ha seguido un diseño estructurado en capas realizando un esfuerzo en crear un lenguaje expresivo en todos los componentes del software que transmitan el problema resuelto.
-El lenguaje concebido facilita la comunicación efectiva del problema que enfrenta el proyecto.
 
-Durante la ejecución se ha podido comprobar que el uso de los paradigmas utilizados han permitido la evolución del diseño hasta su resultado final de forma efectiva, con orden y sin afectar a las bases iniciales.
+Se ha diseñado y desarrollado un sistema capaz de gestionar y ejecutar tareas en servidores remotos.
+Se ha seguido un proceso que garantiza un grado de calidad y una estructura capaz de enfrentar el cambio iterativo natural en el desarrollo de software.
+Cumpliendo con el objetivo principal se ha ejecutado integralmente un ejemplo práctico de aplicación de una metodología que abarca el proceso de desarrollo de software desde su concepción hasta su entrega.
+Se ha seguido un diseño estructurado en capas realizando un esfuerzo en crear un lenguaje expresivo en el nombre y la estructura de todos los componentes del software que transmita el problema resuelto, conocido como UL (Ubiquitous Language o Lenguaje Ubicuo).
+Este lenguaje concebido facilita la comunicación efectiva del problema que enfrenta el proyecto a todo aquel que necesite interactuar con el sistema.
+
+Uno de los puntos que evidencian la utilidad de los paradigmas utilizados (DDD, Arquitectura Hexagonal y CQRS) es que han facilitado una forma estructurada de enfrentar la construcción de un software en un lenguaje desconocido.
+Han enfocado los esfuerzos en aprender lo necesario para implementar los patrones que el diseño demanda.
+Convirtiendo el aprendizaje en un proceso ordenado de búsqueda de conceptos necesarios y transversales en todos los lenguajes.
+
+Durante la ejecución se ha podido comprobar que dichos paradigmas han permitido la evolución del diseño hasta su resultado final de forma efectiva, con orden y sin afectar a las bases iniciales.
 Se ha enfrentado diversos problemas ante el cambio de los requisitos iniciales.
 El ejemplo más claro ha sido la integración del programa de control en el programa cliente.
-También ha permitido encapsular partes de la tecnología recién aprendida, y por tanto desarrollada con deficiencias, de tal forma que no afecte a la resolución del problema de fondo.
-
-Uno de los puntos que evidencian la utilidad de estos paradigmas es que facilitan una forma estructurada enfrentar la construcción de un software en un lenguaje desconocido.
-Enfoca los esfuerzos en aprender lo necesario para implementar los patrones que el diseño demanda.
-Convirtiendo el aprendizaje en un proceso ordenado de búsqueda de conceptos necesarios y transversales en todos los lenguajes.
+La fusión o separación de dos programas se vuelve un proceso sencillo cuando la arquitectura es común.
+También ha permitido encapsular partes de la tecnología recién aprendida, y por tanto desarrollada con las deficiencias típicas de la primera aproximación, de tal forma que no afecte a la resolución del problema de fondo.
+Creando un software entregable que aporta valor acotando sus deficiencias a puntos bien diferenciados.
 
 El presente trabajo ha cumplido ampliamente con el objetivo de evaluar el lenguaje Go como herramienta para un proyecto que enfrente la problemática y metodologías utilizadas.
 Se han puesto a prueba los puntos clave que el lenguaje promueve: asincronía y gestión de concurrencia y simplicidad.
-La concurrencia ha sido un punto clave para el control automático de forma remota.
 Se ha hecho uso tanto en las comunicaciones entre sistemas como en el control efectivo del motor mediante el PID\@.
 La simplicidad con la que se consigue abordar el problema, sin requerir gestionar a bajo nivel la dificultad que enfrentan los sistemas en tiempo real ante la concurrencia, es sin duda una característica clave.
 Los puntos más reseñables son:
 
 \begin{itemize}
-    \item Gestión de los pulsos del encoder: se han hecho pruebas exhaustivas y se consigue no perder ningún pulso del receptor fotoeléctrico.
+    \item Gestión de los pulsos del encoder: se han hecho pruebas y se consigue no perder ningún pulso del receptor fotoeléctrico.
     La saturación del sistema operativo puede afectar a la capacidad a la interacción del programa de control de con el programa cliente o a cada uno de ellos por separado.
     Dicha saturación pone en riesgo el conteo de pulsos del encoder, punto crítico para el control.
     Con la gestión de la asincronía de Go podemos garantizar que los pulsos son detectados y esperan su turno para ser contabilizados sin perder ninguno.
@@ -32,11 +35,11 @@ Los puntos más reseñables son:
 La arquitectura y el diseño que se han empleado busca que el propio código sea la documentación.
 En el desarrollo de software comercial el mantenimiento de la documentación es costoso.
 Se ha visto el encaje de adaptar un proyecto de tipo industrial, un estándar definido y bien depurado, para la documentación mínima imprescindible.
-Ofrecer un documento con una estructura conocida como forma de introducirse al problema, mantenerse informado del dominio, comprender el lenguaje propio y entender los casos de uso disponibles para interactuar con el sistema.
-
-La conclusión general es que lo más importante en la gestión de proyectos es estandarizar procesos, tanto de diseño como de documentación.
-De esta forma, cuando los profesionales entran y salen del proyecto sólo requieren aprender el dominio del problema concreto, no todo el marco del sistema.
-Tal es la motivación y origen de las normas existentes en la industria y la construcción.
+Ofrecer un documento con una estructura conocida como forma de introducirse al problema, mantenerse informado del Dominio, comprender el lenguaje propio y entender los casos de uso disponibles para interactuar con el sistema.
+%
+%La conclusión general es que lo más importante en la gestión de proyectos es estandarizar procesos, tanto de diseño como de documentación.
+%De esta forma, cuando los profesionales entran y salen del proyecto sólo requieren aprender el Dominio del problema concreto, no todo el marco del sistema.
+%Tal es la motivación y origen de las normas existentes en la industria y la construcción.
 
 \textbf{Evaluación cualitativa del Golang}
 
@@ -105,7 +108,7 @@ Los puntos más relevantes de los cuales se ha extraído una conclusión son:
     El contrapunto es que Golang está pensado para ello, te obliga a seguir un orden estricto.
 
     \item \textbf{Testing}: El estándar es disponer de los test unitarios al lado de la clase relacionada.
-    Esto provoca imports ajenos junto a los ficheros que definen el dominio.
+    Esto provoca imports ajenos junto a los ficheros que definen el Dominio.
     El código para crear los dobles en medio de tu código de producción.
     Dificulta la navegación por la estructura de carpetas al tener demasiados archivos ajenos a la estructura del programa.
     La limpieza y la nomenclatura también se aplican a los archivos y organización de ficheros, este estándar lo dificulta.
@@ -121,10 +124,11 @@ Los puntos más relevantes de los cuales se ha extraído una conclusión son:
     \item Separación del programa cliente del programa de control.
     Este punto no ha sido logrado por el requerimiento de tiempo.
     Separar el programa cliente del programa a ejecutar facilita la creación de los programas de control sin afectar a las funcionalidades comunes.
-    \item Creación de programas de control variados que pongan a prueba el sistema.
+    \item Creación de programas de control variados y sintonización del PID que pongan a prueba el sistema.
     Investigar su aplicación para el sector del internet de las cosas.
     Gestión de el automatizado de actuadores en un hogar y su monitorización.
     \item Mejora del hardware, evitar el montaje provisional en proto-board.
     Crear una plataforma hardware para el control de motores de corriente continua en posición y velocidad.
     \item La ejecución manual de las tareas de forma bidireccional cuando los navegadores lo permitan o investigar alternativas.
+    \item Implementación del concepto de contexto que ofrece Go para garantizar la seguridad de ejecución de los hilos.
 \end{itemize}

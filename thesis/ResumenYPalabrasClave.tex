@@ -1,0 +1,81 @@
+\textbf{Resumen}
+
+Se ha diseñado y desarrollado un sistema capaz de gestionar y ejecutar tareas en servidores remotos.
+Como ejemplo de aplicación remota se dispone de un programa de control PID para un motor de corriente continua.
+Se ha obtenido un ejemplo práctico de aplicación de una metodología de desarrollo de software desde su diseño hasta su entrega.
+Un diseño estructurado en capas, separando la solución tecnológica concreta de la lógica que resuelve el problema.
+Se ha creado un lenguaje expresivo en el nombre y la estructura de todos los componentes del software transmitiendo el problema.
+Dicho lenguaje facilita la comunicación efectiva del problema enfrentado a todo aquel que necesite interactuar con el sistema.
+El diseño está enfocado en la gestión del principal problema de desarrollo del software: la evolución.
+El sistema consta de tres programas independientes:
+
+\begin{itemize}
+    \item Un gestor de la interacción con los usuarios.
+    \item Un cliente que responde a las ordenes de ejecución del gestor.
+    Ejecutable en paralelo en tantas máquinas como se requiera.
+    \item Un control PID para ser ejecutado por el programa cliente.
+\end{itemize}
+
+El trabajo evalúa Go ante un proyecto enfocado en la interacción con actuadores o hardware para el control automático.
+Se han puesto a prueba los conceptos clave del lenguaje: asincronía y gestión de concurrencia y simplicidad.
+
+Se ha realizado el ejercicio de adaptación de los documentos utilizados en un proyecto de ejecución de tipo industrial a un proyecto de software.
+El diseño, en un documento de proyecto ejecutivo.
+El desarrollo, en un documento de ejecución de obra.
+
+\textbf{Palabras Clave}
+
+Go,
+API,
+REST,
+RPC,
+CRUD,
+control PID,
+Arquitectura de capas,
+Arquitectura hexagonal,
+DDD,
+CQRS,
+lenguaje ubicuo,
+CI/CD.
+
+\newpage
+
+\textbf{Summary}
+
+A system capable of managing and executing tasks in remote systems has been designed and developed.
+As an example of a remote application, the system also consists of a PID control program for a DC motor.
+A practical example of the application of a software development methodology from design to delivery has been obtained.
+The design is structured in layers, separating the concrete technological solution from the logic that solves the problem, facilitating the iterative evolution of the software.
+An expressive language has been created to convey the problem solved.
+This language facilitates effective communication among all project participants.
+The design is focused on effectively handling the main problem of software development: evolution.
+The resulting system consists of three independent programs:
+
+\begin{itemize}
+    \item A user interaction manager.
+    \item A client that responds to the manager's execution commands.
+    Executable in parallel on as many machines as required.
+    \item A PID control to be executed by the client program.
+\end{itemize}
+
+The work evaluates Go to face a project focused on interaction with actuators or hardware for automatic control.
+The key concepts of the language have been tested: asynchrony and concurrency management and simplicity.
+
+An exercise has been carried out to adapt the documents used in an industrial execution project to a software project.
+The design in an executive project document.
+The development in a work execution document.
+
+\textbf{Key words}
+
+Go,
+API,
+REST,
+RPC,
+CRUD,
+PID control,
+LayerArchitecture,
+HexagonalArchitecture,
+DDD,
+CQRS,
+Ubiquitous Language,
+CI/CD.

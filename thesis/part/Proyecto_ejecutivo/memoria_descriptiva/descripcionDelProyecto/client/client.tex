@@ -12,9 +12,9 @@ Una vez ejecutado devolver el resultado que el programa Cliente debe comunicar a
 
 \subparagraph{Dominio}
 
-Este programa está compuesto principalmente de infraestructura.
+Este programa está compuesto principalmente de Infraestructura.
 Esto es debido a que una vez recibido el comando mediante el RPC sólo será necesario ejecutarlo.
-Siendo tarea del programa ejecutado interpretar dicho comando y transformar esa cadena de caracteres que contiene el \textit{Step} a un dominio interno.
+Siendo tarea del programa ejecutado interpretar dicho comando y transformar esa cadena de caracteres que contiene el \textit{Step} a un Dominio interno.
 Por ejemplo, el programa cliente contenido en un sistema UNIX de LINUX podrá ejecutar cualquier comando de consola contenido por defecto:
 
 \begin{verbatim}
@@ -36,13 +36,13 @@ Algunos de los posibles comandos serán:
     ./pidControl --enabled=false
 \end{verbatim}
 
-El diagrama de Dominio de el \textit{Client} de la \cref{fig:Diagrama UML de el dominio de cliente} muestra dos Value Objects para los \textit{Steps} recibidos y para los \textit{Results} obtenidos.
+El diagrama de Dominio de el \textit{Client} de la \cref{fig:Diagrama UML de el Dominio de cliente} muestra dos Value Objects para los \textit{Steps} recibidos y para los \textit{Results} obtenidos.
 No hay \textit{Entities} al no necesitar persistencia.
 
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.2\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/descripcionDelProyecto/client/uml/clientDomain}
-    \caption{Diagrama UML de el dominio de cliente}\label{fig:Diagrama UML de el dominio de cliente}
+    \caption{Diagrama UML de el Dominio de cliente}\label{fig:Diagrama UML de el Dominio de cliente}
 \end{figure}
 
 \subparagraph{Casos de uso}

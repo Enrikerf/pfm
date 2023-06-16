@@ -1,11 +1,12 @@
 
 \paragraph{Hexagonal Architecture}
 
-Dentro de las arquitecturas de capas se va a realizar un diseño de puertos y adaptadores o más conocido como arquitectura hexagonal.
+Dentro de las arquitecturas de capas se va a realizar un diseño de puertos y adaptadores;
+más conocido como arquitectura hexagonal.
 El diagrama básico más utilizado en la teoría para representarlo se muestra en la ~\cref{fig:hexagonalDiagram}.
 Este diagrama tiene un enfoque didáctico ya que el hexágono es una simple licencia estética.
 En el caso de existir más puertos de salida o entrada que los representados, el hexágono pierde el sentido.
-Cuando se enfrenta por primera vez este diagrama se tiende a intentar descifrar el sentido oculto detrás de la elección de la forma poligonal, no existe.
+%Cuando se enfrenta por primera vez este diagrama se tiende a intentar descifrar el sentido oculto detrás de la elección de la forma poligonal, no existe.
 
 \begin{figure}[H]
     \centering
@@ -13,16 +14,16 @@ Cuando se enfrenta por primera vez este diagrama se tiende a intentar descifrar 
     \caption{Ejemplo básico de un Diagrama de arquitectura hexagonal\cite{TomHombergs2019GYHD}}\label{fig:hexagonalDiagram}
 \end{figure}
 
-En este diagrama, el dominio está representado por una única entidad, o \textit{Entity}, que se encuentra aislada de todo y no depende de ningún elemento.
-La aplicación está representada por los casos de uso, o \textit{Use Case}, y utiliza el dominio dependiendo de él.
-La aplicación se aísla del exterior, la infraestructura, obligando a utilizar sus interfaces a los elementos que acceden a ella.
+En este diagrama, el Dominio está representado por una única entidad, o \textit{Entity}, que se encuentra aislada de todo y no depende de ningún elemento.
+La Aplicación está representada por los casos de uso, o \textit{Use Case}, y utiliza el Dominio dependiendo de él.
+La Aplicación se aísla del exterior, la Infraestructura, obligando a utilizar sus interfaces a los elementos que acceden a ella.
 Las interfaces son los elementos que bordean el hexágono nombrados como \textit{Input/Output Port}.
 Utilizando estas interfaces, nombradas puertos, se encuentran los adaptadores o \textit{Adapters}.
 Los Adaptadores de entrada, a la izquierda, utilizan directamente las interfaces, mientras que los de salida los implementan.
 Representado por fechas con cabeza negra o blanca respectivamente.
 
 En el diagrama~\cref{fig:layers} se aprecia este concepto simplificado.
-La arquitectura hexagonal no es más que una arquitectura de capas que decide dividir el concepto de infraestructura en dos tipos: la que hace uso de la aplicación y la que la aplicación utiliza.
+La arquitectura hexagonal no es más que una arquitectura de capas que decide dividir el concepto de Infraestructura en dos tipos: la que hace uso de la Aplicación y la que la Aplicación utiliza.
 El objetivo es expresar que la dependencia de las capas, expresada por las flechas, sea siempre de fuera hacia adentro.
 Se preserva del cambio el interior y exponer al cambio el exterior.
 Separar lo propenso al cambio de lo que no.
@@ -38,12 +39,20 @@ Separar el lenguaje propio del Dominio, \textit{Domain}, de los detalles de impl
 
 \gls{DDD} (Domain-Driven Design o Diseño Dirigido por el Dominio) es una metodología de diseño enfocada a desarrollar un lenguaje común para todos los partícipes en un problema y su solución por ejemplo: clientes, vendedores, técnicos y financieros en un programa de gestión de venta de productos.
 Para desarrollar ese lenguaje se divide el problema en contextos delimitados.
-En un ejemplo: afiliado en un club deportivo significa facturas, números de identificación fiscal para los financieros y para la gente de operaciones significa reserva de pistas y cancelaciones.
-Para los de ventas significan descuentos, promociones, los demás actores tendrán otro significado para el mismo concepto.
-Todos utilizan la misma palabra para definir conceptos que difieren, pero cuando hablan de afiliados deben entenderse.
-Si en un departamento lo llaman clientes y en otro afiliados surgen problemas de comunicación.
+
+Por ejemplo en una empresa que comercialice actuadores automáticos: los actuadores para el equipo comercial significarán números de referencia y precios;
+Para el departamento financiero significarán facturas y devoluciones;
+Para los técnicos serán características físicas que los definen.
+Si Los comerciales les llaman productos, los financieros les llaman concepto y los técnicos dispositivos, se encontrarán un problema de comunicación.
+Realizar un software para la gestión de la empresa sin intentar resolver este problema de comunicación añade otra capa que además queda por escrita en el código.
+
+%afiliado en un club deportivo significa facturas, números de identificación fiscal para los financieros y para la gente de operaciones significa reserva de pistas y cancelaciones.
+%Para los de ventas significan descuentos, promociones, los demás actores tendrán otro significado para el mismo concepto.
+%Todos utilizan la misma palabra para definir conceptos que difieren, pero cuando hablan de afiliados deben entenderse.
+%Si en un departamento lo llaman clientes y en otro afiliados surgen problemas de comunicación.
+
 Tener un lenguaje común donde todos puedan expresarse y hablar de la misma solución es el reto de este proceso.
-Es lo que se define como \gls{UL} (Ubiquitous Language o lenguaje ubicuo) Intentar expresar en un mismo contexto todos esos significados termina en lo que se conoce como `Big Ball of Mud` o Gran bola de barro.
+Es lo que se define como \gls{UL} (Ubiquitous Language o lenguaje ubicuo) Intentar expresar en un mismo contexto todos esos significados termina en lo que se conoce como \textit{Big Ball of Mud} o Gran bola de barro.
 Los componentes y las relaciones de este UL se pueden apreciar en la figura~\cref{fig:DomainDrivenDesignReference}.
 
 Se describen los elementos que surgen del componente \textit{Model Driven Design}.
@@ -52,18 +61,19 @@ Que son los elementos dentro de ese lenguaje que afectan al diseño del software
 \begin{itemize}
     \item \textit{Entity}: Elemento que contiene atributos definido por un identificador
     \item \textit{Value Object}: Elemento que tiene atributos pero no identificador
-    \item Domain Event: Elemento que define una suceso inducido por la interacción entre los componentes del dominio.
+    \item Domain Event: Elemento que define una suceso inducido por la interacción entre los componentes del Dominio.
     \item Aggregate: Cluster de elementos tratado como una unidad.
     Las referencias o acciones externas sobre sus elementos siempre se hacen a través de un único elemento de este cluster conocido como \textit{Agreggate Root}.
     Tiene reglas definidas de consistencia dentro de su delimitación.
-    \item Repository: Es un mecanismo de interaccion para encapsular el acceso a tecnologías, como el almacenamiento en base de datos, para interactuar con ellas.
-    La implementación no concierne al dominio.
-    \item Service: Es una funcionalidad de interacción entre elementos de dominio.
+    \item Repository: Es un mecanismo de interacción para encapsular el acceso a tecnologías, como el almacenamiento en base de datos, para interactuar con ellas.
+    La implementación no concierne al Dominio.
+    \item Service: Es una funcionalidad de interacción entre elementos de Dominio.
     Encapsula lógica compleja que garantiza un comportamiento consistente.
 \end{itemize}
 
-Esta paradigma de diseño compone el elemento central en el paradigma de la arquitectura de capas o \gls{LayerArchitecture}.
-Se aísla esos contextos que definen nuestro dominio de implementaciones concretas ya sea para acceder al mismo o a las que accede el dominio.
+Este paradigma de diseño compone el elemento central en el paradigma de la arquitectura de capas o \gls{LayerArchitecture}.
+Se aíslan esos contextos que definen el Dominio de implementaciones concretas;
+ya sea para acceder al Dominio o a las que accede el Dominio.
 Por ejemplo, aislarlo de que se ejecute un servicio mediante una consola de comandos o desde una llamada http y que se guarde en una base de datos la información o se guarde en un archivo.
 
 \begin{figure}[H]
@@ -81,13 +91,13 @@ Mientras que las operaciones de escritura son responsables de modificar el estad
 Al separar estas dos responsabilidades, se pueden optimizar las operaciones de lectura para que sean más rápidas y escalables.
 Además, se puede diseñar una arquitectura de software más flexible, permitiendo una mayor adaptabilidad y evolución del sistema a medida que cambian los requisitos de la aplicación.
 
-El resumen hasta ahora es que el diseño sigue una arquitectura hexagonal, con un enfoque \textit{DDD} en el dominio y un enfoque CQRS en los casos de uso.
-Es decir se diseñará un dominio rico y con un UL y se accederá a su funcionalidad a través de casos de uso que sigan el criterio de ser comandos y consultas.
+El resumen hasta ahora es que el diseño sigue una arquitectura hexagonal, con un enfoque \textit{DDD} en el Dominio y un enfoque CQRS en los casos de uso.
+Es decir se diseñará un Dominio rico y con un UL y se accederá a su funcionalidad a través de casos de uso que sigan el criterio de ser comandos y consultas.
 
 \paragraph{\textit{Mapping} o Mapeo}
 
 Otro paradigma de diseño para garantizar la separación efectiva de las capas en su uso de los elementos básicos con los que interactúan es el mapeo o el \textit{Mapping}.
-Si un elemento de Infraestructura utiliza directamente una \textit{Entity} de Dominio estaría saltando la capa de aplicación en su diagrama de dependencia.
+Si un elemento de Infraestructura utiliza directamente una \textit{Entity} de Dominio estaría saltando la capa de Aplicación en su diagrama de dependencia.
 Bien es cierto que se mantendría la dependencia de fuera hacia adentro, pero se ha de tomar una decisión de hasta qué punto se quiere desacoplar una capa de otra.
 A esta decisión de diseño se le conoce como Estrategia de \textit{Mapping} entre capas.
 Estrictamente cada capa requiere sus objetos de trabajo para estar desacoplada de las demás, pero como en todo aspecto de diseño está sometido a discusión acerca de seguir la teoría al pié de la letra y el pragmatismo de no verse envuelto en redundancias y sobredimensionar las soluciones.
@@ -99,16 +109,19 @@ Esto quiere decir que una vez tomada una decisión debe ser una decisión en equ
 Es más eficiente un diseño imperfecto que sea consistente que un diseño perfecto en unos puntos e imperfecto en otros.
 Esto lleva al desorden a la hora de escribir código y complica la entrada de nuevos compañeros, el entendimiento del código existente con todas las consecuencias negativas que esto conlleva.
 
-Los tipos de mapping que se documentan en el libro\cite{TomHombergs2019GYHD} son:
+Se pueden clasificar los tipos de \textit{mapping} o mapeo en los siguientes grupos\cite{TomHombergs2019GYHD}:
 \begin{itemize}
-    \item \textit{The No Mapping Strategy}, no hacer mapeo~\cref{fig:nomapping}
-    \item \textit{The Two-Way Mapping Strategy}, mapeo de doble dirección~\cref{fig:twowaymapping}
-    \item \textit{The Full Mapping Strategy}, mapeo completo~\cref{fig:fullmapping}
-    \item \textit{The One-Way Mapping Strategy}, mapeo de una dirección~\cref{fig:onWaymapping}
+    \item Sin mapeo o \textit{The No Mapping Strategy}~\cref{fig:nomapping}
+    \item Mapeo bidireccional o \textit{The Two-Way Mapping Strategy}~\cref{fig:twowaymapping}
+    \item Mapeo completo o \textit{The Full Mapping Strategy}~\cref{fig:fullmapping}
+    \item Mapeo unidireccional o \textit{The One-Way Mapping Strategy}~\cref{fig:onWaymapping}
 \end{itemize}
 
-Los diagramas del libro ayudan a entender cada una de las estrategias.
-En todos los casos se simplifica el dominio a una única entidad, \textit{Account}, y se separa dicho dominio del acceso al caso de uso que envía dinero a una cuenta y del acceso a la infraestructura que guarda la información del envío de ese dinero.
+Se van exponer cada tipo por separado con un ejemplo;
+definiendo los elementos que intervienen en cada capa.
+Para realizar una comparación, en todos los casos se simplifica el Dominio a una única entidad, \textit{Account}.
+Se separa dicho Dominio de la Aplicación, en estos ejemplos un caso de uso \textit{SendMoney}, que contendrá la lógica necesaria para efectuar el envío de dinero a una cuenta.
+Que a su vez se encontrará separada de la Infraestructura que interactuará con el sistema físico para efectuar ese envío y actualizará la información de las cuentas.
 
 \begin{figure}[H]
     \centering
@@ -116,9 +129,9 @@ En todos los casos se simplifica el dominio a una única entidad, \textit{Accoun
     \caption{No mapping strategy~\cite{TomHombergs2019GYHD}}\label{fig:nomapping}
 \end{figure}
 
-En la estrategia de \textit{No Mapping} ilustrada en la figura~\cref{fig:nomapping} se aprecia que tanto aplicación como Infraestructura dependen de Dominio.
+En la estrategia de \textit{No Mapping} ilustrada en la figura~\cref{fig:nomapping} se aprecia que tanto Aplicación como Infraestructura dependen de Dominio.
 Esto evita todo código redundante, los \gls{DTO} (Data Transfer Object), pero resta flexibilidad.
-Si por detalles técnicos de una infraestructura concreta se requiere más o menos parámetros que los definidos en el Dominio o se deben guardar en otro formato que los definidos en Dominio este diseño se enfrenta a un problema.
+Si por detalles técnicos de una Infraestructura concreta se requiere más o menos parámetros que los definidos en el Dominio, o se deben guardar en otro formato, este diseño se enfrenta a un problema.
 
 \begin{figure}[H]
     \centering
@@ -137,7 +150,7 @@ Se hace necesario escribir más código para crear las entidades a través de lo
     \caption{One way mapping strategy~\cite{TomHombergs2019GYHD}}\label{fig:onWaymapping}
 \end{figure}
 
-En la figura de \textit{The One-Way Mapping Strategy}~\cref{fig:onWaymapping} se ilustra la creación de una interfaz para la Entidad y hace depender de nuevo todas las capas de dicha interfaz.
+En la estrategia de \textit{The One-Way Mapping Strategy}~\cref{fig:onWaymapping} se ilustra la creación de una interfaz para la Entidad y hace depender de nuevo todas las capas de dicha interfaz.
 Se encuentran las capas más separadas y preparadas para el caso en el que se enfrente la necesidad de tener que crear distintas implementaciones aunque no se creen en un primer momento.
 
 \begin{figure}[H]
@@ -153,8 +166,9 @@ No hay una regla de oro para elegir una estrategia que valga para todos los caso
 Debe ser una decisión de equipo, seguir la decisión y re-evaluar con cada inconveniente que enfrente la decisión si se tiene que cambiar la estrategia.
 
 Se puede ver el primer ejemplo en el un proyecto de ejecución que intentara resolver todas las decisiones y describir al detalle la solución a desarrollar no aportaría valor.
-Tomar una decisión de este tipo y documentarla, carece de utilidad en este punto del diseño al no disponer de información suficiente para tomar la decisión.
-Al enfrentar el desarrollo del código se podrá tomar la decisión de qué estrategia encaja mejor.
+Tomar una decisión de este tipo y documentarla carece de utilidad en este punto del diseño;
+no se dispone de información suficiente para ello.
+Al enfrentar el desarrollo del código se podrá valorar qué estrategia encaja mejor.
 
 \paragraph{\textit{Testing} o Testeo}
     \input{./part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/testing}
@@ -162,8 +176,8 @@ Al enfrentar el desarrollo del código se podrá tomar la decisión de qué estr
 \paragraph{Docker}
 
 Docker es el sistema de gestión de contenedores más utilizado en la industria a día de hoy.
-Según la misma página oficial de Docker un contenedor se define como: \textit{´A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another.
-A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings.´}~\cite{docker}
+Según la misma página oficial de Docker un contenedor se define como: Una unidad estándar de software que empaqueta el código y todas sus dependencias de tal modo que la aplicación pueda ejecutarse de forma rápida y fiable de un entorno de ejecución a otro.
+La imagen de un contenedor es un paquete de software ligero, independiente y ejecutable que incluye todo lo que necesita para ser ejecutado: el código, el sistema, las herramientas, librerías y configuración~\cite{docker}.
 
 El sistema se basa en la definición de imágenes que no son más que las instrucciones para la construcción de esos contenedores mediante el sistema de Docker Engine.
 Difieren de las máquinas virtuales tal y como se muestra en la comparativa~\cref{fig:Docker vs VM}.
@@ -174,10 +188,20 @@ Permite ofrecer un producto consistentes a los clientes de forma que el software
 \begin{figure}[H]
     \centering
     \includegraphics[height=0.3\textheight]{./part/Proyecto_ejecutivo/memoria_descriptiva/prestaciones/docker/img/dockerVsVM}
-    \caption{Docker vs VM.\cite{docker}}\label{fig:Docker vs VM}
+    \caption{Comparación: Docker vs Máquinas virtuales.\cite{docker}}\label{fig:Docker vs VM}
 \end{figure}
 
-Las claves de Docker se basan en:
+En la~\cref{fig:Docker vs VM} se muestra una comparación entre las capas que virtualiza cada sistema.
+Cada contenedor de Docker es una abstracción en la capa de aplicación que empaqueta el código y las dependencias juntas.
+Múltiples contenedores pueden ejecutarse en la misma máquina y compartir el \textit{Kernel} del sistema operativo cada uno ejecutándose en un entorno completamente aislado.
+Los contenedores utilizan menos espacio que las máquinas virtuales, pueden manejar más aplicaciones y requieren menos virtualización y requerimientos del sistema operativo que otros sistemas.
+
+Las máquinas virtuales son una abstracción completa del sistema físico que emulan, el hardware.
+Sirven para transformar una máquina en, virtualmente, múltiples máquinas.
+Cada máquina virtual incluye una copia completa de un sistema operativo, la aplicación, los ejecutables y librerías;
+llegando a ocupar Gigas y sus arranques son lentos.
+
+Los principales beneficios del sistema Docker son que:
 \begin{itemize}
     \item Permite trabajar en el desarrollo de distintos proyectos con distintos requerimientos en una misma máquina sin la complejidad de mantener las dependencias de cada proyecto.
     O trasladarse a otra máquina y seguir trabajando de forma rápida al no tener que ponerse a instalar dichas dependencias de nuevo.

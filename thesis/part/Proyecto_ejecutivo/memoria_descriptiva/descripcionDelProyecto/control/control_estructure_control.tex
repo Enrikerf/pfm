@@ -14,11 +14,11 @@
 
 \textbf{Dominio}
 
-La estructura de organización para el dominio de este programa mostrado en la~\cref{fig:Control- Estructura de carpetas de Dominio} muestra que en este caso se utiliza otro lenguaje para nombrar a los repositorios.
+La estructura de organización para el Dominio de este programa mostrado en la~\cref{fig:Control- Estructura de carpetas de Dominio} muestra que en este caso se utiliza otro lenguaje para nombrar a los repositorios.
 Siguiendo las guías de diseño de DDD y el UL se utiliza un lenguaje que exprese el problema que ocupa.
 En el Manager y el Cliente enfrentan un paradigma de servicio web API\@.
-Es por esto que nombrar repositorios a los servicios de infraestructura de salida tiene sentido.
-En este caso la infraestructura de salida se compone de actuadores físicos.
+Es por esto que nombrar repositorios a los servicios de Infraestructura de salida tiene sentido.
+En este caso la Infraestructura de salida se compone de actuadores físicos.
 Se usan por tanto los nombres que los definen como el Encoder y los pines.
 
 \begin{figure}[H]
@@ -58,7 +58,7 @@ Se usan por tanto los nombres que los definen como el Encoder y los pines.
 
 \textbf{Aplicación}
 
-Para los casos de uso definidos en la capa de aplicación se se siguen el paradigma CQRS de la misma forma que en todos los programas.
+Para los casos de uso definidos en la capa de Aplicación se se siguen el paradigma CQRS de la misma forma que en todos los programas.
 La interacción con el entorno físico consta en este caso únicamente de comandos para actuar sobre el motor.
 
 \begin{figure}[H]
@@ -94,7 +94,7 @@ La interacción con el entorno físico consta en este caso únicamente de comand
         .1 Adapter.
             .2 in.
                 .3 GRPC.
-                    .4 Harán uso de los useCases de aplicación cuando llegue una request RPC.
+                    .4 Harán uso de los useCases de Aplicación cuando llegue una request RPC.
                 .3 Console.
                     .4 Servirán para ejecutar los casos de uso mediante terminal.
             .2 out.

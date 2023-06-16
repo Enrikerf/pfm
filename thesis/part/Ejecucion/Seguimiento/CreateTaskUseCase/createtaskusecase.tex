@@ -2,7 +2,7 @@
 Se toma como referencia la~\cref{fig:hexagonalDiagram}, el diagrama más extendido de ejemplo para una arquitectura hexagonal, para una explicación de alto nivel para la funcionalidad de crear tareas \textit{CreateTaskUseCase} que se aprecia en la~\cref{fig:CreateTaskHexagonalDiagram}.
 Los componentes que intervienen son:
 \begin{itemize}
-    \item \textit{WebAdapter}: contiene la lógica relacionada con la recepción de llamadas RPC está ligada a la infraestructura necesaria para ello, es decir importa las librerías para ello.
+    \item \textit{WebAdapter}: contiene la lógica relacionada con la recepción de llamadas RPC está ligada a la Infraestructura necesaria para ello, es decir importa las librerías para ello.
     A través de una interfaz se le ha de inyectar un puerto de entrada que le permita ejecutar la lógica del caso de uso.
     \item UseCase: contiene la lógica necesaria para garantizar la correcta llamada a la lógica de Dominio para la creación de una Tarea.
     Contiene las verificaciones, mediante la instanciación, entre los tipos primitivos y los objetos de Dominio.
@@ -11,10 +11,10 @@ Los componentes que intervienen son:
     La persistencia en la base de datos a través de un puerto de salida; una interfaz que se le inyecta y le permite ejecutar dicha lógica sin conocerla.
     También de emite un evento de Dominio comunicando la creación mediante el acceso a un puerto de salida.
     \item \textit{PersistenceAdapter}: contiene la lógica relacionada con la persistencia de datos.
-    está ligado a la infraestructura de la base de datos y contiene por tanto las importaciones de las librerías necesarias.
-    \item \textit{DispatcherAdapter}: este puerto de salida contiene la lógica para gestionar los eventos emitidos por el dominio.
+    está ligado a la Infraestructura de la base de datos y contiene por tanto las importaciones de las librerías necesarias.
+    \item \textit{DispatcherAdapter}: este puerto de salida contiene la lógica para gestionar los eventos emitidos por el Dominio.
     Para ello, necesita que le sean inyectados los casos de uso, eventHandler en este caso al no ser ejecutados directamente por un usuario.
-    De esta forma, a la vez que un puerto de salida se convierte en un Adaptador de entrada que ejecuta puertos de entrada de nuevo a la aplicación.
+    De esta forma, a la vez que un puerto de salida se convierte en un Adaptador de entrada que ejecuta puertos de entrada de nuevo a la Aplicación.
     \item \textit{Looper}: Contiene la lógica necesaria para obtener de base de datos, a través de un puerto de salida, todas las tareas sobre las que hay que iterar para ejecutarlas.
     \item \textit{Entity}: en este caso de uso serán las Tareas (\textit{Tasks})
 \end{itemize}
@@ -45,9 +45,9 @@ Encontramos en la figura la numeración en orden de ejecución.
 Se puede apreciar que el UL ayuda a la comprensión de los pasos y las funcionalidades.
 El diseño ayuda a diferenciar la resolución del problema: representado por la creación de tareas y su ejecución.
 Separando el porqué y dónde se ejecuta: se activa la resolución del problema por una llamada RPC, en una Base de datos y en un sistema remoto.
-Si cualquiera de los elementos que acceden a el programa que resuelve el caso de uso quiere ser intercambiado, la única exigencia es implementar las interfaces requeridas por la aplicación.
+Si cualquiera de los elementos que acceden a el programa que resuelve el caso de uso quiere ser intercambiado, la única exigencia es implementar las interfaces requeridas por la capa de Aplicación.
 
-La implementación concreta para componer la aplicación correspondiente a este caso de uso la encontramos en el~\cref{lst:bootstrapingExample}.
+La implementación concreta para componer la capa de Aplicación correspondiente a este caso de uso la encontramos en el~\cref{lst:bootstrapingExample}.
 El orden de instanciación e inyección de cada uno de los componentes necesarios para el armado de la aplicación se vuelve un poco más confuso a la hora de llevarlo a la práctica, es por esto que los ejemplos gráficos son de gran ayuda.
 
 \phantom{blank}
@@ -77,7 +77,7 @@ func Bootstrap() {
 \hrule
 
 Para una explicación conceptual de la arquitectura como técnica de diseño los diagramas hexagonales pueden tener un valor didáctico, sin embargo, para un caso de uso más completo como el que desarrolla esta sección pierde el sentido.
-No logra ser explicativo, ya que hay puertos de salida que se convierten en puertos de entrada como es el caso del Dispatcher, y al quitar lógica de negocio del caso de uso mediante servicios de dominio que impidan el acceso directo a los repositorios de persistencia dicho diagrama se va quedando pequeño.
+No logra ser explicativo, ya que hay puertos de salida que se convierten en puertos de entrada como es el caso del Dispatcher, y al quitar lógica de negocio del caso de uso mediante servicios de Dominio que impidan el acceso directo a los repositorios de persistencia dicho diagrama se va quedando pequeño.
 Es preferible diagramas UML completos como el desarrollado en la~\cref{fig:createTaskUseCaseArchitecture}.
 En el diagrama~\cref{fig:createTaskUseCaseArchitectureFolderStructure} se muestra interacción de componentes atendiendo a su distribución en nuestro diseño organizativo del código en ficheros.
 
@@ -92,7 +92,7 @@ En rojo se han marcado los atajos que se han tomado, es decir, el mapeo que no s
 El objetivo es aislar bien de los puertos de entrada, es decir el GRPC, y no tanto de los puertos de salida;
 ya que la persistencia está bien aislada mediante las interfaces y somos propietarios y consumidores internos de ellas.
 Al ser los únicos consumidores de los puertos de salida se dispone de más libertad de cambio sin afectar a terceros.
-Dentro de los adaptadores se hace el trabajo de mapeo entre las entidades de dominio y los modelos de persistencia; traduciendo de nuevo a dominio para responder.
+Dentro de los adaptadores se hace el trabajo de mapeo entre las entidades de Dominio y los modelos de persistencia; traduciendo de nuevo a Dominio para responder.
 
 \begin{figure}[H]
     \centering
@@ -132,24 +132,24 @@ En el controller del~\cref{lst:TaskControler} se hace uso de la request entrante
 Mediante la interfaz inyectada en el controller en el \textit{bootstrapping} se ejecuta el caso de uso resaltado en rojo.
 También es interesante resaltar que una vez ejecutado el caso de uso se utiliza la respuesta, que contiene el id de la nueva Task creada para devolverlo.
 Sin embargo, debido la estrategia utilizada de \textit{mapping}, definida en el diagrama~\cref{fig:CreateTaskUseCaseMapping}, no hacemos uso directo de esta respuesta si no que componemos una nueva para el protocolo de comunicación que está utilizando el cliente, en este caso RPC.
-En los imports de este componente se aprecia que sólo hay dependencias de la infraestructura, gRPC en este caso, y de la capa de aplicación haciendo uso del comando y la interfaz del caso de uso.
+En los imports de este componente se aprecia que sólo hay dependencias de la Infraestructura, gRPC en este caso, y de la capa de Aplicación haciendo uso del comando y la interfaz del caso de uso.
 
 La implementación del caso de uso se muestra en el~\cref{lst:CreateTaskUseCaseCode}.
 Los imports son una forma rápida de comprobar la independencia de capas, de que la arquitectura, y de que los límites se están respetando.
-En este caso todos corresponden a Dominio, no tiene imports de librerías de terceros, es decir, infraestructura.
+En este caso todos corresponden a Dominio, no tiene imports de librerías de terceros, es decir, Infraestructura.
 La interfaz, utilizada en el controlador, \textit{UseCase} se encuentra escrita con la primera letra en mayúsculas, exponiéndola hacia afuera, mientras que el struct \textit{useCase} está en minúscula no pudiendo ser utilizado fuera del package.
 El caso de uso realiza la instanciación de los \textit{ValueObjects} necesarios para la creación de una \textit{Task}.
 Asegurando que no dan ningún error los datos de entrada y luego, haciendo uso del servicio se procede a crearla.
 Aparece marcado en rojo el uso del servicio \textit{Creator} de Dominio.
 
 En este caso se junta en un mismo fichero la interfaz y la implementación, al pertenecer a la misma capa.
-No ocurre lo mismo dentro de \textit{Creator}~\cref{lst:Creator} Donde las interfaces de \textit{SaveRepository.Persist}~\cref{lst:SavePort} y \textit{Dispatcher.Dispatch}~\cref{lst:Dispatcher} se encuentra dentro del dominio, pero la implementación\textit{SaveAdapter}~\cref{lst:SaveAdapter} se encuentra en la capa de infraestructura.
+No ocurre lo mismo dentro de \textit{Creator}~\cref{lst:Creator} Donde las interfaces de \textit{SaveRepository.Persist}~\cref{lst:SavePort} y \textit{Dispatcher.Dispatch}~\cref{lst:Dispatcher} se encuentra dentro del Dominio, pero la implementación\textit{SaveAdapter}~\cref{lst:SaveAdapter} se encuentra en la capa de Infraestructura.
 
 El servicio de Dominio Creator se encarga de encapsular y atomizar los procesos que tienen que ocurrir en bloque siempre que se desee crear una Task.
 Entre los cuales está: instanciar la tarea con los ValueObjects que recibe como parámetros;
 Persistir la misma en la base de datos a través del puerto de salida, interfaz que implementará un adaptador;
 y emitir el evento de creación a través del otro puerto de salida, el Dispatcher interfaz que implementará otro adaptador.
-En la sección de \textit{imports} se aprecia que no hay elementos de infraestructura o aplicación.
+En la sección de \textit{imports} se aprecia que no hay elementos de Infraestructura o Aplicación.
 Se limita al uso de Dominio.
 Aislados del exterior.
 
